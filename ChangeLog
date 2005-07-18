@@ -1,0 +1,38 @@
+0.8.0
+
+- finally: documentation :)
+- check for reserved words and duplicate definitions
+- config.m4 supports header checks and makefile fragments
+	
+0.7.0
+
+- a README file is written containing information on
+  how to continue after an extension was generated
+
+- --function="proto" writes function stub to stdout
+
+- --stubs=filename now supported in ext_skel BC mode
+
+- added --help and --version options
+
+- added a short feedback howto message 
+  (can be disabled using --quiet)  
+
+- --with-xml works again 
+  (ext_skel compatibility)
+
+- will now only purge and overwrite existing target directory
+  if '--force' is requested on cmd line
+
+- .cvsignore created with platform-specific entries
+
+- PEARifying error reporting finished
+
+
+0.6.1
+
+- the package.xml spec had a typo in the dependencies
+
+0.6.0
+
+- initial PEAR releaseIndex: TODO

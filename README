@@ -1,0 +1,10 @@
+PECL_Gen - a PHP extension code generator
+
+PECL_Gen (formerly known as ext_skel_ng) is a pure PHP replacement 
+for the ext_skel shell script that comes with the PHP 4 source. 
+
+It reads in configuration options, function prototypes and code fragments
+from an XML description file and generates a complete ready-to-compile
+PECL extension.
+
+For full documentation see the manual.html file included in this package.

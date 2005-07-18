@@ -1,0 +1,123 @@
+Braindump
+---------
+
+support compiler/linker flags setting using config programs
+like pkg-config, mysql_config etc.
+
+add configure test code within DATA section of <lib> and <header> tags?
+e.g. for version checking?
+
+<lib> shared=no 
+  -> drop EXTNAME_SHARED_LIBADD parameter to PHP_ADD_LIBRARY_WITH_PATH
+	=> requires further research, doesn't work this way
+	==> how to add *static* libraries? 
+
+check whether multiple logos work
+
+use Console_Getargs instead of self extended Console_Getopt
+  => still beta, not touched in a year, what is its stautus?
+
+- check #line numbers in generated source with libxml
+  -> error messages with meaningfull line numbers need this
+
+
+Milestone 0.9
+-------------
+
+- <lib> and <header> tags *within* <with>...</with>  -> in progress
+  => parsing ok now, needs config.m4 output tweaks
+
+- rewrite the function prototype parser
+  - object type specification (as in resources)      -> done
+  - default values                                   -> done
+  - 'void' treatment                                 -> done
+  - '...' not handled                                -> done
+  - array() as default value                         -> done
+  - code generation for 'pass by refecence'          -> only for zval based types yet
+  - '...' code generation                            -> only if first parameter yet
+  - return by reference (for 5.1)                    -> not done yet   
+
+- allow "src='path/to/file'" in more cases           -> needs checking
+
+FREE_RESOURCE macro                                  -> done
+
+allow defined PHP constants as default value         -> done
+
+<define> tag -> #define + <constant>?                -> done by define attribute to <constant>
+
+allow for embedded base64 or uu encoded logo specs   -> done
+
+changeable function prefix?                          -> done
+
+trick parser to verbatim pass on docbook contentent  -> done
+
+add configure compile test for <resource>  to check  -> done
+whether a given payload is a valid type?
+
+SYSTEM Entity and XInclude support                   -> done (needs cleanup)
+
+support for multiple <with> tags with distinct 
+names, name defaults to extension name if not given  -> done
+
+added version attribute to <extension>
+to control parser features (replaces -x switch)      -> done
+
+support <?code ... ?> as alternative to CDATA        -> done (needs check)
+
+check whether <header> checks work                   -> done
+
+
+Milestone 1.0
+-------------
+
+- support new win32 configure files              -> partly done (75%?)
+
+- test suite
+
+- class implementation and documentation support -> partly done (33%?)
+
+- full support for stream wrappers and filters   -> started
+
+- full support for .phpt test case generation    -> started
+
+- support for new package.xml format             -> not done yet
+
+
+
+not necessarily 1.0
+-------------------
+
+- change XML parsing to simplexml? or DOM? and delegate tag level parsing to sub-parsers?
+  => not possible as these APIs do not provide line number information
+
+- XSchema or RELAX/NG instead of DTD?
+
+- VC++ 7 (VS.net) project files
+  => not needed anymore as we now have config.w32?
+
+- more licenses
+  - GPL (with exception to allow linking against PHP)
+  - QPL
+  - MPL?
+  - Artistic
+  - ...
+  - change <license> tag to either take a known license name 
+    in the 'name' attribute or a free form license text as
+    CDATA
+
+- dual/multiple license support
+
+- (c) copyright 
+
+- have different levels of comment (and code?) generation
+  similar to --no-help in ext_skel
+
+- protos
+
+  - option for 'old style' parameter parsing code generation ?
+    (less readable but faster and more flexible)
+    also needed if '...' is not the only parameter
+    unless parse_params_ex with ZEND_PARSE_PARAMS_QUIET fills params anyway??
+
+
+ 

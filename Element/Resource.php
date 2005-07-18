@@ -1,0 +1,260 @@
+<?php
+/**
+ * Class for managing PHP internal resource types
+ *
+ * PHP versions 5
+ *
+ * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category   Tools and Utilities
+ * @package    CodeGen
+ * @author     Hartmut Holzgraefe <hartmut@php.net>
+ * @copyright  2005 Hartmut Holzgraefe
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    CVS: $Id$
+ * @link       http://pear.php.net/package/CodeGen
+ */
+
+/**
+ * includes
+ */
+require_once "CodeGen/PECL/Element.php";
+
+/**
+ * Class for managing PHP internal resource types
+ *
+ * @category   Tools and Utilities
+ * @package    CodeGen
+ * @author     Hartmut Holzgraefe <hartmut@php.net>
+ * @copyright  2005 Hartmut Holzgraefe
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @version    Release: @package_version@
+ * @link       http://pear.php.net/package/CodeGen
+ */
+class CodeGen_PECL_Element_Resource 
+    extends CodeGen_PECL_Element 
+{
+    /**
+     * Resource type name
+     *
+     * @var string
+     * @access private
+     */
+    var $name = "unknown";
+
+    /**
+     * Set method for name
+     *
+     * @access public
+     * @param  string name
+     * @return bool   true on success
+     */
+    function setName($name) 
+    {
+        if (!self::isName($name)) {
+            return PEAR::raiseError("'$name' is not a valid resource name");
+        }
+        
+        $this->name = $name;
+        
+        return true;
+    }
+    
+
+
+
+    /**
+     * Type of the payload that the resource data pointer points to
+     *
+     * @var string
+     * @access private
+     */
+    var $payload = "void";
+
+    /**
+     * Set method for payload type
+     *
+     * @access public
+     * @param  string type name
+     * @return bool   true on success
+     */
+    function setPayload($type)
+    {
+        $this->payload = $type;
+        
+        return true;
+    }
+    
+
+
+
+    /**
+     * Whether the resource memory is allocated and freed by the extension itself
+     *
+     * @var string
+     * @access private
+     */
+    var $alloc = "yes";
+
+    /**
+     * Set method for alloc
+     *
+     * @access public
+     * @param  string "yes" or "no"
+     * @return bool   true on success
+     */
+    function setAlloc($text)
+    {
+        // TODO check values
+        $this->alloc = $text;
+        
+        return true;
+    }
+
+
+
+
+    /** 
+     * Code snippet to be added to the resource destructor callback
+     *
+     * @var string
+     * @access private
+     */
+    var $destruct = "";
+
+    /**
+     * Set method for destructor snippet
+     *
+     * @access public
+     * @param  string C code snippet
+     * @return bool   true on success
+     */
+    function setDestruct($text)
+    {
+        $this->destruct = $text;
+        
+        return true;
+    }
+    
+
+
+
+    /**
+     * DocBook XML snippet that describes the resource for the manual
+     *
+     * @var string
+     * @access private
+     */
+    var $description = "";
+
+    /**
+     * Set method for destructor snippet
+     *
+     * @access public
+     * @param  string C code snippet
+     * @return bool   true on success
+     */
+    function setDescription($text)
+    {
+        $this->description = $text;
+        
+        return true;
+    }
+    
+
+    
+    
+    /** 
+     * Generate resource registration code for MINIT()
+     *
+     * @access public
+     * @return string C code snippet
+     */
+    function minitCode() {
+        return "
+le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor, 
+                                                     NULL, 
+                                                     \"{$this->name}\", 
+                                                     module_number);
+
+";
+    }
+
+
+    /** 
+     * Generate C code for resource destructor callback
+     *
+     * @access public
+     * @param  object extension
+     * @return string C code snippet
+     */
+    function cCode($extension) {
+        $dtor = "int le_{$this->name};\n";
+
+        if ($extension->language == "cpp") {
+            $dtor.= 'extern "C" ';
+        }
+
+		$dtor.= 
+"void {$this->name}_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC)
+{
+    {$this->payload} * resource = ({$this->payload} *)(rsrc->ptr);
+
+";
+
+        $dtor .= CodeGen_Tools_Indent::indent(4, $this->destruct);
+
+        if ($this->alloc === "yes") {
+            $dtor .= "\n\tefree(resource);\n";
+        }
+        
+        $dtor .= "}\n";
+        
+        return $dtor;
+    }
+
+
+
+    /** 
+     * Generate covenience macros for resource access
+     *
+     * @access public
+     * @return string C code snippet
+     */
+    function hCode() {
+        $upname = strtoupper($this->name);
+        
+        return "
+#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name });
+#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, ${$this->name}, le_{$this->name }); if (!r) { RETURN_FALSE; }
+
+";
+    }
+
+
+
+    /** 
+     * Generate documentation for this resource
+     *
+     * @access public 
+     * @param  string id basename for extension
+     * @return string DocBook XML code snippet
+     */
+    function docEntry($base) {
+        return "
+    <section id='$base.resources.{$this->name}'>
+     <title><literal>{$this->name}</literal></title>
+     <para>
+      {$this->description}
+     </para>
+    </section>
+";
+    }
+    
+}
+
+?>
