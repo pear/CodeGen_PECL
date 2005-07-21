@@ -33,7 +33,7 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Dependency_Header
-	extends CodeGen_Element
+    extends CodeGen_Element
 {
     private $name;
     private $prepend = false;

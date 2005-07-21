@@ -65,10 +65,10 @@ class CodeGen_PECL_Element_Stream
     }
 
 
-	function getName() 
+    function getName() 
     {
-		return $this->name;
-	}
+        return $this->name;
+    }
     
 
     /**
@@ -119,22 +119,22 @@ class CodeGen_PECL_Element_Stream
 
 
 
-	var $codeBlocks = array();
+    var $codeBlocks = array();
 
-	function addCode($role, $code)
-	{
-		if (isset($codeBlock[$role])) {
+    function addCode($role, $code)
+    {
+        if (isset($codeBlock[$role])) {
             return PEAR::raiseError("Codeblock '$role' was already set");
-		}
+        }
 
-		if (!in_array($role, array("open", "close", "stat", "urlstat", "diropen", 
-								   "unlink", "rename", "mkdir", "rmdir", 
-								   "write", "read", "flush", "seek", "cast", "set"))) {
-			return PEAR::raiseError("'$role' is not a valid stream codeblock type");
-		}
+        if (!in_array($role, array("open", "close", "stat", "urlstat", "diropen", 
+                                   "unlink", "rename", "mkdir", "rmdir", 
+                                   "write", "read", "flush", "seek", "cast", "set"))) {
+            return PEAR::raiseError("'$role' is not a valid stream codeblock type");
+        }
 
-		$this->codeBlocks[$role] = $code; 
-	}
+        $this->codeBlocks[$role] = $code; 
+    }
 
     
     
@@ -157,43 +157,43 @@ class CodeGen_PECL_Element_Stream
      * @return string C code snippet
      */
     function cCode($extension) {
-		ob_start();
+        ob_start();
 
-		echo "static php_stream_ops php_{$this->name}_stream_ops = {\n";
-
-        echo "    ";
-		echo isset($this->codeBlocks['write']) ? "php_{$this->name}_file_write," : "NULL, /* write */";
-		echo "\n";
+        echo "static php_stream_ops php_{$this->name}_stream_ops = {\n";
 
         echo "    ";
-		echo isset($this->codeBlocks['read']) ? "php_{$this->name}_file_read," : "NULL, /* read */";
-		echo "\n";
+        echo isset($this->codeBlocks['write']) ? "php_{$this->name}_file_write," : "NULL, /* write */";
+        echo "\n";
 
         echo "    ";
-		echo isset($this->codeBlocks['close']) ? "php_{$this->name}_file_close," : "NULL, /* close */";
-		echo "\n";
+        echo isset($this->codeBlocks['read']) ? "php_{$this->name}_file_read," : "NULL, /* read */";
+        echo "\n";
 
         echo "    ";
-		echo isset($this->codeBlocks['flush']) ? "php_{$this->name}_file_flush," : "NULL, /* flush */";
-		echo "\n";
-
-		echo '"'.$this->summary.'"'."\n";
-		
-        echo "    ";
-		echo isset($this->codeBlocks['cast']) ? "php_{$this->name}_file_cast," : "NULL, /* cast */";
-		echo "\n";
+        echo isset($this->codeBlocks['close']) ? "php_{$this->name}_file_close," : "NULL, /* close */";
+        echo "\n";
 
         echo "    ";
-		echo isset($this->codeBlocks['stat']) ? "php_{$this->name}_file_stat," : "NULL, /* stat */";
-		echo "\n";
+        echo isset($this->codeBlocks['flush']) ? "php_{$this->name}_file_flush," : "NULL, /* flush */";
+        echo "\n";
+
+        echo '"'.$this->summary.'"'."\n";
+        
+        echo "    ";
+        echo isset($this->codeBlocks['cast']) ? "php_{$this->name}_file_cast," : "NULL, /* cast */";
+        echo "\n";
 
         echo "    ";
-		echo isset($this->codeBlocks['set']) ? "php_{$this->name}_file_set_option," : "NULL, /* set_option */";
-		echo "\n";
+        echo isset($this->codeBlocks['stat']) ? "php_{$this->name}_file_stat," : "NULL, /* stat */";
+        echo "\n";
 
-		echo "};\n\n";
+        echo "    ";
+        echo isset($this->codeBlocks['set']) ? "php_{$this->name}_file_set_option," : "NULL, /* set_option */";
+        echo "\n";
 
-		return ob_get_clean();
+        echo "};\n\n";
+
+        return ob_get_clean();
     }
 
 

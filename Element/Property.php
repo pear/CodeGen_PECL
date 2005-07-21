@@ -38,7 +38,7 @@ require_once "CodeGen/PECL/Element/Class.php";
  * @link       http://pear.php.net/package/CodeGen
  */
     class CodeGen_PECL_Element_Property
-		extends CodeGen_PECL_Element
+        extends CodeGen_PECL_Element
     {
         /**
          * Is this an abstract property?
@@ -97,129 +97,129 @@ require_once "CodeGen/PECL/Element/Class.php";
 
         function setAccess($access) 
         {
-			switch ($this->access) {
-			case "private":
-			case "protected":
-			case "public":
-				$this->access = $access;
-				return true;
-			default:
-				return PEAR::raiseError("'$access' is not a valid access property");
-			}
+            switch ($this->access) {
+            case "private":
+            case "protected":
+            case "public":
+                $this->access = $access;
+                return true;
+            default:
+                return PEAR::raiseError("'$access' is not a valid access property");
+            }
         }
 
 
-		/**
-		 * Property type
-		 *
-		 * @var string
-		 */
-		private $type = "null";
+        /**
+         * Property type
+         *
+         * @var string
+         */
+        private $type = "null";
 
-		function setType($type) 
-		{
-			switch ($type) {
-			case "void":
-				$type = "null";
-				break;
-			case "int":
-				$type = "long";
-				break;
-			case "long":
-			// case "float": not yet supported by ZEND API
-			// case "double": not yet supported by ZEND API
-			case "string":
-			case "null":
-				break;
-			default:
-				return PEAR::raiseError("'$type' is not a valid property type");
-			}
-
-			$this->type = $type;
-
-			return true;
-		}
-
-
-		/**
-		 * Property name
-		 *
-		 * @var string
-		 */
-		private $name = "unknown";
-
-		function setName($name) 
-		{
-			if (!$this->isName($name)) {
-				return PEAR::raiseError("'$name' is not a valid property name");
-			}
-			
-			$this->name = $name;
-
-			return true;
-		}
-
-		function getName() 
+        function setType($type) 
         {
-			return $this->name;
-		}
+            switch ($type) {
+            case "void":
+                $type = "null";
+                break;
+            case "int":
+                $type = "long";
+                break;
+            case "long":
+            // case "float": not yet supported by ZEND API
+            // case "double": not yet supported by ZEND API
+            case "string":
+            case "null":
+                break;
+            default:
+                return PEAR::raiseError("'$type' is not a valid property type");
+            }
 
-		/**
-		 * Default value
-		 *
-		 * @var    string
-		 * @access private
-		 */
-		private $value = "";
+            $this->type = $type;
 
-		function setValue($value) 
-		{
-			// TODO check?
-			$this->value = $value;
+            return true;
+        }
 
-			return true;
-		}
 
-		/** 
-		 * MINIT code fragment
-		 *
-		 * @access public
-		 * @return string
-		 */
-		function minitCode($classptr) {
-			$code = "zend_declare_property_{$this->type}({$classptr}, ";
-			$code.= '"'.$this->name.'", '.strlen($this->name).', ';
+        /**
+         * Property name
+         *
+         * @var string
+         */
+        private $name = "unknown";
 
-			switch ($this->type) {
-			case "string":
-				$code .= '"'.$this->value.'", ';
-				break;
-			case "long":
-				$code .= (int)$this->value.", ";
-				break;
-			// case "double": not yet supported
-			default: 
-				break;
-			}
+        function setName($name) 
+        {
+            if (!$this->isName($name)) {
+                return PEAR::raiseError("'$name' is not a valid property name");
+            }
+            
+            $this->name = $name;
 
-			
-			$code.= "ZEND_ACC_".strtoupper($this->access);
-			if ($this->isStatic) {
-				$code.= " | ZEND_ACC_STATIC";
-			}
-			if ($this->isAbstract) {
-				$code.= " | ZEND_ACC_ABSTRACT";
-			}
-			if ($this->isInterface) {
-				$code.= " | ZEND_ACC_INTERFACE";
-			}
-			if ($this->isFinal) {
-				$code.= " | ZEND_ACC_FINAL";
-			}
+            return true;
+        }
 
-			$code .= " TSRMLS_DC);\n";
+        function getName() 
+        {
+            return $this->name;
+        }
 
-			return $code;
-		}
-	}
+        /**
+         * Default value
+         *
+         * @var    string
+         * @access private
+         */
+        private $value = "";
+
+        function setValue($value) 
+        {
+            // TODO check?
+            $this->value = $value;
+
+            return true;
+        }
+
+        /** 
+         * MINIT code fragment
+         *
+         * @access public
+         * @return string
+         */
+        function minitCode($classptr) {
+            $code = "zend_declare_property_{$this->type}({$classptr}, ";
+            $code.= '"'.$this->name.'", '.strlen($this->name).', ';
+
+            switch ($this->type) {
+            case "string":
+                $code .= '"'.$this->value.'", ';
+                break;
+            case "long":
+                $code .= (int)$this->value.", ";
+                break;
+            // case "double": not yet supported
+            default: 
+                break;
+            }
+
+            
+            $code.= "ZEND_ACC_".strtoupper($this->access);
+            if ($this->isStatic) {
+                $code.= " | ZEND_ACC_STATIC";
+            }
+            if ($this->isAbstract) {
+                $code.= " | ZEND_ACC_ABSTRACT";
+            }
+            if ($this->isInterface) {
+                $code.= " | ZEND_ACC_INTERFACE";
+            }
+            if ($this->isFinal) {
+                $code.= " | ZEND_ACC_FINAL";
+            }
+
+            $code .= " TSRMLS_DC);\n";
+
+            return $code;
+        }
+    }
 ?>

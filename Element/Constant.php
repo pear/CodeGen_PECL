@@ -72,14 +72,14 @@ require_once "CodeGen/PECL/Element.php";
         var $desc;
 
 
-		/**
-		 * Create a C #define for this constant 
-		 * 
-		 * @access private
-		 * @var    bool
-		 */
-		var $define = false;
-		 
+        /**
+         * Create a C #define for this constant 
+         * 
+         * @access private
+         * @var    bool
+         */
+        var $define = false;
+         
 
         /**
          * Set constant name 
@@ -133,9 +133,9 @@ require_once "CodeGen/PECL/Element.php";
         {
             $this->value = $value;
 
-			if ($this->value == $this->name) {
-				$this->deinfe = false;
-			}
+            if ($this->value == $this->name) {
+                $this->deinfe = false;
+            }
 
             return true;
         }
@@ -163,15 +163,15 @@ require_once "CodeGen/PECL/Element.php";
          */
         function setDefine($value)
         {
-			if (is_bool($value)) {
-				$this->define = $value;
-				return true;
-			} else if (in_array($value, array("yes", "no"), true)) {
-				$this->define = ($value === 'yes');
-				return true;
-			}
-			
-			return PEAR::raiseError("'define' attribute has to be 'yes' or 'no', '$value' given");
+            if (is_bool($value)) {
+                $this->define = $value;
+                return true;
+            } else if (in_array($value, array("yes", "no"), true)) {
+                $this->define = ($value === 'yes');
+                return true;
+            }
+            
+            return PEAR::raiseError("'define' attribute has to be 'yes' or 'no', '$value' given");
         }
 
 
@@ -203,18 +203,18 @@ require_once "CodeGen/PECL/Element.php";
          * @return sting            C code snippet
          */
         function hCode($extension) {
-			if ($this->define) {
-				switch ($this->type) {
-				case "int":
-				case "float":
-					return "#define {$this->name} {$this->value}\n";
-					
-				case "string":
-					return "#define {$this->name} \"$value\"\n";
-				}
-			} 
+            if ($this->define) {
+                switch ($this->type) {
+                case "int":
+                case "float":
+                    return "#define {$this->name} {$this->value}\n";
+                    
+                case "string":
+                    return "#define {$this->name} \"$value\"\n";
+                }
+            } 
 
-			return "";
+            return "";
         }
 
 

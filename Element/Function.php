@@ -444,20 +444,20 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         break;
                     case 'name':
                         switch (strtolower($token)) {
-						// first check for 'known' PHP constants
+                        // first check for 'known' PHP constants
                         case 'true':
                         case 'false':
                         case 'null':
                         case 'array()':
                             $param['default']  = $token; 
-                            break;							
+                            break;                          
                         default:
-							// now see if this is a constand defined by this extension
-							if (isset($extension->constants[$token])) {
-								$param["default"] = $extension->constants[$token]->value;
-							} else {
-								return PEAR::raiseError("x1 invalid default value '$token' specification for parameter '$param[name]' ($type)");
-							}
+                            // now see if this is a constand defined by this extension
+                            if (isset($extension->constants[$token])) {
+                                $param["default"] = $extension->constants[$token]->value;
+                            } else {
+                                return PEAR::raiseError("x1 invalid default value '$token' specification for parameter '$param[name]' ($type)");
+                            }
                         }
                         break;
                     default:
@@ -908,17 +908,17 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 }
 
                 if ($this->code) {
-					if ($extension->linespecs) {
-						// generate #line preprocessor directive
-						if ($this->codeLine) {
-							$linedef = "#line {$this->codeLine} ";
-							if ($this->codeFile) {
-								$linedef.= '"'.$this->codeFile.'"';
-							}
-						} else {
-							$linedef = "";
-						}
-					}
+                    if ($extension->linespecs) {
+                        // generate #line preprocessor directive
+                        if ($this->codeLine) {
+                            $linedef = "#line {$this->codeLine} ";
+                            if ($this->codeFile) {
+                                $linedef.= '"'.$this->codeFile.'"';
+                            }
+                        } else {
+                            $linedef = "";
+                        }
+                    }
 
                     // if function code is specified so we add it here
                     if ($extension->language == "c") {

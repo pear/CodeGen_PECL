@@ -33,47 +33,47 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Dependency_With
-	extends CodeGen_Element
+    extends CodeGen_Element
 {
-	/**
-	 * Set option name
-	 *
-	 * @var    name
-	 * @access private
-	 */
-	var $name = false;
+    /**
+     * Set option name
+     *
+     * @var    name
+     * @access private
+     */
+    var $name = false;
 
-	/**
-	 * Short Summary
-	 *
-	 * @var    string
-	 * @access private
-	 */
-	var $summary = "";
-
-	/**
-	 * Long Description
-	 *
-	 * @var    string
-	 * @access private
-	 */
-	var $description = "";
-
-	/**
-	 * A file to test for to check a given argument path
-	 *
-	 * @var    string
-	 * @access private
-	 */
-	var $testfile = false;
-
-	/**
-	 * Default search path
+    /**
+     * Short Summary
      *
      * @var    string
      * @access private
-	 */
-	var $defaults = "/usr:/usr/local";
+     */
+    var $summary = "";
+
+    /**
+     * Long Description
+     *
+     * @var    string
+     * @access private
+     */
+    var $description = "";
+
+    /**
+     * A file to test for to check a given argument path
+     *
+     * @var    string
+     * @access private
+     */
+    var $testfile = false;
+
+    /**
+     * Default search path
+     *
+     * @var    string
+     * @access private
+     */
+    var $defaults = "/usr:/usr/local";
 
     /**
      * dependant libraries
@@ -95,34 +95,34 @@ class CodeGen_PECL_Dependency_With
 
 
 
-	function setName($name)
-	{
-		if (!ereg("[:alpha:][[:alnum:]-]*", $name)) {
-			return PEAR::raiseError("'$name' is not a valid --with option name");
-		}
+    function setName($name)
+    {
+        if (!ereg("[:alpha:][[:alnum:]-]*", $name)) {
+            return PEAR::raiseError("'$name' is not a valid --with option name");
+        }
 
-		$this->name = $name;
-		return true;
-	}
+        $this->name = $name;
+        return true;
+    }
 
-	function setSummary($text)
-	{
-		$this->summary = $text;
+    function setSummary($text)
+    {
+        $this->summary = $text;
 
-		return true;
-	}
+        return true;
+    }
 
-	function setDescription($text)
-	{
-		$this->description = $text;
+    function setDescription($text)
+    {
+        $this->description = $text;
 
-		return true;
-	}
+        return true;
+    }
 
-	function setTestfile($path) 
-	{
-		$this->testfile = $path;
-	}
+    function setTestfile($path) 
+    {
+        $this->testfile = $path;
+    }
 
     function setDefaults($defaults)
     {

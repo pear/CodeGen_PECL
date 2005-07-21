@@ -37,26 +37,26 @@ require_once "CodeGen/Release.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Release 
-	extends CodeGen_Release
+    extends CodeGen_Release
 {
-	/**
-	 * generate XML fragment for package.xml
-	 *
-	 * @access public
-	 * @return string XML fragment
-	 */
-	function packageXml()
+    /**
+     * generate XML fragment for package.xml
+     *
+     * @access public
+     * @return string XML fragment
+     */
+    function packageXml()
     {
-		$code = "\n  <release>\n";
-		foreach (array("version", "date", "state", "notes") as $key) {
-			if ($this->$key !== "") {
-				$code.= "    <$key>{$this->$key}</$key>\n";
-			}
-		}
-		$code.= "  </release>\n";
-		
-		return $code;
-	}
+        $code = "\n  <release>\n";
+        foreach (array("version", "date", "state", "notes") as $key) {
+            if ($this->$key !== "") {
+                $code.= "    <$key>{$this->$key}</$key>\n";
+            }
+        }
+        $code.= "  </release>\n";
+        
+        return $code;
+    }
 
 }
 

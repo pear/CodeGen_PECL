@@ -80,56 +80,56 @@ class CodeGen_PECL_Element_Logo
     {
         $this->name = $name;
         $this->id = '"'.strtoupper($name).'_LOGO_ID"';
-	} 
+    } 
     
-	/** 
-	 * Set image data and mimetype
-	 *
-	 * @param  string  binary image data
-	 * @param  string  mimetype
-	 * @return bool    true on success
-	 */
-	function setData($data, $mimetype = false)
-	{
-		$this->data = $data;
+    /** 
+     * Set image data and mimetype
+     *
+     * @param  string  binary image data
+     * @param  string  mimetype
+     * @return bool    true on success
+     */
+    function setData($data, $mimetype = false)
+    {
+        $this->data = $data;
 
-		if ($mimetype) {
-			$this->mimetype = $mimetype;
-		} else {
-			// perform a little magic
-			// we only accept GIF, PNG and JPEG here, so we can test 
-			// for the 'magic' signatures ourself
-			if (!strncmp("GIF8", $data, 4)) { 
-				$this->mimetype = "image/gif";
-			} else if(!strncmp(chr(0x89)."PNG\r\n", $data, 6)) {
-				$this->mimetype = "image/png";
-			} else if(ord($data[0]) == 0xff && ord($data[1]) == 0xd8) {
-				$this->mimetype = "image/jpeg";
-			} else {
-				return PEAR::raiseError("can't detect mimetype for logo image data, pease add 'mimetype=...' attribute");
-			}
-		}
+        if ($mimetype) {
+            $this->mimetype = $mimetype;
+        } else {
+            // perform a little magic
+            // we only accept GIF, PNG and JPEG here, so we can test 
+            // for the 'magic' signatures ourself
+            if (!strncmp("GIF8", $data, 4)) { 
+                $this->mimetype = "image/gif";
+            } else if(!strncmp(chr(0x89)."PNG\r\n", $data, 6)) {
+                $this->mimetype = "image/png";
+            } else if(ord($data[0]) == 0xff && ord($data[1]) == 0xd8) {
+                $this->mimetype = "image/jpeg";
+            } else {
+                return PEAR::raiseError("can't detect mimetype for logo image data, pease add 'mimetype=...' attribute");
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Load image data from file, set mimetype
-	 *
-	 * @param  string  path to image file
-	 * @param  string  mimetype
-	 * @return bool    true on success
-	 */
-	function loadFile($path, $mimetype = false)
-	{
-		if (!is_readable($path)) {
-			return PEAR::raiseError("Can't read logo image file '$path'");
-		}
+    /**
+     * Load image data from file, set mimetype
+     *
+     * @param  string  path to image file
+     * @param  string  mimetype
+     * @return bool    true on success
+     */
+    function loadFile($path, $mimetype = false)
+    {
+        if (!is_readable($path)) {
+            return PEAR::raiseError("Can't read logo image file '$path'");
+        }
 
-		return $this->setData(file_get_contents($path), $mimetype);
-	}
+        return $this->setData(file_get_contents($path), $mimetype);
+    }
 
-	
+    
     
     /** 
      * Code snippet for image registration in MINFO()

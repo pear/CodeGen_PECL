@@ -43,58 +43,58 @@ require_once "CodeGen/PECL/ExtensionParser.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Command
-	extends CodeGen_Command
+    extends CodeGen_Command
 {
-	/**
-	 * Command constructor
-	 *
-	 * @param object  Extension to work on
-	 */
-	function __construct(CodeGen_Extension $extension)
-	{
-		parent::__construct($extension);
-		
-		if ($this->options->have("linespecs", "l")) {
-			$this->extension->setLinespecs(true);
-		}
-	}
+    /**
+     * Command constructor
+     *
+     * @param object  Extension to work on
+     */
+    function __construct(CodeGen_Extension $extension)
+    {
+        parent::__construct($extension);
+        
+        if ($this->options->have("linespecs", "l")) {
+            $this->extension->setLinespecs(true);
+        }
+    }
 
-	/**
-	 * Add pecl-gen specific command line options
-	 *
-	 * @return array  extended options
-	 */
-	function commandOptions()
-	{
-		list($shortOptions, $longOptions) = parent::commandOptions();
+    /**
+     * Add pecl-gen specific command line options
+     *
+     * @return array  extended options
+     */
+    function commandOptions()
+    {
+        list($shortOptions, $longOptions) = parent::commandOptions();
 
-		$shortOptions .= "l";
+        $shortOptions .= "l";
 
-		$longOptions= array_merge($longOptions, array("extname=", 
-													  "full-xml", 
-													  "function=",
-													  "linespecs",
-													  "no-help",
-													  "proto=",
-													  "skel="    , 
-													  "stubs=",  
-													  "xml==")); 
+        $longOptions= array_merge($longOptions, array("extname=", 
+                                                      "full-xml", 
+                                                      "function=",
+                                                      "linespecs",
+                                                      "no-help",
+                                                      "proto=",
+                                                      "skel="    , 
+                                                      "stubs=",  
+                                                      "xml==")); 
 
-		return array($shortOptions, $longOptions);
-	}
+        return array($shortOptions, $longOptions);
+    }
 
-	/**
-	 * Show usage/help information
-	 *
-	 * @param string  otpional additional message
-	 */
+    /**
+     * Show usage/help information
+     *
+     * @param string  otpional additional message
+     */
     function showUsage($message = false)
     {
-		$fp = fopen("php://stderr", "w");
-		
-		if ($message) fputs($fp, "$message\n\n");
-		
-		fputs($fp, "Usage:
+        $fp = fopen("php://stderr", "w");
+        
+        if ($message) fputs($fp, "$message\n\n");
+        
+        fputs($fp, "Usage:
 
 pecl-gen [-h] [--force] [--experimental] [--version]
   [--extname=name] [--proto=file] [--skel=dir] [--stubs=file] 
@@ -125,140 +125,140 @@ pecl-gen [-h] [--force] [--experimental] [--version]
                      (skeleton stuff is now self-contained)
 ");
 
-		fclose($fp);
-	}
+        fclose($fp);
+    }
 
 
-	/**
-	 * Generate just a single function stub file
-	 *
-	 */
-	function singleFunction() 
-	{
-		$func = new CodeGen_PECL_Element_Function;
+    /**
+     * Generate just a single function stub file
+     *
+     */
+    function singleFunction() 
+    {
+        $func = new CodeGen_PECL_Element_Function;
 
-		$func->set_role("public");
+        $func->set_role("public");
 
-		$err = $func->setProto(trim($this->options->value("function")));
-		if (PEAR::isError($err)) {
-			terminate($err->get_message());
-		}   
-		
-		$err = $this->extension->addFunction($func);
-		if (PEAR::isError($err)) {
-			terminate($err->get_message());
-		}
-		
-		echo $this->extension->publicFunctionsC();
-		
-		echo "\n\n/*----------------------------------------------------------------------*/\n\n";
-		
-		foreach ($this->extension->functions as $name => $function) {
-			echo sprintf("\tPHP_FE(%-20s, NULL)\n",$name);
-		}
-		
-		echo "\n\n/*----------------------------------------------------------------------*/\n\n";
-		
-		foreach ($this->extension->functions as $name => $function) {
-			echo "PHP_FUNCTION($name);\n";
-		}
-	}
+        $err = $func->setProto(trim($this->options->value("function")));
+        if (PEAR::isError($err)) {
+            terminate($err->get_message());
+        }   
+        
+        $err = $this->extension->addFunction($func);
+        if (PEAR::isError($err)) {
+            terminate($err->get_message());
+        }
+        
+        echo $this->extension->publicFunctionsC();
+        
+        echo "\n\n/*----------------------------------------------------------------------*/\n\n";
+        
+        foreach ($this->extension->functions as $name => $function) {
+            echo sprintf("\tPHP_FE(%-20s, NULL)\n",$name);
+        }
+        
+        echo "\n\n/*----------------------------------------------------------------------*/\n\n";
+        
+        foreach ($this->extension->functions as $name => $function) {
+            echo "PHP_FUNCTION($name);\n";
+        }
+    }
 
-	/**
-	 * ext-skel compatibility mode
-	 *
-	 */
-	function extSkelCompat()
-	{
-		$extname = $this->options->value("extname");
-		
-		$err = $this->extension->setName($extname);
-		if (PEAR::isError($err)) {
-			$command->terminate($err->getMessage());
-		}
-		
-		if ($this->options->have("proto")) {
-			$proto_file = $this->options->value("proto");
-			
-			if (!file_exists($proto_file) || !is_readable($proto_file)) {
-				$command->terminate("cannot open proto file");  
-			}
-			
-			foreach (file($proto_file) as $line) {
-				$func = new CodeGen_PECL_Element_Function;
-				$func->setRole("public");
-				$err = $func->setProto(trim($line));
-				if (PEAR::isError($err)) {
-					$command->terminate($err->getMessage());
-				}   
-				
-				$err = $this->extension->addFunction($func);
-				if (PEAR::isError($err)) {
-					$command->terminate($err->getMessage());
-				}
-			}
-		}
-		
-		if ($this->options->have("stubs")) {
-			$stubname = $this->options->value("stubs");
-			
-			if (file_exists("$stubname")  && !$this->options->have("f", "force")) {
-				$command->terminate("'$stubname' already exists (use '--force' to overwrite)"); 
-			}
-			
-			$fp = fopen($stubname, "w");
-			fputs($fp, $this->extension->publicFunctionsC());
-			
-			fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
-			
-			foreach ($this->extension->functions as $name => $function) {
-				fputs($fp, sprintf("\tPHP_FE(%-20s, NULL)\n",$name));
-			}
-			
-			fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
-			
-			foreach ($this->extension->functions as $name => $function) {
-				fputs($fp, "PHP_FUNCTION($name);\n");
-			}
-			
-			fclose($fp);
-			
-			echo "$stubname successfully written\n";
-		} else { 
-			if (file_exists("./$extname")  && !$this->options->have("f", "force")) {
-				$command->terminate("'$extname' already exists, can't create directory (use '--force' to override)"); 
-			}
-			
-			$err = System::mkdir($extname);
-			if (PEAR::isError($err)) {
-				$command->terminate($err->getMessage());
-			}
-			
-			$err = $this->extension->generateSource("./$extname");
-			if (PEAR::isError($err)) {
-				$command->terminate($err->getMessage());
-			}
-			
-			if ($this->options->have("xml")) {
-				$manpath = "$extname/manual/". str_replace('_', '-', $extname);
-				
-				$err = System::mkdir("-p $manpath");
-				if (PEAR::isError($err)) {
-					$command->terminate($err->getMessage());
-				}
-				
-				$err = $this->extension->generateDocumentation($manpath);
-				if (PEAR::isError($err)) {
-					$command->terminate($err->getMessage());
-				}
-			}
-			
-			$this->extension->write_readme("./$extname");
-			
-			if (!$this->options->have("quiet")) {
-				echo $this->extension->successMsg();
-			}
-		}
+    /**
+     * ext-skel compatibility mode
+     *
+     */
+    function extSkelCompat()
+    {
+        $extname = $this->options->value("extname");
+        
+        $err = $this->extension->setName($extname);
+        if (PEAR::isError($err)) {
+            $command->terminate($err->getMessage());
+        }
+        
+        if ($this->options->have("proto")) {
+            $proto_file = $this->options->value("proto");
+            
+            if (!file_exists($proto_file) || !is_readable($proto_file)) {
+                $command->terminate("cannot open proto file");  
+            }
+            
+            foreach (file($proto_file) as $line) {
+                $func = new CodeGen_PECL_Element_Function;
+                $func->setRole("public");
+                $err = $func->setProto(trim($line));
+                if (PEAR::isError($err)) {
+                    $command->terminate($err->getMessage());
+                }   
+                
+                $err = $this->extension->addFunction($func);
+                if (PEAR::isError($err)) {
+                    $command->terminate($err->getMessage());
+                }
+            }
+        }
+        
+        if ($this->options->have("stubs")) {
+            $stubname = $this->options->value("stubs");
+            
+            if (file_exists("$stubname")  && !$this->options->have("f", "force")) {
+                $command->terminate("'$stubname' already exists (use '--force' to overwrite)"); 
+            }
+            
+            $fp = fopen($stubname, "w");
+            fputs($fp, $this->extension->publicFunctionsC());
+            
+            fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
+            
+            foreach ($this->extension->functions as $name => $function) {
+                fputs($fp, sprintf("\tPHP_FE(%-20s, NULL)\n",$name));
+            }
+            
+            fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
+            
+            foreach ($this->extension->functions as $name => $function) {
+                fputs($fp, "PHP_FUNCTION($name);\n");
+            }
+            
+            fclose($fp);
+            
+            echo "$stubname successfully written\n";
+        } else { 
+            if (file_exists("./$extname")  && !$this->options->have("f", "force")) {
+                $command->terminate("'$extname' already exists, can't create directory (use '--force' to override)"); 
+            }
+            
+            $err = System::mkdir($extname);
+            if (PEAR::isError($err)) {
+                $command->terminate($err->getMessage());
+            }
+            
+            $err = $this->extension->generateSource("./$extname");
+            if (PEAR::isError($err)) {
+                $command->terminate($err->getMessage());
+            }
+            
+            if ($this->options->have("xml")) {
+                $manpath = "$extname/manual/". str_replace('_', '-', $extname);
+                
+                $err = System::mkdir("-p $manpath");
+                if (PEAR::isError($err)) {
+                    $command->terminate($err->getMessage());
+                }
+                
+                $err = $this->extension->generateDocumentation($manpath);
+                if (PEAR::isError($err)) {
+                    $command->terminate($err->getMessage());
+                }
+            }
+            
+            $this->extension->write_readme("./$extname");
+            
+            if (!$this->options->have("quiet")) {
+                echo $this->extension->successMsg();
+            }
+        }
 
-	}
+    }
 }

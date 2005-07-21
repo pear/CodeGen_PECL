@@ -199,7 +199,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
             $dtor.= 'extern "C" ';
         }
 
-		$dtor.= 
+        $dtor.= 
 "void {$this->name}_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC)
 {
     {$this->payload} * resource = ({$this->payload} *)(rsrc->ptr);
