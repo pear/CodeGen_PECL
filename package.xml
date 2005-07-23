@@ -62,38 +62,42 @@
     </deps>
 
     <filelist>
-      <file role="doc" name="manual.html"/>
       <dir name="/" baseinstalldir="/">
+        <dir name="docs">
+          <file role="doc" name="manual.html"/>
+        </dir>
         <file role="script" name="pecl-gen">
           <replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
           <replace from="@php_dir@"  to="php_dir"  type="pear-config" />
         </file>
       </dir>
-      <dir name="/" baseinstalldir="CodeGen/PECL">
-        <file role="php">Extension.php</file>
-        <file role="php">Release.php</file>
-        <file role="php">Maintainer.php</file>
-        <file role="php">Element.php</file>
-        <file role="php">Command.php</file>
-        <dir name="Element">
-          <file role="php">Constant.php</file>
-          <file role="php">Function.php</file>
-          <file role="php">Global.php</file>
-          <file role="php">Ini.php</file>
-          <file role="php">Logo.php</file>
-          <file role="php">Resource.php</file>
-          <file role="php">Test.php</file>
-          <file role="php">Class.php</file>
-          <file role="php">Method.php</file>
-          <file role="php">Property.php</file>
-          <file role="php">Stream.php</file>
+      <dir name="/" baseinstalldir="CodeGen">
+        <dir name="PECL">
+          <file role="php">Extension.php</file>
+          <file role="php">Release.php</file>
+          <file role="php">Maintainer.php</file>
+          <file role="php">Element.php</file>
+          <file role="php">Command.php</file>
+          <dir name="Element">
+            <file role="php">Constant.php</file>
+            <file role="php">Function.php</file>
+            <file role="php">Global.php</file>
+            <file role="php">Ini.php</file>
+            <file role="php">Logo.php</file>
+            <file role="php">Resource.php</file>
+            <file role="php">Test.php</file>
+            <file role="php">Class.php</file>
+            <file role="php">Method.php</file>
+            <file role="php">Property.php</file>
+            <file role="php">Stream.php</file>
+          </dir>
+          <dir name="Dependency">
+           <file role="php">With.php</file>
+           <file role="php">Lib.php</file>
+           <file role="php">Header.php</file>
+          </dir>
+          <file role="php">ExtensionParser.php</file>
         </dir>
-        <dir name="Dependency">
-         <file role="php">With.php</file>
-         <file role="php">Lib.php</file>
-         <file role="php">Header.php</file>
-        </dir>
-        <file role="php">ExtensionParser.php</file>
       </dir>
     </filelist>
   </release>

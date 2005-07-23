@@ -166,7 +166,7 @@ class CodeGen_PECL_Element_Logo
 #include \"php_logos.h\"
 
 static unsigned char {$this->name}_logo[] = {
-#include \"{$this->name}_logo.h\"
+#include \"{$this->name}_logos.h\"
 }; 
 ";
     }
