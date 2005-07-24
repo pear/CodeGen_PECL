@@ -159,12 +159,8 @@ require_once "CodeGen/Tools/Indent.php";
          */
         private $properties = array();
         
-        function addProperty($property) 
+        function addProperty(CodeGen_PECL_Element_Property $property) 
         {
-            if (!is_a($property, "CodeGen_PECL_Element_Property")) {
-                return PEAR::raiseError("argument is not CodeGen_PECL_Element_Property");
-            }
-            
             if (isset($this->properties[$property->getName()])) {
                 return PEAR::raiseError("property '$property' already exists");
             }
@@ -180,12 +176,8 @@ require_once "CodeGen/Tools/Indent.php";
          */
         public $methods = array();
         
-        function addMethod($method) 
+        function addMethod(CodeGen_PECL_Element_Method $method) 
         {
-            if (!is_a($method, "CodeGen_PECL_Element_Method")) {
-                return PEAR::raiseError("argument is not CodeGen_PECL_Element_Method");
-            }
-            
             if (isset($this->functions[$method->name])) {
                 return PEAR::raiseError("method '$function' already exists");
             }

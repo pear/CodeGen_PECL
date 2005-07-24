@@ -295,12 +295,8 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a function object
      */
-    function addFunction($function)
+    function addFunction(CodeGen_PECL_Element_Function $function)
     {
-        if (!is_a($function, "CodeGen_PECL_Element_Function")) {
-            return PEAR::raiseError("argument is not CodeGen_PECL_Element_Function");
-        }
-
         $role = $function->getRole();
         
         switch ($role) {
@@ -1980,11 +1976,7 @@ you have been warned!
      * @access public
      * @param  object  a Test object
      */
-    function addTest($test) {
-        if (! is_a($test, "CodeGen_PECL_Element_Test")) {
-            return PEAR::raiseError("Parameter is not a CodeGen_PECL Test instance");
-        }
-
+    function addTest(CodeGen_PECL_Element_Test $test) {
         $this->testcases[$test->name] = $test;
         return true;
     }
