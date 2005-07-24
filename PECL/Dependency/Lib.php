@@ -66,6 +66,11 @@ class CodeGen_PECL_Dependency_Lib
         return $this->name;
     }
     
+    function testPlatform($name) 
+    {
+        return $this->platform->test($name);
+    }
+
     function configm4($extName, $withName)
     {
         static $first = true;
@@ -87,7 +92,7 @@ class CodeGen_PECL_Dependency_Lib
         $ret.= "  PHP_ADD_LIBRARY_WITH_PATH({$this->name}, \$PHP_{$withUpname}_DIR/{$this->path}, {$extUpname}_SHARED_LIBADD)\n";
             
         if ($this->function) {
-            $ret.= "  AC_CHECK_LIB({$this->name}, {$this->function}, [AC_DEFINE(HAVE_{$this->upname},1,[ ])], [AC_MSG_ERROR({$this->name} library not found or wrong version)],)\n";
+            $ret.= "  AC_CHECK_LIB({$this->name}, {$this->function}, [AC_DEFINE(HAVE_{$extUpname},1,[ ])], [AC_MSG_ERROR({$this->name} library not found or wrong version)],)\n";
         }
         
         return $ret;
@@ -99,7 +104,7 @@ class CodeGen_PECL_Dependency_Lib
             return "";
         }
 
-        $extUpname = strtoupper($extname);
+        $extUpname = strtoupper($extName);
       
         return "
   if (!CHECK_LIB(\"{$this->name}.lib\", \"{$extName}\", PHP_$extUpname)) { 

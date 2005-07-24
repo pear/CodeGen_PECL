@@ -1689,10 +1689,10 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
         // add libraries from <deps> section
         if (count($this->libs)) {
             foreach ($this->libs as $lib) {
-                if (!$lib["platform"]->test("windows")) {
+                if (!$lib->testPlatform("windows")) {
                     continue;
                 }
-                $winlibs .= " $lib[name].lib";
+                $winlibs .= " ".$lib->getName().".lib";
             }
         }
 
@@ -2008,69 +2008,67 @@ you have been warned!
     */
     function writeDotCvsignore()
     {
-        // open output file
-        $fp = fopen($this->dirpath."/.cvsignore", "w");
+        ob_start();
 
         // unix specific entries
         if ($this->platform->test("unix")) {
-            fputs($fp, "*.lo\n");
-            fputs($fp, "*.la\n");
-            fputs($fp, ".deps\n");
-            fputs($fp, ".libs\n");
-            fputs($fp, "Makefile\n");
-            fputs($fp, "Makefile.fragments\n");
-            fputs($fp, "Makefile.global\n");
-            fputs($fp, "Makefile.objects\n");
-            fputs($fp, "acinclude.m4\n");
-            fputs($fp, "aclocal.m4\n");
-            fputs($fp, "autom4te.cache\n");
-            fputs($fp, "build\n");
-            fputs($fp, "config.cache\n");
-            fputs($fp, "config.guess\n");
-            fputs($fp, "config.h\n");
-            fputs($fp, "config.h.in\n");
-            fputs($fp, "config.log\n");
-            fputs($fp, "config.nice\n");
-            fputs($fp, "config.status\n");
-            fputs($fp, "config.sub\n");
-            fputs($fp, "configure\n");
-            fputs($fp, "configure.in\n");
-            fputs($fp, "conftest\n");
-            fputs($fp, "conftest.c\n");
-            fputs($fp, "include\n");
-            fputs($fp, "install-sh\n");
-            fputs($fp, "libtool\n");
-            fputs($fp, "ltmain.sh\n");
-            fputs($fp, "missing\n");
-            fputs($fp, "mkinstalldirs\n");
-            fputs($fp, "modules\n");
-            fputs($fp, "scan_makefile_in.awk\n");
+            echo 
+"*.lo
+*.la
+.deps
+.libs
+Makefile
+Makefile.fragments
+Makefile.global
+Makefile.objects
+acinclude.m4
+aclocal.m4
+autom4te.cache
+build
+config.cache
+config.guess
+config.h
+config.h.in
+config.log
+config.nice
+config.status
+config.sub
+configure
+configure.in
+conftest
+conftest.c
+include
+install-sh
+libtool
+ltmain.sh
+missing
+mkinstalldirs
+modules
+scan_makefile_in.awk
+";
         }
 
         // windows specific entries
         if ($this->platform->test("windows")) {
-            fputs($fp, "*.dsw\n");
-            fputs($fp, "*.plg\n");
-            fputs($fp, "*.opt\n");
-            fputs($fp, "*.ncb\n");
-            fputs($fp, "Release\n");
-            fputs($fp, "Release_inline\n");
-            fputs($fp, "Debug\n");
-            fputs($fp, "Release_TS\n");
-            fputs($fp, "Release_TSDbg\n");
-            fputs($fp, "Release_TS_inline\n");
-            fputs($fp, "Debug_TS\n");
+            echo 
+"*.dsw
+*.plg
+*.opt
+*.ncb
+Release
+Release_inline
+Debug
+Release_TS
+Release_TSDbg
+Release_TS_inline
+Debug_TS
+";
         }
 
         // "pear package" creates .tgz
-        fputs($fp, "*.tgz\n");
+        echo "{$this->name}*.tgz\n";
 
-        // some typical backup file patterns
-        fputs($fp, "*~\n");
-        fputs($fp, "#*#\n");
-        fputs($fp, ".#*\n");
-
-        fclose($fp);
+        return $this->obToFile(".cvsignore");
     }
 
     /**
