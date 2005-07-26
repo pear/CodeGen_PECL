@@ -58,6 +58,22 @@ class CodeGen_PECL_Release
         return $code;
     }
 
+
+    /**
+     * Code snippet for phpinfo output
+     *
+     * @access public
+     * @param  string extension name
+     * @return string C code snippet
+     */
+    function phpinfoCode($name) 
+    {
+        return sprintf("    php_printf(\"<p>Version %s%s (%s)</p>\\n\", );\n",
+                       $this->version,
+                       $this->state,
+                       date("Y-m-d", $this->date)
+                       );
+    }
 }
 
 ?>
