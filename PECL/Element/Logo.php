@@ -44,7 +44,7 @@ class CodeGen_PECL_Element_Logo
      * @access private
      * @var string
      */
-    var $name;
+    private $name;
     
     /**
      * ID for URL call of image ("...?=ID")
@@ -52,7 +52,7 @@ class CodeGen_PECL_Element_Logo
      * @access private
      * @var string
      */
-    var $id;
+    private $id;
     
     /**
      * The actual image data as a binary string
@@ -60,14 +60,14 @@ class CodeGen_PECL_Element_Logo
      * @access private
      * @var string
      */
-    var $data;
+    private $data;
     
     /**
      *
      * @access private
      * @var string
      */
-    var $mimeType = false;
+    private $mimeType = false;
     
     /**
      * Constructor
@@ -82,6 +82,17 @@ class CodeGen_PECL_Element_Logo
         $this->id = '"'.strtoupper($name).'_LOGO_ID"';
     } 
     
+
+    /**
+     * name getter
+     *
+     * @return  string 
+     */
+    function getName()
+    {
+        return $this->name;
+    }
+
     /** 
      * Set image data and mimetype
      *
@@ -197,6 +208,28 @@ static unsigned char {$this->name}_logo[] = {
         return $code;
     }
 
+
+    /**
+     * Code snippet for phpinfo output
+     *
+     * @access public
+     * @param  string extension name
+     * @return string C code snippet
+     */
+    function phpinfoCode($name) 
+    {
+            return "
+    php_printf(\"<img src='\");
+    if (SG(request_info).request_uri) {
+        php_printf(\"%s\", (SG(request_info).request_uri));
+    }   
+    php_printf(\"?=%s\", {$this->id});
+    php_printf(\"' align='right' alt='image' border='0'>\\n\");
+
+"; 
+    }
+
+    
 }
 
 ?>
