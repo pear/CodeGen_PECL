@@ -51,10 +51,8 @@ class CodeGen_PECL_Element_Test
     /**
      * testfile basename
      *
-     * @access private
-     * @type   string
      */
-    var $name = "";
+    protected $name = "";
     
     /**
      * Setter for testcase name
@@ -87,10 +85,9 @@ class CodeGen_PECL_Element_Test
     /**
      * Testcase description
      *
-     * @access private
      * @type   string
      */
-    var $title = "";
+    protected $title = "";
 
     /**
      * Getter for testcase title
@@ -117,10 +114,9 @@ class CodeGen_PECL_Element_Test
     /**
      * Test code to decide whether to skip a test
      *
-     * @access private
      * @type   string
      */
-    var $skipif = "";
+    protected $skipif = "";
 
     /**
      * Getter for skipif test code
@@ -147,10 +143,10 @@ class CodeGen_PECL_Element_Test
     /**
      * GET data
      *
-     * @access private
+     * @access protected
      * @type   string
      */
-    var $get = false;
+    protected $get = false;
 
     /**
      * Getter for GET data
@@ -177,10 +173,10 @@ class CodeGen_PECL_Element_Test
     /**
      * raw POST data
      *
-     * @access private
+     * @access protected
      * @type   string
      */
-    var $post = false;
+    protected $post = false;
 
     /**
      * Getter for raw POST data
@@ -207,9 +203,9 @@ class CodeGen_PECL_Element_Test
     /**
      * actual test code
      *
-     * @access private
      * @type   string
      */
+    protected $code;
 
     /**
      * Getter for test code
@@ -236,9 +232,9 @@ class CodeGen_PECL_Element_Test
     /**
      * expected output for test code
      *
-     * @access private
      * @type   string
      */
+    protected $output;
 
     /**
      * Getter for expected output
@@ -283,12 +279,14 @@ class CodeGen_PECL_Element_Test
      */
     function writeTest($extension) 
     {
-        ob_start();
+        $extName = $extension->getName();
 
-        echo "--TEST--\n{$this->name}\n";
+        $file = new CodeGen_Tools_Outbuf("{$extName}/tests/{$this->name}.phpt");
+
+        echo "--TEST--\n{$this->title}\n";
         
         if (!empty($this->skipif)) {
-            echo "--SKIPIF--\n{$this->skipif}\n";
+            echo "--SKIPIF--\n<?php if({$this->skipif}) echo 'skip'; ?>\n";
         }
 
         if (!empty($this->post)) {
@@ -299,13 +297,10 @@ class CodeGen_PECL_Element_Test
             echo "--GET--\n{$this->get}\n";
         }
         
-        echo "--FILE--\n{$this->code}";
+        echo "--FILE--\n<?php\n{$this->code}\n?>\n";
         echo "--EXPECT--\n{$this->output}";
 
-        $fp = fopen("{$extension->name}/tests/{$this->name}.phpt", "w");
-        fputs($fp, ob_get_contents());
-        ob_end_clean();
-        fclose($fp);
+        $file->write();
     }
 }
 ?>
