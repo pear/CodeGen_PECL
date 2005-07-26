@@ -41,7 +41,7 @@ class CodeGen_PECL_Dependency_With
      * @var    name
      * @access private
      */
-    var $name = false;
+    private $name = false;
 
     /**
      * Short Summary
@@ -49,7 +49,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $summary = "";
+    private $summary = "";
 
     /**
      * Long Description
@@ -57,7 +57,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $description = "";
+    private $description = "";
 
     /**
      * A file to test for to check a given argument path
@@ -65,7 +65,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $testfile = false;
+    private $testfile = false;
 
     /**
      * Default search path
@@ -73,7 +73,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $defaults = "/usr:/usr/local";
+    private $defaults = "/usr:/usr/local";
 
     /**
      * dependant libraries
@@ -81,7 +81,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $libs = array();
+    private $libs = array();
 
 
     /**
@@ -90,11 +90,25 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    var $headers = array();
+    private $headers = array();
 
 
+    /**
+     * name getter
+     * 
+     * @param string
+     */
+    function getName()
+    {
+        return $this->name;
+    }
 
 
+    /**
+     * name setter
+     *
+     * @param  string
+     */
     function setName($name)
     {
         if (!ereg("[:alpha:][[:alnum:]-]*", $name)) {
@@ -105,6 +119,11 @@ class CodeGen_PECL_Dependency_With
         return true;
     }
 
+    /**
+     * summary setter
+     *
+     * @param string
+     */
     function setSummary($text)
     {
         $this->summary = $text;
@@ -112,6 +131,11 @@ class CodeGen_PECL_Dependency_With
         return true;
     }
 
+    /**
+     * description setter
+     *
+     * @param string
+     */
     function setDescription($text)
     {
         $this->description = $text;
@@ -119,17 +143,52 @@ class CodeGen_PECL_Dependency_With
         return true;
     }
 
+    /**
+     * testfile setter
+     *
+     * @param string
+     */
     function setTestfile($path) 
     {
         $this->testfile = $path;
     }
 
+    /**
+     * testfile getter
+     * 
+     * @return string
+     */
+    function getTestfile()
+    {
+        return $this->testfile;
+    }
+
+    /**
+     * default searchpath setter
+     *
+     * @param string
+     */
     function setDefaults($defaults)
     {
         $this->defaults = $defaults;
     }
 
-    function addLib($lib)
+    /**
+     * default searchpath getter
+     * 
+     * @return string
+     */
+    function getDefaults()
+    {
+        return $this->defaults;
+    }
+
+    /**
+     * add library dependency
+     * 
+     * @param  object
+     */
+    function addLib(CodeGen_PECL_Dependency_Lib $lib)
     {
         $name = $lib->getName();
         
@@ -142,7 +201,22 @@ class CodeGen_PECL_Dependency_With
         return true;
     }
 
-    function addHeader($header)
+    /**
+     * libraries getter
+     *
+     * @return array
+     */
+    function getLibs()
+    {
+        return $this->libs;
+    }
+
+    /** 
+     * add header dependency
+     *
+     * @param object
+     */
+    function addHeader(CodeGen_PECL_Dependency_Header $header)
     {
         $name = $header->getName();
         
@@ -154,6 +228,17 @@ class CodeGen_PECL_Dependency_With
 
         return true;
     }
+
+    /**
+     * headers getter
+     *
+     * @return array
+     */
+    function getHeaders()
+    {
+        return $this->headers;
+    }
+
 }
 
 ?>

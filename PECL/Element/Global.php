@@ -46,7 +46,7 @@ class CodeGen_PECL_Element_Global
      * @access private
      * @var     string
      */
-    var $name;
+    protected $name;
     
     /**
      * Set method for name
@@ -65,6 +65,16 @@ class CodeGen_PECL_Element_Global
         return true;
     }
     
+    /**
+     * Get method for name
+     *
+     * @access public
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
+    }
 
 
 
@@ -74,10 +84,10 @@ class CodeGen_PECL_Element_Global
      * @access private
      * @var     string
      */
-    var $type;
+    protected $type;
     
     /**
-     * Set method for name
+     * Set method for type
      *
      * @access public
      * @var string C type name
@@ -93,14 +103,26 @@ class CodeGen_PECL_Element_Global
         return true;
     }
     
+    /**
+     * Get method for name
+     *
+     * @access public
+     * @return string
+     */
+    function getType($name)
+    {
+        return $this->type;
+    }
+
     
+
     /**
      * Default value
      *
      * @access private
      * @var     string
      */
-    var $value;
+    protected $value;
 
     /**
      * Set method for default value
@@ -114,6 +136,17 @@ class CodeGen_PECL_Element_Global
         $this->value = $value;
         
         return true;
+    }
+
+    /** 
+     * Get method for default value
+     *
+     * @access public
+     * @return string
+     */
+    function getValue()
+    {
+        return $this->value;
     }
     
 

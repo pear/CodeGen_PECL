@@ -44,7 +44,7 @@ class CodeGen_PECL_Element_Stream
      * @var string
      * @access private
      */
-    var $name = "unknown";
+    protected $name = "unknown";
 
     /**
      * Set method for name
@@ -77,7 +77,7 @@ class CodeGen_PECL_Element_Stream
      * @var string
      * @access private
      */
-    var $summary = "";
+    protected $summary = "";
 
     /**
      * Set method for destructor snippet
@@ -100,7 +100,7 @@ class CodeGen_PECL_Element_Stream
      * @var string
      * @access private
      */
-    var $description = "";
+    protected $description = "";
 
     /**
      * Set method for destructor snippet
@@ -119,8 +119,19 @@ class CodeGen_PECL_Element_Stream
 
 
 
-    var $codeBlocks = array();
+    /**
+     * code blocks for various handlers 
+     *
+     * @var array
+     */
+    protected $codeBlocks = array();
 
+    /**
+     * add code for a handler
+     *
+     * @param  string handler role
+     * @param  string C code snippet
+     */
     function addCode($role, $code)
     {
         if (isset($codeBlock[$role])) {

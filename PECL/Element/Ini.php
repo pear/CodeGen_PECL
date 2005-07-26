@@ -46,7 +46,7 @@ require_once "CodeGen/PECL/Element.php";
        * @access private
        * @var     string
        */
-      var $name;
+      protected $name;
       
       /**
        * Set method for name
@@ -65,6 +65,17 @@ require_once "CodeGen/PECL/Element.php";
           return true;
       }
 
+      /**
+       * Get method for name
+       *
+       * @access public
+       * @return string
+       */
+      function getName()
+      {
+          return $this->name;
+      }
+
 
 
 
@@ -74,7 +85,7 @@ require_once "CodeGen/PECL/Element.php";
        * @access private
        * @var     string
        */
-      var $type;
+      protected $type;
 
       /**
        * Set method for data type
@@ -111,121 +122,175 @@ require_once "CodeGen/PECL/Element.php";
       }
 
 
-
-
-    /**
-     * Directive default value
-     *
-     * @access private
-     * @var     string
-     */
-    var $value;
-
-    /**
-     * Set method for default value
-     *
-     * @access public
-     * @param string default value 
-     */
-    function setValue($value)
-    {
-        // TODO checks
-        $this->value = $value;
-        
-        return true;
-    }
+      /**
+       * Get method for type
+       *
+       * @access public
+       * @return string
+       */
+      function getType()
+      {
+          return $this->type;
+      }
 
 
 
+      /**
+       * Directive default value
+       *
+       * @access private
+       * @var     string
+       */
+      protected $value;
+      
+      /**
+       * Set method for default value
+       *
+       * @access public
+       * @param string default value 
+       */
+      function setValue($value)
+      {
+          // TODO checks
+          $this->value = $value;
+          
+          return true;
+      }
 
-    /**
-     * Directive description
-     *
-     * @access private
-     * @var     string
-     */
-    var $desc;
-
-    /**
-     * Set method for directive description
-     *
-     * @access public
-     * @param string description
-     */
-    function setDesc($desc)
-    {
-        $this->desc = $desc;
-        
-        return true;
-    }
-
+      /**
+       * Get method for default value
+       *
+       * @access public
+       * @return string
+       */
+      function getValue()
+      {
+          return $this->value;
+      }
 
 
 
 
-    /**
-     * Directive access mode
-     *
-     * @access private
-     * @var     string
-     */
-    var $access = "PHP_INI_ALL";
+      /**
+       * Directive description
+       *
+       * @access private
+       * @var     string
+       */
+      protected $desc;
+      
+      /**
+       * Set method for directive description
+       *
+       * @access public
+       * @param string description
+       */
+      function setDesc($desc)
+      {
+          $this->desc = $desc;
+          
+          return true;
+      }
+      
 
-    /**
-     * Set method for access mode
-     *
-     * @access private
-     * @param string access mode specification (system|perdir|user|all)
-     */
-    function setAccess($access)
-    {
-        switch ($access) {
-        case "system":
-            $this->access = "PHP_INI_SYSTEM";
-            return true;
-        case "perdir":
-            $this->access = "PHP_INI_PERDIR";
-            return true;
-        case "user":
-            // TODO shouldn't this be ALL instead?
-            $this->access = "PHP_INI_USER";
-            return true;
-        case "all":
-        case "":
-            $this->access = "PHP_INI_ALL";
-            return true;
-        default:
-            return PEAR::raiseError("'$access' is not a valid access mode (system|perdir|user|all)");
-        }
-    }
+      /**
+       * Get method for description
+       *
+       * @access public
+       * @return string
+       */
+      function getDesc()
+      {
+          return $this->desc;
+      }
 
 
 
+      /**
+       * Directive access mode
+       *
+       * @access private
+       * @var     string
+       */
+      protected $access = "PHP_INI_ALL";
 
-    /**
-     * Directive OnUpdate handler
-     *
-     * @access private
-     * @var     string
-     */
-    var $onupdate;
+      /**
+       * Set method for access mode
+       *
+       * @access private
+       * @param string access mode specification (system|perdir|user|all)
+       */
+      function setAccess($access)
+      {
+          switch ($access) {
+          case "system":
+              $this->access = "PHP_INI_SYSTEM";
+              return true;
+          case "perdir":
+              $this->access = "PHP_INI_PERDIR";
+              return true;
+          case "user":
+              // TODO shouldn't this be ALL instead?
+              $this->access = "PHP_INI_USER";
+              return true;
+          case "all":
+          case "":
+              $this->access = "PHP_INI_ALL";
+              return true;
+          default:
+              return PEAR::raiseError("'$access' is not a valid access mode (system|perdir|user|all)");
+          }
+      }
 
-    /**
-     * Set method for OnUpdate handler
-     *
-     * @access public
-     * @param string C function name
-     */
-    function setOnUpdate($name)
-    {
-        if (!self::isName($name)) {
-            return PEAR::raiseError("'$name' is not a valid update function name");
-        }
-        
-        $this->onupdate = $name;
-        
-        return true;
-    }
+      /**
+       * Get method for access
+       *
+       * @access public
+       * @return string
+       */
+      function getAccess()
+      {
+          return $this->access;
+      }
+
+
+
+      /**
+       * Directive OnUpdate handler
+       *
+       * @access private
+       * @var     string
+       */
+      protected $onupdate;
+      
+      /**
+       * Set method for OnUpdate handler
+       *
+       * @access public
+       * @param string C function name
+       */
+      function setOnUpdate($name)
+      {
+          if (!self::isName($name)) {
+              return PEAR::raiseError("'$name' is not a valid update function name");
+          }
+          
+          $this->onupdate = $name;
+          
+          return true;
+      }
+      
+      /**
+       * Get method for update handler
+       *
+       * @access public
+       * @return string
+       */
+      function getOnupdate()
+      {
+          return $this->onupdate;
+      }
+
 
 
 
@@ -236,7 +301,7 @@ require_once "CodeGen/PECL/Element.php";
      * @access private
      * @var     string
      */
-    var $cType;
+    protected $cType;
 
 
     /**

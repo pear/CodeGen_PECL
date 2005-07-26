@@ -44,7 +44,7 @@ class CodeGen_PECL_Element_Resource
      * @var string
      * @access private
      */
-    var $name = "unknown";
+    protected $name = "unknown";
 
     /**
      * Set method for name
@@ -64,7 +64,16 @@ class CodeGen_PECL_Element_Resource
         return true;
     }
     
-
+    /**
+     * Get method for name
+     *
+     * @access public
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
+    }
 
 
     /**
@@ -73,7 +82,7 @@ class CodeGen_PECL_Element_Resource
      * @var string
      * @access private
      */
-    var $payload = "void";
+    protected $payload = "void";
 
     /**
      * Set method for payload type
@@ -89,34 +98,51 @@ class CodeGen_PECL_Element_Resource
         return true;
     }
     
-
+    /**
+     * Get method for payload type
+     *
+     * @access public
+     * @return string
+     */
+    function getPayload()
+    {
+        return $this->payload;
+    }
 
 
     /**
      * Whether the resource memory is allocated and freed by the extension itself
      *
-     * @var string
+     * @var bool
      * @access private
      */
-    var $alloc = "yes";
+    protected $alloc = true;
 
     /**
      * Set method for alloc
      *
      * @access public
-     * @param  string "yes" or "no"
+     * @param  bool   allocate memory?
      * @return bool   true on success
      */
     function setAlloc($text)
     {
-        // TODO check values
-        $this->alloc = $text;
+        $this->alloc = (bool)$text;
         
         return true;
     }
 
-
-
+    /**
+     * Get mehod for alloc
+     *
+     * @access public
+     * @return bool
+     */
+    function getAlloc()
+    {
+        return $this->alloc;
+    }
+    
 
     /** 
      * Code snippet to be added to the resource destructor callback
@@ -124,7 +150,7 @@ class CodeGen_PECL_Element_Resource
      * @var string
      * @access private
      */
-    var $destruct = "";
+    protected $destruct = "";
 
     /**
      * Set method for destructor snippet
@@ -149,7 +175,7 @@ class CodeGen_PECL_Element_Resource
      * @var string
      * @access private
      */
-    var $description = "";
+    protected $description = "";
 
     /**
      * Set method for destructor snippet
@@ -195,7 +221,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
     function cCode($extension) {
         $dtor = "int le_{$this->name};\n";
 
-        if ($extension->language == "cpp") {
+        if ($extension->getLanguage() == "cpp") {
             $dtor.= 'extern "C" ';
         }
 
@@ -208,7 +234,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
 
         $dtor .= CodeGen_Tools_Indent::indent(4, $this->destruct);
 
-        if ($this->alloc === "yes") {
+        if ($this->alloc) {
             $dtor .= "\n\tefree(resource);\n";
         }
         
