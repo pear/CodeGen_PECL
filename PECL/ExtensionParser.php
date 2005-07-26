@@ -64,8 +64,8 @@ class CodeGen_PECL_ExtensionParser
         $role = isset($attr["role"]) ? $attr["role"] : "public";
         
         if (isset($attr["name"])) {
-            if ($role == "public" && $this->extension->prefix) {
-                $err = $this->helper->setName($this->extension->prefix."_".$attr["name"]);
+            if ($role == "public" && $this->extension->getPrefix()) {
+                $err = $this->helper->setName($this->extension->getPrefix()."_".$attr["name"]);
             } else {
                 $err = $this->helper->setName($attr["name"]);
                 }
@@ -219,7 +219,7 @@ class CodeGen_PECL_ExtensionParser
             }
 
             if (isset($attr["alloc"])) {
-                $err = $this->helper->setAlloc($attr["alloc"]);
+                $err = $this->helper->setAlloc($this->toBool($attr["alloc"]));
                 if (PEAR::isError($err)) {
                     return $err;
                 }
@@ -533,7 +533,7 @@ class CodeGen_PECL_ExtensionParser
             $with = new CodeGen_PECL_Dependency_With;
 
             if (!isset($attr['name'])) {
-                $attr["name"] = $this->extension->name;
+                $attr["name"] = $this->extension->getName();
             }
             $err = $with->setName($attr["name"]);
             if (PEAR::isError($err)) {
