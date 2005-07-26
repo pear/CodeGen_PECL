@@ -45,7 +45,7 @@ class CodeGen_PECL_Maintainer
       * @access public
       * @return string phpinfo() line
       */
-     function phpinfo()
+     function phpinfoCode()
      {
          return "  php_printf(\"<p>{$this->name} &lt;{$this->email}&gt; ({$this->role})</p>\\n\");\n";
      }
