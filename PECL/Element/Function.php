@@ -47,8 +47,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $name = "";
+        protected $name = "";
 
+        /**
+         * name setter
+         *
+         * @param string
+         */
         function setName($name) 
         {
             if (!self::isName($name)) {
@@ -81,6 +86,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
             return true;
         }
 
+        /**
+         * name getter
+         *
+         * @return string
+         */
         function getName()
         {
             return $this->name;
@@ -93,8 +103,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $summary = "";
+        protected $summary = "";
 
+        /**
+         * summary getter
+         *
+         * @param string
+         */
         function setSummary($text)
         {
             $this->summary = $text;
@@ -110,8 +125,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $description  = "";
+        protected $description  = "";
 
+        /**
+         * description setter
+         * 
+         * @param string
+         */
         function setDescription($text)
         {
             $this->description = $text;
@@ -127,8 +147,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $role  = "public";
+        protected $role  = "public";
 
+        /**
+         * role setter
+         * 
+         * @param string
+         */
         function setRole($role)
         {
             switch($role) {
@@ -166,7 +191,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var    bool
          */
-        var $varargs = false;
+        protected $varargs = false;
 
 
         /**
@@ -175,7 +200,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $proto = "void unknown(void)";
+        protected $proto = "void unknown(void)";
 
         /**
          * Function returntype (parsed from proto)
@@ -183,7 +208,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     string
          */
-        var $returns = "void";
+        protected $returns = "void";
 
         /**
          * Function parameters (parsed from proto)
@@ -191,7 +216,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     array
          */
-        var $params = array();
+        protected $params = array();
 
         /**
          * Number of optional parameters (parsed from proto)
@@ -199,7 +224,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var     int
          */
-        var $optional = 0;
+        protected $optional = 0;
 
         /**
          * Set parameter and return value information from PHP style prototype
@@ -642,7 +667,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var    string
          */
-        var $code = "";
+        protected $code = "";
 
         /**
          * Source file of code snippet
@@ -650,7 +675,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var    string
          */
-        var $codeFile = "";
+        protected $codeFile = "";
 
         /**
          * Source line of code snippet
@@ -658,15 +683,97 @@ require_once "CodeGen/Tools/Tokenizer.php";
          * @access private
          * @var    int
          */
-        var $codeLine = 0;
+        protected $codeLine = 0;
 
-        function setCode($text, $line = 0, $file = "")
+        /**
+         * Code setter
+         *
+         * @param string code snippet
+         * @param int    source line
+         * @param int    source filename
+         */
+        function setCode($code, $line = 0, $file = "")
         {
-            $this->code = $text;
+            $this->code     = $code;
             $this->codeFile = $file;
             $this->codeLine = $line;
             return true;
         }
+
+        /**
+         * Code getter
+         *
+         * @return string
+         */
+        function getCode()
+        {
+            return $this->code;
+        }
+
+
+
+
+
+        /**
+         * test code snippet
+         *
+         * @var string
+         */
+        protected $testCode = "echo 'no test case for this function yet';";
+
+        /**
+         * testCode setter
+         *
+         * @param  string code snippet
+         */
+        function setTestCode($code)
+        {
+            $this->testCode = $code;
+        }
+
+        /**
+         * testCode getter
+         *
+         * @return string
+         */
+        function getTestCode()
+        {
+            return $this->testCode;
+        }
+
+
+        /**
+         * expected test result string
+         *
+         * @var string
+         */
+        protected $testResult = "no test case for this function yet";
+ 
+        /**
+         * testResult setter
+         *
+         * @param  string code snippet
+         */
+        function setTestResult($code)
+        {
+            $this->testResult = $code;
+        }
+
+        /**
+         * testResult getter
+         *
+         * @return string
+         */
+        function getTestResult()
+        {
+            return $this->testResult;
+        }
+
+
+
+
+
+
 
 
 
@@ -751,10 +858,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 $code .= "{\n";
                 
                 // for functions returning a named resource we create payload pointer variable
-                if ($returns[0] === "resource" && isset($returns[1]) && isset($extension->resources[$returns[1]])) {
-                    $resource = $extension->resources[$returns[1]];
-                    $payload  = $resource->payload;
-                    if ($resource->alloc === "yes") {
+                $resources = $extension->getResources();
+                if ($returns[0] === "resource" && isset($returns[1]) && isset($resources[$returns[1]])) {
+                    $resource = $resources[$returns[1]];
+                    $payload  = $resource->getPayload();
+                    if ($resource->getAlloc()) {
                         $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
                     } else {
                         $code .= "    $payload * return_res;\n";
@@ -835,12 +943,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             $code .= "    zval * $name = NULL;\n";
                             $code .= "    int {$name}_id = -1;\n";
 
-                            if (isset($param['subtype']) && isset($extension->resources[$param['subtype']])) {
-                                $resource = $extension->resources[$param['subtype']];
+                            $resources = $extension->getResources();
+                            if (isset($param['subtype']) && isset($resources[$param['subtype']])) {
+                                $resource = $resources[$param['subtype']];
                                 $varname = "res_{$name}";
-                                $code .= "    {$resource->payload} * $varname;\n";
+                                $code .= "    ".$resource->getPayload()." * $varname;\n";
                                 
-                                $resFetch .= "    ZEND_FETCH_RESOURCE($varname, {$resource->payload} *, &$name, {$name}_id, \"$param[subtype]\", le_$param[subtype]);\n";
+                                $resFetch .= "    ZEND_FETCH_RESOURCE($varname, ".$resource->getPayload()." *, &$name, {$name}_id, \"$param[subtype]\", le_$param[subtype]);\n";
                             } else {
                                 $resFetch .="    ZEND_FETCH_RESOURCE(???, ???, $name, {$name}_id, \"???\", ???_rsrc_id);\n";
                             }
@@ -908,7 +1017,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 }
 
                 if ($this->code) {
-                    if ($extension->linespecs) {
+                    if ($extension->getLinespecs()) {
                         // generate #line preprocessor directive
                         if ($this->codeLine) {
                             $linedef = "#line {$this->codeLine} ";
@@ -921,7 +1030,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
 
                     // if function code is specified so we add it here
-                    if ($extension->language == "c") {
+                    if ($extension->getLanguage() == "c") {
                         // in C variable declarations have to be at the very beginning
                         // of a block, so we have to add {...} around the snippet
                         $code .= "    do {\n";
@@ -1084,21 +1193,15 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function writeTest($extension) 
         {
-            $fp = fopen("{$extension->dirpath}/tests/{$this->name}.phpt", "w");
-            fputs($fp, 
-"--TEST--
-{$this->name}() function
---SKIPIF--
-<?php if (!extension_loaded('{$extension->name}')) print 'skip'; ?>
---POST--
---GET--
---FILE--
-<?php 
-    echo 'no test case for {$this->name}() yet';
-?>
---EXPECT--
-no test case for {$this->name}() yet");
-            fclose($fp);
+            $test = new CodeGen_PECL_Element_Test;
+
+            $test->setName($this->name);
+            $test->setTitle($this->name."() function");
+            $test->setSkipIf("!extension_loaded('{".$extension->getName()."}')");
+            $test->setCode($this->testCode);
+            $test->setOutput($this->testResult);
+
+            $test->writeTest($extension);
         }
 
 

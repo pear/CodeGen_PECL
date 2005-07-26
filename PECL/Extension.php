@@ -89,63 +89,63 @@ class CodeGen_PECL_Extension
      *
      * @var array
      */
-    var $functions = array();
+    protected $functions = array();
     
     /**
      * The extensions internal functions like MINIT 
      *
      * @var array
      */
-    var $internalFunctions = array();
+    protected $internalFunctions = array();
         
     /**
      * The constants defined by this extension
      *
      * @var array
      */
-    var $constants = array();
+    protected $constants = array();
     
     /**
      * The PHP classes defined by this extension
      *
      * @var array
      */
-    var $classes = array();
+    protected $classes = array();
     
     /**
      * The extensions php.ini parameters
      *
      * @var array
      */
-    var $phpini    = array();
+    protected $phpini    = array();
     
     /**
      * The extensions internal global variables
      *
      * @var array
      */
-    var $globals    = array();
+    protected $globals    = array();
 
     /**
      * The PHP resources defined by this extension
      *
      * @var array
      */
-    var $resources = array();
+    protected $resources = array();
 
     /**
      * The package files created by this extension
      *
      * @var array
      */
-    var $packageFiles = array();
+    protected $packageFiles = array();
 
     /**
      * Code snippets
      *
      * @var array
      */
-    var $code = array();
+    protected $code = array();
 
 
     /**
@@ -153,14 +153,14 @@ class CodeGen_PECL_Extension
      *
      * @var array
      */
-    var $makefragment = array();
+    protected $makefragment = array();
 
     /** 
      * Custom test cases
      *
      * @var array
      */
-    var $testcases = array();
+    protected $testcases = array();
 
 
     /**
@@ -169,7 +169,7 @@ class CodeGen_PECL_Extension
      * @var    string
      * @access private
      */
-    var $logos = array();
+    protected $logos = array();
 
 
     /**
@@ -178,7 +178,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $makefragments = array();
+    protected $makefragments = array();
 
 
     /**
@@ -187,7 +187,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $configfragments = array("top"=>array(), "bottom"=>array());
+    protected $configfragments = array("top"=>array(), "bottom"=>array());
 
     /**
      * generate #line specs?
@@ -195,7 +195,7 @@ class CodeGen_PECL_Extension
      * @var     bool
      * @access  private
      */
-    var $linespecs = false;
+    protected $linespecs = false;
 
     /**
      * PHP Streams
@@ -203,7 +203,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $streams = array();
+    protected $streams = array();
 
     /**
      * External libraries
@@ -211,7 +211,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $libs = array();
+    protected $libs = array();
 
     /**
      * External header files
@@ -219,7 +219,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $headers = array();
+    protected $headers = array();
 
     /**
      * --with configure options
@@ -227,7 +227,7 @@ class CodeGen_PECL_Extension
      * @var    array
      * @access private
      */
-    var $with = array();
+    protected $with = array();
 
 
     // }}} 
@@ -248,9 +248,6 @@ class CodeGen_PECL_Extension
     }
     
     // }}} 
-    
-
-
     
     
     /** 
@@ -273,21 +270,44 @@ class CodeGen_PECL_Extension
     }
 
 
-    function addLib($lib) 
+    /**
+     * Add toplevel library dependancy 
+     *
+     * @var  string  library basename
+     */
+    function addLib(CodeGen_PECL_Dependency_Lib $lib) 
     {
-        // TODO check dups
-        $this->libs[$lib->getName()] = $lib;
+        $name = $lib->getName();
+       
+        if (isset($this->libs[$name])) {
+            return PEAR::raiseError("library '{$name}' added twice");
+        }
+
+        $this->libs[$name] = $lib;
+
+        return true;
     }
 
-    function addHeader($header) 
+    /**
+     * Add toplevel header file dependancy 
+     *
+     * @var  string  header filename
+     */
+    function addHeader(CodeGen_PECL_Dependency_Header $header) 
     {
-        // TODO check dups
-        $this->headers[$header->getName()] = $header;
+        $name = $header->getName();
+       
+        if (isset($this->headers[$name])) {
+            return PEAR::raiseError("header '{$name}' added twice");
+        }
+
+        $this->headers[$name] = $header;
+
+        return true;
     }
 
 
     // {{{ member adding functions
-    
 
     /**
      * Add a function to the extension
@@ -297,24 +317,25 @@ class CodeGen_PECL_Extension
      */
     function addFunction(CodeGen_PECL_Element_Function $function)
     {
+        $name = $function->getName();
         $role = $function->getRole();
         
         switch ($role) {
         case "public":
-            if (isset($this->functions[$function->name])) {
+            if (isset($this->functions[$name])) {
                 return PEAR::raiseError("public function '{$function->name}' has been defined before");
             }
-            $this->functions[$function->name] = $function;
+            $this->functions[$name] = $function;
             return true;
             
         case "private":
             return PEAR::raiseError("private functions are no longer supported, use <code> sections instead");
             
         case "internal":
-            if (isset($this->functions[$function->name])) {
+            if (isset($this->internalFunctions[$name])) {
                 return PEAR::raiseError("internal '{$function->name}' has been defined before");
             }
-            $this->internalFunctions[$function->name] = $function;
+            $this->internalFunctions[$name] = $function;
             return true;
             
         default: 
@@ -329,7 +350,7 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a constant object
      */
-    function addConstant($constant)
+    function addConstant(CodeGen_PECL_Element_Constant $constant)
     {
         if (isset($this->constants[$constant->name])) {
             return PEAR::raiseError("constant '{$constant->name}' has been defined before");
@@ -347,7 +368,7 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a phpini object
      */
-    function addPhpIni($phpini)
+    function addPhpIni(CodeGen_PECL_Element_Ini $phpini)
     {
         if (isset($this->phpini[$phpini->name])) {
             return PEAR::raiseError("php.ini directive '{$phpini->name}' has been defined before");
@@ -364,12 +385,13 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a global object
      */
-    function addGlobal($global)
+    function addGlobal(CodeGen_PECL_Element_Global $global)
     {
-        if (isset($this->globals[$global->name])) {
-            return PEAR::raiseError("global '{$global->name}' has been defined before");
+        $name = $global->getName();
+        if (isset($this->globals[$name])) {
+            return PEAR::raiseError("global '{$name}' has been defined before");
         }
-        $this->globals[$global->name] = $global;
+        $this->globals[$name] = $global;
         
         return true;
     }
@@ -381,16 +403,28 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a resource object
      */
-    function addResource($resource)
+    function addResource(CodeGen_PECL_Element_Resource $resource)
     {
-        if (isset($this->resources[$resource->name])) {
-            return PEAR::raiseError("resource type '{$resource->name}' has been defined before");
+        $name = $resource->getName();
+        if (isset($this->resources[$name])) {
+            return PEAR::raiseError("resource type '{$name}' has been defined before");
         }
-        $this->resources[$resource->name] = $resource;
+        $this->resources[$name] = $resource;
         
         return true;
     }
     
+    /**
+     * Get PHP resource types
+     *
+     * @access public
+     * @return array
+     */
+    function getResources()
+    {
+        return $this->resources;
+    }
+
     
     /**
      * Add a PHP class to the extension
@@ -398,7 +432,7 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a class object
      */
-    function addClass($class)
+    function addClass(CodeGen_PECL_Element_Class $class)
     {
         if (isset($this->classes[$class->getName()])) {
             return PEAR::raiseError("class '".$class->getName()."' has been defined before");
@@ -415,7 +449,7 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object   a stream wrapper object
      */
-    function addStream($stream)
+    function addStream(CodeGen_PECL_Element_Stream $stream)
     {
         if (isset($this->streams[$stream->getName()])) {
             return PEAR::raiseError("stream '".$stream->getName()."' has been defined before");
@@ -453,13 +487,15 @@ class CodeGen_PECL_Extension
      * @param   object 'With' object
      * @returns bool
      */
-    function addWith($with) 
+    function addWith(CodeGen_PECL_Dependency_With $with) 
     {
-        if (isset($this->with[$with->name])) {
-            return PEAR::raiseError("--with-{$with->name} declared twice");
+        $name = $with->getName();
+
+        if (isset($this->with[$name])) {
+            return PEAR::raiseError("--with-{$name} declared twice");
         }
 
-        $this->with[$with->name] = $with;
+        $this->with[$name] = $with;
 
         return true;
     }
@@ -522,13 +558,15 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  object  the logo
      */
-    function addLogo($logo) 
+    function addLogo(CodeGen_PECL_Element_Logo $logo) 
     {
-        if (isset($this->logos[$logo->name])) {
-            return PEAR::raiseError("logo '{$logo->name}' already defined");
+        $name = $logo->getName();
+
+        if (isset($this->logos[$name])) {
+            return PEAR::raiseError("logo '{$name}' already defined");
         }
 
-        $this->logos[$logo->name] = $logo;
+        $this->logos[$name] = $logo;
         
         return true;
     }
@@ -574,10 +612,22 @@ class CodeGen_PECL_Extension
         $this->linespecs = $state;
     }
 
+    /**
+     * linespec getter
+     *
+     * @access public
+     * @return bool
+     */
+    function getLinespecs()
+    {
+        return $this->linespecs;
+    }
+
+
     // }}} 
 
     // {{{ output generation
-        
+
     /**
      * Create the extensions including
      *
@@ -850,7 +900,7 @@ zend_module_entry {$name}_module_entry = {
     PHP_RINIT($name),     /* Replace with NULL if there is nothing to do at request start */
     PHP_RSHUTDOWN($name), /* Replace with NULL if there is nothing to do at request end   */
     PHP_MINFO($name),
-    \"".$this->release->version."\", 
+    \"".$this->release->getVersion()."\", 
     STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -858,9 +908,13 @@ zend_module_entry {$name}_module_entry = {
 ";
 
         $code .= "#ifdef COMPILE_DL_$upname\n";
-        if ($this->language == "cpp") $code .= "extern \"C\" {\n";
+        if ($this->language == "cpp") {
+            $code .= "extern \"C\" {\n";
+        }
         $code .= "ZEND_GET_MODULE($name)\n";
-        if ($this->language == "cpp") $code .= "} // extern \"C\"\n";
+        if ($this->language == "cpp") {
+            $code .= "} // extern \"C\"\n";
+        }
         $code .= "#endif\n\n";
 
         return $code;
@@ -938,7 +992,7 @@ zend_module_entry {$name}_module_entry = {
         $code  = "/* {{{ {$this->name}_functions[] */\n";
         $code .= "function_entry {$this->name}_functions[] = {\n";
         foreach ($this->functions as $function) {
-            $code .=  sprintf("    PHP_FE(%-20s, NULL)\n",$function->name);
+            $code .=  sprintf("    PHP_FE(%-20s, NULL)\n",$function->getName());
         }
         foreach ($this->classes as $class) {
             foreach ($class->methods as $method) {
@@ -1027,11 +1081,11 @@ zend_module_entry {$name}_module_entry = {
      */
     function writeHeaderFile() 
     {
-        $filename = "php_{$this->name}.h";
+        $this->addPackageFile('header', "php_{$this->name}.h"); 
+
+        $file =  new CodeGen_Tools_Outbuf($this->dirpath."/php_{$this->name}.h");
         
         $upname = strtoupper($this->name);
-        
-        ob_start();
         
         echo $this->getLicense();
         echo "#ifndef PHP_{$upname}_H\n";
@@ -1144,9 +1198,7 @@ PHP_MINFO_FUNCTION({$this->name});
 
         echo CodeGen_PECL_Element::cCodeEditorSettings();
 
-        $this->addPackageFile('header', $filename); 
-
-        return $this->obToFile($filename);
+        return $file->write();
     }
 
     // }}} 
@@ -1215,7 +1267,7 @@ PHP_MINIT_FUNCTION({$this->name})
             
         if (isset($this->internalFunctions['MINIT'])) {
             if ($need_block) $code .= "\n    {\n";
-            $code .= CodeGen_Tools_Indent::indent(8, $this->internalFunctions['MINIT']->code);
+            $code .= CodeGen_Tools_Indent::indent(8, $this->internalFunctions['MINIT']->getCode());
             if ($need_block) $code .= "\n    }\n";
         } else {
             $code .="\n    /* add your stuff here */\n";
@@ -1244,7 +1296,7 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
             
         if (isset($this->internalFunctions['MSHUTDOWN'])) {
             if (count($this->phpini)) $code .= "\n    {\n";
-            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['MSHUTDOWN']->code);
+            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['MSHUTDOWN']->getCode());
             if (count($this->phpini)) $code .= "\n    }\n";
         } else {
             $code .="\n    /* add your stuff here */\n";
@@ -1265,7 +1317,7 @@ PHP_RINIT_FUNCTION({$this->name})
 ";
 
         if (isset($this->internalFunctions['RINIT'])) {
-            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['RINIT']->code);
+            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['RINIT']->getCode());
         } else {
           $code .= "    /* add your stuff here */\n";
         }
@@ -1284,7 +1336,7 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 ";
 
         if (isset($this->internalFunctions['RSHUTDOWN'])) {
-            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['RSHUTDOWN']->code);
+            $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['RSHUTDOWN']->getCode());
         } else {
             $code .= "    /* add your stuff here */\n";
         }
@@ -1305,28 +1357,20 @@ PHP_MINFO_FUNCTION({$this->name})
 
         foreach ($this->logos as $logo)
         {
-            $code.= "
-    php_printf(\"<img src='\");
-    if (SG(request_info).request_uri) {
-        php_printf(\"%s\", (SG(request_info).request_uri));
-    }   
-    php_printf(\"?=%s\", ".($logo->id).");
-    php_printf(\"' align='right' alt='image' border='0'>\\n\");
-
-"; 
+            $code.= $logo->phpinfoCode($this->name);
         }
 
-        if (isset($this->summary)) {
+        if (!empty($this->summary)) {
             $code .= "    php_printf(\"<p>".str_replace('"','\\"',$this->summary)."</p>\\n\");\n";
         }
-        if (isset($this->release)) {
-            $code .= "    php_printf(\"<p>Version {$this->release->version}{$this->release->state} ({$this->release->date})</p>\\n\");\n";
+        if (!empty($this->release)) {
+            $code .= $this->release->phpinfoCode($this->name);
         }
 
         if (count($this->authors)) {
             $code .= "    php_printf(\"<p><b>Authors:</b></p>\\n\");\n";
             foreach ($this->authors as $author) {
-                $code.= CodeGen_Tools_Indent::indent(4, $author->phpinfo());
+                $code.= CodeGen_Tools_Indent::indent(4, $author->phpinfoCode($this->name));
             }
         }
 
@@ -1390,7 +1434,9 @@ PHP_MINFO_FUNCTION({$this->name})
 
         $upname = strtoupper($this->name);
 
-        ob_start();
+        $this->addPackageFile('code', $filename); 
+
+        $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename, CodeGen_Tools_Outbuf::OB_TABIFY);
             
         echo $this->getLicense();
 
@@ -1435,10 +1481,8 @@ PHP_MINFO_FUNCTION({$this->name})
         echo "#endif /* HAVE_$upname */\n\n";
   
         echo CodeGen_PECL_Element::cCodeEditorSettings();
- 
-        $this->addPackageFile('code', $filename); 
 
-        return $this->obToFile($filename, $this->OB_TABIFY);
+        return $file->write();
     }
 
     // }}} 
@@ -1457,7 +1501,9 @@ PHP_MINFO_FUNCTION({$this->name})
 
         $flagVar = ($this->language === "cpp") ? "CXXFLAGS" : "CFLAGS";
 
-        ob_start();
+        $this->addPackageFile("conf", "config.m4");
+
+        $file = new CodeGen_Tools_Outbuf($this->dirpath."/config.m4", CodeGen_Tools_Outbuf::OB_TABIFY);
 
         echo 
 'dnl
@@ -1469,8 +1515,8 @@ dnl
         if (isset($this->with[$this->name])) {
             $with = $this->with[$this->name];
             echo " 
-PHP_ARG_WITH({$with->name}, whether to enable {$with->name} functions,
-[  --with-{$with->name}[=DIR]      With {$with->name} support])
+PHP_ARG_WITH({$this->name}, whether to enable {$this->name} functions,
+[  --with-{$this->name}[=DIR]      With {$this->name} support])
 \n";
         } else {
             echo "
@@ -1489,22 +1535,22 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
 
         foreach ($this->with as $with) {
-            if ($with->name != $this->name) {
+            if ($with->getName() != $this->name) {
                 echo " 
 PHP_ARG_WITH({$with->name}, {$with->summary},
 [  --with-{$with->name}[=DIR]      With {$with->name} support])
 \n";
             }
 
-            $withUpname = strtoupper($with->name);
+            $withUpname = strtoupper($with->getName());
 
             echo "
-  if test -r \"\$PHP_$withUpname/{$with->testfile}\"; then
+  if test -r \"\$PHP_$withUpname/".$with->getTestfile()."\"; then
     PHP_{$withUpname}_DIR=\"\$PHP_$withUpname\"
   else
-    AC_MSG_CHECKING(for {$with->name} in default path)
-    for i in ".str_replace(":"," ",$with->defaults)."; do
-      if test -r \"\$i/{$with->testfile}\"; then
+    AC_MSG_CHECKING(for ".$with->getName()." in default path)
+    for i in ".str_replace(":"," ",$with->getDefaults())."; do
+      if test -r \"\$i/".$with->getTestfile()."\"; then
         PHP_{$withUpname}_DIR=\$i
         AC_MSG_RESULT(found in \$i)
         break
@@ -1518,7 +1564,7 @@ PHP_ARG_WITH({$with->name}, {$with->summary},
 ";
 
             $pathes = array();
-            foreach($with->headers as $header) {
+            foreach($with->getHeaders() as $header) {
                $pathes[$header->getPath()] = true; // TODO WTF???
             }
        
@@ -1531,11 +1577,11 @@ PHP_ARG_WITH({$with->name}, {$with->summary},
 
             echo "  export $flagVar=\"\$$flagVar \$INCLUDES -DHAVE_$withUpname\"\n";
 
-            foreach($with->headers as $header) {
+            foreach($with->getHeaders() as $header) {
                 echo $header->configm4($this->name, $this->name);
             }  
 
-            foreach ($with->libs as $lib) {
+            foreach ($with->getLibs() as $lib) {
                 echo $lib->configm4($this->name, $with->name);
             }
             
@@ -1566,7 +1612,7 @@ PHP_ARG_WITH({$with->name}, {$with->summary},
         }  
 
         foreach ($this->resources as $resource) {
-            echo "  AC_CHECK_TYPE({$resource->payload}, [], [AC_MSG_ERROR(required payload type for resource {$resource->name} not found)], [#include \"php_{$this->name}.h\"])\n";
+            echo "  AC_CHECK_TYPE(".$resource->getPayload().", [], [AC_MSG_ERROR(required payload type for resource ".$resource->getName()." not found)], [#include \"php_{$this->name}.h\"])\n";
         }
 
         echo "  export $flagVar=\"\$OLD_$flagVar\"\n";
@@ -1608,9 +1654,7 @@ fi
 
 ";
 
-        $this->addPackageFile("conf", "config.m4");
-
-        return $this->obToFile("config.m4", $this->OB_TABIFY);
+        return $file->write();
     }
 
     // }}} 
@@ -1628,7 +1672,11 @@ fi
         // TODO fragments
         $upname = strtoupper($this->name);
 
-        ob_start();
+        $this->addPackageFile("conf", "config.w32");
+
+        $file = new CodeGen_Tools_Outbuf($this->dirpath."/config.w32",
+                                         CodeGen_Tools_Outbuf::OB_UNTABIFY 
+                                         | CodeGen_Tools_Outbuf::OB_DOSIFY);
 
         echo 
 '// $ Id: $
@@ -1663,14 +1711,13 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
 
         echo "}\n";
 
-        $this->addPackageFile("conf", "config.w32");
-
-        return $this->obToFile("config.w32", $this->OB_UNTABIFY | $this->OB_DOSIFY);
+        $file->write();
     }
 
     // }}} 
 
     // {{{ M$ dev studio project file
+
     /**
      * Write project file for VisualStudio V6
      *
@@ -1679,7 +1726,11 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
      */
     function writeMsDevStudioDsp() 
     {
-        ob_start();
+        $filename = $this->name.".dsp"; 
+        $this->addPackageFile("conf", $filename);
+        $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename, 
+                                         CodeGen_Tools_Outbuf::OB_UNTABIFY 
+                                         | CodeGen_Tools_Outbuf::OB_DOSIFY);
 
         // these system libraries are always needed?
         // (list taken from sample *.dsp files in php ext tree...) 
@@ -1840,10 +1891,7 @@ SOURCE=$filename
 # End Project
 ';
 
-        $filename = $this->name.".dsp"; 
-        $this->addPackageFile("conf", $filename);
-
-        return $this->obToFile($filename, $this->OB_UNTABIFY | $this->OB_DOSIFY);
+        return $file->write();
     }
 
 // }}} 
@@ -1865,7 +1913,7 @@ SOURCE=$filename
             fputs($fp, "{$this->name}\n");
             $names = array();
             foreach($this->authors as $author) {
-                $names[] = $author->name;
+                $names[] = $author->getName();
             }
             fputs($fp, join(", ", $names) . "\n"); 
             fclose($fp);
@@ -1903,8 +1951,8 @@ you have been warned!
      */
     function writePackageXml() 
     {
-        ob_start();
-        
+        $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package.xml");
+
         echo 
 "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>
 <!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">
@@ -1925,9 +1973,9 @@ you have been warned!
         }
 
         foreach ($this->with as $with) {
-            $configOption = "--with-".$with->name;
+            $configOption = "--with-".$with->getName();
             echo "  <configureoptions>\n";
-            echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"{$with->name} installation directory?\" />\n";
+            echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"".$with->getName()." installation directory?\" />\n";
             echo "  </configureoptions>\n";
         }
 
@@ -1965,7 +2013,7 @@ you have been warned!
 
         echo "</package>\n";
         
-        return $this->obToFile("package.xml");
+        return $outfile->write();
     }
 
     // }}}
@@ -1977,7 +2025,13 @@ you have been warned!
      * @param  object  a Test object
      */
     function addTest(CodeGen_PECL_Element_Test $test) {
-        $this->testcases[$test->name] = $test;
+        $name = $test->getName();
+       
+        if (isset($this->testcases[$name])) {
+            return PEAR::raiseError("testcase '{$name}' added twice");
+        }
+
+        $this->testcases[$name] = $test;
         return true;
     }
 
@@ -2008,7 +2062,7 @@ you have been warned!
     */
     function writeDotCvsignore()
     {
-        ob_start();
+        $file = new CodeGen_Tools_Outbuf($this->dirpath."/.cvsignore");
 
         // unix specific entries
         if ($this->platform->test("unix")) {
@@ -2068,7 +2122,7 @@ Debug_TS
         // "pear package" creates .tgz
         echo "{$this->name}*.tgz\n";
 
-        return $this->obToFile(".cvsignore");
+        return $file->write();
     }
 
     /**
@@ -2096,10 +2150,11 @@ Debug_TS
     */
     function writeReadme() 
     {
+        $file = new CodeGen_Tools_Outbuf("README");
+
         $configOption = isset($this->with[$this->name]) ? "--with-" : "--enable-";
         $configOption.= $this->name;
 
-        ob_start();
 ?>
 This is a standalone PHP extension created using CodeGen_PECL <?php echo self::version(); ?>
 
@@ -2182,45 +2237,7 @@ of phpinfo();
 
 <?php
 
-
-        return $this->obToFile("README");
-    }
-
-
-    var $OB_DOSIFY   = 1;
-    var $OB_TABIFY   = 2;
-    var $OB_UNTABIFY = 4;
-
-    /**
-     * write current output buffer to file
-     *
-     * @param  file path
-     * @param  formating flags
-     * @access private
-     */
-    function obToFile($path, $flags = 0)                                
-    {
-        $fp = fopen($this->dirpath . "/" . $path, "w");
-        if (!is_resource($fp)) {
-            return PEAR::raiseError("can't write to output file '$path");
-        }
-
-        $text = ob_get_clean();
-
-        if ($flags && $this->OB_TABIFY) {
-          $text = CodeGen_Tools_Indent::tabify($text);
-        } else if ($flags && $this->OB_UNTABIFY) {
-          $text = CodeGen_Tools_Indent::untabify($text);
-        }
-
-        if ($flags && $this->OB_DOSIFY) {
-          $text = CodeGen_Tools_Indent::tabify($text);
-        }
-
-        fputs($fp, $text);
-        fclose($fp);
-
-        return true;
+        $file->write();
     }
 }   
 
