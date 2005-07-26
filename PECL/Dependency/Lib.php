@@ -35,14 +35,40 @@ require_once "CodeGen/PECL/Element.php";
 class CodeGen_PECL_Dependency_Lib
     extends CodeGen_Element
 {
+    /** 
+     * library basename
+     *
+     * @var string
+     */
     private $name;
 
+    /**
+     * library searchpath relative to install prefix
+     *
+     * @var string
+     */
     private $path = "lib";
 
+    /**
+     * library platform
+     *
+     * @var object
+     */
     private $platform;
 
-    private $function = false;
+    /**
+     * function to check for
+     *
+     * @var string
+     */
+    private $function = "";
 
+    /**
+     * Constructor
+     *
+     * @param  string  library basename
+     * @param  string  platform name
+     */
     function __construct($name, $platform = "all")
     {
         // TODO check name
@@ -51,26 +77,54 @@ class CodeGen_PECL_Dependency_Lib
         $this->platform = new CodeGen_Tools_Platform($platform);
     }
 
+    /**
+     * path setter
+     *
+     * @param string
+     */
     function setPath($path) 
     {
         $this->path = $path;
     }
 
+    /**
+     * test function setter
+     *
+     * @param string
+     */
     function setFunction($function)
     {
         $this->function = $function;
     }
     
+    /**
+     *  basename getter
+     *
+     * @return string
+     */
     function getName()
     {
         return $this->name;
     }
     
+    /**
+     * check for platform 
+     *
+     * @param  platfrom name
+     * @return bool
+     */
     function testPlatform($name) 
     {
         return $this->platform->test($name);
     }
 
+    /**
+     * write config.m4 code snippet for unix builds
+     *
+     * @param  string Extension name
+     * @param  string --with option name
+     * @return string code snippet
+     */
     function configm4($extName, $withName)
     {
         static $first = true;
@@ -98,6 +152,13 @@ class CodeGen_PECL_Dependency_Lib
         return $ret;
     }
 
+    /**
+     * write config.w32 code snippet for windows builds
+     *
+     * @param  string Extension name
+     * @param  string --with option name
+     * @return string code snippet
+     */
     function configw32($extName, $withName)
     {
         if (!$this->platform->test("windows")) {
