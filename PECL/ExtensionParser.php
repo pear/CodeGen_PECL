@@ -125,70 +125,99 @@ class CodeGen_PECL_ExtensionParser
         return $this->helper->setProto(trim($data), $this->extension);
     }
 
-        function tagstart_extension_function_code($attr)
-        {
-            if (isset($attr["src"])) {
-                if (!file_exists($attr["src"])) {
-                    return PEAR::raiseError("'src' file '$attr[src]' not found in <code>");                    
-                }
-                if (!is_readable($attr["src"])) {
-                    return PEAR::raiseError("Cannot read 'src' file '$attr[src]' in <code>");                    
-                }
+    function tagstart_extension_function_code($attr)
+    {
+        if (isset($attr["src"])) {
+            if (!file_exists($attr["src"])) {
+                return PEAR::raiseError("'src' file '$attr[src]' not found in <code>");                    
+            }
+            if (!is_readable($attr["src"])) {
+                return PEAR::raiseError("Cannot read 'src' file '$attr[src]' in <code>");                    
             }
         }
+    }
 
-        function tagend_extension_function_code($attr, $data, $line=0, $file="")
-        {
-            if (isset($attr["src"])) {
-                return $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
-            } else {
-                return $this->helper->setCode($data, $line, $file);
-            }
+    function tagend_extension_function_code($attr, $data, $line=0, $file="")
+    {
+        if (isset($attr["src"])) {
+            return $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
+        } else {
+            return $this->helper->setCode($data, $line, $file);
         }
+    }
+    
+    function tagend_extension_function_testcode($attr, $data)
+    {
+        return $this->helper->setTestCode(CodeGen_Tools_Indent::linetrim($data));
+    }
 
-        function tagend_extension_function($attr, $data) 
-        {
-            $err = $this->extension->addFunction($this->helper);
-            $this->popHelper();
-            return $err;
-        }
-
-        function tagend_extension_functions_function($attr, $data)
-        {
-            return $this->tagend_extension_function($attr, $data);
-        }
-
-        function tagend_extension_functions_function_code($attr, $data)
-        {
-            return $this->tagend_extension_function_code($attr, $data);
-        }
-
-        function tagend_extension_functions_function_summary($attr, $data)
-        {
-            return $this->tagend_extension_function_summary($attr, $data);
-        }
+    function tagend_extension_function_testresult($attr, $data)
+    {
+        return $this->helper->setTestResult(CodeGen_Tools_Indent::linetrim($data));
+    }
 
 
-        function tagend_extension_functions_function_description($attr, $data)
-        {
-            return $this->tagend_extension_function_description($attr, $data);
-        }
 
-        function tagend_extension_functions_function_proto($attr, $data)
-        {
-            return $this->tagend_extension_function_proto($attr, $data);
-        }
+    function tagend_extension_function($attr, $data) 
+    {
+        $err = $this->extension->addFunction($this->helper);
+        $this->popHelper();
+        return $err;
+    }
+    
 
-        function tagend_class_function($attr, $data) 
-        {
-            $err = $this->helper_prev->addMethod($this->helper);
-            $this->popHelper();
-            return $err;
-        }
 
-        function tagend_functions($attr, $data) {
-            return true;
-        }        
+
+
+    function tagend_extension_functions_function($attr, $data)
+    {
+        return $this->tagend_extension_function($attr, $data);
+    }
+    
+    function tagend_extension_functions_function_code($attr, $data)
+    {
+        return $this->tagend_extension_function_code($attr, $data);
+    }
+    
+    function tagend_extension_functions_function_summary($attr, $data)
+    {
+        return $this->tagend_extension_function_summary($attr, $data);
+    }
+
+    
+    function tagend_extension_functions_function_description($attr, $data)
+    {
+        return $this->tagend_extension_function_description($attr, $data);
+    }
+
+    function tagend_extension_functions_function_proto($attr, $data)
+    {
+        return $this->tagend_extension_function_proto($attr, $data);
+    }
+
+    function tagend_extension_functions_function_testcode($attr, $data)
+    {
+        return $this->tagend_extension_function_testcode($attr, $data);
+    }
+
+    function tagend_extension_functions_function_testresult($attr, $data)
+    {
+        return $this->tagend_extension_function_testresult($attr, $data);
+    }
+
+    
+
+
+    function tagend_class_function($attr, $data) 
+    {
+        $err = $this->helper_prev->addMethod($this->helper);
+        $this->popHelper();
+        return $err;
+    }
+    
+    function tagend_functions($attr, $data) {
+        return true;
+    }        
 
 
         function tagstart_extension_resource($attr)
@@ -649,8 +678,11 @@ class CodeGen_PECL_ExtensionParser
                     return $err;
                 }
             } else {
-                return PEAR::raiseError("name attribut for class missing");
+                return PEAR::raiseError("name attribut for <test> missing");
             }
+
+            $test->setSkipIf("!extension_loaded('".$this->extension->getName()."')");
+
             $this->pushHelper($test);
         }
 
@@ -690,7 +722,7 @@ class CodeGen_PECL_ExtensionParser
             }
         }
 
-        function tagend_test_output($attr, $data) {
+        function tagend_test_result($attr, $data) {
             $this->helper->setOutput(CodeGen_Tools_Indent::linetrim($data));
         }
 
