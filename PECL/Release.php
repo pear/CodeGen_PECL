@@ -68,7 +68,7 @@ class CodeGen_PECL_Release
      */
     function phpinfoCode($name) 
     {
-        return sprintf("    php_printf(\"<p>Version %s%s (%s)</p>\\n\", );\n",
+        return sprintf("    php_printf(\"<p>Version %s%s (%s)</p>\\n\");\n",
                        $this->version,
                        $this->state,
                        date("Y-m-d", $this->date)

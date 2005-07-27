@@ -1197,7 +1197,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
             $test->setName($this->name);
             $test->setTitle($this->name."() function");
-            $test->setSkipIf("!extension_loaded('{".$extension->getName()."}')");
+            $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
             $test->setCode($this->testCode);
             $test->setOutput($this->testResult);
 
