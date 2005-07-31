@@ -425,6 +425,17 @@ class CodeGen_PECL_Extension
         return $this->resources;
     }
 
+    /**
+     * Get PHP constants 
+     *
+     * @access public
+     * @return array
+     */
+    function getConstants()
+    {
+        return $this->constants;
+    }
+
     
     /**
      * Add a PHP class to the extension
@@ -1535,14 +1546,15 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
 
         foreach ($this->with as $with) {
-            if ($with->getName() != $this->name) {
+            $withName   = $with->getName();
+            $withUpname = strtoupper($withName);
+
+            if ($withName != $this->name) {
                 echo " 
-PHP_ARG_WITH({$with->name}, {$with->summary},
-[  --with-{$with->name}[=DIR]      With {$with->name} support])
+PHP_ARG_WITH({$withName}, {".$with->getSummary()."},
+[  --with-{$withName}[=DIR]      With {$withName} support])
 \n";
             }
-
-            $withUpname = strtoupper($with->getName());
 
             echo "
   if test -r \"\$PHP_$withUpname/".$with->getTestfile()."\"; then
