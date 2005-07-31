@@ -132,6 +132,16 @@ class CodeGen_PECL_Dependency_With
     }
 
     /**
+     * summary getter
+     *
+     * @return string
+     */
+    function getSummary()
+    {
+        return $this->summary;
+    }
+
+    /**
      * description setter
      *
      * @param string
