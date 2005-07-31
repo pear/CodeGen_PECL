@@ -112,6 +112,47 @@ class CodeGen_PECL_Element_Test
     }
     
     /**
+     * php.ini settings for this test
+     *
+     * @type   string
+     */
+    protected $ini = "";
+
+    /**
+     * Getter for php.ini settings
+     *
+     * @access public
+     * @return string  value of
+     */
+    function getIni() 
+    {
+        return $this->ini;
+    }
+    
+    /**
+     * Setter for php.ini settings
+     *
+     * @access public
+     * @param  string  new value for
+     */
+    function setIni($code) 
+    {
+        $this->ini = $code;
+    }
+    
+
+    /**
+     * Adder for php.ini settings
+     *
+     * @access public
+     * @param  string  new value for
+     */
+    function addIni($code) 
+    {
+        $this->ini.= "\n$code";
+    }
+    
+    /**
      * Test code to decide whether to skip a test
      *
      * @type   string
@@ -137,7 +178,32 @@ class CodeGen_PECL_Element_Test
      */
     function setSkipIf($code) 
     {
-        $this->skipif = $code;
+        $this->skipif = "";
+        $this->addSkipIf($code);
+    }
+
+    /**
+     * Setter for skipif testcode
+     *
+     * @access public
+     * @param  string  new value for
+     */
+    function addSkipIf($code) 
+    {
+        // check whether $code is just an expression or a complete code snippet
+        $isExpression = true;
+        foreach (token_get_all("<?php $code") as $token) {
+            if (($token === ';') || ($token === '}')) {
+                $isExpression = false;
+                break;
+            }
+        }
+
+        if ($isExpression) {
+            $this->skipif.= "\nif($code) die('skip');\n";
+        } else {
+            $this->skipif.= "\n$code";
+        }
     }
     
     /**
@@ -284,9 +350,13 @@ class CodeGen_PECL_Element_Test
         $file = new CodeGen_Tools_Outbuf("{$extName}/tests/{$this->name}.phpt");
 
         echo "--TEST--\n{$this->title}\n";
+
+        if (!empty($this->ini)) {
+            echo "--INI--\n{$this->ini}\n";
+        }
         
         if (!empty($this->skipif)) {
-            echo "--SKIPIF--\n<?php if({$this->skipif}) echo 'skip'; ?>\n";
+            echo "--SKIPIF--\n<?php \n{$this->skipif}\n ?>\n";
         }
 
         if (!empty($this->post)) {
