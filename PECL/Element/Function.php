@@ -478,19 +478,20 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             break;                          
                         default:
                             // now see if this is a constand defined by this extension
-                            if (isset($extension->constants[$token])) {
-                                $param["default"] = $extension->constants[$token]->value;
+                            $constants = $extension->getConstants();
+                            if (isset($constants[$token])) {
+                                $param["default"] = $constants[$token]->value;
                             } else {
-                                return PEAR::raiseError("x1 invalid default value '$token' specification for parameter '$param[name]' ($type)");
+                                return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
                             }
                         }
                         break;
                     default:
-                        return PEAR::raiseError("x2 invalid default value '$token' specification for parameter '$param[name]' ($type)");
+                        return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
                     }
                     break;
                 default:
-                    return PEAR::raiseError("x3 invalid default value '$token' specification for parameter '$param[name]' ($type)");
+                    return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
                 }
                 
                 if ($firstOptional && count($params)+1 >= $firstOptional) {
@@ -767,6 +768,63 @@ require_once "CodeGen/Tools/Tokenizer.php";
         function getTestResult()
         {
             return $this->testResult;
+        }
+
+
+        /**
+         * test additional skipif condition
+         *
+         * @var string
+         */
+        protected $testSkipIf = "";
+
+        /**
+         * testSkipIf setter
+         *
+         * @param  string code snippet
+         */
+        function setTestSkipIf($code)
+        {
+            $this->testSkipIf = $code;
+        }
+
+        /**
+         * testSkipIf getter
+         *
+         * @return string
+         */
+        function getTestSkipIf()
+        {
+            return $this->testSkipIf;
+        }
+
+
+
+        /**
+         * test additional ini condition
+         *
+         * @var string
+         */
+        protected $testIni = "";
+
+        /**
+         * testIni setter
+         *
+         * @param  string code snippet
+         */
+        function setTestIni($code)
+        {
+            $this->testIni = $code;
+        }
+
+        /**
+         * testIni getter
+         *
+         * @return string
+         */
+        function getTestIni()
+        {
+            return $this->testIni;
         }
 
 
@@ -1197,8 +1255,20 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
             $test->setName($this->name);
             $test->setTitle($this->name."() function");
-            $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
+
+            $test->setIni("extension_dir=../modules"); // TODO be more clever about this?
+            $test->addIni("extension=".$extension->getName().".so"); // TODO .so is UNIX-only
+            if ($this->testIni) {
+                $test->addIni($this->testIni);
+            }
+
+            $test->setSkipIf("!extension_loaded('".$extension->getName()."')";
+            if ($this->testSkipIf) {
+                $test->addSkipIf($this->testSkipIf);
+            }
+
             $test->setCode($this->testCode);
+
             $test->setOutput($this->testResult);
 
             $test->writeTest($extension);
