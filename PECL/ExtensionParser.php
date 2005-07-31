@@ -156,6 +156,17 @@ class CodeGen_PECL_ExtensionParser
         return $this->helper->setTestResult(CodeGen_Tools_Indent::linetrim($data));
     }
 
+    function tagend_extension_function_testini($attr, $data)
+    {
+        return $this->helper->setTestIni(CodeGen_Tools_Indent::linetrim($data));
+    }
+
+    function tagend_extension_function_testskipif($attr, $data)
+    {
+        return $this->helper->setTestSkipIf(CodeGen_Tools_Indent::linetrim($data));
+    }
+
+
 
 
     function tagend_extension_function($attr, $data) 
