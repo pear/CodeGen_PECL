@@ -14,9 +14,6 @@ e.g. for version checking?
 
 check whether multiple logos work
 
-use Console_Getargs instead of self extended Console_Getopt
-  => still beta, not touched in a year, what is its stautus?
-
 - check #line numbers in generated source with libxml
   -> error messages with meaningfull line numbers need this
 
@@ -72,13 +69,15 @@ Milestone 1.0
 
 - support new win32 configure files              -> partly done (75%?)
 
-- test suite
+- test suite                                     
 
 - class implementation and documentation support -> partly done (33%?)
 
 - full support for stream wrappers and filters   -> started
 
-- full support for .phpt test case generation    -> started
+- full support for .phpt test case generation    -> done (needs check)
+
+  - <testskipif>,<testini> in <function>         -> done (needs check)
 
 - support for new package.xml format             -> not done yet
 
@@ -87,27 +86,8 @@ Milestone 1.0
 not necessarily 1.0
 -------------------
 
-- change XML parsing to simplexml? or DOM? and delegate tag level parsing to sub-parsers?
-  => not possible as these APIs do not provide line number information
-
-- XSchema or RELAX/NG instead of DTD?
-
 - VC++ 7 (VS.net) project files
   => not needed anymore as we now have config.w32?
-
-- more licenses
-  - GPL (with exception to allow linking against PHP)
-  - QPL
-  - MPL?
-  - Artistic
-  - ...
-  - change <license> tag to either take a known license name 
-    in the 'name' attribute or a free form license text as
-    CDATA
-
-- dual/multiple license support
-
-- (c) copyright 
 
 - have different levels of comment (and code?) generation
   similar to --no-help in ext_skel
