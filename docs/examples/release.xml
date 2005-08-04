@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<extension name="release">
+ <!-- testing the various release related tags 
+      inherited from PEAR package.xml
+ -->
+
+ <maintainer>
+  <user>hholzraefe</user>
+  <name>Hartmut Holzgrefe</name>
+  <email>hartmut@php.net</email>
+  <role>maintainer</role>
+ </maintainer>
+
+ <release>
+  <version>1.0</version>
+  <date>2005-07-09</date>
+  <state>stable</state>
+  <notes>
+   The sample extension is now stable
+  </notes>
+ </release>
+
+ <changelog>
+  <release>
+   <version>0.5</version>
+   <date>2005-07-05</date>
+   <state>beta</state>
+   <notes>First beta version</notes>
+  <release>
+  <release>
+   <version>0.1</version>
+   <date>2005-07-01</date>
+   <state>alpha</state>
+   <notes>First alpha version</notes>
+  <release>
+ </changelog>
+</extension>
