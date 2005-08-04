@@ -323,7 +323,7 @@ class CodeGen_PECL_Extension
         switch ($role) {
         case "public":
             if (isset($this->functions[$name])) {
-                return PEAR::raiseError("public function '{$function->name}' has been defined before");
+                return PEAR::raiseError("public function '$name' has been defined before");
             }
             $this->functions[$name] = $function;
             return true;
@@ -333,7 +333,7 @@ class CodeGen_PECL_Extension
             
         case "internal":
             if (isset($this->internalFunctions[$name])) {
-                return PEAR::raiseError("internal '{$function->name}' has been defined before");
+                return PEAR::raiseError("internal '$name' has been defined before");
             }
             $this->internalFunctions[$name] = $function;
             return true;
@@ -352,10 +352,12 @@ class CodeGen_PECL_Extension
      */
     function addConstant(CodeGen_PECL_Element_Constant $constant)
     {
-        if (isset($this->constants[$constant->name])) {
-            return PEAR::raiseError("constant '{$constant->name}' has been defined before");
+        $name = $constant->getName();
+
+        if (isset($this->constants[$name])) {
+            return PEAR::raiseError("constant '$name' has been defined before");
         }
-        $this->constants[$constant->name] = $constant;
+        $this->constants[$name] = $constant;
         
         return true;
     }
@@ -370,10 +372,12 @@ class CodeGen_PECL_Extension
      */
     function addPhpIni(CodeGen_PECL_Element_Ini $phpini)
     {
-        if (isset($this->phpini[$phpini->name])) {
-            return PEAR::raiseError("php.ini directive '{$phpini->name}' has been defined before");
+        $name = $phpini->getName();
+
+        if (isset($this->phpini[$name])) {
+            return PEAR::raiseError("php.ini directive '$name' has been defined before");
         }
-        $this->phpini[$phpini->name] = $phpini;
+        $this->phpini[$name] = $phpini;
         
         return true;
     }
@@ -700,7 +704,7 @@ class CodeGen_PECL_Extension
         $this->writeCodeFile();
 
         foreach($this->logos as $logo) {
-            $fp = fopen("{$this->dirpath}/{$logo->name}_logos.h", "w");
+            $fp = fopen("{$this->dirpath}/".$logo->getName()."_logos.h", "w");
             fwrite($fp, CodeGen_Tools_Indent::tabify($logo->hCode()));
             fclose($fp);
         }

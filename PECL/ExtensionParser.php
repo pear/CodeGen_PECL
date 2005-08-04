@@ -300,7 +300,7 @@ class CodeGen_PECL_ExtensionParser
         {
             // TODO checks
             if (!isset($attr["name"])) {
-                $attr["name"] = $this->extension->name;
+                $attr["name"] = $this->extension->getName();
             }
 
             $logo = new CodeGen_PECL_Element_Logo($attr["name"]);
@@ -642,7 +642,7 @@ class CodeGen_PECL_ExtensionParser
             if (!isset($attr['name'])) {
                 return PEAR::raiseError("name attribut for file missing");
             }
-
+ 
             return $this->extension->addSourceFile($attr['name']);
         }
 
