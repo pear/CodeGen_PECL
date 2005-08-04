@@ -917,16 +917,18 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 
                 // for functions returning a named resource we create payload pointer variable
                 $resources = $extension->getResources();
-                if ($returns[0] === "resource" && isset($returns[1]) && isset($resources[$returns[1]])) {
-                    $resource = $resources[$returns[1]];
-                    $payload  = $resource->getPayload();
-                    if ($resource->getAlloc()) {
-                        $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
+                if ($returns[0] === "resource") {
+                    if (isset($returns[1]) && isset($resources[$returns[1]])) {
+                        $resource = $resources[$returns[1]];
+                        $payload  = $resource->getPayload();
+                        if ($resource->getAlloc()) {
+                            $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
+                        } else {
+                            $code .= "    $payload * return_res;\n";
+                        }
                     } else {
-                        $code .= "    $payload * return_res;\n";
+                        $code .= "    void * return_res;\n";
                     }
-                } else {
-                    $code .= "    void * return_res;\n";
                 }
                 
 
@@ -1095,14 +1097,14 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(8, $this->code);
+                        $code .= CodeGen_Tools_Indent::indent(8, CodeGen_Tools_Indent::linetrim($this->code));
                         $code .= "    } while(0);\n"; 
                     } else {
                         // in C++ variable may be declared at any time
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(4, $this->code)."\n";
+                        $code .= CodeGen_Tools_Indent::indent(4, CodeGen_Tools_Indent::linetrim($this->code))."\n";
                     }
 
                     // when a function returns a named resource we know what to do
@@ -1256,13 +1258,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
             $test->setName($this->name);
             $test->setTitle($this->name."() function");
 
-            $test->setIni("extension_dir=../modules"); // TODO be more clever about this?
-            $test->addIni("extension=".$extension->getName().".so"); // TODO .so is UNIX-only
             if ($this->testIni) {
                 $test->addIni($this->testIni);
             }
 
-            $test->setSkipIf("!extension_loaded('".$extension->getName()."')";
+            $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
             if ($this->testSkipIf) {
                 $test->addSkipIf($this->testSkipIf);
             }
