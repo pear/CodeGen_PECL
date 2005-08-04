@@ -1,6 +1,8 @@
 Braindump
 ---------
 
+test files are not yet added to package.xml
+
 allow addition of files to directories (eg. test),
 allow specification of file role instead of guessing by extension?
 
