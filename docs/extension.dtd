@@ -1,4 +1,4 @@
-<!ELEMENT extension (summary|description|license|maintainers|logo|release|changelog|functions|constants|globals|deps|resources|code|streams|tests|makefile)*>
+<!ELEMENT extension (summary|description|license|maintainers|logo|release|changelog|functions|function|constants|constant|globals|global|phpini|deps|resources|resource|code|streams|stream|tests|test|makefile|classes|class)*>
 <!ATTLIST extension
   name CDATA #REQUIRED
 >
@@ -11,16 +11,18 @@
 
 <!ELEMENT maintainer (user|role|name|email)*>
 
-<!ELEMENT logo (#PCDATA)>
-<!ATTLIST logo
-  src CDATA #REQUIRED
->
-
 <!ELEMENT user (#PCDATA)>
 
 <!ELEMENT role (#PCDATA)>
 
+<!ELEMENT name (#PCDATA)>
+
 <!ELEMENT email (#PCDATA)>
+
+<!ELEMENT logo (#PCDATA)>
+<!ATTLIST logo
+  src CDATA #REQUIRED
+>
 
 <!ELEMENT changelog (release)*>
 
@@ -36,8 +38,9 @@
 
 <!ELEMENT notes (#PCDATA)>
 
+
 <!ELEMENT functions (function)*>
-<!ELEMENT function (summary|proto|description|code)*>
+<!ELEMENT function (summary|proto|description|code|testcode|testresult|testini|testskipif)*>
 <!ATTLIST function
   role  (internal|private|public) "public"
   name  CDATA #REQUIRED
@@ -45,14 +48,15 @@
 <!ELEMENT proto (#PCDATA)>  
 <!ELEMENT code  (#PCDATA)>  
 <!ATTLIST code  
-  role (header|code) "code"
+  role     (header|code) "code"
+  position (top|bottom)  "bottom"
   src  CDATA
 >
 <!ELEMENT constants (constant)*>
 <!ELEMENT constant (#PCDATA)>
 <!ATTLIST constant
   name  CDATA #REQUIRED
-  value CDATA #REQUIRED
+  value CDATA 
   type  (string|int|float) "string"
 >
 
@@ -92,10 +96,8 @@
 >
 <!ELEMENT header (#PCDATA)>
 <!ATTLIST header
-  name       CDATA #REQUIRED
-  function   CDATA #IMPLIED
-  searchpath CDATA #IMPLIED
-  platform   (unix|win32|all) "all"
+  name     CDATA #REQUIRED
+  path     CDATA #IMPLIED
   prepend  (yes|no) "no"
 >
 
@@ -104,7 +106,7 @@
 <!ATTLIST resource
   name       CDATA #REQUIRED
   payload    CDATA #IMPLIED
-	alloc      (yes|no) "no"
+  alloc      (yes|no) "no"
 >
 <!ELEMENT destruct (#PCDATA)>
 
@@ -121,11 +123,12 @@
 
 
 <!ELEMENT tests (test)*>
-<!ELEMENT test (title, skipif?, post?, get?, code, output)>
+<!ELEMENT test (title, ini?, skipif?, post?, get?, code, output)>
 <!ATTLIST test
   name CDATA #REQUIRED
 >
 <!ELEMENT title (#PCDATA)>
+<!ELEMENT ini (#PCDATA)>
 <!ELEMENT skipif (#PCDATA)>
 <!ELEMENT post (#PCDATA)>
 <!ELEMENT get (#PCDATA)>
