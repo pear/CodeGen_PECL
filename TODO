@@ -1,6 +1,9 @@
 Braindump
 ---------
 
+allow addition of files to directories (eg. test),
+allow specification of file role instead of guessing by extension?
+
 support compiler/linker flags setting using config programs
 like pkg-config, mysql_config etc.
 
