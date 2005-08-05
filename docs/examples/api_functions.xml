@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<extension name="api_functions">
+
+ <function role="internal" name="MINIT">
+  <code>
+<![CDATA[
+php_error(E_WARNING, "MINIT");
+]]>
+  </code>
+ </function>
+
+ <function role="internal" name="MSHUTDOWN">
+  <code>
+<![CDATA[
+php_error(E_WARNING, "MSHUTDOWN");
+]]>
+  </code>
+ </fnction>
+
+ <function role="internal" name="RINIT">
+  <code>
+<![CDATA[
+php_error(E_WARNING, "RINIT");
+]]>
+  </code>
+ </function>
+
+ <function role="internal" name="RSHUTDOWN">
+  <code>
+<![CDATA[
+php_error(E_WARNING, "RSHUTDOWN");
+]]>
+  </code>
+ </function>
+
+ <function role="internal" name="MINFO">
+  <code>
+<![CDATA[
+php_error(E_WARNING, "MINFO");
+]]>
+  </code>
+ </function>
+
+</extension>
