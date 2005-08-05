@@ -190,7 +190,7 @@ HREF="#AEN426"
 ></DT
 ><DT
 >2.13.2. <A
-HREF="#AEN448"
+HREF="#AEN455"
 >Embedded function test cases</A
 ></DT
 ></DL
@@ -199,41 +199,41 @@ HREF="#AEN448"
 ></DD
 ><DT
 >3. <A
-HREF="#AEN451"
+HREF="#AEN458"
 >XML input parsing</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1. <A
-HREF="#AEN453"
+HREF="#AEN460"
 >Includes</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1.1. <A
-HREF="#AEN466"
+HREF="#AEN473"
 >External entities</A
 ></DT
 ><DT
 >3.1.2. <A
-HREF="#AEN469"
+HREF="#AEN476"
 >XInclude</A
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN472"
-><CODE
-CLASS="sgmltag"
->code</CODE
+HREF="#AEN479"
+><TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > tags</A
 ></DT
 ></DL
 ></DD
 ><DT
 >3.2. <A
-HREF="#AEN476"
+HREF="#AEN483"
 >Verbatim text data</A
 ></DT
 ></DL
@@ -588,9 +588,9 @@ NAME="AEN51"
 ></H2
 ><P
 >&#13;    The top level container tag describing an extension is the
-    <CODE
-CLASS="sgmltag"
->extension</CODE
+    <TT
+CLASS="literal"
+>&#60;extension&#62;</TT
 > tag. The name of the extension
     is given in the <TT
 CLASS="literal"
@@ -601,13 +601,13 @@ CLASS="literal"
     generated C code.
    </P
 ><P
->&#13;    The tags <CODE
-CLASS="sgmltag"
->summary</CODE
+>&#13;    The tags <TT
+CLASS="literal"
+>&#60;summary&#62;</TT
 > and
-    <CODE
-CLASS="sgmltag"
->description</CODE
+    <TT
+CLASS="literal"
+>&#60;description&#62;</TT
 > should be added at the very top of
     your extensions. The summary should be a short one-line
     description of the extension while the actually description can be
@@ -666,16 +666,16 @@ CLASS="literal"
     output block for the extension.
    </P
 ><P
->&#13;    The <CODE
-CLASS="sgmltag"
->maintainers</CODE
->, <CODE
-CLASS="sgmltag"
->release</CODE
+>&#13;    The <TT
+CLASS="literal"
+>&#60;maintainers&#62;</TT
+>, <TT
+CLASS="literal"
+>&#60;release&#62;</TT
 > and
-    <CODE
-CLASS="sgmltag"
->changelog</CODE
+    <TT
+CLASS="literal"
+>&#60;changelog&#62;</TT
 > tags specifications are identical to  
     those in  the PEAR <TT
 CLASS="literal"
@@ -733,9 +733,9 @@ CLASS="programlisting"
     </PRE
 ></DIV
 ><P
->&#13;    The <CODE
-CLASS="sgmltag"
->license</CODE
+>&#13;    The <TT
+CLASS="literal"
+>&#60;license&#62;</TT
 > tag is a little more restrictive as
     its <TT
 CLASS="literal"
@@ -789,9 +789,9 @@ CLASS="programlisting"
 CLASS="literal"
 >phpinfo()</TT
 > block can be specified using the
-    <CODE
-CLASS="sgmltag"
->logo</CODE
+    <TT
+CLASS="literal"
+>&#60;logo&#62;</TT
 > tag. The actual file name of the logo
     image has to be given in the <TT
 CLASS="literal"
@@ -836,13 +836,13 @@ NAME="AEN96"
 >2.3. Dependencies</A
 ></H2
 ><P
->&#13;    Dependencies are specified within the <CODE
-CLASS="sgmltag"
->deps</CODE
+>&#13;    Dependencies are specified within the <TT
+CLASS="literal"
+>&#60;deps&#62;</TT
 >
-    environment. Within the <CODE
-CLASS="sgmltag"
->deps</CODE
+    environment. Within the <TT
+CLASS="literal"
+>&#60;deps&#62;</TT
 > itself it is
     possible to set the programming language and target platforms using
     the <TT
@@ -887,20 +887,20 @@ CLASS="literal"
    </P
 ><P
 > 
-    <CODE
-CLASS="sgmltag"
->with</CODE
->, <CODE
-CLASS="sgmltag"
->lib</CODE
+    <TT
+CLASS="literal"
+>&#60;with&#62;</TT
+>, <TT
+CLASS="literal"
+>&#60;lib&#62;</TT
 > and 
-    <CODE
-CLASS="sgmltag"
->header</CODE
+    <TT
+CLASS="literal"
+>&#60;header&#62;</TT
 > tags may be used within the 
-    <CODE
-CLASS="sgmltag"
->deps</CODE
+    <TT
+CLASS="literal"
+>&#60;deps&#62;</TT
 > section to add configure switches 
     and library and header file dependencies.
    </P
@@ -950,9 +950,9 @@ CLASS="literal"
      used if multiple versions are installed on the target system.
     </P
 ><P
->&#13;     The <CODE
-CLASS="sgmltag"
->with</CODE
+>&#13;     The <TT
+CLASS="literal"
+>&#60;with&#62;</TT
 > tag takes three attributes:
      <TT
 CLASS="literal"
@@ -979,9 +979,9 @@ CLASS="literal"
      is mandatory.
     </P
 ><P
->&#13;     Textual data enclosed by the <CODE
-CLASS="sgmltag"
->with</CODE
+>&#13;     Textual data enclosed by the <TT
+CLASS="literal"
+>&#60;with&#62;</TT
 > is used to
      describe the "with" option in the output of <TT
 CLASS="literal"
@@ -1022,9 +1022,9 @@ NAME="AEN138"
 ></H3
 ><P
 >&#13;     Needed external libraries are specified using the
-     <CODE
-CLASS="sgmltag"
->lib</CODE
+     <TT
+CLASS="literal"
+>&#60;lib&#62;</TT
 > tag. The <TT
 CLASS="literal"
 >name=...</TT
@@ -1092,9 +1092,9 @@ NAME="AEN152"
 ></H3
 ><P
 >&#13;     It is possible to specify header files needed by the extension
-     using the <CODE
-CLASS="sgmltag"
->header</CODE
+     using the <TT
+CLASS="literal"
+>&#60;header&#62;</TT
 >. Any headers specified have
      to exist in the include path set for compiling (see also the
      section on <TT
@@ -1120,9 +1120,9 @@ CLASS="literal"
 CLASS="literal"
 >include</TT
 >
-     subdirectory of the path given in <CODE
-CLASS="sgmltag"
->with</CODE
+     subdirectory of the path given in <TT
+CLASS="literal"
+>&#60;with&#62;</TT
 >. If a
      different relative path needs to be used it can be defined using
      the <TT
@@ -1162,9 +1162,9 @@ NAME="AEN167"
 ></H2
 ><P
 >&#13;    Custom code may be added to your extension source files using the
-    <CODE
-CLASS="sgmltag"
->code</CODE
+    <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > tags. The <TT
 CLASS="literal"
 >role=...</TT
@@ -1205,9 +1205,9 @@ NAME="AEN178"
 ></H2
 ><P
 >&#13;    Three different kinds of functions may be defined using the
-    <CODE
-CLASS="sgmltag"
->function</CODE
+    <TT
+CLASS="literal"
+>&#60;function&#62;</TT
 > tag: public, internal and private
     functions.
     Public functions are functions you want to make available at the
@@ -1257,9 +1257,9 @@ CLASS="literal"
 CLASS="literal"
 >name=...</TT
 > and at least the
-     <CODE
-CLASS="sgmltag"
->proto</CODE
+     <TT
+CLASS="literal"
+>&#60;proto&#62;</TT
 > tag to be set.
     </P
 ><P
@@ -1269,15 +1269,15 @@ CLASS="sgmltag"
     </P
 ><P
 >&#13;     The function prototype specified using the
-     <CODE
-CLASS="sgmltag"
->proto</CODE
+     <TT
+CLASS="literal"
+>&#60;proto&#62;</TT
 > tag is parsed to extract the return
      type, the function name and the argument list. The function name
      in the prototype has to match the name attribute given in the
-     <CODE
-CLASS="sgmltag"
->function</CODE
+     <TT
+CLASS="literal"
+>&#60;function&#62;</TT
 >.
     </P
 ><P
@@ -1376,19 +1376,19 @@ CLASS="literal"
     </P
 ><P
 >&#13;     Function documentation should be given using the
-     <CODE
-CLASS="sgmltag"
->summary</CODE
+     <TT
+CLASS="literal"
+>&#60;summary&#62;</TT
 > tag for a one line description and the
-     <CODE
-CLASS="sgmltag"
->description</CODE
+     <TT
+CLASS="literal"
+>&#60;description&#62;</TT
 > tag for a more detailed
      description.
      Both are copied to the generated DocBook XML
-     documentation for that function. Within <CODE
-CLASS="sgmltag"
->description</CODE
+     documentation for that function. Within <TT
+CLASS="literal"
+>&#60;description&#62;</TT
 >
      DocBook tags may be used. Be aware though that while <B
 CLASS="command"
@@ -1399,13 +1399,13 @@ CLASS="command"
     </P
 ><P
 >&#13;     Skeleton code for parameter parsing and result passing is
-     generated if  no <CODE
-CLASS="sgmltag"
->code</CODE
+     generated if  no <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > fragment is specified
-     for a function. A <CODE
-CLASS="sgmltag"
->code</CODE
+     for a function. A <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > section is inserted
      right after the generated parameter parsing code. Setting a
      return value is up to the code fragment if any is given, adding a
@@ -1567,9 +1567,9 @@ CLASS="literal"
 > command line option.
         </P
 ><P
->&#13;         The default code generated when no <CODE
-CLASS="sgmltag"
->code</CODE
+>&#13;         The default code generated when no <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 >
          section is given includes the extension name, summary line
          and release version and date, the optional logo image if
@@ -1612,9 +1612,9 @@ CLASS="programlisting"
 >
     </P
 ><P
->&#13;     <CODE
-CLASS="sgmltag"
->code</CODE
+>&#13;     <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > sections for the internal
      functions may be written as if they were C function bodies,
      including local variable definitions.
@@ -1630,13 +1630,13 @@ NAME="AEN280"
 >2.6. Constants</A
 ></H2
 ><P
->&#13;    PHP constants are defined using <CODE
-CLASS="sgmltag"
->constant</CODE
+>&#13;    PHP constants are defined using <TT
+CLASS="literal"
+>&#60;constant&#62;</TT
 >
-    tags within the <CODE
-CLASS="sgmltag"
->constants</CODE
+    tags within the <TT
+CLASS="literal"
+>&#60;constants&#62;</TT
 > environment.
    </P
 ><P
@@ -1673,9 +1673,9 @@ CLASS="literal"
    </P
 ><P
 >&#13;    A descriptive text may be given as content of the
-    <CODE
-CLASS="sgmltag"
->constant</CODE
+    <TT
+CLASS="literal"
+>&#60;constant&#62;</TT
 > tag. This text will be used when
     generation the DocBook XML documentation.
    </P
@@ -1729,9 +1729,9 @@ CLASS="literal"
 >&#13;    An extension may define variables that are global to either the
     complete extension or to a specific request. True globals that are
     global to the complete extensions do not need any registration so
-    they can be defined using C code within the global <CODE
-CLASS="sgmltag"
->code</CODE
+    they can be defined using C code within the global <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > 
     tag.
    </P
@@ -1746,27 +1746,27 @@ CLASS="literal"
    </P
 ><P
 >&#13;    All global definitions have to be put into a
-    <CODE
-CLASS="sgmltag"
->globals</CODE
+    <TT
+CLASS="literal"
+>&#60;globals&#62;</TT
 > environment. Simple module globals are
-    defined using the <CODE
-CLASS="sgmltag"
->global</CODE
+    defined using the <TT
+CLASS="literal"
+>&#60;global&#62;</TT
 >
     tag. <TT
 CLASS="literal"
 >php.ini</TT
 > directives are defined using the
-    <CODE
-CLASS="sgmltag"
->phpini</CODE
+    <TT
+CLASS="literal"
+>&#60;phpini&#62;</TT
 > tag.
    </P
 ><P
->&#13;    A <CODE
-CLASS="sgmltag"
->global</CODE
+>&#13;    A <TT
+CLASS="literal"
+>&#60;global&#62;</TT
 > definition requires the
     <TT
 CLASS="literal"
@@ -1805,12 +1805,12 @@ CLASS="literal"
 CLASS="literal"
 >php.ini</TT
 > directives may be defined using the
-    <CODE
-CLASS="sgmltag"
->phpini</CODE
-> within a <CODE
-CLASS="sgmltag"
->globals</CODE
+    <TT
+CLASS="literal"
+>&#60;phpini&#62;</TT
+> within a <TT
+CLASS="literal"
+>&#60;globals&#62;</TT
 >
     environment. To define a <TT
 CLASS="literal"
@@ -1935,14 +1935,14 @@ CLASS="literal"
 >
    </P
 ><P
->&#13;    The content data of <CODE
-CLASS="sgmltag"
->phpini</CODE
+>&#13;    The content data of <TT
+CLASS="literal"
+>&#60;phpini&#62;</TT
 > tags is used to
     generate documentation for the defined
-    directive. <CODE
-CLASS="sgmltag"
->global</CODE
+    directive. <TT
+CLASS="literal"
+>&#60;global&#62;</TT
 > definitions may also include
     content data but it is for internal documentation only, it is not
     used in DocBook XML generation (yet).
@@ -2020,13 +2020,13 @@ NAME="AEN369"
 ></H2
 ><P
 >&#13;    You may define PHP resource types within a
-    <CODE
-CLASS="sgmltag"
->resources</CODE
+    <TT
+CLASS="literal"
+>&#60;resources&#62;</TT
 > environment. For each
-    <CODE
-CLASS="sgmltag"
->resource</CODE
+    <TT
+CLASS="literal"
+>&#60;resource&#62;</TT
 > you have to specify the
     <TT
 CLASS="literal"
@@ -2074,9 +2074,9 @@ CLASS="literal"
     to them is unset or at request shutdown. If your resource
     payload needs to be cleaned up as well you have to add an
     appropriate C code snippet that takes care of this using the
-    <CODE
-CLASS="sgmltag"
->destruct</CODE
+    <TT
+CLASS="literal"
+>&#60;destruct&#62;</TT
 > tag. Within the destructor snippet you
     may refer to the allocated payload using the
     <TT
@@ -2136,9 +2136,9 @@ NAME="AEN391"
 ></H3
 ><P
 >&#13;     The creation of resource instances is not defined within
-     <CODE
-CLASS="sgmltag"
->resource</CODE
+     <TT
+CLASS="literal"
+>&#60;resource&#62;</TT
 >. This is a task to be handled by
      public PHP functions instead.
     </P
@@ -2231,9 +2231,9 @@ NAME="AEN408"
 ></H2
 ><P
 >&#13;    Additional configure checks can be added to the generated config.m4
-    file used by Unix/Cygwin builds using the <CODE
-CLASS="sgmltag"
->configm4</CODE
+    file used by Unix/Cygwin builds using the <TT
+CLASS="literal"
+>&#60;configm4&#62;</TT
 > 
     tag. Using the 'position' attribute it is possible to specify whether
     the additional code is to be added at the top or bottom of the 
@@ -2269,9 +2269,9 @@ NAME="AEN415"
 ></H2
 ><P
 >&#13;    Makefile rules may be added using the
-    <CODE
-CLASS="sgmltag"
->makefile</CODE
+    <TT
+CLASS="literal"
+>&#60;makefile&#62;</TT
 > for Unix/Cygwin builds.
     Using this it is possible to add dependencies or build rules in
     addition to the default and auto generated rules.
@@ -2305,9 +2305,9 @@ NAME="AEN422"
 >2.13. Tests</A
 ></H2
 ><P
->&#13;    Global test cases can be created using the <CODE
-CLASS="sgmltag"
->test</CODE
+>&#13;    Global test cases can be created using the <TT
+CLASS="literal"
+>&#60;test&#62;</TT
 > tag.
     Test cases for functions are automaticly created. 
    </P
@@ -2320,13 +2320,13 @@ NAME="AEN426"
 >2.13.1. Global test cases</A
 ></H3
 ><P
->&#13;     Global test case scripts can be created using the <CODE
-CLASS="sgmltag"
->test</CODE
+>&#13;     Global test case scripts can be created using the <TT
+CLASS="literal"
+>&#60;test&#62;</TT
 > tag.
-     The <CODE
-CLASS="sgmltag"
->test</CODE
+     The <TT
+CLASS="literal"
+>&#60;test&#62;</TT
 > has a single attribute <TT
 CLASS="literal"
 >name</TT
@@ -2343,23 +2343,23 @@ CLASS="literal"
 CLASS="literal"
 >'_'</TT
 > are allowed in test names. A more readable test
-     title may be set using the <CODE
-CLASS="sgmltag"
->title</CODE
+     title may be set using the <TT
+CLASS="literal"
+>&#60;title&#62;</TT
 > tag within 
-     <CODE
-CLASS="sgmltag"
->test</CODE
+     <TT
+CLASS="literal"
+>&#60;test&#62;</TT
 >.
     </P
 ><P
->&#13;     The actual PHP code to run is specified using a <CODE
-CLASS="sgmltag"
->code</CODE
+>&#13;     The actual PHP code to run is specified using a <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 >
-     section. The expected output is specified using a <CODE
-CLASS="sgmltag"
->result</CODE
+     section. The expected output is specified using a <TT
+CLASS="literal"
+>&#60;result&#62;</TT
 >
      tag, it defaults to <TT
 CLASS="literal"
@@ -2379,9 +2379,9 @@ CLASS="literal"
 CLASS="literal"
 >mode</TT
 >
-     attribute of <CODE
-CLASS="sgmltag"
->result</CODE
+     attribute of <TT
+CLASS="literal"
+>&#60;result&#62;</TT
 > to <TT
 CLASS="literal"
 >format</TT
@@ -2392,14 +2392,45 @@ CLASS="literal"
 >.
     </P
 ><P
->&#13;    </P
+>&#13;     The <TT
+CLASS="literal"
+>--SKIPIF--</TT
+> section of the generated tests checks
+     for the generated extension being loaded, the tests will automaticly be
+     skiped if it is not available. Additional skip conditions can be added
+     using the <TT
+CLASS="literal"
+>&#60;skipif&#62;</TT
+> tag. The content of the tag may either
+     be a PHP expression that evaluates to <TT
+CLASS="literal"
+>true</TT
+> if the test
+     should be skipped or a complete code snippet that prints <TT
+CLASS="literal"
+>skip</TT
+>
+     if the test is supposed to be skipped. A string describing the reason for
+     the test being skipped may be added after the <TT
+CLASS="literal"
+>skip</TT
+> in 
+     this case.
+    </P
+><P
+>&#13;     Additional php.ini settings to be used for testing may be specified in
+     a <TT
+CLASS="literal"
+>&#60;ini&#62;</TT
+> section.
+    </P
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN448"
+NAME="AEN455"
 >2.13.2. Embedded function test cases</A
 ></H3
 ><P
@@ -2411,7 +2442,7 @@ NAME="AEN448"
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN451"
+NAME="AEN458"
 ></A
 >Chapter 3. XML input parsing</H1
 ><DIV
@@ -2419,7 +2450,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN453"
+NAME="AEN460"
 >3.1. Includes</A
 ></H2
 ><P
@@ -2444,9 +2475,9 @@ CLASS="literal"
 >the <TT
 CLASS="literal"
 >source</TT
-> attribute of <CODE
-CLASS="sgmltag"
->code</CODE
+> attribute of <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > tags</P
 ></LI
 ></UL
@@ -2457,7 +2488,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN466"
+NAME="AEN473"
 >3.1.1. External entities</A
 ></H3
 ><P
@@ -2469,7 +2500,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN469"
+NAME="AEN476"
 >3.1.2. XInclude</A
 ></H3
 ><P
@@ -2481,10 +2512,10 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN472"
->3.1.3. <CODE
-CLASS="sgmltag"
->code</CODE
+NAME="AEN479"
+>3.1.3. <TT
+CLASS="literal"
+>&#60;code&#62;</TT
 > tags</A
 ></H3
 ><P
@@ -2497,7 +2528,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN476"
+NAME="AEN483"
 >3.2. Verbatim text data</A
 ></H2
 ><P
