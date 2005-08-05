@@ -300,7 +300,7 @@ class CodeGen_PECL_Element_Test
      *
      * @type   string
      */
-    protected $output;
+    protected $output = "OK";
 
     /**
      * Getter for expected output
@@ -322,6 +322,43 @@ class CodeGen_PECL_Element_Test
     function setOutput($data) 
     {
         $this->output = $data;
+    }
+
+    /**
+     * Output block style
+     *
+     * @type   string
+     */
+    protected $mode = "plain";
+
+    /**
+     * Getter for output block style
+     *
+     * @access public
+     * @return string  value of
+     */
+    function getMode() 
+    {
+        return $this->mode;
+    }
+    
+    /**
+     * Setter for output block style
+     *
+     * @access public
+     * @param  string  new value for
+     */
+    function setMode($mode) 
+    {
+        switch ($mode) {
+        case 'plain':
+        case 'format':
+        case 'regex':
+            $this->mode = $mode;
+            return true;
+        }
+        
+        return PEAR::raiseError("'$mode' is not a valid test output comparison mode");
     }
 
     /** 
@@ -372,7 +409,20 @@ class CodeGen_PECL_Element_Test
         }
         
         echo "--FILE--\n<?php\n{$this->code}\n?>\n";
-        echo "--EXPECT--\n{$this->output}";
+
+        switch ($this->mode) {
+        case 'regex':
+            echo "--EXPECTREGEX--\n";
+            break;
+        case 'format':
+            echo "--EXPECTF--\n";
+            break;
+        case 'plain':
+        default:   
+            echo "--EXPECT--\n";
+            break;
+        }
+        echo $this->output;
 
         $file->write();
     }
