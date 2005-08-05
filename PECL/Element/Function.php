@@ -1264,6 +1264,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
             }
 
             $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
+            $test->addSkipIf("!function_exists('".$this->getName()."')");
             if ($this->testSkipIf) {
                 $test->addSkipIf($this->testSkipIf);
             }
