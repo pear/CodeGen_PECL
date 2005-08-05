@@ -2,14 +2,6 @@
 <extension name="testcase">
 <!-- testing test cases -->
 
-  <!-- embeded function testcase -->
-  <function name="foobar">
-   <proto>string foobar()</proto>
-   <code>RETURN_STRING("foobar",1);</code>
-   <testcode>echo foobar();</testcode>
-   <testresult>foobar</testresult>
-  </function>
-
   <!-- standalone testcase -->
   <test name="001">
    <title>Standalone test</title>
@@ -28,5 +20,15 @@
    <title>Skip #2</title>
    <skipif>if (1==1) die("skip");</skipif>
   </test>
+
+  <!-- embeded function testcase -->
+  <function name="foobar">
+   <proto>string foobar()</proto>
+   <code>RETURN_STRING("foobar",1);</code>
+   <test>
+    <code>echo foobar();</code>
+    <result>foobar</result>
+   </test>
+  </function>
 
 </extension>

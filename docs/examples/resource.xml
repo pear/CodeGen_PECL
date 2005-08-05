@@ -12,40 +12,44 @@
  <function name="my_fopen">
   <proto>resource my_file my_fopen(string path, string mode)</proto>
   <code>if (!(return_res = fopen(path, mode))) RETURN_FALSE;</code>
-  <testcode>echo is_resource(my_fopen("test.txt", "w")) ? "OK" : "Failure";</testcode>
+  <test><code>echo is_resource(my_fopen("test.txt", "w")) ? "OK" : "Failure";</code></test>
  </function>
 
  <!-- use the resource -->
  <function name="my_fwrite">
   <proto>int my_fwrite(resource my_file fp, string text)</proto>
   <code>RETURN_LONG(fwrite(text, 1, text_len, res_fp));</code>
-  <testcode>
+  <test>
+   <code>
 $fp = my_fopen("test.txt", "w") or die("Failure");
 echo my_fwrite($fp, 'hallo');
 my_fclose($fp);
-  </testcode>
-  <testresult>
+   </code>
+   <result>
 5
-  </testresult>
+   </result>
+  </test>
  </function>
 
  <!-- free the resource -->
  <function name="my_fclose">
   <proto>void my_fclose(resource my_file fp)</proto>
   <code>FREE_RESOURCE(fp);</code>
-  <testcode>
+  <test>
+   <code>
 <![CDATA[
 $fp = my_fopen("test.txt", "w") or die("Failure");
 var_dump($fp);
 my_fclose($fp);
 var_dump($fp);
 ]]>
-  </testcode>
-  <testresult mode="format">
+   </code>
+   <result mode="format">
 <![CDATA[
 resource(%d) of type (my_file)
 resource(%d) of type (Unknown)
 ]]>
-  </testresult>
+   </result>
+  </test>
  </function>
 </extension>
