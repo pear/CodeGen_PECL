@@ -61,8 +61,8 @@ class CodeGen_PECL_Element_Test
      * @return string  value of
      */ function setName($name) 
     {
-        if (! $this->isName($name)) {
-            return PEAR::raise("'$name' is not a valid test case basename");
+        if (! ereg("[[:alnum:]_-]+", $name)) {
+            return PEAR::raiseError("'$name' is not a valid test case basename");
         }
 
         $this->name = $name;
