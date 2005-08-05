@@ -720,7 +720,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          *
          * @var string
          */
-        protected $testCode = "echo 'no test case for this function yet';";
+        protected $testCode = "echo 'OK'; // no test case for this function yet";
 
         /**
          * testCode setter
@@ -746,24 +746,25 @@ require_once "CodeGen/Tools/Tokenizer.php";
         /**
          * expected test result string
          *
-         * @var string
+         * @var array
          */
-        protected $testResult = "no test case for this function yet";
+        protected $testResult = array();
  
         /**
          * testResult setter
          *
-         * @param  string code snippet
+         * @param  string result text
+         * @param  string test output comparison mode
          */
-        function setTestResult($code)
+        function setTestResult($text, $mode = "plain")
         {
-            $this->testResult = $code;
+            $this->testResult = array("result" => $text, "mode" => $mode);
         }
 
         /**
          * testResult getter
          *
-         * @return string
+         * @return array
          */
         function getTestResult()
         {
@@ -1269,7 +1270,12 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
             $test->setCode($this->testCode);
 
-            $test->setOutput($this->testResult);
+            if (!empty($this->testResult)) {
+                $test->setOutput($this->testResult['result']);
+                if (isset($this->testResult['mode'])) {
+                    $test->setMode($this->testResult['mode']);
+                }
+            }
 
             $test->writeTest($extension);
         }
