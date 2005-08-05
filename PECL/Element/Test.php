@@ -347,7 +347,11 @@ class CodeGen_PECL_Element_Test
     {
         $extName = $extension->getName();
 
-        $file = new CodeGen_Tools_Outbuf("{$extName}/tests/{$this->name}.phpt");
+        $filename = "tests/{$this->name}.phpt";
+
+        $extension->addPackageFile("test", $filename);
+
+        $file = new CodeGen_Tools_Outbuf($extension->dirpath."/".$filename);
 
         echo "--TEST--\n{$this->title}\n";
 
