@@ -1299,17 +1299,67 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
      ...
     </para>
    </section>
+
    <section>
     <title>XInclude</title>
     <para>
-     ...
+     The <literal>CodeGen</literal> XML parser supports a simple 
+     subset of XInclude, it is possible to include additional
+     specification files using the <literal>href=...</literal>
+     attribute of the <literal>&lt;include&gt;</literal> tag:
+    </para>
+    <example>
+     <title>XInclude</title>
+     <programlisting>
+<![CDATA[
+  <extension name="foobar" xmlns:xi="http://www.w3.org/2001/XInclude">
+   ...
+   <xi:include href="foobar_2.xml"/>
+   ...
+  </extension>
+]]>
+     </programlisting>
+    </example>
+    <para>
+     The <literal>parse=...</literal> attirbute is also supported, 
+     using <literal>&lt;include parse='text' href='...'/&gt;</literal> it is possible to
+     include arbitrary data without parsing it as XML.
+    </para>
+    <example>
+     <title>Verbatim XInclude</title>
+     <programlisting>
+<![CDATA[
+  <extension name="foobar" xmlns:xi="http://www.w3.org/2001/XInclude">
+   ...
+   <description><xi:include href="README" parse="text"/></description>
+   ...
+  </extension>
+]]>
+     </programlisting>
+    </example>
+    <para>
+     Other <literal>&lt;include&gt;</literal> features and the <literal>&lt;fallback&gt;</literal>
+     are not supported yet, and most of them won't make sense in this context anyway.
     </para>
    </section>
+
    <section>
     <title><literal>&lt;code&gt;</literal> tags</title>
     <para>
-     ...
+     In most places the <literal>&lt;code&gt;</literal> tag supports loading of 
+     its content using its <literal>src=...</literal> attribute:
     </para>
+    <example>
+     <title>Using <literal>&lt;code src="..."&gt;</literal></title>
+     <programlisting>
+<![CDATA[
+  <function name="foobar">
+   ...
+   <code src="func_foobar.c"/>
+  </function>
+]]>
+     </programlisting>
+    </example>
    </section>
   </section>
 
@@ -1327,11 +1377,20 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
   <section>
    <title>Invocation</title>
    <para>
-...
+    The transformation of a XMP specification file into 
+    an extension directory is done by simply calling the
+    <filename>pecl-gen</filename> command with the XML
+    filename as argument:
    </para>
    <programlisting>
 pecl-gen my_extension.xml
    </programlisting>
+   <para>
+    <filename>pecl-gen</filename> will refuse to overwrite
+    an existing extension directory (as changes made in there
+    may be lost) unless you call it with the <literal>-f</literal>
+    or <literal>--force</literal> option:
+   </para>
    <programlisting>
 pecl-gen -f my_extension.xml
    </programlisting>

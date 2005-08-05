@@ -247,7 +247,7 @@ HREF="#AEN544"
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN547"
+HREF="#AEN562"
 ><TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -257,46 +257,46 @@ CLASS="literal"
 ></DD
 ><DT
 >3.2. <A
-HREF="#AEN551"
+HREF="#AEN572"
 >Verbatim text data</A
 ></DT
 ></DL
 ></DD
 ><DT
 >4. <A
-HREF="#AEN554"
+HREF="#AEN575"
 >Usage</A
 ></DT
 ><DD
 ><DL
 ><DT
 >4.1. <A
-HREF="#AEN556"
+HREF="#AEN577"
 >Invocation</A
 ></DT
 ><DT
 >4.2. <A
-HREF="#AEN561"
+HREF="#AEN587"
 >Configuration</A
 ></DT
 ><DT
 >4.3. <A
-HREF="#AEN574"
+HREF="#AEN600"
 >Compilation</A
 ></DT
 ><DT
 >4.4. <A
-HREF="#AEN579"
+HREF="#AEN605"
 >Testing</A
 ></DT
 ><DT
 >4.5. <A
-HREF="#AEN594"
+HREF="#AEN620"
 >Installation</A
 ></DT
 ><DT
 >4.6. <A
-HREF="#AEN604"
+HREF="#AEN630"
 >PEAR integration</A
 ></DT
 ></DL
@@ -436,8 +436,26 @@ HREF="#AEN523"
 >Full test case</A
 ></DT
 ><DT
+>3-1. <A
+HREF="#AEN550"
+>XInclude</A
+></DT
+><DT
+>3-2. <A
+HREF="#AEN556"
+>Verbatim XInclude</A
+></DT
+><DT
+>3-3. <A
+HREF="#AEN568"
+>Using <TT
+CLASS="literal"
+>&#60;code src="..."&#62;</TT
+></A
+></DT
+><DT
 >4-1. <A
-HREF="#AEN609"
+HREF="#AEN635"
 >Installation using <TT
 CLASS="literal"
 >pear</TT
@@ -2940,7 +2958,80 @@ NAME="AEN544"
 >3.1.2. XInclude</A
 ></H3
 ><P
->&#13;     ...
+>&#13;     The <TT
+CLASS="literal"
+>CodeGen</TT
+> XML parser supports a simple 
+     subset of XInclude, it is possible to include additional
+     specification files using the <TT
+CLASS="literal"
+>href=...</TT
+>
+     attribute of the <TT
+CLASS="literal"
+>&#60;include&#62;</TT
+> tag:
+    </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN550"
+></A
+><P
+><B
+>Example 3-1. XInclude</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;extension name="foobar" xmlns:xi="http://www.w3.org/2001/XInclude"&#62;
+   ...
+   &#60;xi:include href="foobar_2.xml"/&#62;
+   ...
+  &#60;/extension&#62;
+
+     </PRE
+></DIV
+><P
+>&#13;     The <TT
+CLASS="literal"
+>parse=...</TT
+> attirbute is also supported, 
+     using <TT
+CLASS="literal"
+>&#60;include parse='text' href='...'/&#62;</TT
+> it is possible to
+     include arbitrary data without parsing it as XML.
+    </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN556"
+></A
+><P
+><B
+>Example 3-2. Verbatim XInclude</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;extension name="foobar" xmlns:xi="http://www.w3.org/2001/XInclude"&#62;
+   ...
+   &#60;description&#62;&#60;xi:include href="README" parse="text"/&#62;&#60;/description&#62;
+   ...
+  &#60;/extension&#62;
+
+     </PRE
+></DIV
+><P
+>&#13;     Other <TT
+CLASS="literal"
+>&#60;include&#62;</TT
+> features and the <TT
+CLASS="literal"
+>&#60;fallback&#62;</TT
+>
+     are not supported yet, and most of them won't make sense in this context anyway.
     </P
 ></DIV
 ><DIV
@@ -2948,15 +3039,44 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN547"
+NAME="AEN562"
 >3.1.3. <TT
 CLASS="literal"
 >&#60;code&#62;</TT
 > tags</A
 ></H3
 ><P
->&#13;     ...
+>&#13;     In most places the <TT
+CLASS="literal"
+>&#60;code&#62;</TT
+> tag supports loading of 
+     its content using its <TT
+CLASS="literal"
+>src=...</TT
+> attribute:
     </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN568"
+></A
+><P
+><B
+>Example 3-3. Using <TT
+CLASS="literal"
+>&#60;code src="..."&#62;</TT
+></B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;function name="foobar"&#62;
+   ...
+   &#60;code src="func_foobar.c"/&#62;
+  &#60;/function&#62;
+
+     </PRE
+></DIV
 ></DIV
 ></DIV
 ><DIV
@@ -2964,7 +3084,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN551"
+NAME="AEN572"
 >3.2. Verbatim text data</A
 ></H2
 ><P
@@ -2976,7 +3096,7 @@ NAME="AEN551"
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN554"
+NAME="AEN575"
 ></A
 >Chapter 4. Usage</H1
 ><DIV
@@ -2984,16 +3104,37 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN556"
+NAME="AEN577"
 >4.1. Invocation</A
 ></H2
 ><P
->&#13;...
+>&#13;    The transformation of a XMP specification file into 
+    an extension directory is done by simply calling the
+    <TT
+CLASS="filename"
+>pecl-gen</TT
+> command with the XML
+    filename as argument:
    </P
 ><PRE
 CLASS="programlisting"
 >&#13;pecl-gen my_extension.xml
    </PRE
+><P
+>&#13;    <TT
+CLASS="filename"
+>pecl-gen</TT
+> will refuse to overwrite
+    an existing extension directory (as changes made in there
+    may be lost) unless you call it with the <TT
+CLASS="literal"
+>-f</TT
+>
+    or <TT
+CLASS="literal"
+>--force</TT
+> option:
+   </P
 ><PRE
 CLASS="programlisting"
 >&#13;pecl-gen -f my_extension.xml
@@ -3004,7 +3145,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN561"
+NAME="AEN587"
 >4.2. Configuration</A
 ></H2
 ><P
@@ -3061,7 +3202,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN574"
+NAME="AEN600"
 >4.3. Compilation</A
 ></H2
 ><P
@@ -3082,7 +3223,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN579"
+NAME="AEN605"
 >4.4. Testing</A
 ></H2
 ><P
@@ -3148,7 +3289,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN594"
+NAME="AEN620"
 >4.5. Installation</A
 ></H2
 ><P
@@ -3189,7 +3330,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN604"
+NAME="AEN630"
 >4.6. PEAR integration</A
 ></H2
 ><P
@@ -3206,7 +3347,7 @@ CLASS="filename"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN609"
+NAME="AEN635"
 ></A
 ><P
 ><B
