@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->PECL_Gen - the PHP extension generator</TITLE
+>CodeGen_PECL - the PHP extension generator</TITLE
 ><META
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
@@ -26,7 +26,7 @@ CLASS="title"
 NAME="AEN1"
 ><TT
 CLASS="literal"
->PECL_Gen</TT
+>CodeGen_PECL</TT
 > - the PHP extension generator</A
 ></H1
 ><HR></DIV
@@ -51,43 +51,67 @@ HREF="#AEN6"
 ></DT
 ><DT
 >1.2. <A
-HREF="#AEN19"
+HREF="#AEN22"
 >Features</A
 ></DT
 ><DT
 >1.3. <A
-HREF="#AEN38"
+HREF="#AEN43"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+>1.3.1. <A
+HREF="#AEN48"
+>Online installation</A
+></DT
+><DT
+>1.3.2. <A
+HREF="#AEN54"
+>Installing from package files</A
+></DT
+><DT
+>1.3.3. <A
+HREF="#AEN64"
+>Installing from PEAR CVS</A
+></DT
+></DL
+></DD
+><DT
+>1.4. <A
+HREF="#AEN69"
 >How to use it</A
 ></DT
 ></DL
 ></DD
 ><DT
 >2. <A
-HREF="#AEN49"
+HREF="#AEN82"
 >The XML description</A
 ></DT
 ><DD
 ><DL
 ><DT
 >2.1. <A
-HREF="#AEN51"
+HREF="#AEN84"
 >Basics</A
 ></DT
 ><DT
 >2.2. <A
-HREF="#AEN64"
+HREF="#AEN97"
 >Release information</A
 ></DT
 ><DT
 >2.3. <A
-HREF="#AEN96"
+HREF="#AEN132"
 >Dependencies</A
 ></DT
 ><DD
 ><DL
 ><DT
 >2.3.1. <A
-HREF="#AEN119"
+HREF="#AEN155"
 ><TT
 CLASS="literal"
 >--with...</TT
@@ -95,48 +119,48 @@ CLASS="literal"
 ></DT
 ><DT
 >2.3.2. <A
-HREF="#AEN138"
+HREF="#AEN178"
 >Libraries</A
 ></DT
 ><DT
 >2.3.3. <A
-HREF="#AEN152"
+HREF="#AEN192"
 >Header files</A
 ></DT
 ></DL
 ></DD
 ><DT
 >2.4. <A
-HREF="#AEN167"
+HREF="#AEN207"
 >Custom code</A
 ></DT
 ><DT
 >2.5. <A
-HREF="#AEN178"
+HREF="#AEN218"
 >Functions</A
 ></DT
 ><DD
 ><DL
 ><DT
 >2.5.1. <A
-HREF="#AEN188"
+HREF="#AEN228"
 >Public functions</A
 ></DT
 ><DT
 >2.5.2. <A
-HREF="#AEN232"
+HREF="#AEN272"
 >Internal functions</A
 ></DT
 ></DL
 ></DD
 ><DT
 >2.6. <A
-HREF="#AEN280"
+HREF="#AEN320"
 >Constants</A
 ></DT
 ><DT
 >2.7. <A
-HREF="#AEN297"
+HREF="#AEN337"
 ><TT
 CLASS="literal"
 >php.ini</TT
@@ -144,53 +168,53 @@ CLASS="literal"
 ></DT
 ><DT
 >2.8. <A
-HREF="#AEN369"
+HREF="#AEN409"
 >Resources</A
 ></DT
 ><DD
 ><DL
 ><DT
 >2.8.1. <A
-HREF="#AEN391"
+HREF="#AEN431"
 >Resource creation and destruction</A
 ></DT
 ></DL
 ></DD
 ><DT
 >2.9. <A
-HREF="#AEN402"
+HREF="#AEN443"
 >Classes</A
 ></DT
 ><DT
 >2.10. <A
-HREF="#AEN405"
+HREF="#AEN446"
 >Streams</A
 ></DT
 ><DT
 >2.11. <A
-HREF="#AEN408"
+HREF="#AEN449"
 >config.m4 fragments</A
 ></DT
 ><DT
 >2.12. <A
-HREF="#AEN415"
+HREF="#AEN456"
 >Makefile fragments</A
 ></DT
 ><DT
 >2.13. <A
-HREF="#AEN422"
+HREF="#AEN463"
 >Tests</A
 ></DT
 ><DD
 ><DL
 ><DT
 >2.13.1. <A
-HREF="#AEN430"
+HREF="#AEN471"
 >Global test cases</A
 ></DT
 ><DT
 >2.13.2. <A
-HREF="#AEN465"
+HREF="#AEN506"
 >Embedded function test cases</A
 ></DT
 ></DL
@@ -199,31 +223,31 @@ HREF="#AEN465"
 ></DD
 ><DT
 >3. <A
-HREF="#AEN478"
+HREF="#AEN526"
 >XML input parsing</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1. <A
-HREF="#AEN480"
+HREF="#AEN528"
 >Includes</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1.1. <A
-HREF="#AEN493"
+HREF="#AEN541"
 >External entities</A
 ></DT
 ><DT
 >3.1.2. <A
-HREF="#AEN496"
+HREF="#AEN544"
 >XInclude</A
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN499"
+HREF="#AEN547"
 ><TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -233,8 +257,47 @@ CLASS="literal"
 ></DD
 ><DT
 >3.2. <A
-HREF="#AEN503"
+HREF="#AEN551"
 >Verbatim text data</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="#AEN554"
+>Usage</A
+></DT
+><DD
+><DL
+><DT
+>4.1. <A
+HREF="#AEN556"
+>Invocation</A
+></DT
+><DT
+>4.2. <A
+HREF="#AEN561"
+>Configuration</A
+></DT
+><DT
+>4.3. <A
+HREF="#AEN574"
+>Compilation</A
+></DT
+><DT
+>4.4. <A
+HREF="#AEN579"
+>Testing</A
+></DT
+><DT
+>4.5. <A
+HREF="#AEN594"
+>Installation</A
+></DT
+><DT
+>4.6. <A
+HREF="#AEN604"
+>PEAR integration</A
 ></DT
 ></DL
 ></DD
@@ -250,122 +313,135 @@ CLASS="LOT"
 ></DT
 ><DT
 >2-1. <A
-HREF="#AEN61"
+HREF="#AEN94"
 >Extension basics</A
 ></DT
 ><DT
 >2-2. <A
-HREF="#AEN73"
+HREF="#AEN106"
 >Release information</A
 ></DT
 ><DT
 >2-3. <A
-HREF="#AEN84"
+HREF="#AEN117"
 >License</A
 ></DT
 ><DT
 >2-4. <A
-HREF="#AEN93"
->A logo image</A
+HREF="#AEN126"
+>Loading a logo image from a file</A
 ></DT
 ><DT
 >2-5. <A
-HREF="#AEN116"
->Dependencies</A
+HREF="#AEN129"
+>An inline logo image</A
 ></DT
 ><DT
 >2-6. <A
-HREF="#AEN134"
+HREF="#AEN152"
+>Dependencies</A
+></DT
+><DT
+>2-7. <A
+HREF="#AEN174"
 ><TT
 CLASS="literal"
 >--with...</TT
 ></A
 ></DT
 ><DT
->2-7. <A
-HREF="#AEN149"
+>2-8. <A
+HREF="#AEN189"
 >Library dependencies</A
 ></DT
 ><DT
->2-8. <A
-HREF="#AEN164"
+>2-9. <A
+HREF="#AEN204"
 >Header file dependencies</A
 ></DT
 ><DT
->2-9. <A
-HREF="#AEN243"
+>2-10. <A
+HREF="#AEN283"
 ><TT
 CLASS="literal"
 >MINIT()</TT
 ></A
 ></DT
 ><DT
->2-10. <A
-HREF="#AEN274"
+>2-11. <A
+HREF="#AEN314"
 ><TT
 CLASS="literal"
 >MINFO()</TT
 ></A
 ></DT
 ><DT
->2-11. <A
-HREF="#AEN294"
+>2-12. <A
+HREF="#AEN334"
 >PHP Constants</A
 ></DT
 ><DT
->2-12. <A
-HREF="#AEN362"
->Globals</A
-></DT
-><DT
 >2-13. <A
-HREF="#AEN366"
->Globals</A
+HREF="#AEN402"
+>Defining globals and ini entries</A
 ></DT
 ><DT
 >2-14. <A
-HREF="#AEN388"
->Resources</A
+HREF="#AEN406"
+>Using globals</A
 ></DT
 ><DT
 >2-15. <A
-HREF="#AEN395"
->Resource creation</A
+HREF="#AEN428"
+>Resources</A
 ></DT
 ><DT
 >2-16. <A
-HREF="#AEN399"
->Resource destruction</A
+HREF="#AEN435"
+>Resource creation</A
 ></DT
 ><DT
 >2-17. <A
-HREF="#AEN412"
->config.m4 additions</A
+HREF="#AEN440"
+>Resource destruction</A
 ></DT
 ><DT
 >2-18. <A
-HREF="#AEN419"
->Makefile fragments</A
+HREF="#AEN453"
+>config.m4 additions</A
 ></DT
 ><DT
 >2-19. <A
-HREF="#AEN459"
->Minmal test case</A
+HREF="#AEN460"
+>Makefile fragments</A
 ></DT
 ><DT
 >2-20. <A
-HREF="#AEN462"
->Full test case</A
-></DT
-><DT
->2-21. <A
-HREF="#AEN472"
+HREF="#AEN500"
 >Minmal test case</A
 ></DT
 ><DT
->2-22. <A
-HREF="#AEN475"
+>2-21. <A
+HREF="#AEN503"
 >Full test case</A
+></DT
+><DT
+>2-22. <A
+HREF="#AEN520"
+>Minmal test case</A
+></DT
+><DT
+>2-23. <A
+HREF="#AEN523"
+>Full test case</A
+></DT
+><DT
+>4-1. <A
+HREF="#AEN609"
+>Installation using <TT
+CLASS="literal"
+>pear</TT
+></A
 ></DT
 ></DL
 ></DIV
@@ -387,10 +463,21 @@ NAME="AEN6"
 ><P
 >&#13;    <TT
 CLASS="literal"
+>CodeGen_PECL</TT
+> (formerly known as <TT
+CLASS="literal"
 >PECL_Gen</TT
-> is a tool that can automatically create
-    the basic framework for a PHP extension from a rather simple XML
-    specification file.
+>
+    is a tool that can automatically create the basic framework for a PHP extension 
+    from a rather simple XML specification file. The actual funcionality is provided
+    by the script <TT
+CLASS="filename"
+>pecl-gen</TT
+> that is installed by the 
+    <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+> package.
    </P
 ><P
 >&#13;    It also supports the simpler (but less powerful) prototype file
@@ -403,12 +490,12 @@ CLASS="literal"
 ><P
 >&#13;    <TT
 CLASS="literal"
->PECL_Gen</TT
+>pecl-gen</TT
 >, unlike the older
     <TT
 CLASS="literal"
 >ext_skel</TT
-> solution, is a 100% PHP 5 bases
+> solution, is a 100% PHP 5 based
     solution and does not require any external tools like
     <TT
 CLASS="literal"
@@ -423,7 +510,7 @@ CLASS="literal"
 ><P
 >&#13;    The code generated by <TT
 CLASS="literal"
->PECL_Gen</TT
+>CodeGen_Pecl</TT
 > is designed to work 
     with both the PHP 4 and PHP 5 extension APIs, PHP 5 is only required
     for the conversion of the XML spec file to C/C++ code. 
@@ -434,13 +521,13 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN19"
+NAME="AEN22"
 >1.2. Features</A
 ></H2
 ><P
 >&#13;    <TT
 CLASS="literal"
->pecl-gen</TT
+>CodeGen_PECL</TT
 > tries to support as many extension
     writing aspects as possible. This currently includes code and documentation
     generation for:
@@ -472,6 +559,10 @@ CLASS="literal"
 ><TD
 >per-thread global variables</TD
 ></TR
+><TR
+><TD
+>test cases</TD
+></TR
 ></TBODY
 ></TABLE
 ><P
@@ -481,7 +572,7 @@ CLASS="literal"
 ><P
 >&#13;    <TT
 CLASS="literal"
->pecl-gen</TT
+>CodeGen_PECL</TT
 > also generates
     <TT
 CLASS="filename"
@@ -496,7 +587,13 @@ CLASS="filename"
 CLASS="filename"
 >package.xml</TT
 > files needed for
-    PEAR/PECL packaging.
+    PEAR/PECL packaging. Support for the new Windows Scripting Host
+    based build system is currently being worked on, <TT
+CLASS="filename"
+>config.w32</TT
+>
+    files are already generated but may only work for simple configuration
+    setups for now.
    </P
 ><P
 >&#13;    DocBook XML documentation templates suitable for inclusion in the
@@ -510,7 +607,9 @@ CLASS="literal"
 >make
      test</TT
 >" infrastructure it is not possible to use the
-    generated tests with standalone PECL extensions right now.
+    generated tests with standalone PECL extensions right now. We hope
+    to be able to resolve this issue on time for the PH 5.1.0 release
+    though.
    </P
 ></DIV
 ><DIV
@@ -518,8 +617,125 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN38"
->1.3. How to use it</A
+NAME="AEN43"
+>1.3. Installation</A
+></H2
+><P
+>&#13;    <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+> is available in PEAR, the
+    PHP Extension and Application Repository, on <TT
+CLASS="literal"
+>http://pear.php.net</TT
+>.
+   </P
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="AEN48"
+>1.3.1. Online installation</A
+></H3
+><P
+>&#13;     Online installation using the PEAR installer is the easiest way 
+     to install <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+>, just issue the following
+     command:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;pear install -o CodeGen_PECL
+    </PRE
+><P
+>&#13;     The PEAR installer will download and install the package itself
+     and all packages that it depends on.
+    </P
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="AEN54"
+>1.3.2. Installing from package files</A
+></H3
+><P
+>&#13;     When installing from package files downloaded from <TT
+CLASS="literal"
+>pear.php.net</TT
+>
+     you have to resolve dependencies yourself. Currently <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+>
+     depends on two other PEAR packages: <TT
+CLASS="literal"
+>Console_Getopt</TT
+>, which is part
+     of the PEAR base installation, and <TT
+CLASS="literal"
+>CodeGen</TT
+>, the code generator
+     base package. You need to download both <TT
+CLASS="literal"
+>CodeGen</TT
+> and 
+     <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+> packages for installation. The actual installation
+     is once again performed by the PEAR installer:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;pear install CogeGen-0.9.0.tgz
+pear install CogeGen_PECL-0.9.0.tgz
+    </PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="AEN64"
+>1.3.3. Installing from PEAR CVS</A
+></H3
+><P
+>&#13;     You can also install CodeGen_PECL snapshots from PEAR CVS. CVS snapshots may
+     include features not yet available in any release package, but the code in
+     CVS may not be as well tested as the release packages (or even broken at 
+     times). Be warned, your milage may vary. Use the following sequence of 
+     commands in your PEAR CVS checkout to install the latest
+     <TT
+CLASS="literal"
+>CodeGen_PECL</TT
+> snapshot:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;cd pear
+cd CodeGen
+cvs update
+pear install -f package.xml
+cd ..
+cd CodeGen_PECL
+cvs update
+pear install -f package.xml
+cd ..
+    </PRE
+></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN69"
+>1.4. How to use it</A
 ></H2
 ><P
 >&#13;    There are currently three different modes of operation for
@@ -549,6 +765,14 @@ CLASS="literal"
 > documentation instead.
    </P
 ><P
+>&#13;    A more detailed step by step guide on how to invocate <TT
+CLASS="literal"
+>pecl-gen</TT
+>
+    and how to procede to configure, compile, test and install an extension 
+    is given in the "Usage" chapter later in this document.
+   </P
+><P
 >&#13;    Below you find a hardcopy of the <TT
 CLASS="literal"
 >pecl-gen
@@ -558,6 +782,7 @@ CLASS="literal"
 ><PRE
 CLASS="screen"
 >&#13;
+
 pecl-gen 0.9.0rc5,Copyright (c) 2003-2005 Hartmut Holzgraefe
 Usage:
 
@@ -595,7 +820,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN49"
+NAME="AEN82"
 ></A
 >Chapter 2. The XML description</H1
 ><DIV
@@ -603,7 +828,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN51"
+NAME="AEN84"
 >2.1. Basics</A
 ></H2
 ><P
@@ -645,7 +870,7 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN61"
+NAME="AEN94"
 ></A
 ><P
 ><B
@@ -658,7 +883,7 @@ CLASS="programlisting"
  &#60;summary&#62;A sample PHP extension&#60;/summary&#62;
  &#60;description&#62;
   This is a sample extension specification
-  showing how to use PECL_Gen for
+  showing how to use CodeGen_PECL for
   extension generation.
  &#60;/description&#62;
  ...
@@ -671,7 +896,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN64"
+NAME="AEN97"
 >2.2. Release information</A
 ></H2
 ><P
@@ -706,7 +931,7 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN73"
+NAME="AEN106"
 ></A
 ><P
 ><B
@@ -788,7 +1013,7 @@ CLASS="emphasis"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN84"
+NAME="AEN117"
 ></A
 ><P
 ><B
@@ -812,30 +1037,31 @@ CLASS="literal"
     <TT
 CLASS="literal"
 >&#60;logo&#62;</TT
-> tag. The actual file name of the logo
-    image has to be given in the <TT
+> tag. The actual logo image data
+    may be read from a file specified by the <TT
 CLASS="literal"
 >scr=...</TT
-> attribute,
-    Its MIME type defaults to <TT
+> 
+    attribute, or it may be included inline in base64 encoded form
+    within the <TT
 CLASS="literal"
->image/gif</TT
-> unless a
-    different type is specified using the
+>&#60;logo&#62;</TT
+> tag.
+    Its MIME type may be specified using the
     <TT
 CLASS="literal"
 >mimetype=...</TT
 > attribute. Automatic MIME type
-    detection is planned for a future release. 
+    detection exists for GIF, PNG and JPEG images.
    </P
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN93"
+NAME="AEN126"
 ></A
 ><P
 ><B
->Example 2-4. A logo image</B
+>Example 2-4. Loading a logo image from a file</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -846,13 +1072,37 @@ CLASS="programlisting"
 
     </PRE
 ></DIV
+><DIV
+CLASS="example"
+><A
+NAME="AEN129"
+></A
+><P
+><B
+>Example 2-5. An inline logo image</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;...
+  &#60;logo&#62;
+&#60;![CDATA[
+R0lGODdhFQASAOMAAMDEwJCQkLCwsGhoaFhcWLjAuDA0MPj8+FBUUPj4+AAA
+AAAAAAAAAAAAAAAAAAAAACwAAAAAFQASAAAEehDISWsNQIhBuv+DphWhABhH
+qq5GpgHluc5HK24vmiKGwfeIgdAU0wkSyCQSkAhgQhgdQUlNCAKkq0BaVWqh
+29S0i8QRtFyyNXQOhA9jshktVq8F7Xe8O3en5WxXTgEcdn2DAwF2hHiCGoQc
+HASSQgRukwiZmpucmwYRADs=
+]]&#62;
+  &#60;/logo&#62;
+...
+    </PRE
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN96"
+NAME="AEN132"
 >2.3. Dependencies</A
 ></H2
 ><P
@@ -863,7 +1113,7 @@ CLASS="literal"
     environment. Within the <TT
 CLASS="literal"
 >&#60;deps&#62;</TT
-> itself it is
+> section itself it is
     possible to set the programming language and target platforms using
     the <TT
 CLASS="literal"
@@ -881,13 +1131,14 @@ CLASS="literal"
 >) and C++
     (<TT
 CLASS="literal"
->language="cpp"</TT
+>lang="cpp"</TT
 >). The language selection 
     does not influence code generation itself
     (<TT
 CLASS="literal"
 >pecl-gen</TT
-> always generates C code) but the way
+> always generates C code as the PHP extension
+    API is a pure C API) but the way
     extensions are compiled and linked. C++ should only be selected to
     interface to external C++ libraries.
    </P
@@ -927,11 +1178,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN116"
+NAME="AEN152"
 ></A
 ><P
 ><B
->Example 2-5. Dependencies</B
+>Example 2-6. Dependencies</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -949,7 +1200,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN119"
+NAME="AEN155"
 >2.3.1. <TT
 CLASS="literal"
 >--with...</TT
@@ -963,7 +1214,10 @@ CLASS="literal"
 >
      script will try to figure out where external libraries and header
      files needed by an extension are installed on the build system.
-     Using a "with" option it is possible to specify where to actually
+     Using a <TT
+CLASS="literal"
+>--with-...</TT
+> option it is possible to specify where to actually
      look for libraries and headers. This way it is possible to
      override search paths if things are not installed in the default
      system paths or to specify the exact version of a package to be
@@ -977,7 +1231,10 @@ CLASS="literal"
      <TT
 CLASS="literal"
 >name=...</TT
-> for the actual name of the "with"
+> for the actual name of the <TT
+CLASS="literal"
+>--with-...</TT
+>
      option, <TT
 CLASS="literal"
 >testfile</TT
@@ -987,7 +1244,10 @@ CLASS="literal"
 >configure</TT
 >
      script and a list of default paths to check if no path is given
-     as an argument to the "with" option in
+     as an argument to the <TT
+CLASS="literal"
+>--with-...</TT
+> option in
      <TT
 CLASS="literal"
 >defaults</TT
@@ -995,8 +1255,11 @@ CLASS="literal"
     </P
 ><P
 >&#13;     Name and defaults are set to the extension base name and
-     "/usr:/usr/local" if no values are given. The testfile attribute
-     is mandatory.
+     <TT
+CLASS="filename"
+>/usr:/usr/local</TT
+> if no values are given. 
+     The testfile attribute is mandatory.
     </P
 ><P
 >&#13;     Textual data enclosed by the <TT
@@ -1012,11 +1275,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN134"
+NAME="AEN174"
 ></A
 ><P
 ><B
->Example 2-6. <TT
+>Example 2-7. <TT
 CLASS="literal"
 >--with...</TT
 ></B
@@ -1037,7 +1300,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN138"
+NAME="AEN178"
 >2.3.2. Libraries</A
 ></H3
 ><P
@@ -1084,11 +1347,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN149"
+NAME="AEN189"
 ></A
 ><P
 ><B
->Example 2-7. Library dependencies</B
+>Example 2-8. Library dependencies</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -1107,7 +1370,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN152"
+NAME="AEN192"
 >2.3.3. Header files</A
 ></H3
 ><P
@@ -1153,11 +1416,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN164"
+NAME="AEN204"
 ></A
 ><P
 ><B
->Example 2-8. Header file dependencies</B
+>Example 2-9. Header file dependencies</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -1177,7 +1440,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN167"
+NAME="AEN207"
 >2.4. Custom code</A
 ></H2
 ><P
@@ -1220,20 +1483,19 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN178"
+NAME="AEN218"
 >2.5. Functions</A
 ></H2
 ><P
->&#13;    Three different kinds of functions may be defined using the
+>&#13;    Two different kinds of functions may be defined using the
     <TT
 CLASS="literal"
 >&#60;function&#62;</TT
-> tag: public, internal and private
+> tag: public and internal
     functions.
     Public functions are functions you want to make available at the
     PHP code level, internal functions are C functions to be used by
-    the PHP extension API and private functions are static C helper
-    functions to be used within your extension.
+    the PHP extension API.
    </P
 ><P
 >&#13;    Public function names should by convention be prefixed with the
@@ -1255,16 +1517,14 @@ CLASS="literal"
     <TT
 CLASS="literal"
 >MINFO</TT
->, and private functions may have any legal
-    C function name (unless you experience duplicate symbol errors
-    while compiling or linking the extension).
+>.
    </P
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN188"
+NAME="AEN228"
 >2.5.1. Public functions</A
 ></H3
 ><P
@@ -1464,7 +1724,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN232"
+NAME="AEN272"
 >2.5.2. Internal functions</A
 ></H3
 ><P
@@ -1496,11 +1756,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN243"
+NAME="AEN283"
 ></A
 ><P
 ><B
->Example 2-9. <TT
+>Example 2-10. <TT
 CLASS="literal"
 >MINIT()</TT
 ></B
@@ -1602,11 +1862,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN274"
+NAME="AEN314"
 ></A
 ><P
 ><B
->Example 2-10. <TT
+>Example 2-11. <TT
 CLASS="literal"
 >MINFO()</TT
 ></B
@@ -1646,7 +1906,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN280"
+NAME="AEN320"
 >2.6. Constants</A
 ></H2
 ><P
@@ -1702,11 +1962,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN294"
+NAME="AEN334"
 ></A
 ><P
 ><B
->Example 2-11. PHP Constants</B
+>Example 2-12. PHP Constants</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -1739,7 +1999,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN297"
+NAME="AEN337"
 >2.7. <TT
 CLASS="literal"
 >php.ini</TT
@@ -1970,11 +2230,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN362"
+NAME="AEN402"
 ></A
 ><P
 ><B
->Example 2-12. Globals</B
+>Example 2-13. Defining globals and ini entries</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -2001,11 +2261,11 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN366"
+NAME="AEN406"
 ></A
 ><P
 ><B
->Example 2-13. Globals</B
+>Example 2-14. Using globals</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -2035,7 +2295,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN369"
+NAME="AEN409"
 >2.8. Resources</A
 ></H2
 ><P
@@ -2115,11 +2375,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN388"
+NAME="AEN428"
 ></A
 ><P
 ><B
->Example 2-14. Resources</B
+>Example 2-15. Resources</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -2151,7 +2411,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN391"
+NAME="AEN431"
 >2.8.1. Resource creation and destruction</A
 ></H3
 ><P
@@ -2165,11 +2425,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN395"
+NAME="AEN435"
 ></A
 ><P
 ><B
->Example 2-15. Resource creation</B
+>Example 2-16. Resource creation</B
 ></P
 ><PRE
 CLASS="screen"
@@ -2186,18 +2446,21 @@ CLASS="screen"
      </PRE
 ></DIV
 ><P
->&#13;     Resources are freed by simply removing them from the 
-     resource list that they are in. The resources destructor
-     function is automaticly called on list removal.
+>&#13;     Resources are freed using the <TT
+CLASS="literal"
+>FREE_RESOURCE()</TT
+>
+     macro. The resources destructor
+     function is automaticly called when freeing a resource.
     </P
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN399"
+NAME="AEN440"
 ></A
 ><P
 ><B
->Example 2-16. Resource destruction</B
+>Example 2-17. Resource destruction</B
 ></P
 ><PRE
 CLASS="screen"
@@ -2205,7 +2468,7 @@ CLASS="screen"
   &#60;function name="foo_close"&#62;
    &#60;proto&#62;void foo_close(resource foo foores)&#60;/proto&#62;
    &#60;code&#62;
-     zend_list_delete(Z_LVAL_P(foores));
+     FREE_RESOURCE(foores);
    &#60;/code&#62;
   &#60;/function&#62;
 
@@ -2218,7 +2481,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN402"
+NAME="AEN443"
 >2.9. Classes</A
 ></H2
 ><P
@@ -2233,7 +2496,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN405"
+NAME="AEN446"
 >2.10. Streams</A
 ></H2
 ><P
@@ -2246,7 +2509,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN408"
+NAME="AEN449"
 >2.11. config.m4 fragments</A
 ></H2
 ><P
@@ -2262,11 +2525,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN412"
+NAME="AEN453"
 ></A
 ><P
 ><B
->Example 2-17. config.m4 additions</B
+>Example 2-18. config.m4 additions</B
 ></P
 ><PRE
 CLASS="screen"
@@ -2284,7 +2547,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN415"
+NAME="AEN456"
 >2.12. Makefile fragments</A
 ></H2
 ><P
@@ -2299,11 +2562,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN419"
+NAME="AEN460"
 ></A
 ><P
 ><B
->Example 2-18. Makefile fragments</B
+>Example 2-19. Makefile fragments</B
 ></P
 ><PRE
 CLASS="screen"
@@ -2321,7 +2584,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN422"
+NAME="AEN463"
 >2.13. Tests</A
 ></H2
 ><P
@@ -2339,10 +2602,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;
-  TEST_PHP_EXECUTABLE="/usr/local/bin/php"
-  export TEST_PHP_EXECUTABLE
-
-  php path/to/run-tests.php tests
+  TEST_PHP_EXECUTABLE="/usr/local/bin/php"   php path/to/run-tests.php tests
 
    </PRE
 ><P
@@ -2360,7 +2620,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN430"
+NAME="AEN471"
 >2.13.1. Global test cases</A
 ></H3
 ><P
@@ -2471,11 +2731,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN459"
+NAME="AEN500"
 ></A
 ><P
 ><B
->Example 2-19. Minmal test case</B
+>Example 2-20. Minmal test case</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -2489,11 +2749,11 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN462"
+NAME="AEN503"
 ></A
 ><P
 ><B
->Example 2-20. Full test case</B
+>Example 2-21. Full test case</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -2514,46 +2774,75 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN465"
+NAME="AEN506"
 >2.13.2. Embedded function test cases</A
 ></H3
 ><P
->&#13;     For each function a default test case is created. 
-     The name and title for this test are automaticly set
-     to the function name, test code and the expected result
-     can be set using the <TT
+>&#13;     For each function a default test case is created,
+     the name and title for this test are automaticly set
+     to the function name. 
+    </P
+><P
+>	
+     Test code and the expected result
+     can be set using a <TT
 CLASS="literal"
->&#60;testcode&#62;</TT
+>&#60;test&#62;</TT
 >
-     and <TT
+     section within <TT
 CLASS="literal"
->&#60;testresult&#62;</TT
-> tags, additional
-     skip conditions and ini settings can be specified using
+>&#60;function&#62;</TT
+>.
      <TT
 CLASS="literal"
->&#60;testskip&#62;</TT
-> and 
+>&#60;code&#62;</TT
+>,
      <TT
 CLASS="literal"
->&#60;testini&#62;</TT
-> tags.
+>&#60;result&#62;</TT
+>,
+     <TT
+CLASS="literal"
+>&#60;skipif&#62;</TT
+> and
+     <TT
+CLASS="literal"
+>&#60;ini&#62;</TT
+>
+     may be used in there in the same way as in a global
+     <TT
+CLASS="literal"
+>&#60;&#62;</TT
+> section. Use of the 
+     <TT
+CLASS="literal"
+>name</TT
+> attribute to 
+     <TT
+CLASS="literal"
+>&#60;test&#62;</TT
+> or the 
+     <TT
+CLASS="literal"
+>&#60;title&#62;</TT
+> tag are not 
+     supported within a function test.
     </P
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN472"
+NAME="AEN520"
 ></A
 ><P
 ><B
->Example 2-21. Minmal test case</B
+>Example 2-22. Minmal test case</B
 ></P
 ><PRE
 CLASS="programlisting"
 >&#13;
   &#60;function name="foobar"&#62;
    ...
-   &#60;testcode&#62;echo "OK";&#60;/testcode&#62;
+   &#60;test&#62;&#60;code&#62;echo "OK";&#60;/code&#62;&#60;/test&#62;
   &#60;/test&#62;
 
      </PRE
@@ -2561,22 +2850,24 @@ CLASS="programlisting"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN475"
+NAME="AEN523"
 ></A
 ><P
 ><B
->Example 2-22. Full test case</B
+>Example 2-23. Full test case</B
 ></P
 ><PRE
 CLASS="programlisting"
 >&#13;
   &#60;function name="foobar"&#62;
    ...
-   &#60;testskipif&#62;1==0&#60;/testskipif&#62;
-   &#60;testini&#62;max_execution_time=0&#60;/testini&#62;
-   &#60;testcode&#62;echo "Random number: ".rand(1,10);&#60;/testcode&#62;
-   &#60;testresult mode='format'&#62;Random number: %d&#60;/testresult&#62;
-  &#60;/test&#62;
+   &#60;test&#62;
+    &#60;skipif&#62;1==0&#60;/skipif&#62;
+    &#60;ini&#62;max_execution_time=0&#60;/ini&#62;
+    &#60;code&#62;echo "Random number: ".rand(1,10);&#60;/code&#62;
+    &#60;result mode='format'&#62;Random number: %d&#60;/result&#62;
+   &#60;test&#62;
+  &#60;/function&#62;
 
      </PRE
 ></DIV
@@ -2587,7 +2878,7 @@ CLASS="programlisting"
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN478"
+NAME="AEN526"
 ></A
 >Chapter 3. XML input parsing</H1
 ><DIV
@@ -2595,13 +2886,13 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN480"
+NAME="AEN528"
 >3.1. Includes</A
 ></H2
 ><P
 >&#13;	The XML parser used by <TT
 CLASS="literal"
->PECL_Gen</TT
+>CodeGen_PECL</TT
 > supports inclusion
     of additional source files using three different ways:
     <P
@@ -2633,7 +2924,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN493"
+NAME="AEN541"
 >3.1.1. External entities</A
 ></H3
 ><P
@@ -2645,7 +2936,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN496"
+NAME="AEN544"
 >3.1.2. XInclude</A
 ></H3
 ><P
@@ -2657,7 +2948,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN499"
+NAME="AEN547"
 >3.1.3. <TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -2673,12 +2964,263 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN503"
+NAME="AEN551"
 >3.2. Verbatim text data</A
 ></H2
 ><P
 >&#13;    ...
    </P
+></DIV
+></DIV
+><DIV
+CLASS="chapter"
+><HR><H1
+><A
+NAME="AEN554"
+></A
+>Chapter 4. Usage</H1
+><DIV
+CLASS="section"
+><H2
+CLASS="section"
+><A
+NAME="AEN556"
+>4.1. Invocation</A
+></H2
+><P
+>&#13;...
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;pecl-gen my_extension.xml
+   </PRE
+><PRE
+CLASS="programlisting"
+>&#13;pecl-gen -f my_extension.xml
+   </PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN561"
+>4.2. Configuration</A
+></H2
+><P
+>&#13;    You need to configure an extension for your actual build
+    system before compiling it. Configuring a PECL extension
+    consists of two steps:
+   </P
+><P
+>&#13;    First you need to copy some files from your PHP installation
+    into the extension directory and run the autotools to create
+    a <TT
+CLASS="filename"
+>configure</TT
+>. All this is taken care of by the
+    <TT
+CLASS="filename"
+>phpize</TT
+> command that is part of your PHP
+    installation:
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;cd my_extension
+phpize
+   </PRE
+><P
+>&#13;    Next you need to run <TT
+CLASS="filename"
+>configure</TT
+> to configure
+    your extension for your system installation. Most of the time just
+    running <TT
+CLASS="filename"
+>configure</TT
+> will be sufficient as 
+    appropriate defaults should be picked by the script. If your 
+    extension relies on external libraries installed in non-standard
+    places you may want to run <TT
+CLASS="filename"
+>configure</TT
+> with
+    the appropriate <TT
+CLASS="literal"
+>--with-...</TT
+> options.
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;configure
+   </PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN574"
+>4.3. Compilation</A
+></H2
+><P
+>&#13;    After configuring your extension the actual compilation is
+    done by the <TT
+CLASS="filename"
+>make</TT
+> command. No further
+    parameters are needed at this point:
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;make
+   </PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN579"
+>4.4. Testing</A
+></H2
+><P
+>&#13;    Starting with PHP 5.1 it should be possible to run the generated 
+    test cases by simply typing <TT
+CLASS="literal"
+>make test</TT
+>. For older
+    PHP versions a few more steps are needed:
+    <P
+></P
+><TABLE
+BORDER="0"
+><TBODY
+><TR
+><TD
+>you have to specify the PHP binary to be used for testing</TD
+></TR
+><TR
+><TD
+>you have to set up a <TT
+CLASS="filename"
+>php.ini</TT
+> that loags the extension for testing</TD
+></TR
+><TR
+><TD
+>you have to manually run the <TT
+CLASS="filename"
+>run-tests.php</TT
+> that comes with the PHP source</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+>
+    After adding the extension to your <TT
+CLASS="filename"
+>php.ini</TT
+> a typical 
+    test invocation may look like this:
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;
+  TEST_PHP_EXECUTABLE="/usr/local/bin/php"   php ../php-src/run-tests.php tests
+
+   </PRE
+><P
+>&#13;    (your <TT
+CLASS="filename"
+>php</TT
+> binary and <TT
+CLASS="filename"
+>run-tests.php</TT
+>
+    script may obviously be in different locations)
+   </P
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN594"
+>4.5. Installation</A
+></H2
+><P
+>&#13;    You can copy your newly created extension to your installations 
+    default extension directory by simply running <TT
+CLASS="literal"
+>make install</TT
+>.
+    If you've set a different <TT
+CLASS="literal"
+>extension_dir</TT
+> in your
+    <TT
+CLASS="filename"
+>php.ini</TT
+> you have to manually copy the extensions 
+    <TT
+CLASS="literal"
+>.so</TT
+> file to this directory.
+   </P
+><P
+>&#13;    Please note that in both cases your regular user permissions may
+    not be sufficient to install the extension file, you may need to
+    run the commands as a different user, e.g. by using the <TT
+CLASS="literal"
+>sudo</TT
+>
+    command.
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;sudo make install
+   </PRE
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN604"
+>4.6. PEAR integration</A
+></H2
+><P
+>&#13;    <TT
+CLASS="literal"
+>pecl-gen</TT
+> generates a <TT
+CLASS="filename"
+>package.xml</TT
+>
+    alongside with the other generated files. An extension may be configured,
+    compiled and installed in a single operation using the PEAR installer:
+   </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN609"
+></A
+><P
+><B
+>Example 4-1. Installation using <TT
+CLASS="literal"
+>pear</TT
+></B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;cd my_extension
+pear install package.xml
+    </PRE
+></DIV
 ></DIV
 ></DIV
 ></DIV
