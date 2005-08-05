@@ -137,15 +137,15 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>Basics</title>
    <para>
     The top level container tag describing an extension is the
-    <sgmltag>extension</sgmltag> tag. The name of the extension
+    <literal>&lt;extension&gt;</literal> tag. The name of the extension
     is given in the <literal>name</literal> attribute. The extension
     name has to be a valid C name as it is used as both the extensions
     directory name and the base name for several C symbols within the
     generated C code.
    </para>
    <para>
-    The tags <sgmltag>summary</sgmltag> and
-    <sgmltag>description</sgmltag> should be added at the very top of
+    The tags <literal>&lt;summary&gt;</literal> and
+    <literal>&lt;description&gt;</literal> should be added at the very top of
     your extensions. The summary should be a short one-line
     description of the extension while the actually description can be
     as detailed as you like. Both are later used to generate the
@@ -181,8 +181,8 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     output block for the extension.
    </para>
    <para>
-    The <sgmltag>maintainers</sgmltag>, <sgmltag>release</sgmltag> and
-    <sgmltag>changelog</sgmltag> tags specifications are identical to  
+    The <literal>&lt;maintainers&gt;</literal>, <literal>&lt;release&gt;</literal> and
+    <literal>&lt;changelog&gt;</literal> tags specifications are identical to  
     those in  the PEAR <literal>package.xml</literal> specification so 
     please refer to the PEAR documentation here.
    </para>
@@ -228,7 +228,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     </programlisting>
    </example>
    <para>
-    The <sgmltag>license</sgmltag> tag is a little more restrictive as
+    The <literal>&lt;license&gt;</literal> tag is a little more restrictive as
     its <literal>package.xml</literal> counterpart as it is used to
     decide which license text should actually be written to the
     <literal>LICENSE</literal>. For now you have to specify either
@@ -249,7 +249,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <para>
     A logo to be used within the extensions
     <literal>phpinfo()</literal> block can be specified using the
-    <sgmltag>logo</sgmltag> tag. The actual file name of the logo
+    <literal>&lt;logo&gt;</literal> tag. The actual file name of the logo
     image has to be given in the <literal>scr=...</literal> attribute,
     Its MIME type defaults to <literal>image/gif</literal> unless a
     different type is specified using the
@@ -271,8 +271,8 @@ pecl-gen [-h] [--force] [--experimental] [--version]
   <section>
    <title>Dependencies</title>
    <para>
-    Dependencies are specified within the <sgmltag>deps</sgmltag>
-    environment. Within the <sgmltag>deps</sgmltag> itself it is
+    Dependencies are specified within the <literal>&lt;deps&gt;</literal>
+    environment. Within the <literal>&lt;deps&gt;</literal> itself it is
     possible to set the programming language and target platforms using
     the <literal>language=...</literal> and
     <literal>platform=...</literal> attributes.
@@ -291,9 +291,9 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     (<literal>platform="win32"</literal>) or both (<literal>platform="all"</literal>).
    </para>
    <para> 
-    <sgmltag>with</sgmltag>, <sgmltag>lib</sgmltag> and 
-    <sgmltag>header</sgmltag> tags may be used within the 
-    <sgmltag>deps</sgmltag> section to add configure switches 
+    <literal>&lt;with&gt;</literal>, <literal>&lt;lib&gt;</literal> and 
+    <literal>&lt;header&gt;</literal> tags may be used within the 
+    <literal>&lt;deps&gt;</literal> section to add configure switches 
     and library and header file dependencies.
    </para>
    <example>
@@ -323,7 +323,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
      used if multiple versions are installed on the target system.
     </para>
     <para>
-     The <sgmltag>with</sgmltag> tag takes three attributes:
+     The <literal>&lt;with&gt;</literal> tag takes three attributes:
      <literal>name=...</literal> for the actual name of the "with"
      option, <literal>testfile</literal> for the relative path of a
      file to check for while running the <literal>configure</literal>
@@ -337,7 +337,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
      is mandatory.
     </para>
     <para>
-     Textual data enclosed by the <sgmltag>with</sgmltag> is used to
+     Textual data enclosed by the <literal>&lt;with&gt;</literal> is used to
      describe the "with" option in the output of <literal>configure
       --help</literal> calls.
     </para>
@@ -357,7 +357,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     <title>Libraries</title>
     <para>
      Needed external libraries are specified using the
-     <sgmltag>lib</sgmltag> tag. The <literal>name=...</literal>
+     <literal>&lt;lib&gt;</literal> tag. The <literal>name=...</literal>
      attribute is mandatory and takes the library base name. A library
      dependency by the name "sample" is actually referring to a library
      file named <filename>libsample.a</filename> for a static or  
@@ -393,7 +393,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     <title>Header files</title>
     <para>
      It is possible to specify header files needed by the extension
-     using the <sgmltag>header</sgmltag>. Any headers specified have
+     using the <literal>&lt;header&gt;</literal>. Any headers specified have
      to exist in the include path set for compiling (see also the
      section on <literal>--with</literal>
      above). <literal>#include</literal> statements for the specified
@@ -403,7 +403,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     </para>
     <para>
      By default header files are searched for in the <literal>include</literal>
-     subdirectory of the path given in <sgmltag>with</sgmltag>. If a
+     subdirectory of the path given in <literal>&lt;with&gt;</literal>. If a
      different relative path needs to be used it can be defined using
      the <literal>path</literal> attribute.
     </para>
@@ -453,7 +453,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>Custom code</title>
    <para>
     Custom code may be added to your extension source files using the
-    <sgmltag>code</sgmltag> tags. The <literal>role=...</literal>
+    <literal>&lt;code&gt;</literal> tags. The <literal>role=...</literal>
     and <literal>position=...</literal> tags specify the actual place
     in there generated source files where your code should be
     inserted.
@@ -470,7 +470,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>Functions</title>
    <para>
     Three different kinds of functions may be defined using the
-    <sgmltag>function</sgmltag> tag: public, internal and private
+    <literal>&lt;function&gt;</literal> tag: public, internal and private
     functions.
     Public functions are functions you want to make available at the
     PHP code level, internal functions are C functions to be used by
@@ -493,7 +493,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
      The definition of a public PHP function requires the attributes 
      <literal>role="public"</literal> and
      <literal>name=...</literal> and at least the
-     <sgmltag>proto</sgmltag> tag to be set.
+     <literal>&lt;proto&gt;</literal> tag to be set.
     </para>
     <para>
      The function name may be any valid C name. To comply to PHP
@@ -502,10 +502,10 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     </para>
     <para>
      The function prototype specified using the
-     <sgmltag>proto</sgmltag> tag is parsed to extract the return
+     <literal>&lt;proto&gt;</literal> tag is parsed to extract the return
      type, the function name and the argument list. The function name
      in the prototype has to match the name attribute given in the
-     <sgmltag>function</sgmltag>.
+     <literal>&lt;function&gt;</literal>.
     </para>
     <para>
      Valid types to be used for arguments and the return type are:
@@ -526,19 +526,19 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     </para>
     <para>
      Function documentation should be given using the
-     <sgmltag>summary</sgmltag> tag for a one line description and the
-     <sgmltag>description</sgmltag> tag for a more detailed
+     <literal>&lt;summary&gt;</literal> tag for a one line description and the
+     <literal>&lt;description&gt;</literal> tag for a more detailed
      description.
      Both are copied to the generated DocBook XML
-     documentation for that function. Within <sgmltag>description</sgmltag>
+     documentation for that function. Within <literal>&lt;description&gt;</literal>
      DocBook tags may be used. Be aware though that while <command>pecl-gen</command>
      accepts this validating XML parsers may complain when reading/validating
      an extension specification file.
     </para>
     <para>
      Skeleton code for parameter parsing and result passing is
-     generated if  no <sgmltag>code</sgmltag> fragment is specified
-     for a function. A <sgmltag>code</sgmltag> section is inserted
+     generated if  no <literal>&lt;code&gt;</literal> fragment is specified
+     for a function. A <literal>&lt;code&gt;</literal> section is inserted
      right after the generated parameter parsing code. Setting a
      return value is up to the code fragment if any is given, adding a
      template doesn't make sense in this case.
@@ -630,7 +630,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
          <literal>-i</literal> command line option.
         </simpara>
         <simpara>
-         The default code generated when no <sgmltag>code</sgmltag>
+         The default code generated when no <literal>&lt;code&gt;</literal>
          section is given includes the extension name, summary line
          and release version and date, the optional logo image if
          specified, and the global and actual values of all
@@ -657,7 +657,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
      </variablelist>
     </para>
     <para>
-     <sgmltag>code</sgmltag> sections for the internal
+     <literal>&lt;code&gt;</literal> sections for the internal
      functions may be written as if they were C function bodies,
      including local variable definitions.
     </para>
@@ -671,7 +671,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
      The definition of a private function requires just the
      <literal>role="private"</literal> and <literal>name=...</literal>
      attributes. The complete C code of the actual function has to be
-     put into a <sgmltag>code</sgmltag>. Private functions should be
+     put into a <literal>&lt;code&gt;</literal>. Private functions should be
      declared <literal>static</literal> and their name should of
      course match the name attribute, but this is not checked for.
     </para>
@@ -683,8 +683,8 @@ pecl-gen [-h] [--force] [--experimental] [--version]
   <section>
    <title>Constants</title>
    <para>
-    PHP constants are defined using <sgmltag>constant</sgmltag>
-    tags within the <sgmltag>constants</sgmltag> environment.
+    PHP constants are defined using <literal>&lt;constant&gt;</literal>
+    tags within the <literal>&lt;constants&gt;</literal> environment.
    </para>
    <para>
     The actual constant name, type and value are specified using the
@@ -705,7 +705,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    </para>
    <para>
     A descriptive text may be given as content of the
-    <sgmltag>constant</sgmltag> tag. This text will be used when
+    <literal>&lt;constant&gt;</literal> tag. This text will be used when
     generation the DocBook XML documentation.
    </para>
    <example>
@@ -742,7 +742,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     An extension may define variables that are global to either the
     complete extension or to a specific request. True globals that are
     global to the complete extensions do not need any registration so
-    they can be defined using C code within the global <sgmltag>code</sgmltag> 
+    they can be defined using C code within the global <literal>&lt;code&gt;</literal> 
     tag.
    </para>
    <para>
@@ -753,13 +753,13 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    </para>
    <para>
     All global definitions have to be put into a
-    <sgmltag>globals</sgmltag> environment. Simple module globals are
-    defined using the <sgmltag>global</sgmltag>
+    <literal>&lt;globals&gt;</literal> environment. Simple module globals are
+    defined using the <literal>&lt;global&gt;</literal>
     tag. <literal>php.ini</literal> directives are defined using the
-    <sgmltag>phpini</sgmltag> tag.
+    <literal>&lt;phpini&gt;</literal> tag.
    </para>
    <para>
-    A <sgmltag>global</sgmltag> definition requires the
+    A <literal>&lt;global&gt;</literal> definition requires the
     <literal>name=...</literal> and <literal>type=...</literal>
     attributes to be set as valid C names and types. Which C types are
     allowed depends on what type definitions have been included from
@@ -779,7 +779,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    </para>
    <para>
     <literal>php.ini</literal> directives may be defined using the
-    <sgmltag>phpini</sgmltag> within a <sgmltag>globals</sgmltag>
+    <literal>&lt;phpini&gt;</literal> within a <literal>&lt;globals&gt;</literal>
     environment. To define a <literal>php.ini</literal> directive you
     have to specify its name, type and default value using the
     <literal>name=...</literal>, <literal>type=...</literal> and
@@ -836,9 +836,9 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     </variablelist>
    </para>
    <para>
-    The content data of <sgmltag>phpini</sgmltag> tags is used to
+    The content data of <literal>&lt;phpini&gt;</literal> tags is used to
     generate documentation for the defined
-    directive. <sgmltag>global</sgmltag> definitions may also include
+    directive. <literal>&lt;global&gt;</literal> definitions may also include
     content data but it is for internal documentation only, it is not
     used in DocBook XML generation (yet).
    </para>
@@ -897,8 +897,8 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>Resources</title>
    <para>
     You may define PHP resource types within a
-    <sgmltag>resources</sgmltag> environment. For each
-    <sgmltag>resource</sgmltag> you have to specify the
+    <literal>&lt;resources&gt;</literal> environment. For each
+    <literal>&lt;resource&gt;</literal> you have to specify the
     <literal>name=...</literal> and <literal>payload=...</literal>
     attributes. The <literal>name</literal> has to be a valid 
     C name and the <literal>payload</literal> has to be a valid 
@@ -921,7 +921,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     to them is unset or at request shutdown. If your resource
     payload needs to be cleaned up as well you have to add an
     appropriate C code snippet that takes care of this using the
-    <sgmltag>destruct</sgmltag> tag. Within the destructor snippet you
+    <literal>&lt;destruct&gt;</literal> tag. Within the destructor snippet you
     may refer to the allocated payload using the
     <literal>resource</literal> pointer variable.
    </para>
@@ -960,7 +960,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     <title>Resource creation and destruction</title>
     <para>
      The creation of resource instances is not defined within
-     <sgmltag>resource</sgmltag>. This is a task to be handled by
+     <literal>&lt;resource&gt;</literal>. This is a task to be handled by
      public PHP functions instead.
     </para>
     <example>
@@ -1021,7 +1021,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>config.m4 fragments</title>
    <para>
     Additional configure checks can be added to the generated config.m4
-    file used by Unix/Cygwin builds using the <sgmltag>configm4</sgmltag> 
+    file used by Unix/Cygwin builds using the <literal>&lt;configm4&gt;</literal> 
     tag. Using the 'position' attribute it is possible to specify whether
     the additional code is to be added at the top or bottom of the 
     config.m4 file.
@@ -1043,7 +1043,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <title>Makefile fragments</title>
    <para>
     Makefile rules may be added using the
-    <sgmltag>makefile</sgmltag> for Unix/Cygwin builds.
+    <literal>&lt;makefile&gt;</literal> for Unix/Cygwin builds.
     Using this it is possible to add dependencies or build rules in
     addition to the default and auto generated rules.
    </para>
@@ -1063,33 +1063,46 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
   <section>
    <title>Tests</title>
    <para>
-    Global test cases can be created using the <sgmltag>test</sgmltag> tag.
+    Global test cases can be created using the <literal>&lt;test&gt;</literal> tag.
     Test cases for functions are automaticly created. 
    </para>
    <section>
     <title>Global test cases</title>
     <para>
-     Global test case scripts can be created using the <sgmltag>test</sgmltag> tag.
-     The <sgmltag>test</sgmltag> has a single attribute <literal>name</literal>. 
+     Global test case scripts can be created using the <literal>&lt;test&gt;</literal> tag.
+     The <literal>&lt;test&gt;</literal> has a single attribute <literal>name</literal>. 
      As the test name is used as the test file basename <literal>name</literal>
      has to be unique and only characters, digits and <literal>'-'</literal> and
      <literal>'_'</literal> are allowed in test names. A more readable test
-     title may be set using the <sgmltag>title</sgmltag> tag within 
-     <sgmltag>test</sgmltag>.
+     title may be set using the <literal>&lt;title&gt;</literal> tag within 
+     <literal>&lt;test&gt;</literal>.
     </para>
     <para>
-     The actual PHP code to run is specified using a <sgmltag>code</sgmltag>
-     section. The expected output is specified using a <sgmltag>result</sgmltag>
+     The actual PHP code to run is specified using a <literal>&lt;code&gt;</literal>
+     section. The expected output is specified using a <literal>&lt;result&gt;</literal>
      tag, it defaults to <literal>OK</literal>. The PHP test suite supports three
      different ways to compare test output with the expected result: plain string
      comparison, comparison using printf style placeholders like %d for numbers
      and regular expresions (for details see the <filename>README.TESTING*</filename>
      files in the PHP source). By default the <literal>plain</literal> mode is used,
      the other two modes can be selected by setting the <literal>mode</literal>
-     attribute of <sgmltag>result</sgmltag> to <literal>format</literal> or
+     attribute of <literal>&lt;result&gt;</literal> to <literal>format</literal> or
      <literal>regex</literal>.
     </para>
     <para>
+     The <literal>--SKIPIF--</literal> section of the generated tests checks
+     for the generated extension being loaded, the tests will automaticly be
+     skiped if it is not available. Additional skip conditions can be added
+     using the <literal>&lt;skipif&gt;</literal> tag. The content of the tag may either
+     be a PHP expression that evaluates to <literal>true</literal> if the test
+     should be skipped or a complete code snippet that prints <literal>skip</literal>
+     if the test is supposed to be skipped. A string describing the reason for
+     the test being skipped may be added after the <literal>skip</literal> in 
+     this case.
+    </para>
+    <para>
+     Additional php.ini settings to be used for testing may be specified in
+     a <literal>&lt;ini&gt;</literal> section.
     </para>
    </section>
    <section>
@@ -1111,7 +1124,7 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
     <itemizedlist>
      <listitem><simpara>external entities</simpara></listitem>
      <listitem><simpara>a subset of XInclude</simpara></listitem>
-     <listitem><simpara>the <literal>source</literal> attribute of <sgmltag>code</sgmltag> tags</simpara></listitem>
+     <listitem><simpara>the <literal>source</literal> attribute of <literal>&lt;code&gt;</literal> tags</simpara></listitem>
     </itemizedlist>
    </para>
    <section>
@@ -1127,7 +1140,7 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
     </para>
    </section>
    <section>
-    <title><sgmltag>code</sgmltag> tags</title>
+    <title><literal>&lt;code&gt;</literal> tags</title>
     <para>
      ...
     </para>
