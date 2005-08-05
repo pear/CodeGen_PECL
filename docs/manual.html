@@ -185,12 +185,12 @@ HREF="#AEN422"
 ><DL
 ><DT
 >2.13.1. <A
-HREF="#AEN426"
+HREF="#AEN430"
 >Global test cases</A
 ></DT
 ><DT
 >2.13.2. <A
-HREF="#AEN455"
+HREF="#AEN465"
 >Embedded function test cases</A
 ></DT
 ></DL
@@ -199,31 +199,31 @@ HREF="#AEN455"
 ></DD
 ><DT
 >3. <A
-HREF="#AEN458"
+HREF="#AEN478"
 >XML input parsing</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1. <A
-HREF="#AEN460"
+HREF="#AEN480"
 >Includes</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1.1. <A
-HREF="#AEN473"
+HREF="#AEN493"
 >External entities</A
 ></DT
 ><DT
 >3.1.2. <A
-HREF="#AEN476"
+HREF="#AEN496"
 >XInclude</A
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN479"
+HREF="#AEN499"
 ><TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -233,7 +233,7 @@ CLASS="literal"
 ></DD
 ><DT
 >3.2. <A
-HREF="#AEN483"
+HREF="#AEN503"
 >Verbatim text data</A
 ></DT
 ></DL
@@ -346,6 +346,26 @@ HREF="#AEN412"
 >2-18. <A
 HREF="#AEN419"
 >Makefile fragments</A
+></DT
+><DT
+>2-19. <A
+HREF="#AEN459"
+>Minmal test case</A
+></DT
+><DT
+>2-20. <A
+HREF="#AEN462"
+>Full test case</A
+></DT
+><DT
+>2-21. <A
+HREF="#AEN472"
+>Minmal test case</A
+></DT
+><DT
+>2-22. <A
+HREF="#AEN475"
+>Full test case</A
 ></DT
 ></DL
 ></DIV
@@ -2311,12 +2331,36 @@ CLASS="literal"
 > tag.
     Test cases for functions are automaticly created. 
    </P
+><P
+>&#13;    Currently you have to make sure your extension is loaded by php.ini
+    and have to perform the following steps to run the test suite
+    (changing pathes to point to the right files on your system):
+   </P
+><PRE
+CLASS="programlisting"
+>&#13;
+  TEST_PHP_EXECUTABLE="/usr/local/bin/php"
+  export TEST_PHP_EXECUTABLE
+
+  php path/to/run-tests.php tests
+
+   </PRE
+><P
+>&#13;    Starting with PHP 5.1 it should be possible to test PECL extensions
+    by just typing <TT
+CLASS="literal"
+>make test</TT
+> in the extension source
+    dir, the changes needed for this are being reviewed right now and
+    should hopefully be ready in time to be included in the PHP 5.1.0
+    release.
+   </P
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN426"
+NAME="AEN430"
 >2.13.1. Global test cases</A
 ></H3
 ><P
@@ -2424,17 +2468,118 @@ CLASS="literal"
 >&#60;ini&#62;</TT
 > section.
     </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN459"
+></A
+><P
+><B
+>Example 2-19. Minmal test case</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;test name="echo"&#62;
+   &#60;code&#62;echo "OK";&#60;/code&#62;
+  &#60;/test&#62;
+
+     </PRE
+></DIV
+><DIV
+CLASS="example"
+><A
+NAME="AEN462"
+></A
+><P
+><B
+>Example 2-20. Full test case</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;test name="full"&#62;
+   &#60;title&#62;A full test case using all tags&#60;/title&#62;
+   &#60;skipif&#62;1==0&#60;/skipif&#62;
+   &#60;ini&#62;max_execution_time=0&#60;/ini&#62;
+   &#60;code&#62;echo "Random number: ".rand(1,10);&#60;/code&#62;
+   &#60;result mode='format'&#62;Random number: %d&#60;/result&#62;
+  &#60;/test&#62;
+
+     </PRE
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN455"
+NAME="AEN465"
 >2.13.2. Embedded function test cases</A
 ></H3
 ><P
->&#13;    </P
+>&#13;     For each function a default test case is created. 
+     The name and title for this test are automaticly set
+     to the function name, test code and the expected result
+     can be set using the <TT
+CLASS="literal"
+>&#60;testcode&#62;</TT
+>
+     and <TT
+CLASS="literal"
+>&#60;testresult&#62;</TT
+> tags, additional
+     skip conditions and ini settings can be specified using
+     <TT
+CLASS="literal"
+>&#60;testskip&#62;</TT
+> and 
+     <TT
+CLASS="literal"
+>&#60;testini&#62;</TT
+> tags.
+    </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN472"
+></A
+><P
+><B
+>Example 2-21. Minmal test case</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;function name="foobar"&#62;
+   ...
+   &#60;testcode&#62;echo "OK";&#60;/testcode&#62;
+  &#60;/test&#62;
+
+     </PRE
+></DIV
+><DIV
+CLASS="example"
+><A
+NAME="AEN475"
+></A
+><P
+><B
+>Example 2-22. Full test case</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+  &#60;function name="foobar"&#62;
+   ...
+   &#60;testskipif&#62;1==0&#60;/testskipif&#62;
+   &#60;testini&#62;max_execution_time=0&#60;/testini&#62;
+   &#60;testcode&#62;echo "Random number: ".rand(1,10);&#60;/testcode&#62;
+   &#60;testresult mode='format'&#62;Random number: %d&#60;/testresult&#62;
+  &#60;/test&#62;
+
+     </PRE
+></DIV
 ></DIV
 ></DIV
 ></DIV
@@ -2442,7 +2587,7 @@ NAME="AEN455"
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN458"
+NAME="AEN478"
 ></A
 >Chapter 3. XML input parsing</H1
 ><DIV
@@ -2450,7 +2595,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN460"
+NAME="AEN480"
 >3.1. Includes</A
 ></H2
 ><P
@@ -2488,7 +2633,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN473"
+NAME="AEN493"
 >3.1.1. External entities</A
 ></H3
 ><P
@@ -2500,7 +2645,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN476"
+NAME="AEN496"
 >3.1.2. XInclude</A
 ></H3
 ><P
@@ -2512,7 +2657,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN479"
+NAME="AEN499"
 >3.1.3. <TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -2528,7 +2673,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN483"
+NAME="AEN503"
 >3.2. Verbatim text data</A
 ></H2
 ><P

@@ -1066,6 +1066,27 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
     Global test cases can be created using the <literal>&lt;test&gt;</literal> tag.
     Test cases for functions are automaticly created. 
    </para>
+   <para>
+    Currently you have to make sure your extension is loaded by php.ini
+    and have to perform the following steps to run the test suite
+    (changing pathes to point to the right files on your system):
+   </para>
+   <programlisting>
+<![CDATA[
+  TEST_PHP_EXECUTABLE="/usr/local/bin/php"
+  export TEST_PHP_EXECUTABLE
+
+  php path/to/run-tests.php tests
+]]>
+   </programlisting>
+   <para>
+    Starting with PHP 5.1 it should be possible to test PECL extensions
+    by just typing <literal>make test</literal> in the extension source
+    dir, the changes needed for this are being reviewed right now and
+    should hopefully be ready in time to be included in the PHP 5.1.0
+    release.
+   </para>
+
    <section>
     <title>Global test cases</title>
     <para>
@@ -1104,11 +1125,68 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
      Additional php.ini settings to be used for testing may be specified in
      a <literal>&lt;ini&gt;</literal> section.
     </para>
+    <example>
+     <title>Minmal test case</title>
+     <programlisting>
+<![CDATA[
+  <test name="echo">
+   <code>echo "OK";</code>
+  </test>
+]]>
+     </programlisting>
+    </example>
+    <example>
+     <title>Full test case</title>
+     <programlisting>
+<![CDATA[
+  <test name="full">
+   <title>A full test case using all tags</title>
+   <skipif>1==0</skipif>
+   <ini>max_execution_time=0</ini>
+   <code>echo "Random number: ".rand(1,10);</code>
+   <result mode='format'>Random number: %d</result>
+  </test>
+]]>
+     </programlisting>
+    </example>
    </section>
    <section>
     <title>Embedded function test cases</title>
     <para>
+     For each function a default test case is created. 
+     The name and title for this test are automaticly set
+     to the function name, test code and the expected result
+     can be set using the <literal>&lt;testcode&gt;</literal>
+     and <literal>&lt;testresult&gt;</literal> tags, additional
+     skip conditions and ini settings can be specified using
+     <literal>&lt;testskip&gt;</literal> and 
+     <literal>&lt;testini&gt;</literal> tags.
     </para>
+    <example>
+     <title>Minmal test case</title>
+     <programlisting>
+<![CDATA[
+  <function name="foobar">
+   ...
+   <testcode>echo "OK";</testcode>
+  </test>
+]]>
+     </programlisting>
+    </example>
+    <example>
+     <title>Full test case</title>
+     <programlisting>
+<![CDATA[
+  <function name="foobar">
+   ...
+   <testskipif>1==0</testskipif>
+   <testini>max_execution_time=0</testini>
+   <testcode>echo "Random number: ".rand(1,10);</testcode>
+   <testresult mode='format'>Random number: %d</testresult>
+  </test>
+]]>
+     </programlisting>
+    </example>
    </section>
   </section>
  </chapter>
