@@ -41,7 +41,7 @@ class CodeGen_PECL_ExtensionParser
 {
     function setInputFile($filename) 
     {
-        $this->extension->addPackageFile("doc", $filename);
+        $this->extension->addPackageFile("copy", $filename);
         return parent::setInputFile($filename);
     }
 
@@ -58,8 +58,10 @@ class CodeGen_PECL_ExtensionParser
         return true;
     }
 
-
-
+    function tagstart_extension_changelog($attr)
+    {
+        $this->verbatim();
+    }
 
     function tagstart_extension_function($attr)
     {
