@@ -1380,7 +1380,8 @@ PHP_MINFO_FUNCTION({$this->name})
         }
 
         if (!empty($this->summary)) {
-            $code .= "    php_printf(\"<p>".str_replace('"','\\"',$this->summary)."</p>\\n\");\n";
+            $summary = strtr(trim($this->summary), array('"'=>'\\"', "\n"=>"<br />"));
+            $code .= "    php_printf(\"<p>$summary</p>\\n\");\n";
         }
         if (!empty($this->release)) {
             $code .= $this->release->phpinfoCode($this->name);
