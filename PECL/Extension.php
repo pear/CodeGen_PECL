@@ -670,7 +670,7 @@ class CodeGen_PECL_Extension
         $this->dirpath = realpath($dirpath);
         
         echo "Creating '{$this->name}' extension in '$dirpath'\n";
-        
+
         // generate complete source code
         $this->generateSource();
 
@@ -735,11 +735,11 @@ class CodeGen_PECL_Extension
             $this->files['doc'][] = "LICENSE";
         }
         
-        // generate PEAR/PECL package.xml file
-        $this->writePackageXml();
-        
         // generate test case templates
         $this->writeTestFiles();
+
+        // generate PEAR/PECL package.xml file
+        $this->writePackageXml();        
     }
     
     // {{{   docbook documentation
@@ -1281,9 +1281,10 @@ PHP_MINIT_FUNCTION({$this->name})
         }
             
         if (isset($this->internalFunctions['MINIT'])) {
-            if ($need_block) $code .= "\n    {\n";
-            $code .= CodeGen_Tools_Indent::indent(8, $this->internalFunctions['MINIT']->getCode());
-            if ($need_block) $code .= "\n    }\n";
+            $indent = $need_block ? 6 : 4;
+            if ($need_block) $code .= "\n    do {\n";
+            $code .= CodeGen_Tools_Indent::indent($indent, $this->internalFunctions['MINIT']->getCode());
+            if ($need_block) $code .= "\n    } while (0);\n";
         } else {
             $code .="\n    /* add your stuff here */\n";
         }
@@ -1302,23 +1303,26 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
             
         if (count($this->phpini)) {
             $code .= "    UNREGISTER_INI_ENTRIES();\n";
+            $need_block = true;
         }
 
-        foreach ($this->logos as $logo) {
-            $code .= CodeGen_Tools_Indent::indent(4, $logo->mshutdownCode());
+        if (count($this->logos)) {
+            foreach ($this->logos as $logo) {
+                $code .= CodeGen_Tools_Indent::indent(4, $logo->mshutdownCode());
+            }
             $need_block = true;
         }
             
         if (isset($this->internalFunctions['MSHUTDOWN'])) {
-            if (count($this->phpini)) $code .= "\n    {\n";
+            $indent = $need_block ? 6 : 4;
+            if (count($this->phpini)) $code .= "\n    do {\n";
             $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['MSHUTDOWN']->getCode());
-            if (count($this->phpini)) $code .= "\n    }\n";
+            if (count($this->phpini)) $code .= "\n    } while (0);\n";
         } else {
             $code .="\n    /* add your stuff here */\n";
         }
 
         $code .= "
-  
     return SUCCESS;
 }
 /* }}} */
@@ -1393,10 +1397,11 @@ PHP_MINFO_FUNCTION({$this->name})
 "    php_info_print_box_end();
 ";
 
+        // TODO move this decision up?
         if (isset($this->internalFunctions['MINFO'])) {
-            $code .= "\n    {\n";
-            $code .= $this->internalFunctions['MINFO']->code;
-            $code .= "\n    }\n";
+            $code .= "\n    do {\n";
+            $code .= CodeGen_Tools_Indent::indent(6, $this->internalFunctions['MINFO']->getCode());
+            $code .= "\n    } while (0);\n";
         } else {
             $code .= "    /* add your stuff here */\n";
         }
@@ -2008,9 +2013,9 @@ you have been warned!
         }
 
 // TODO dependencies
-
+        
         echo "\n  <filelist>\n";
-        echo "    <dir role=\"doc\" name=\"/\">\n";
+        echo "    <dir name=\"/\">\n";
         if (@is_array($this->packageFiles['doc'])) {
             foreach ($this->packageFiles['doc'] as $file) {
                 echo "      <file role=\"doc\">$file</file>\n";
@@ -2022,7 +2027,15 @@ you have been warned!
                 echo "      <file role=\"src\">$basename</file>\n";
             }
         }
-        
+
+        if (!empty($this->packageFiles['test'])) {
+            echo "      <dir name=\"tests\">\n";
+            foreach ($this->packageFiles['test'] as $basename => $filepath) {
+                echo "        <file role=\"test\">$basename</file>\n";
+            }
+            echo "      </dir>\n";
+        }
+
         echo "    </dir>\n";
         echo "  </filelist>\n";
 
