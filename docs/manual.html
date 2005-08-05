@@ -181,35 +181,49 @@ HREF="#AEN415"
 HREF="#AEN422"
 >Tests</A
 ></DT
+><DD
+><DL
+><DT
+>2.13.1. <A
+HREF="#AEN426"
+>Global test cases</A
+></DT
+><DT
+>2.13.2. <A
+HREF="#AEN448"
+>Embedded function test cases</A
+></DT
+></DL
+></DD
 ></DL
 ></DD
 ><DT
 >3. <A
-HREF="#AEN427"
+HREF="#AEN451"
 >XML input parsing</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1. <A
-HREF="#AEN429"
+HREF="#AEN453"
 >Includes</A
 ></DT
 ><DD
 ><DL
 ><DT
 >3.1.1. <A
-HREF="#AEN442"
+HREF="#AEN466"
 >External entities</A
 ></DT
 ><DT
 >3.1.2. <A
-HREF="#AEN445"
+HREF="#AEN469"
 >XInclude</A
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN448"
+HREF="#AEN472"
 ><CODE
 CLASS="sgmltag"
 >code</CODE
@@ -217,6 +231,11 @@ CLASS="sgmltag"
 ></DT
 ></DL
 ></DD
+><DT
+>3.2. <A
+HREF="#AEN476"
+>Verbatim text data</A
+></DT
 ></DL
 ></DD
 ></DL
@@ -518,21 +537,27 @@ CLASS="literal"
    </P
 ><PRE
 CLASS="screen"
->&#13;pecl-gen [-h] [--extname=name] [--proto=file] [--skel=dir] [--stubs=file] 
+>&#13;
+pecl-gen 0.9.0rc5,Copyright (c) 2003-2005 Hartmut Holzgraefe
+Usage:
+
+pecl-gen [-h] [--force] [--experimental] [--version]
+  [--extname=name] [--proto=file] [--skel=dir] [--stubs=file] 
   [--no-help] [--xml[=file]] [--full-xml] [--function=proto] [specfile.xml]
 
   -h|--help          this message
-  --force            overwrite existing directories
-	--function         create a function skeleton from a proto right away
+  -f|--force         overwrite existing directories
+  -l|--linespecs     generate #line specs
+  -x|--experimental  deprecated
+  --function         create a function skeleton from a proto right away
   --version          show version info
 
   the following options are inherited from ext_skel:
-
   --extname=module   module is the name of your extension 
   --proto=file       file contains prototypes of functions to create
   --xml              generate xml documentation to be added to phpdoc-cvs
 
-	these wait for functionality to be implemented and are ignored for now ...
+  these wait for functionality to be implemented and are ignored for now ...
   --stubs=file       generate only function stubs in file
   --no-help          don't try to be nice and create comments in the code
                      and helper functions to test if the module compiled
@@ -542,6 +567,7 @@ CLASS="screen"
                      (this was also a no-op in ext_skel) 
   --skel=dir         path to the skeleton directory
                      (skeleton stuff is now self-contained)
+
    </PRE
 ></DIV
 ></DIV
@@ -2279,23 +2305,113 @@ NAME="AEN422"
 >2.13. Tests</A
 ></H2
 ><P
->&#13;    For now <TT
-CLASS="literal"
->PECL_Gen</TT
-> generates one test case
-    skeleton for every function prototype. 
+>&#13;    Global test cases can be created using the <CODE
+CLASS="sgmltag"
+>test</CODE
+> tag.
+    Test cases for functions are automaticly created. 
    </P
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="AEN426"
+>2.13.1. Global test cases</A
+></H3
 ><P
->&#13;    Support for customizable test script generation is planned for a
-    future release.
-   </P
+>&#13;     Global test case scripts can be created using the <CODE
+CLASS="sgmltag"
+>test</CODE
+> tag.
+     The <CODE
+CLASS="sgmltag"
+>test</CODE
+> has a single attribute <TT
+CLASS="literal"
+>name</TT
+>. 
+     As the test name is used as the test file basename <TT
+CLASS="literal"
+>name</TT
+>
+     has to be unique and only characters, digits and <TT
+CLASS="literal"
+>'-'</TT
+> and
+     <TT
+CLASS="literal"
+>'_'</TT
+> are allowed in test names. A more readable test
+     title may be set using the <CODE
+CLASS="sgmltag"
+>title</CODE
+> tag within 
+     <CODE
+CLASS="sgmltag"
+>test</CODE
+>.
+    </P
+><P
+>&#13;     The actual PHP code to run is specified using a <CODE
+CLASS="sgmltag"
+>code</CODE
+>
+     section. The expected output is specified using a <CODE
+CLASS="sgmltag"
+>result</CODE
+>
+     tag, it defaults to <TT
+CLASS="literal"
+>OK</TT
+>. The PHP test suite supports three
+     different ways to compare test output with the expected result: plain string
+     comparison, comparison using printf style placeholders like %d for numbers
+     and regular expresions (for details see the <TT
+CLASS="filename"
+>README.TESTING*</TT
+>
+     files in the PHP source). By default the <TT
+CLASS="literal"
+>plain</TT
+> mode is used,
+     the other two modes can be selected by setting the <TT
+CLASS="literal"
+>mode</TT
+>
+     attribute of <CODE
+CLASS="sgmltag"
+>result</CODE
+> to <TT
+CLASS="literal"
+>format</TT
+> or
+     <TT
+CLASS="literal"
+>regex</TT
+>.
+    </P
+><P
+>&#13;    </P
+></DIV
+><DIV
+CLASS="section"
+><HR><H3
+CLASS="section"
+><A
+NAME="AEN448"
+>2.13.2. Embedded function test cases</A
+></H3
+><P
+>&#13;    </P
+></DIV
 ></DIV
 ></DIV
 ><DIV
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN427"
+NAME="AEN451"
 ></A
 >Chapter 3. XML input parsing</H1
 ><DIV
@@ -2303,7 +2419,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN429"
+NAME="AEN453"
 >3.1. Includes</A
 ></H2
 ><P
@@ -2341,37 +2457,52 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN442"
+NAME="AEN466"
 >3.1.1. External entities</A
 ></H3
 ><P
->&#13;    </P
+>&#13;     ...
+    </P
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN445"
+NAME="AEN469"
 >3.1.2. XInclude</A
 ></H3
 ><P
->&#13;    </P
+>&#13;     ...
+    </P
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN448"
+NAME="AEN472"
 >3.1.3. <CODE
 CLASS="sgmltag"
 >code</CODE
 > tags</A
 ></H3
 ><P
->&#13;    </P
+>&#13;     ...
+    </P
 ></DIV
+></DIV
+><DIV
+CLASS="section"
+><HR><H2
+CLASS="section"
+><A
+NAME="AEN476"
+>3.2. Verbatim text data</A
+></H2
+><P
+>&#13;    ...
+   </P
 ></DIV
 ></DIV
 ></DIV

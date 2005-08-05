@@ -94,7 +94,7 @@
      --help</literal> output:
    </para>
    <screen>
-<![CDATA
+<![CDATA[
 pecl-gen 0.9.0rc5,Copyright (c) 2003-2005 Hartmut Holzgraefe
 Usage:
 
@@ -1063,13 +1063,40 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
   <section>
    <title>Tests</title>
    <para>
-    For now <literal>PECL_Gen</literal> generates one test case
-    skeleton for every function prototype. 
+    Global test cases can be created using the <sgmltag>test</sgmltag> tag.
+    Test cases for functions are automaticly created. 
    </para>
-   <para>
-    Support for customizable test script generation is planned for a
-    future release.
-   </para>
+   <section>
+    <title>Global test cases</title>
+    <para>
+     Global test case scripts can be created using the <sgmltag>test</sgmltag> tag.
+     The <sgmltag>test</sgmltag> has a single attribute <literal>name</literal>. 
+     As the test name is used as the test file basename <literal>name</literal>
+     has to be unique and only characters, digits and <literal>'-'</literal> and
+     <literal>'_'</literal> are allowed in test names. A more readable test
+     title may be set using the <sgmltag>title</sgmltag> tag within 
+     <sgmltag>test</sgmltag>.
+    </para>
+    <para>
+     The actual PHP code to run is specified using a <sgmltag>code</sgmltag>
+     section. The expected output is specified using a <sgmltag>result</sgmltag>
+     tag, it defaults to <literal>OK</literal>. The PHP test suite supports three
+     different ways to compare test output with the expected result: plain string
+     comparison, comparison using printf style placeholders like %d for numbers
+     and regular expresions (for details see the <filename>README.TESTING*</filename>
+     files in the PHP source). By default the <literal>plain</literal> mode is used,
+     the other two modes can be selected by setting the <literal>mode</literal>
+     attribute of <sgmltag>result</sgmltag> to <literal>format</literal> or
+     <literal>regex</literal>.
+    </para>
+    <para>
+    </para>
+   </section>
+   <section>
+    <title>Embedded function test cases</title>
+    <para>
+    </para>
+   </section>
   </section>
  </chapter>
 
