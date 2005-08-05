@@ -39,7 +39,11 @@ require_once "CodeGen/PECL/Maintainer.php";
 class CodeGen_PECL_ExtensionParser 
     extends CodeGen_ExtensionParser
 {
-
+    function setInputFile($filename) 
+    {
+        $this->extension->addPackageFile("doc", $filename);
+        return parent::setInputFile($filename);
+    }
 
     function tagstart_maintainer($attr)
     {
@@ -318,7 +322,7 @@ class CodeGen_PECL_ExtensionParser
                 // we support uuencoded and base64 encoded embedded data
                 $decoded = base64_decode($data);
                 if (!is_string($decoded)) {
-                    PEAR::raiseError("only uuencoded and base64 encoded image data is supported for embedded data");
+                    PEAR::raiseError("only base64 encoded image data is supported for embedded data");
                 }
                     
                 $err = $logo->setData($decoded, $attr["mimetype"]);
