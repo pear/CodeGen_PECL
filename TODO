@@ -1,7 +1,6 @@
 Braindump
 ---------
 
-test files are not yet added to package.xml
 
 allow addition of files to directories (eg. test),
 allow specification of file role instead of guessing by extension?
@@ -68,6 +67,7 @@ support <?code ... ?> as alternative to CDATA        -> done (needs check)
 
 check whether <header> checks work                   -> done
 
+test files are not yet added to package.xml          -> done
 
 Milestone 1.0
 -------------
