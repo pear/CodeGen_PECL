@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd" [
+<!ENTITY systemEntity SYSTEM "parsing_1.xml">
+]>
+<extension name="parsing" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!-- system entity inclusion -->
+&systemEntity;
+
+<!-- xinclude inclusion -->
+<xi:include href="parsing_2.xml"/>
+
+<!-- verbatim xinclude inclusion -->
+<logo><xi:include href="logo.gif" parse="text"/></logo>
+
+<!-- <code src=...> inclusion -->
+
+<code src="snippet.c"/>
+
+</extension>
