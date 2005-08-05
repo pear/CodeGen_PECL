@@ -48,10 +48,13 @@ class CodeGen_PECL_Release
     function packageXml()
     {
         $code = "\n  <release>\n";
-        foreach (array("version", "date", "state", "notes") as $key) {
+        foreach (array("version", "state", "notes") as $key) {
             if ($this->$key !== "") {
                 $code.= "    <$key>{$this->$key}</$key>\n";
             }
+        }
+        if ($this->date !== "") {
+            $code .= "    <date>".date("Y-m-d", $this->date)."</date>\n";
         }
         $code.= "  </release>\n";
         
