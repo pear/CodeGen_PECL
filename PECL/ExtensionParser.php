@@ -314,10 +314,10 @@ class CodeGen_PECL_ExtensionParser
                     return $err;
                 }
             } else {
-                // we support uuencoded and base64 encoded embedded data
+                // we support base64 encoded embedded data only
                 $decoded = base64_decode($data);
                 if (!is_string($decoded)) {
-                    PEAR::raiseError("only base64 encoded image data is supported for embedded data");
+                    return PEAR::raiseError("only base64 encoded image data is supported for embedded data");
                 }
                     
                 $err = $logo->setData($decoded, $attr["mimetype"]);
@@ -759,10 +759,12 @@ class CodeGen_PECL_ExtensionParser
 
         function tagstart_class($attr)
         {
-            $this->pushHelper(new CodeGen_PECL_Element_Class);
+            $class = new CodeGen_PECL_Element_Class;
+
+            $this->pushHelper($class);
 
             if (isset($attr["name"])) {
-                $err = $this->helper->setName($attr["name"]);
+                $err = $class->setName($attr["name"]);
                 if (PEAR::isError($err)) {
                     return $err;
                 }
@@ -770,8 +772,11 @@ class CodeGen_PECL_ExtensionParser
                 return PEAR::raiseError("name attribut for class missing");
             }
 
-            if (PEAR::isError($err)) {
-                return $err;
+            if (isset($attr["extends"])) {
+                $err = $class->setExtends($attr["extends"]);
+                if (PEAR::isError($err)) {
+                    return $err;
+                }
             }
             
             return true;

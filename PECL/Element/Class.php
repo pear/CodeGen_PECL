@@ -248,8 +248,13 @@ static void class_init_{$this->name}(void)
 {
     zend_class_entry ce;
     INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);
-    {$this->name}_ce_ptr = zend_register_internal_class(&ce);
 ";
+
+            if ($this->extends) {
+                $code.= "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
+            } else {
+                $code.= "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
+            }
 
             foreach ($this->properties as $property) {
               $code .= "    ".$property->minit_code($this->name."_ce_ptr");
