@@ -204,6 +204,20 @@ require_once "CodeGen/Tools/Indent.php";
 
 
         /**
+         * Is this class final?
+         *
+         * @var   bool
+         */
+        private $isFinal = false;
+
+        function isFinal() 
+        {
+            $this->isFinal = true;
+        }
+
+
+
+        /**
          * Is this an interface?
          *
          * @var   bool
@@ -254,6 +268,10 @@ static void class_init_{$this->name}(void)
                 $code.= "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
             } else {
                 $code.= "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
+            }
+
+            if ($this->isFinal) {
+              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL;\n";
             }
 
             foreach ($this->properties as $property) {
