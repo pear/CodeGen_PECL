@@ -4,6 +4,7 @@
  <class name="class1">
   <summary>Class1</summary>
   <description>test class 1</description>
+  <property name="foo" type="int" value="42"/>
  </class>
 
  <class name="class2" extends="class1">
@@ -13,6 +14,11 @@
 
  <test name="extend">
   <code>$c2 = new class2; echo $c2 instanceof class1 ? "OK" : "Failure";</code>
+ </test>
+
+ <test name="property">
+  <code>$c1 = new class1; echo $c1->foo;</code>
+  <result>42</result>
  </test>
 
 </extension>

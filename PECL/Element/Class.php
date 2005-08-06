@@ -257,7 +257,7 @@ static void class_init_{$this->name}(void)
             }
 
             foreach ($this->properties as $property) {
-              $code .= "    ".$property->minit_code($this->name."_ce_ptr");
+              $code .= "    ".$property->minitCode($this->name."_ce_ptr");
             }
 
             $code.= "}\n";
