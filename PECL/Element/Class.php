@@ -274,6 +274,10 @@ static void class_init_{$this->name}(void)
               $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL_CLASS;\n";
             }
 
+            if ($this->isAbstract) {
+              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;\n";
+            }
+
             foreach ($this->properties as $property) {
               $code .= "    ".$property->minitCode($this->name."_ce_ptr");
             }

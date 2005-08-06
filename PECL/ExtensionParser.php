@@ -783,6 +783,10 @@ class CodeGen_PECL_ExtensionParser
             $class->isFinal();
         }
 
+        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
+            $class->isAbstract();
+        }
+
         return true;
     }
 
