@@ -779,6 +779,10 @@ class CodeGen_PECL_ExtensionParser
             }
         }
             
+        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
+            $class->isFinal();
+        }
+
         return true;
     }
 
@@ -826,6 +830,10 @@ class CodeGen_PECL_ExtensionParser
             if (PEAR::isError($err)) {
                 return $err;
             }
+        }
+
+        if (isset($attr["static"]) && $this->toBool($attr["static"])) {
+            $prop->isStatic();
         }
 
         return $this->helper->addProperty($prop);
