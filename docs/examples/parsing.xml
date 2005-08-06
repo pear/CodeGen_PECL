@@ -11,10 +11,10 @@
 <xi:include href="parsing_2.xml"/>
 
 <!-- verbatim xinclude inclusion -->
-<logo><xi:include href="logo.gif" parse="text"/></logo>
+<code><xi:include href="snippet1.c" parse="text"/></code>
 
 <!-- <code src=...> inclusion -->
 
-<code src="snippet.c"/>
+<code src="snippet2.c"/>
 
 </extension>

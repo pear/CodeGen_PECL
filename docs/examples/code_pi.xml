@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<extension name="code_pi">
+<code>
+<?data
+  foo->bar = 42;
+?>
+</code>
+</extension> 
