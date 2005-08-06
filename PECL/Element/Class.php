@@ -271,7 +271,7 @@ static void class_init_{$this->name}(void)
             }
 
             if ($this->isFinal) {
-              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL;\n";
+              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL_CLASS;\n";
             }
 
             foreach ($this->properties as $property) {
