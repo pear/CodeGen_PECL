@@ -1293,11 +1293,32 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
      <listitem><simpara>the <literal>source</literal> attribute of <literal>&lt;code&gt;</literal> tags</simpara></listitem>
     </itemizedlist>
    </para>
+
    <section>
     <title>External entities</title>
     <para>
-     ...
+     In SGML and early XML system entites were the only 
+     include mechanism availabe. System entities have to
+     be defined in the documents DOCTYPE header, later on
+     in the document the entity can be used to include 
+     the specified file:
     </para>
+    <example>
+     <title>System Entities</title>
+     <programlisting>
+<![CDATA[
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd" [
+<!ENTITY systemEntity SYSTEM "parsing_1.xml">
+]>
+<extension name="foobar">
+...
+&systemEntity;
+..
+</extension>
+]]>
+     </programlisting>
+    </example>
    </section>
 
    <section>
@@ -1366,8 +1387,38 @@ $(builddir)/scanner.c: $(srcdir)/scanner.re
   <section>
    <title>Verbatim text data</title>
    <para>
-    ...
+    C code usually contains quite a few <literal>&gt;</literal>, 
+    <literal>&lt;</literal> and <literal>&amp;</literal> characters
+    all of which need to be escaped in XML. This can be done by either
+    converting them into entities all over the place or by embedding
+    the code into CDATA sections:
    </para>
+   <example>
+    <title>CDATA sections</title>
+    <programlisting>
+&lt;code&gt;
+&lt;![CDATA[
+  foo-&gt;bar = 42;
+]]&gt;
+&lt;/code&gt;
+    </programlisting>
+   </example>
+   <para>
+    Typing <literal>&lt;![CDATA[</literal> can become rather annoying
+    over time (esp. on a german keyboard), so i introduced the 
+    <literal>&lt;?data</literal> processing instruction into the
+    <literal>CodeGen</literal> XML parser as an alternative to CDATA:
+   </para>
+   <example>
+    <title><literal>&lt;?data</literal> processing instruction</title>
+    <programlisting>
+<![CDATA[
+<?data
+  foo->bar = 42;
+?>
+]]>
+    </programlisting>
+   </example>
   </section>
  </chapter>
 

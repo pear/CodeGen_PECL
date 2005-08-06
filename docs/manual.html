@@ -242,12 +242,12 @@ HREF="#AEN541"
 ></DT
 ><DT
 >3.1.2. <A
-HREF="#AEN544"
+HREF="#AEN547"
 >XInclude</A
 ></DT
 ><DT
 >3.1.3. <A
-HREF="#AEN562"
+HREF="#AEN565"
 ><TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -257,46 +257,46 @@ CLASS="literal"
 ></DD
 ><DT
 >3.2. <A
-HREF="#AEN572"
+HREF="#AEN575"
 >Verbatim text data</A
 ></DT
 ></DL
 ></DD
 ><DT
 >4. <A
-HREF="#AEN575"
+HREF="#AEN592"
 >Usage</A
 ></DT
 ><DD
 ><DL
 ><DT
 >4.1. <A
-HREF="#AEN577"
+HREF="#AEN594"
 >Invocation</A
 ></DT
 ><DT
 >4.2. <A
-HREF="#AEN587"
+HREF="#AEN604"
 >Configuration</A
 ></DT
 ><DT
 >4.3. <A
-HREF="#AEN600"
+HREF="#AEN617"
 >Compilation</A
 ></DT
 ><DT
 >4.4. <A
-HREF="#AEN605"
+HREF="#AEN622"
 >Testing</A
 ></DT
 ><DT
 >4.5. <A
-HREF="#AEN620"
+HREF="#AEN637"
 >Installation</A
 ></DT
 ><DT
 >4.6. <A
-HREF="#AEN630"
+HREF="#AEN647"
 >PEAR integration</A
 ></DT
 ></DL
@@ -437,25 +437,43 @@ HREF="#AEN523"
 ></DT
 ><DT
 >3-1. <A
-HREF="#AEN550"
->XInclude</A
+HREF="#AEN544"
+>System Entities</A
 ></DT
 ><DT
 >3-2. <A
-HREF="#AEN556"
->Verbatim XInclude</A
+HREF="#AEN553"
+>XInclude</A
 ></DT
 ><DT
 >3-3. <A
-HREF="#AEN568"
+HREF="#AEN559"
+>Verbatim XInclude</A
+></DT
+><DT
+>3-4. <A
+HREF="#AEN571"
 >Using <TT
 CLASS="literal"
 >&#60;code src="..."&#62;</TT
 ></A
 ></DT
 ><DT
+>3-5. <A
+HREF="#AEN581"
+>CDATA sections</A
+></DT
+><DT
+>3-6. <A
+HREF="#AEN588"
+><TT
+CLASS="literal"
+>&#60;?data</TT
+> processing instruction</A
+></DT
+><DT
 >4-1. <A
-HREF="#AEN635"
+HREF="#AEN652"
 >Installation using <TT
 CLASS="literal"
 >pear</TT
@@ -2946,15 +2964,43 @@ NAME="AEN541"
 >3.1.1. External entities</A
 ></H3
 ><P
->&#13;     ...
+>&#13;     In SGML and early XML system entites were the only 
+     include mechanism availabe. System entities have to
+     be defined in the documents DOCTYPE header, later on
+     in the document the entity can be used to include 
+     the specified file:
     </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN544"
+></A
+><P
+><B
+>Example 3-1. System Entities</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+&#60;?xml version="1.0" ?&#62;
+&#60;!DOCTYPE extension SYSTEM "../extension.dtd" [
+&#60;!ENTITY systemEntity SYSTEM "parsing_1.xml"&#62;
+]&#62;
+&#60;extension name="foobar"&#62;
+...
+&#38;systemEntity;
+..
+&#60;/extension&#62;
+
+     </PRE
+></DIV
 ></DIV
 ><DIV
 CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN544"
+NAME="AEN547"
 >3.1.2. XInclude</A
 ></H3
 ><P
@@ -2975,11 +3021,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN550"
+NAME="AEN553"
 ></A
 ><P
 ><B
->Example 3-1. XInclude</B
+>Example 3-2. XInclude</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -3006,11 +3052,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN556"
+NAME="AEN559"
 ></A
 ><P
 ><B
->Example 3-2. Verbatim XInclude</B
+>Example 3-3. Verbatim XInclude</B
 ></P
 ><PRE
 CLASS="programlisting"
@@ -3039,7 +3085,7 @@ CLASS="section"
 ><HR><H3
 CLASS="section"
 ><A
-NAME="AEN562"
+NAME="AEN565"
 >3.1.3. <TT
 CLASS="literal"
 >&#60;code&#62;</TT
@@ -3058,11 +3104,11 @@ CLASS="literal"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN568"
+NAME="AEN571"
 ></A
 ><P
 ><B
->Example 3-3. Using <TT
+>Example 3-4. Using <TT
 CLASS="literal"
 >&#60;code src="..."&#62;</TT
 ></B
@@ -3084,19 +3130,86 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN572"
+NAME="AEN575"
 >3.2. Verbatim text data</A
 ></H2
 ><P
->&#13;    ...
+>&#13;    C code usually contains quite a few <TT
+CLASS="literal"
+>&#62;</TT
+>, 
+    <TT
+CLASS="literal"
+>&#60;</TT
+> and <TT
+CLASS="literal"
+>&#38;</TT
+> characters
+    all of which need to be escaped in XML. This can be done by either
+    converting them into entities all over the place or by embedding
+    the code into CDATA sections:
    </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN581"
+></A
+><P
+><B
+>Example 3-5. CDATA sections</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;&#60;code&#62;
+&#60;![CDATA[
+  foo-&#62;bar = 42;
+]]&#62;
+&#60;/code&#62;
+    </PRE
+></DIV
+><P
+>&#13;    Typing <TT
+CLASS="literal"
+>&#60;![CDATA[</TT
+> can become rather annoying
+    over time (esp. on a german keyboard), so i introduced the 
+    <TT
+CLASS="literal"
+>&#60;?data</TT
+> processing instruction into the
+    <TT
+CLASS="literal"
+>CodeGen</TT
+> XML parser as an alternative to CDATA:
+   </P
+><DIV
+CLASS="example"
+><A
+NAME="AEN588"
+></A
+><P
+><B
+>Example 3-6. <TT
+CLASS="literal"
+>&#60;?data</TT
+> processing instruction</B
+></P
+><PRE
+CLASS="programlisting"
+>&#13;
+&#60;?data
+  foo-&#62;bar = 42;
+?&#62;
+
+    </PRE
+></DIV
 ></DIV
 ></DIV
 ><DIV
 CLASS="chapter"
 ><HR><H1
 ><A
-NAME="AEN575"
+NAME="AEN592"
 ></A
 >Chapter 4. Usage</H1
 ><DIV
@@ -3104,7 +3217,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN577"
+NAME="AEN594"
 >4.1. Invocation</A
 ></H2
 ><P
@@ -3145,7 +3258,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN587"
+NAME="AEN604"
 >4.2. Configuration</A
 ></H2
 ><P
@@ -3202,7 +3315,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN600"
+NAME="AEN617"
 >4.3. Compilation</A
 ></H2
 ><P
@@ -3223,7 +3336,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN605"
+NAME="AEN622"
 >4.4. Testing</A
 ></H2
 ><P
@@ -3289,7 +3402,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN620"
+NAME="AEN637"
 >4.5. Installation</A
 ></H2
 ><P
@@ -3330,7 +3443,7 @@ CLASS="section"
 ><HR><H2
 CLASS="section"
 ><A
-NAME="AEN630"
+NAME="AEN647"
 >4.6. PEAR integration</A
 ></H2
 ><P
@@ -3347,7 +3460,7 @@ CLASS="filename"
 ><DIV
 CLASS="example"
 ><A
-NAME="AEN635"
+NAME="AEN652"
 ></A
 ><P
 ><B
