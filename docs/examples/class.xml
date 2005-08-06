@@ -4,7 +4,8 @@
  <class name="class1">
   <summary>Class1</summary>
   <description>test class 1</description>
-  <property name="foo" type="int" value="42"/>
+  <property name="foo" access="public" type="int" value="42"/>
+  <property name="bar" access="private" type="int" value="23"/>
  </class>
 
  <class name="class2" extends="class1">
@@ -19,6 +20,11 @@
  <test name="property">
   <code>$c1 = new class1; echo $c1->foo;</code>
   <result>42</result>
+ </test>
+
+ <test name="property_private">
+  <code>$c1 = new class1; echo $c1->bar;</code>
+  <result mode="format">Fatal error: Cannot access private property class1::$bar in %s on line %d</result>
  </test>
 
 </extension>

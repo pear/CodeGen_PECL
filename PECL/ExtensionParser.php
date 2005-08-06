@@ -794,12 +794,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_property($attr)
     {
-        if (!isset($attr["name"])) {
-            return PEAR::raiseError("Name attribute missing for property");
-        }
-
         $prop = new CodeGen_PECL_Element_Property;
 
+        if (!isset($attr["name"])) {
+            return PEAR::raiseError("name attribute missing for property");
+        }
         $err = $prop->setName($attr["name"]);
         if (PEAR::isError($err)) {
             return $err;
@@ -813,11 +812,21 @@ class CodeGen_PECL_ExtensionParser
         }
 
         if (isset($attr["value"])) {
+            if (!isset($attr["type"])) {
+                return PEAR::raiseError("property value can only be set together with type");
+            }
             $err = $prop->setValue($attr["value"]);
             if (PEAR::isError($err)) {
                 return $err;
             }
         }            
+
+        if (isset($attr["access"])) {
+            $err = $prop->setAccess($attr["access"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
 
         return $this->helper->addProperty($prop);
     }
