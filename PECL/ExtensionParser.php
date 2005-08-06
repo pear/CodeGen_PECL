@@ -792,28 +792,6 @@ class CodeGen_PECL_ExtensionParser
             return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
         }
 
-        function tagstart_class_code($attr)
-        {
-            if (isset($attr["src"])) {
-                if (!file_exists($attr["src"])) {
-                    return PEAR::raiseError("Soruce file '$attr[src]' not found");                    
-                }
-                if (!is_readable($attr["src"])) {
-                    return PEAR::raiseError("Cannot read source file '$attr[src]'");                    
-                }
-            }
-        }
-
-        function tagend_class_code($attr, $data)
-        {
-            if (isset($attr["src"])) {
-                return $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
-            } else {
-                return $this->helper->setCode(CodeGen_Tools_Indent::linetrim($data));
-            }
-        }
-
-
         function tagstart_class_property($attr)
         {
             if (!isset($attr["name"])) {
