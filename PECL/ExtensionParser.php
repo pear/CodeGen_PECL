@@ -779,6 +779,8 @@ class CodeGen_PECL_ExtensionParser
             }
         }
             
+        // TODO: make sure a class is not abstract and final at the same time
+
         if (isset($attr["final"]) && $this->toBool($attr["final"])) {
             $class->isFinal();
         }
@@ -841,6 +843,37 @@ class CodeGen_PECL_ExtensionParser
         }
 
         return $this->helper->addProperty($prop);
+    }
+
+    function tagstart_class_constant($attr)
+    {
+        $const = new CodeGen_PECL_Element_ClassConstant;
+
+        if (!isset($attr["name"])) {
+            return PEAR::raiseError("name attribute missing for class constant");
+        }
+        $err = $const->setName($attr["name"]);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
+        if (!isset($attr["type"])) {
+            return PEAR::raiseError("type attribute missing for class constant");
+        }
+        $err = $const->setType($attr["type"]);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
+        if (!isset($attr["value"])) {
+            return PEAR::raiseError("value attribute missing for class constant");
+        }
+        $err = $const->setValue($attr["value"]);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
+        return $this->helper->addConstant($const);
     }
 
 

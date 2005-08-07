@@ -24,6 +24,7 @@
  */
 require_once "CodeGen/PECL/Element.php";
 require_once "CodeGen/PECL/Element/Property.php";
+require_once "CodeGen/PECL/Element/ClassConstant.php";
 require_once "CodeGen/PECL/Element/Method.php";
 
 require_once "CodeGen/Tools/Indent.php";
@@ -161,11 +162,32 @@ require_once "CodeGen/Tools/Indent.php";
         
         function addProperty(CodeGen_PECL_Element_Property $property) 
         {
-            if (isset($this->properties[$property->getName()])) {
-                return PEAR::raiseError("property '$property' already exists");
+            $name = $property->getName();
+
+            if (isset($this->properties[$name])) {
+                return PEAR::raiseError("property '$name' already exists");
             }
 
-            $this->properties[$property->getName()] = $property;
+            $this->properties[$name] = $property;
+        }
+
+        
+        /**
+         * Constants
+         *
+         * @var   array
+         */
+        private $constants = array();
+        
+        function addConstant(CodeGen_PECL_Element_ClassConstant $constant) 
+        {
+            $name = $constant->getName();
+
+            if (isset($this->constants[$name])) {
+                return PEAR::raiseError("constant '$name' already exists");
+            }
+
+            $this->constants[$name] = $constant;
         }
 
         
@@ -280,6 +302,10 @@ static void class_init_{$this->name}(void)
 
             foreach ($this->properties as $property) {
               $code .= "    ".$property->minitCode($this->name."_ce_ptr");
+            }
+
+            foreach ($this->constants as $constant) {
+              $code .= "    ".$constant->minitCode($this->name."_ce_ptr");
             }
 
             $code.= "}\n";

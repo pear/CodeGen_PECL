@@ -96,6 +96,7 @@
             <file role="php">Class.php</file>
             <file role="php">Method.php</file>
             <file role="php">Property.php</file>
+            <file role="php">ClassConstant.php</file>
             <file role="php">Stream.php</file>
           </dir>
           <dir name="Dependency">

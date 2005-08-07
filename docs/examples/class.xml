@@ -10,6 +10,10 @@
 
   <property name="bar" access="private" type="int" value="23"/>
   <property name="baz" access="public"  type="int" value="37" static="yes"/>
+
+  <constant name="c_int"    type="int"    value="23"/>
+  <constant name="c_float"  type="float"  value="23"/>
+  <constant name="c_string" type="string" value="23"/>
  </class>
 
  <class name="class2" extends="class1">
@@ -109,6 +113,33 @@ $c3 = new class3;
   <result mode="format">
 Fatal error: Class class3 may not inherit from final class (class_f) in %s on line %d
   </result>
+ </test>
+
+ <test name="constant_int">
+  <code>
+   <?data 
+    var_dump(class1::c_int); 
+   ?>
+  </code>
+  <result>int(23)</result>
+ </test>
+
+ <test name="constant_float">
+  <code>
+   <?data 
+    var_dump(class1::c_float); 
+   ?>
+  </code>
+  <result>float(23)</result>
+ </test>
+
+ <test name="constant_string">
+  <code>
+   <?data 
+    var_dump(class1::c_string); 
+   ?>
+  </code>
+  <result>string(2) "23"</result>
  </test>
 
 </extension>
