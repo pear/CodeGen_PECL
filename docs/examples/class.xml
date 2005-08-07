@@ -14,6 +14,11 @@
   <constant name="c_int"    type="int"    value="23"/>
   <constant name="c_float"  type="float"  value="23"/>
   <constant name="c_string" type="string" value="23"/>
+
+  <function name="f_test">
+   <proto>int f_test(int n)</proto>
+   <code>RETURN_LONG(n);</code>
+  </function>
  </class>
 
  <class name="class2" extends="class1">
@@ -142,4 +147,13 @@ Fatal error: Class class3 may not inherit from final class (class_f) in %s on li
   <result>string(2) "23"</result>
  </test>
 
+ <test name="method_1">
+  <code>
+   <?data
+    $c1 = new class1;
+    echo $c1->f_test(42);
+   ?>
+  </code>
+  <result>42</result>
+ </test>
 </extension>

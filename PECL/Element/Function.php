@@ -1037,7 +1037,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             break;                          
                         }
 
-                        if (empty($param['byRef'])) {
+                        if (empty($param['byRef']) && $param['type'] != 'object') {
                             $argString .= "/";
                         } else if (!$zvalType) {
                             // TODO: pass by ref for 'simple' types requires further thinking

@@ -111,27 +111,27 @@ class CodeGen_PECL_ExtensionParser
         return true;
     }
     
-    function tagend_extension_function_summary($attr, $data) 
+    function tagend_function_summary($attr, $data) 
     {
         return $this->helper->setSummary(trim($data));
     }
 
-    function tagstart_extension_function_description($attr)
+    function tagstart_function_description($attr)
     {
         $this->verbatim();
     }
 
-    function tagend_extension_function_description($attr, $data) 
+    function tagend_function_description($attr, $data) 
     {
         return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagend_extension_function_proto($attr, $data)
+    function tagend_function_proto($attr, $data)
     {
         return $this->helper->setProto(trim($data), $this->extension);
     }
 
-    function tagstart_extension_function_code($attr)
+    function tagstart_function_code($attr)
     {
         if (isset($attr["src"])) {
             if (!file_exists($attr["src"])) {
@@ -143,7 +143,7 @@ class CodeGen_PECL_ExtensionParser
         }
     }
 
-    function tagend_extension_function_code($attr, $data, $line=0, $file="")
+    function tagend_function_code($attr, $data, $line=0, $file="")
     {
         if (isset($attr["src"])) {
             return $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
@@ -193,35 +193,14 @@ class CodeGen_PECL_ExtensionParser
         return $this->tagend_extension_function($attr, $data);
     }
     
-    function tagend_extension_functions_function_code($attr, $data)
-    {
-        return $this->tagend_extension_function_code($attr, $data);
-    }
-    
-    function tagend_extension_functions_function_summary($attr, $data)
-    {
-        return $this->tagend_extension_function_summary($attr, $data);
-    }
 
-    
-    function tagend_extension_functions_function_description($attr, $data)
-    {
-        return $this->tagend_extension_function_description($attr, $data);
-    }
-
-    function tagend_extension_functions_function_proto($attr, $data)
-    {
-        return $this->tagend_extension_function_proto($attr, $data);
-    }
-
-
-    
 
 
     function tagend_class_function($attr, $data) 
     {
-        $err = $this->helper_prev->addMethod($this->helper);
+        $method = $this->helper;
         $this->popHelper();
+        $err = $this->helper->addMethod($method);
         return $err;
     }
     

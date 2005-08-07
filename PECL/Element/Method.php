@@ -184,13 +184,14 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @param  string  PHP style prototype 
          * @return bool    Success status
          */
-        function setProto($proto) {
-            parent::setProto($proto);
+        function setProto($proto, $extension) {
+            parent::setProto($proto, $extension);
 
             $param = array();
             $param['name']    = "thisObj";
             $param['type']    = "object";
             $param['subtype'] = $this->classname;
+            $param['byRef']   = true;
 
             array_unshift($this->params, $param);
         }

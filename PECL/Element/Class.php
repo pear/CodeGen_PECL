@@ -200,11 +200,13 @@ require_once "CodeGen/Tools/Indent.php";
         
         function addMethod(CodeGen_PECL_Element_Method $method) 
         {
-            if (isset($this->functions[$method->name])) {
-                return PEAR::raiseError("method '$function' already exists");
+            $name = $method->getName();
+
+            if (isset($this->functions[$name])) {
+                return PEAR::raiseError("method '$name' already exists");
             }
 
-            $this->methods[$method->name] = $method;
+            $this->methods[$name] = $method;
 
             return true;
         }
