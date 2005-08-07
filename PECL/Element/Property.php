@@ -119,23 +119,24 @@ require_once "CodeGen/PECL/Element/Class.php";
         function setType($type) 
         {
             switch ($type) {
-            case "void":
-                $type = "null";
-                break;
             case "int":
-                $type = "long";
-                break;
             case "long":
-            // case "float": not yet supported by ZEND API
-            // case "double": not yet supported by ZEND API
+                $this->type = "long";
+                break;
+            case "float":
+            case "double":
+                $this->type = "double";
+                break;
             case "string":
+                $this->type = "string";
+                break;
             case "null":
+            case "void":
+                $this->type = "null";
                 break;
             default:
                 return PEAR::raiseError("'$type' is not a valid property type");
             }
-
-            $this->type = $type;
 
             return true;
         }
@@ -195,9 +196,10 @@ require_once "CodeGen/PECL/Element/Class.php";
                 $code .= '"'.$this->value.'", ';
                 break;
             case "long":
-                $code .= (int)$this->value.", ";
+            case "double":
+                // TODO zend_declare_property_double only available in 5.1? add a configure check for this?
+                $code .= $this->value.", ";
                 break;
-            // case "double": not yet supported
             default: 
                 break;
             }
