@@ -86,6 +86,8 @@ require_once "CodeGen/PECL/Element/Class.php";
         function isAbstract() 
         {
             $this->isAbstract = true;
+
+            return $this->validate();
         }
 
         /**
@@ -98,6 +100,8 @@ require_once "CodeGen/PECL/Element/Class.php";
         function isInterface() 
         {
             $this->isInterface = true;
+
+            return $this->validate();
         }
 
         /**
@@ -110,6 +114,8 @@ require_once "CodeGen/PECL/Element/Class.php";
         function isFinal() 
         {
             $this->isFinal = true;
+
+            return $this->validate();
         }
 
         /**
@@ -122,6 +128,8 @@ require_once "CodeGen/PECL/Element/Class.php";
         function isStatic() 
         {
             $this->isStatic = true;
+
+            return $this->validate();
         }
 
         /**
@@ -138,7 +146,7 @@ require_once "CodeGen/PECL/Element/Class.php";
             case "protected":
             case "public":
                 $this->access = $access;
-                return true;
+                return $this->validate();
             default:
                 return PEAR::raiseError("'$access' is not a valid access property");
             }
@@ -204,24 +212,27 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function methodEntry() 
         {
-            if ($this->isAbstract || $this->isInterface) {
+            if ($this->isInterface) {
                 return "";
             }
 
-            $code= "PHP_ME({$this->classname}, {$this->name}, NULL, ";
+            if ($this->isAbstract) {
+                // TODO create arg_info from prototype, see also arginfoCode
+                $code = "ZEND_FENTRY({$this->name}, NULL, NULL /* arg_info */, ZEND_ACC_ABSTRACT | ";
+            } else {
+                $code = "PHP_ME({$this->classname}, {$this->name}, NULL, ";
+            }
+
             $code.= "ZEND_ACC_".strtoupper($this->access);
+
             if ($this->isStatic) {
                 $code.= " | ZEND_ACC_STATIC";
             }
-            if ($this->isAbstract) {
-                $code.= " | ZEND_ACC_ABSTRACT";
-            }
-            if ($this->isInterface) {
-                $code.= " | ZEND_ACC_INTERFACE";
-                }
+
             if ($this->isFinal) {
                 $code.= " | ZEND_ACC_FINAL";
             }
+
             $code.= ")";
             
             return $code;
@@ -256,6 +267,52 @@ require_once "CodeGen/PECL/Element/Class.php";
             }
 
             return parent::cCode($extension);
+        }
+
+        /**
+         * Validate settings, spot conflicts
+         *
+         * @return true or exception
+         */
+        function validate()
+        {
+            /* an abstract method can't be final or private and can't have code */
+            if ($this->isAbstract && $this->isFinal) {
+                return PEAR::raiseError("A method can't be abstract and final at the same time");
+            }
+
+            if ($this->isAbstract && $this->access == "private") {
+                return PEAR::raiseError("A method can't be abstract and private at the same time");
+            }
+
+            if ($this->isAbstract && !empty($this->code)) {
+                return PEAR::raiseError("A method can't be abstract and implemented at the same time");
+            }
+
+            return true;
+        }
+
+        /**
+         * The role attribute doesn't apply here
+         *
+         * @param  string
+         * @return exception
+         */
+        function setRole($role)
+        {
+            return PEAR::raiseError("the role attribute is not defined for class member functions");
+        }
+
+        /**
+         * Code addition must be validated here
+         *
+         * @param  string  code snippet
+         */
+        function setCode($code)
+        {
+            parent::setCode($code);
+
+            return $this->validate();
         }
     }
 ?>

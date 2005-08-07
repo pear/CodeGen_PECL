@@ -37,6 +37,13 @@
   <description>test class final</description>
  </class>
 
+ <class name="class_a1" abstract="yes">
+ </class>
+
+ <class name="class_a2">
+  <function name="f_abstract" abstract="yes" access="public" />
+ </class>
+
  <test name="extend">
   <code>
    <?data 
@@ -175,6 +182,43 @@ Fatal error: Call to private method class1::f_private() from context '' in %s on
   </result>
  </test>
 
-	
+
+ <test name="abstract_class_1">
+  <code>$c = new class_a1;</code>
+  <result mode="format">
+Fatal error: Cannot instantiate abstract class class_a1 in %s on line %d
+  </result>
+ </test>	
+
+ <test name="abstract_class_2">
+  <code>
+   class class_a1_ex extends class_a1 { }; 
+   $c = new class_a1_ex; 
+   echo "OK";
+  </code>
+ </test>	
+
+ <test name="abstract_method_1">
+  <code>$c = new class_a2;</code>
+  <result mode="format">
+Fatal error: Cannot instantiate abstract class class_a2 in %s on line %d
+  </result>
+ </test>	
+
+ <test name="abstract_method_2">
+  <code>
+   <?data
+    class class_a2_ex extends class_a2 
+    { 
+      function f_abstract($s) 
+      {
+        echo $s;
+      }
+    }; 
+    $c = new class_a2_ex; 
+    echo $c->f_abstract("OK");
+   ?>
+  </code>
+ </test>	
 
 </extension>

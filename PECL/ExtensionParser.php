@@ -116,6 +116,13 @@ class CodeGen_PECL_ExtensionParser
             }
         }
         
+        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
+            $err = $method->isAbstract();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
         return true;
     }
     
