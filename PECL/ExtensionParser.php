@@ -96,16 +96,24 @@ class CodeGen_PECL_ExtensionParser
         
     function tagstart_extension_class_function($attr)
     {
-        // TODO modify
-        $this->pushHelper(new CodeGen_PECL_Element_Method($this->helper->getName()));
+        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
+
+        $this->pushHelper($method);
         
         if (isset($attr["name"])) {
-            $err = $this->helper->setName($attr["name"]);
+            $err = $method->setName($attr["name"]);
             if (PEAR::isError($err)) {
                 return $err;
             }
         } else {
             return PEAR::raiseError("'name' attribut for <function> missing");
+        }
+
+        if (isset($attr["access"])) {
+            $err = $method->setAccess($attr["access"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
         
         return true;

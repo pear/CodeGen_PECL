@@ -204,6 +204,10 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function methodEntry() 
         {
+            if ($this->isAbstract || $this->isInterface) {
+                return "";
+            }
+
             $code= "PHP_ME({$this->classname}, {$this->name}, NULL, ";
             $code.= "ZEND_ACC_".strtoupper($this->access);
             if ($this->isStatic) {
@@ -231,7 +235,27 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function cProto() 
         {
+            if ($this->isAbstract || $this->isInterface) {
+                return "";
+            }
+            
             return "PHP_METHOD({$this->classname}, {$this->name})";
+        }
+
+        /**
+         * Create C code implementing the PHP userlevel function
+         *
+         * @access public
+         * @param  class Extension  extension the function is part of
+         * @return string           C code implementing the function
+         */
+        function cCode($extension) 
+        {
+            if ($this->isAbstract || $this->isInterface) {
+                return "";
+            }
+
+            return parent::cCode($extension);
         }
     }
 ?>

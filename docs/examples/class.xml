@@ -19,6 +19,12 @@
    <proto>int f_test(int n)</proto>
    <code>RETURN_LONG(n);</code>
   </function>
+
+  <function name="f_private" access="private">
+   <proto>int f_test(int n)</proto>
+   <code>RETURN_LONG(n);</code>
+  </function>
+
  </class>
 
  <class name="class2" extends="class1">
@@ -147,7 +153,7 @@ Fatal error: Class class3 may not inherit from final class (class_f) in %s on li
   <result>string(2) "23"</result>
  </test>
 
- <test name="method_1">
+ <test name="method_test">
   <code>
    <?data
     $c1 = new class1;
@@ -156,4 +162,19 @@ Fatal error: Class class3 may not inherit from final class (class_f) in %s on li
   </code>
   <result>42</result>
  </test>
+
+ <test name="method_private">
+  <code>
+   <?data
+    $c1 = new class1;
+    echo $c1->f_private(42);
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Call to private method class1::f_private() from context '' in %s on line %f
+  </result>
+ </test>
+
+	
+
 </extension>
