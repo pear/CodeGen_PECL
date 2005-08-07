@@ -45,7 +45,7 @@ require_once "CodeGen/PECL/Element.php";
          * @access private
          * @var    string
          */
-        var $name;
+        protected $name;
 
         /**
          * The constants PHP data type
@@ -53,7 +53,7 @@ require_once "CodeGen/PECL/Element.php";
          * @access private
          * @var    string
          */
-        var $type = "string";
+        protected $type = "string";
 
         /**
          * The constants value
@@ -61,7 +61,7 @@ require_once "CodeGen/PECL/Element.php";
          * @access private
          * @var    string
          */
-        var $value;
+        protected $value;
 
         /**
          * The constants description text
@@ -69,7 +69,7 @@ require_once "CodeGen/PECL/Element.php";
          * @access private
          * @var    string
          */
-        var $desc;
+        protected $desc;
 
 
         /**
@@ -78,7 +78,7 @@ require_once "CodeGen/PECL/Element.php";
          * @access private
          * @var    bool
          */
-        var $define = false;
+        protected $define = false;
          
 
         /**
@@ -105,7 +105,18 @@ require_once "CodeGen/PECL/Element.php";
         
 
         /**
-         * Set constant name 
+         * Get constant name
+         *
+         * @access public
+         * @param  string
+         */
+        function getName()
+        {
+            return $this->name;
+        }
+
+        /**
+         * Set constant type
          *
          * @access public
          * @param  string  the type
