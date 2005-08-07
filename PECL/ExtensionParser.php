@@ -123,6 +123,13 @@ class CodeGen_PECL_ExtensionParser
             }
         }
         
+        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
+            $err = $method->isFinal();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
         return true;
     }
     

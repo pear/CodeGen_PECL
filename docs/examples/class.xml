@@ -37,6 +37,15 @@
   <description>test class final</description>
  </class>
 
+ <class name="class_f2" extends="class1">
+  <summary>Class_F2</summary>
+  <description>test method final</description>
+  <function name="f_final" final="yes">
+   <proto>int f_final()</proto>
+   <code>RETURN_LONG(42);</code>
+  </function>
+ </class>
+
  <class name="class_a1" abstract="yes">
  </class>
 
@@ -130,6 +139,22 @@ $c3 = new class3;
   </code>
   <result mode="format">
 Fatal error: Class class3 may not inherit from final class (class_f) in %s on line %d
+  </result>
+ </test>
+
+
+ <test name="method_final">
+  <code>
+   <?data
+class class3 extends class_f2 {
+  function f_final() { return 32; }
+}
+
+$c3 = new class3;
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Cannot override final method class_f2::f_final() in %s on line %d
   </result>
  </test>
 
