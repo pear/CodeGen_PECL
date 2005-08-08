@@ -22,7 +22,7 @@
 require_once "CodeGen/PECL/Element.php";
 
 /**
- * Class representing a header file dependencyp
+ * Class representing a header file dependency
  *
  * @category   Tools and Utilities
  * @package    CodeGen
