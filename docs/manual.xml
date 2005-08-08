@@ -216,10 +216,16 @@ pecl-gen [-h] [--force] [--experimental] [--version]
    <para>
     The top level container tag describing an extension is the
     <literal>&lt;extension&gt;</literal> tag. The name of the extension
-    is given in the <literal>name</literal> attribute. The extension
+    is given in the <literal>name=...</literal> attribute. The extension
     name has to be a valid C name as it is used as both the extensions
     directory name and the base name for several C symbols within the
     generated C code.
+   </para>
+   <para>
+	You can specify which CodeGen_Pecl version your specification file
+    was build for using the <literal>version=...</literal> attribute.
+    The <filename>pecl-gen</filename> command will not accept specifications
+    written for a newer version of CodeGen_PECL than the one installed.
    </para>
    <para>
     The tags <literal>&lt;summary&gt;</literal> and
@@ -450,42 +456,6 @@ HASSQgRukwiZmpucmwYRADs=
    </section>
 
    <section>
-    <title>Libraries</title>
-    <para>
-     Needed external libraries are specified using the
-     <literal>&lt;lib&gt;</literal> tag. The <literal>name=...</literal>
-     attribute is mandatory and takes the library base name. A library
-     dependency by the name "sample" is actually referring to a library
-     file named <filename>libsample.a</filename> for a static or  
-     <filename>libsample.so</filename> for a dynamic library on
-     Unix-like systems or to <filename>sample.DLL</filename> on
-     Windows.
-    </para>
-    <para>
-     It is possible to specify the name of a function symbol expected
-     to be provided by the library using the
-     <literal>function=...</literal> attribute. This function symbol
-     is being looked for when <literal>configure</literal> is run for
-     the extension. This way it is possible to verify that the right
-     version of a library was found. With VisualStudio on windows it
-     is not possible to perform this check, in this case the library
-     is just added to the project file.
-    </para>
-    <example>
-     <title>Library dependencies</title>
-     <programlisting>
-<![CDATA[
-...
-    <lib name="sample_u" platform="unix"  function="sample_v2" />
-    <lib name="sample_w" platform="win32" />
-    <lib name="sample"   platform="all" />
-...
-]]>
-     </programlisting>
-    </example>
-   </section>
-
-   <section>
     <title>Header files</title>
     <para>
      It is possible to specify header files needed by the extension
@@ -525,8 +495,113 @@ HASSQgRukwiZmpucmwYRADs=
     </example>
    </section>
 
-<!-- TODO: will we ever support this? 
-     would make sense for e.g. pkgtools?
+   <section>
+    <title>Libraries</title>
+    <para>
+     Needed external libraries are specified using the
+     <literal>&lt;lib&gt;</literal> tag. The <literal>name=...</literal>
+     attribute is mandatory and takes the library base name. A library
+     dependency by the name "sample" is actually referring to a library
+     file named <filename>libsample.a</filename> for a static or  
+     <filename>libsample.so</filename> for a dynamic library on
+     Unix-like systems or to <filename>sample.DLL</filename> on
+     Windows.
+    </para>
+    <para>
+     It is possible to specify the name of a function symbol expected
+     to be provided by the library using the
+     <literal>function=...</literal> attribute. This function symbol
+     is being looked for when <literal>configure</literal> is run for
+     the extension. This way it is possible to verify that the right
+     version of a library was found. With VisualStudio on windows it
+     is not possible to perform this check, in this case the library
+     is just added to the project file.
+    </para>
+    <example>
+     <title>Library dependencies</title>
+     <programlisting>
+<![CDATA[
+...
+    <lib name="sample_u" platform="unix"  function="sample_v2" />
+    <lib name="sample_w" platform="win32" />
+    <lib name="sample"   platform="all" />
+...
+]]>
+     </programlisting>
+    </example>
+   </section>
+
+   <section>
+    <title>Dependencies to other extensions</title>
+    <para>
+     Starting with PHP 5.1 it is possible to define dependendies 
+     between extensions. Dependencies determine the order in which
+     extensions are initialized and shut down. They also make sure
+     that extensions like <literal>pdo_mysql</literal> that require a
+     base extension like <literal>pdo</literal> are only loaded if 
+     that extension is present and that two extensions that would
+     conflict whith each other are not loaded at the same time.
+    </para>
+    <para>
+     A dependency is defined using an <literal>&lt;extension&gt;</literal> 
+     tag within <literal>&lt;deps&gt;</literal>.
+     Here the <literal>&lt;extension&gt;</literal> takes at least
+     a <literal>name=...</literal>. 
+    </para>
+    <para>
+     By default this means that the 
+     extension by that name is required by your extension and has
+     to be initialized first. This behavior can also explicitly
+     be requested by setting the <literal>type=...</literal> attribute 
+     to <literal>REQUIRED</literal>. Other possible values are 
+     <literal>OPTIONAL</literal> if the other extension should 
+     be initialized first if present but is not required by your
+     extension and <literal>CONFLICTS</literal> if your extension
+     and the other one conflict in some way and should not be
+     loaded at the same time.
+    </para>
+    <para>
+     The extension API and CodeGen_PECL also allow to specify
+     version checks on dependencies, the actual checks are
+     not yet implemented as of PHP 5.1 though. CodeGen_PECL
+     allready supports these anyhow, and as soon as the functionality
+     is implemented within PHP the generated extensions will
+     make use of it.
+    </para> 
+    <para>
+     Version dependencies are defined using 
+     the <literal>version=...</literal> attribute and the
+     optional <literal>rel=...</literal> attribute. 
+     <literal>version</literal> takes a 'PHP-standardized'
+     version number string (see http://php.net/version_compare)
+     and <literal>rel</literal> defines the operator to be
+     used to compare the actual extension version with the
+     one in <literal>version</literal>. The default value
+     for <literal>rel</literal> is <literal>&gt;=</literal>,
+     so the extensions version number has to be at least as
+     high as specified. Possible <literal>&gt;=</literal>
+     values are <literal>&gt;=</literal>, <literal>&gt;</literal>, 
+     <literal>=</literal>, <literal>&lt;</literal> and 
+     <literal>&lt;=</literal> or their text alternatives 
+     <literal>ge</literal>, <literal>gt</literal>, 
+     <literal>eq</literal>, <literal>lt</literal> and 
+     <literal>le</literal>.
+    </para>
+    <example>
+     <title>Extension dependencies</title>
+     <programlisting>
+      <?data
+       <deps>
+        <extension name="standard"/>
+        <extension name="foobar"      type="OPTIONAL"/>
+        <extension name="alternative" type="CONFLICTS"/>
+        <extension name="xxx" version="3.2.1" rel="ge"/>
+       </deps>
+      ?>
+     </programlisting>
+    </example>
+   </section>
+
 
    <section>
     <title>External programs</title>
@@ -541,7 +616,6 @@ HASSQgRukwiZmpucmwYRADs=
      Not supported yet.
     </para>
    </section>
--->
 
   </section>
 
@@ -778,9 +852,16 @@ HASSQgRukwiZmpucmwYRADs=
     values are always used "as is", no constants may be used here.
    </para>
    <para>
-    It is sufficient to specify a constant <literal>name</literal>
-    only if a C integer constant should be available under the same
-    name in PHP, too.
+    Setting the <literal>define=...</literal> attribute to 
+    <literal>yes</literal> defines not only a PHP constant but
+    also adds a C #define with the same name and value to the
+    generated header file so that the constant can be used 
+    under the same name in both PHP and C code.
+   </para>
+   <para>
+    It is sufficient on the other hand to specify a constant 
+    <literal>name</literal> only if a C integer constant should 
+    be available under the same name in PHP, too.
    </para>
    <para>
     A descriptive text may be given as content of the
@@ -805,8 +886,12 @@ HASSQgRukwiZmpucmwYRADs=
   <constant name="SAMPLE_STRING" type="string" value="Hello World!">
    A sample string constant.
   </constant>
+  <constant name="SAMPLE_INT2" type="int" value="23>
+   This also adds a <literal>#define SAMPLE_INT2 23</literal>
+   definition to the generated header file.
+  </constant>
   <constant name="MY_CONST">
-    A shortcat for #defined integer constants
+   A shortcat for already #defined integer constants
   </constant>
  </constants>
 ...
@@ -1079,13 +1164,51 @@ HASSQgRukwiZmpucmwYRADs=
   </section>
 
   <section>
-   <title>Classes</title>
-   <para>
-    OO support is planned for a future release but not implemented yet.
-    OO code generation may be limited to PHP 5 extensions as unlike the
-    rest of the extension API the OO implementation changed a lot between
-    PHP 4 and 5.
-   </para>
+   <title>OO features</title>
+   <warning>
+    <simpara>
+     The OO APIs differ between PHP 4 and 5,  
+     CodeGen_PECL supports only PHP 5 when it 
+     comes to this.
+    </simpara>
+    <simpara>
+     The OO support in CodeGen_PECL is also
+     rather new and not as well tested as the
+     rest of it in some places.
+    </simpara>
+   </warning>
+
+   <section>
+    <title>Classes</title>
+    <para>
+     
+    </para>
+   </section>
+
+   <section>
+    <title>Properties</title>
+    <para>
+    </para>
+   </section>
+
+   <section>
+    <title>Constants</title>
+    <para>
+    </para>
+   </section>
+
+
+   <section>
+    <title>Methods</title>
+    <para>
+    </para>
+   </section>
+
+   <section>
+    <title>Interfaces</title>
+    <para>
+    </para>
+   </section>
   </section>
 
   <section>
