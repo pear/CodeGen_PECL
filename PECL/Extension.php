@@ -2054,7 +2054,18 @@ you have been warned!
             echo $this->release->packageXml();
         }
 
-// TODO dependencies
+
+        $min_version = "4"; 
+		if (!empty($this->classes)) {
+          $min_version = "5";
+        }
+		
+		echo "  <deps>\n";
+        echo "    <dep type=\"php\" rel=\"ge\" version=\"$min_version\"/>\n";
+		foreach ($this->otherExtensions as $ext) {
+		    $ext->packageXML();
+        }		
+		echo "  </deps>\n";
         
         echo "\n  <filelist>\n";
         echo "    <dir name=\"/\">\n";
