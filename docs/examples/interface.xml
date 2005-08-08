@@ -13,6 +13,13 @@
   <implements interface="Countable"/>
  </class>
 
+ <class name="c3">
+  <implements interface="Countable"/>
+  <implements interface="Iterator"/>
+ </class>
+
+  
+
  <test name="001">
   <code>
    $c = new c1; 
@@ -39,6 +46,36 @@ Fatal error: Cannot instantiate abstract class c2 in %s on line %d
    $c = new class3;
    echo "OK";
   </code>
+ </test>
+
+ <test name="004">
+  <code>
+   <?data
+$class = new ReflectionClass('c3');
+var_dump($class->getInterfaces());
+   ?>
+  </code>
+  <result>
+   <?data
+  array(3) {
+  [0]=>
+  &object(ReflectionClass)#2 (1) {
+    ["name"]=>
+    string(9) "Countable"
+  }
+  [1]=>
+  &object(ReflectionClass)#3 (1) {
+    ["name"]=>
+    string(8) "Iterator"
+  }
+  [2]=>
+  &object(ReflectionClass)#4 (1) {
+    ["name"]=>
+    string(11) "Traversable"
+  }
+}
+   ?>
+  </result>
  </test>
 
 </extension>

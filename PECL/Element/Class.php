@@ -283,11 +283,7 @@ require_once "CodeGen/Tools/Indent.php";
 
             $code.= "static void class_init_{$this->name}(void)\n{\n";
 
-            $code.= "   zend_class_entry ce";
-            if (count($this->implements)) {
-                $code.= ", **if_".join(", **if_", $this->implements);
-            }
-            $code.= ";\n\n";
+            $code.= "   zend_class_entry ce;\n\n";
   
             $code.= "INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);
 ";
@@ -314,18 +310,22 @@ require_once "CodeGen/Tools/Indent.php";
               $code.= "    ".$constant->minitCode($this->name."_ce_ptr");
             }
 
-            // TODO add error checking for interface not found
             if (count($this->implements)) {
+                $code.= "    do {\n";
+                $code.= "        zend_class_entry **tmp;\n";
+                
                 $interfaces = array();
                 foreach ($this->implements as $interface) {
-                    $code.= sprintf("    zend_hash_find(CG(class_table), \"%s\", %d, &if_%s);\n", 
+                    $code.= sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
                                     strtolower($interface), strlen($interface)+1, $interface);
+                    $code.= "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
+                    $code.= "        } else {\n";
+                    $code.= "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}\, skipped");\n";
+                    $code.= "        }\n";
                 }
-                $code.= "    zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, ";
-                $code.= count($this->implements);
-                $code.= ", *if_".join(", *if_", $this->implements);
-                $code.= ");\n";
+                $code.= "    } while(0);\n";
             }
+                
 
             $code.= "}\n";
 
