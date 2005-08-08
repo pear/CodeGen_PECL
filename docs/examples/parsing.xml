@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE extension SYSTEM "../extension.dtd" [
-<!ENTITY systemEntity SYSTEM "parsing_1.xml">
+<!ENTITY systemEntity SYSTEM "parsing_1.inc">
 ]>
 <extension name="parsing" xmlns:xi="http://www.w3.org/2001/XInclude">
 
@@ -8,7 +8,7 @@
 &systemEntity;
 
 <!-- xinclude inclusion -->
-<xi:include href="parsing_2.xml"/>
+<xi:include href="parsing_2.inc"/>
 
 <!-- verbatim xinclude inclusion -->
 <code><xi:include href="snippet1.c" parse="text"/></code>
