@@ -320,7 +320,7 @@ require_once "CodeGen/Tools/Indent.php";
                                     strtolower($interface), strlen($interface)+1, $interface);
                     $code.= "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
                     $code.= "        } else {\n";
-                    $code.= "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}\, skipped");\n";
+                    $code.= "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
                     $code.= "        }\n";
                 }
                 $code.= "    } while(0);\n";
