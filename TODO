@@ -58,7 +58,7 @@ trick parser to verbatim pass on docbook contentent  -> done
 add configure compile test for <resource>  to check  -> done
 whether a given payload is a valid type?
 
-SYSTEM Entity and XInclude support                   -> done (needs cleanup)
+SYSTEM Entity and XInclude support                   -> done 
 
 support for multiple <with> tags with distinct 
 names, name defaults to extension name if not given  -> done
@@ -66,7 +66,7 @@ names, name defaults to extension name if not given  -> done
 added version attribute to <extension>
 to control parser features (replaces -x switch)      -> done
 
-support <?code ... ?> as alternative to CDATA        -> done (needs check)
+support <?code ... ?> as alternative to CDATA        -> done 
 
 check whether <header> checks work                   -> done
 
@@ -77,15 +77,26 @@ Milestone 1.0
 
 - support new win32 configure files              -> partly done (75%?)
 
-- test suite                                     
+- test suite                                     -> partly done, not automized yet 
 
-- class implementation and documentation support -> partly done (33%?)
+- class implementation and documentation support 
+ 
+  - <class>                                      -> done
+  - <class extends="..."                         -> done
+  - <class><implements interface="..."           -> done
+  - <class><const>                               -> done
+  - <class><property ...                         -> done
+  - <class><function ...                         -> done
+  - constructor, destructor, other specials      -> missing
+  - <interface>                                  -> missing
+  - <exception>                                  -> missing
+  - type hints                                   -> missing
 
 - full support for stream wrappers and filters   -> started
 
-- full support for .phpt test case generation    -> done (needs check)
+- full support for .phpt test case generation    -> done 
 
-  - <testskipif>,<testini> in <function>         -> done (needs check)
+  - <skipif>,<ini> in <function>                 -> done
 
 - support for new package.xml format             -> not done yet
 
