@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<extension name="interface">
+
+ <class name="c1">
+  <implements interface="Countable"/>
+  <function name="count">
+   <proto>int count()</proto>
+   <code>RETURN_LONG(42);</code>
+  </function>
+ </class>
+
+ <class name="c2">
+  <implements interface="Countable"/>
+ </class>
+
+ <test name="001">
+  <code>
+   $c = new c1; 
+   echo $c instanceof Countable ? "OK" : "Failure";
+  </code>
+ </test>
+
+ <test name="002">
+  <code>
+   $c = new c2; 
+   echo "OK";
+  </code>
+  <result mode="format">
+Fatal error: Cannot instantiate abstract class c2 in %s on line %d
+  </result>
+ </test>
+
+ <test name="003">
+  <code>
+   class class3 extends c2 
+   {
+     function count() { return 42; }
+   }
+   $c = new class3;
+   echo "OK";
+  </code>
+ </test>
+
+</extension>

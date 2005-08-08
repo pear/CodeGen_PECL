@@ -314,5 +314,28 @@ require_once "CodeGen/PECL/Element/Class.php";
 
             return $this->validate();
         }
+
+        /**
+	 * Method name checking is less strict
+         * 
+         * Method names can't clash with PHP standard functions
+         * so we can just check for syntax and keywords here
+         *
+         * @param string method name
+	 */
+	function setName($name)
+        {
+            if (!self::isName($name)) {
+                return PEAR::raiseError("'$name' is not a valid function name");
+            }
+     
+            if (self::isKeyword($name)) {
+                return PEAR::raiseError("'$name' is a reserved word which is not valid for function names");
+            }
+
+            $this->name = $name;
+
+            return true;
+        }
     }
 ?>

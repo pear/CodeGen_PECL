@@ -141,7 +141,7 @@ require_once "CodeGen/Tools/Indent.php";
         
         function addInterface($interface) 
         {
-            if (!self::isName($parent)) {
+            if (!self::isName($interface)) {
                 return PEAR::raiseError("'$interface' is not a valid interface name");
             }           
         
@@ -267,25 +267,29 @@ require_once "CodeGen/Tools/Indent.php";
             $code = "static zend_class_entry * {$this->name}_ce_ptr = NULL;\n\n";
 
             foreach ($this->methods as $method) {
-                $code .= $method->cCode($extension);
-                $code .= "\n";
+                $code.= $method->cCode($extension);
+                $code.= "\n";
             }
 
             $code.= "static zend_function_entry {$this->name}_methods[] = {\n";
 
             foreach ($this->methods as $method) {
-                $code .= "  ".$method->methodEntry()."\n";
+                $code.= "  ".$method->methodEntry()."\n";
             }
 
             $code.= "  { NULL, NULL, NULL }\n";
-            $code.="};\n";
+            $code.= "};\n";
         
 
-            $code.="
-static void class_init_{$this->name}(void) 
-{
-    zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);
+            $code.= "static void class_init_{$this->name}(void)\n{\n";
+
+            $code.= "   zend_class_entry ce";
+            if (count($this->implements)) {
+                $code.= ", **if_".join(", **if_", $this->implements);
+            }
+            $code.= ";\n\n";
+  
+            $code.= "INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);
 ";
 
             if ($this->extends) {
@@ -303,11 +307,23 @@ static void class_init_{$this->name}(void)
             }
 
             foreach ($this->properties as $property) {
-              $code .= "    ".$property->minitCode($this->name."_ce_ptr");
+              $code.= "    ".$property->minitCode($this->name."_ce_ptr");
             }
 
             foreach ($this->constants as $constant) {
-              $code .= "    ".$constant->minitCode($this->name."_ce_ptr");
+              $code.= "    ".$constant->minitCode($this->name."_ce_ptr");
+            }
+
+            if (count($this->implements)) {
+                $interfaces = array();
+                foreach ($this->implements as $interface) {
+                    $code.= sprintf("    zend_hash_find(CG(class_table), \"%s\", %d, &if_%s);\n", 
+                                    strtolower($interface), strlen($interface)+1, $interface);
+                }
+                $code.= "    zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, ";
+                $code.= count($this->implements);
+                $code.= ", *if_".join(", *if_", $this->implements);
+                $code.= ");\n";
             }
 
             $code.= "}\n";

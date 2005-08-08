@@ -803,6 +803,15 @@ class CodeGen_PECL_ExtensionParser
         return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
     }
 
+    function tagend_class_implements($attr, $data)
+    {
+        if (!isset($attr["interface"])) {
+            return PEAR::raiseError("intarface attribute missing for <implements>");
+        }
+
+        return $this->helper->addInterface($attr["interface"]);
+    }
+
     function tagstart_class_property($attr)
     {
         $prop = new CodeGen_PECL_Element_Property;
