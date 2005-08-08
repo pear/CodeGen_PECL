@@ -100,7 +100,7 @@ Milestone 1.0
 
 - support for new package.xml format             -> not done yet
 
-- support extension dependencies                 -> not done yet
+- support extension dependencies                 -> done
 
 - some clever mechanism to ease e.g. property    -> not done yet
   access within classes? i'm afraid C prepro

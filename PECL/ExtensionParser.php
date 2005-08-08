@@ -567,6 +567,40 @@ class CodeGen_PECL_ExtensionParser
         $this->extension->addHeader($header);
     }
 
+
+    function tagstart_extension_deps_extension($attr)
+    {
+        $ext = new CodeGen_PECL_Dependency_Extension;
+
+        $err = $ext->setName($attr['name']);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
+        if (isset($attr["type"])) {
+            $err = $ext->setType($attr['type']);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+
+        if (isset($attr["version"]) || isset($attr["rel"])) {
+            if (!isset($attr["version"])) {
+                return PEAR::raiseError("'rel' attribut requires 'version' ");
+            }
+
+            if (!isset($attr["rel"])) {
+                $attr["rel"] = "ge";
+            }
+
+            $err = $ext->setVersion($attr['version'], $attr['rel']);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+
+        $this->extension->addOtherExtension($ext);
+    }
         
     function tagstart_extension_deps_with($attr) 
     {

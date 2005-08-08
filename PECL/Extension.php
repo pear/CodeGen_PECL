@@ -42,6 +42,7 @@ require_once "CodeGen/PECL/Element/Stream.php";
 require_once "CodeGen/PECL/Dependency/With.php";
 require_once "CodeGen/PECL/Dependency/Lib.php";
 require_once "CodeGen/PECL/Dependency/Header.php";
+require_once "CodeGen/PECL/Dependency/Extension.php";
 
 /**
  * A class that generates PECL extension soure and documenation files
@@ -148,13 +149,6 @@ class CodeGen_PECL_Extension
     protected $code = array();
 
 
-    /**
-     * Makefile fragments
-     *
-     * @var array
-     */
-    protected $makefragment = array();
-
     /** 
      * Custom test cases
      *
@@ -171,6 +165,14 @@ class CodeGen_PECL_Extension
      */
     protected $logos = array();
 
+
+    /**
+     * cross extension dependencies
+     *
+     * @var  array
+     */
+    protected $otherExtensions = array();
+    
 
     /**
      * Makefile fragments
@@ -586,6 +588,24 @@ class CodeGen_PECL_Extension
         return true;
     }
 
+
+    /**
+     * Add cross-module dependency
+     *
+     * @param  object  extension dependency object
+     */
+    function addOtherExtension(CodeGen_PECL_Dependency_Extension $ext)
+    {
+        $name = $ext->getName();
+
+        if (isset($this->otherExtensions[$name])) {
+            return PEAR::raiseError("dependency to extension '{$name}' already defined");
+        }
+
+        $this->otherExtensions[$name] = $ext;
+        
+        return true;
+    }
     
     /**
      * Add makefile fragment
@@ -595,7 +615,7 @@ class CodeGen_PECL_Extension
      */
     function addMakeFragment($text)
     {
-        $this->makefragment[] = $text;
+        $this->makefragments[] = $text;
         return true;
     }
             
@@ -903,11 +923,32 @@ class CodeGen_PECL_Extension
         $name = $this->name;
         $upname = strtoupper($this->name);
 
-        $code = "
+        $code = "";
+
+        if (empty($this->otherExtensions)) {
+           $moduleHeader = "    STANDARD_MODULE_HEADER,";
+        } else {
+           $code.= CodeGen_PECL_Dependency_Extension::cCodeHeader($this);
+           foreach ($this->otherExtensions as $ext) {
+               $code.= $ext->cCode($this);
+           }
+           $code.= CodeGen_PECL_Dependency_Extension::cCodeFooter($this);
+
+           $moduleHeader = 
+"#if ZEND_EXTENSION_API_NO >= 220050617
+        STANDARD_MODULE_HEADER_EX, NULL,
+        pdo_{$this->name}_deps,
+#else
+        STANDARD_MODULE_HEADER,
+#endif
+";
+        }
+
+        $code.= "
 /* {{{ {$name}_module_entry
  */
 zend_module_entry {$name}_module_entry = {
-    STANDARD_MODULE_HEADER,
+$moduleHeader
     \"$name\",
     {$name}_functions,
     PHP_MINIT($name),     /* Replace with NULL if there is nothing to do at php startup   */ 
@@ -1126,7 +1167,7 @@ zend_module_entry {$name}_module_entry = {
 #include <php_ini.h>
 #include <SAPI.h>
 #include <ext/standard/info.h>
-
+#include <Zend/zend_extensions.h>
 ';
 
         echo "#ifdef  __cplusplus\n";
@@ -1656,11 +1697,11 @@ PHP_ARG_WITH({$withName}, {".$with->getSummary()."},
   PHP_NEW_EXTENSION({$this->name}, ".join(" ", array_keys($this->packageFiles['code']))." , \$ext_shared)
 ";
 
-        if (count($this->makefragment)) {
+        if (count($this->makefragments)) {
             echo "  PHP_ADD_MAKEFILE_FRAGMENT\n";
 
             $frag = fopen($this->dirpath."/Makefile.frag","w");
-            foreach($this->makefragment as $block) {
+            foreach($this->makefragments as $block) {
                 fputs($frag, CodeGen_Tools_Indent::tabify("\n$block\n"));
             }
             fclose($frag);
