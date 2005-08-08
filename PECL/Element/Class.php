@@ -314,6 +314,7 @@ require_once "CodeGen/Tools/Indent.php";
               $code.= "    ".$constant->minitCode($this->name."_ce_ptr");
             }
 
+            // TODO add error checking for interface not found
             if (count($this->implements)) {
                 $interfaces = array();
                 foreach ($this->implements as $interface) {
