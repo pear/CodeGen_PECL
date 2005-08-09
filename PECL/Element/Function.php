@@ -236,7 +236,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
         function setProto($proto, $extension) {
             $this->proto = $proto;
 
-            if (version_compare($extension->version(), "0.9.0rc1", ">=")) {
+            if ($extension->haveVersion("0.9.0rc1")) {
                 $stat = $this->newSetProto($proto, $extension);
             } else {
                 $stat = $this->oldSetProto($proto);
@@ -1001,13 +1001,23 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         case "resource":
                             $zvalType = true;
                             $argString .= "r";
-                            $code .= "    zval * $name = NULL;\n";
-                            $code .= "    int {$name}_id = -1;\n";
+
+                            if ($extension->haveVersion("1.0.0dev")) {
+                                $code .= "    zval * $name_res = NULL;\n";
+                                $code .= "    int {$name}_resid = -1;\n";
+                            } else {
+                                $code .= "    zval * $name = NULL;\n";
+                                $code .= "    int {$name}_id = -1;\n";
+                            }
 
                             $resources = $extension->getResources();
                             if (isset($param['subtype']) && isset($resources[$param['subtype']])) {
                                 $resource = $resources[$param['subtype']];
-                                $varname = "res_{$name}";
+                                if ($extension->haveVersion("1.0.0dev")) {
+                                    $varname = $name;
+                                } else {
+                                    $varname = "res_{$name}";
+                                }
                                 $code .= "    ".$resource->getPayload()." * $varname;\n";
                                 
                                 $resFetch .= "    ZEND_FETCH_RESOURCE($varname, ".$resource->getPayload()." *, &$name, {$name}_id, \"$param[subtype]\", le_$param[subtype]);\n";

@@ -60,30 +60,69 @@ class CodeGen_PECL_Extension
     extends CodeGen_Extension
 {
     /**
-    * Current version number
-    *
-    * @access public
-    * @return string version
+    * Current CodeGen_PECL version number
+    * 
+    * @return string
     */
     static function version() 
     {
-      return "0.9.0rc5";
+        return "0.9.0rc5";
     }
 
     /**
-    * Copyright message
+    * CodeGen_PECL Copyright message
     *
-    * @access public
-    * @return string version
+    * @return string
     */
-    static function copyright() 
+    static function copyright()
     {
-      return "Copyright (c) 2003-2005 Hartmut Holzgraefe";
+        return "Copyright (c) 2003-2005 Hartmut Holzgraefe";
     }
 
-    // {{{ member variables
 
+    // {{{ member variables
     
+    /**
+     * Version requested by input if any
+     *
+     * @var string
+     */
+    protected $version = "";
+
+    /**
+     * Get requested version
+     *
+     * @return  string
+     */
+    function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set requested version
+     *
+     * @param  string
+     */
+    function setVersion($version)
+    {
+        $this->version = $version; // TODO check
+    }
+
+    /**
+     * Check requested version
+     *
+     * @param  string version
+     * @return bool
+     */
+    function haveVersion($version)
+    {
+        if ($this->version) {
+            return version_compare($version, $this->version) >= 0;
+        }
+
+        return true; // 
+    }
 
 
     /**
