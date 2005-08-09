@@ -2071,6 +2071,10 @@ you have been warned!
             echo $this->release->packageXml();
         }
 
+        echo "  <changelog>\n";
+        echo $this->changelog."\n"; // TODO indent
+        echo "  </changelog>\n";
+
 
         $min_version = "4"; 
 		if (!empty($this->classes)) {
