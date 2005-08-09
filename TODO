@@ -1,32 +1,13 @@
 Braindump
 ---------
 
-create seperate target dir for copied spec files
-
-copy <changelog> to generated package.xml
-
-allow addition of files to directories (eg. test),
-allow specification of file role instead of guessing by extension?
-
-support compiler/linker flags setting using config programs
-like pkg-config, mysql_config etc.
-
-add configure test code within DATA section of <lib> and <header> tags?
-e.g. for version checking?
-
-<lib> shared=no 
-  -> drop EXTNAME_SHARED_LIBADD parameter to PHP_ADD_LIBRARY_WITH_PATH
-	=> requires further research, doesn't work this way
-	==> how to add *static* libraries? 
-
-check whether multiple logos work
-
-- check #line numbers in generated source with libxml
-  -> error messages with meaningfull line numbers need this
+...
 
 
 Milestone 0.9
 -------------
+
+- copy <changelog> to generated package.xml          -> missing
 
 - <lib> and <header> tags *within* <with>...</with>  -> in progress
   => parsing ok now, needs config.m4 output tweaks
@@ -39,7 +20,6 @@ Milestone 0.9
   - array() as default value                         -> done
   - code generation for 'pass by refecence'          -> only for zval based types yet
   - '...' code generation                            -> only if first parameter yet
-  - return by reference (for 5.1)                    -> not done yet   
 
 - allow "src='path/to/file'" in more cases           -> needs checking
 
@@ -47,7 +27,7 @@ FREE_RESOURCE macro                                  -> done
 
 allow defined PHP constants as default value         -> done
 
-<define> tag -> #define + <constant>?                -> done by define attribute to <constant>
+<define> tag -> #define + <constant>?                -> done 
 
 allow for embedded base64 or uu encoded logo specs   -> done
 
@@ -72,12 +52,16 @@ check whether <header> checks work                   -> done
 
 test files are not yet added to package.xml          -> done
 
+
 Milestone 1.0
 -------------
 
+- check #line numbers in generated source with libxml
+  -> error messages with meaningfull line numbers need this
+
 - support new win32 configure files              -> partly done (75%?)
 
-- test suite                                     -> partly done, not automized yet 
+- test suite                                     -> done, but needs more tests/examples
 
 - class implementation and documentation support 
  
@@ -92,11 +76,11 @@ Milestone 1.0
   - <exception>                                  -> missing
   - type hints                                   -> missing
 
-- full support for stream wrappers and filters   -> started
-
-- full support for .phpt test case generation    -> done 
+- full support for .phpt test case generation    -> mostly done
 
   - <skipif>,<ini> in <function>                 -> done
+
+  - <notest/> for functions not needing a test   -> missing
 
 - support for new package.xml format             -> not done yet
 
@@ -111,6 +95,15 @@ Milestone 1.0
 not necessarily 1.0
 -------------------
 
+- multiple logos                                 -> started, needs checking
+
+- add configure test code within DATA section of <lib> and <header> tags?
+  e.g. for version checking?
+
+- full support for stream wrappers and filters   -> started
+
+- return by reference (for 5.1 if it supports it)          
+
 - VC++ 7 (VS.net) project files
   => not needed anymore as we now have config.w32?
 
@@ -124,5 +117,19 @@ not necessarily 1.0
     also needed if '...' is not the only parameter
     unless parse_params_ex with ZEND_PARSE_PARAMS_QUIET fills params anyway??
 
+- create seperate target dir for copied spec files
+
+- allow addition of files to directories (eg. test),
+  
+- allow specification of file role instead of guessing by extension?
+
+- support compiler/linker flags setting using config programs
+  like pkg-config, mysql_config etc.
+
+
+- <lib> shared=no 
+  -> drop EXTNAME_SHARED_LIBADD parameter to PHP_ADD_LIBRARY_WITH_PATH
+	=> requires further research, doesn't work this way
+	==> how to add *static* libraries? 
 
  
