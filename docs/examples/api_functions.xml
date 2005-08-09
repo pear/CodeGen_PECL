@@ -15,7 +15,7 @@ php_error(E_WARNING, "MINIT");
 php_error(E_WARNING, "MSHUTDOWN");
 ]]>
   </code>
- </fnction>
+ </function>
 
  <function role="internal" name="RINIT">
   <code>

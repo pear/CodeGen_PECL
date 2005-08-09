@@ -2,7 +2,7 @@
 <extension name="code_pi">
 <code>
 <?data
-  foo->bar = 42;
+  int foo = 42; // <&>
 ?>
 </code>
 </extension> 
