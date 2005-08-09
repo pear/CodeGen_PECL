@@ -1260,35 +1260,41 @@ require_once "CodeGen/Tools/Tokenizer.php";
          *
          * @access public
          * @param  class Extension  extension the function is part of
-         * @return string           PHP test script
+         * @return int              number of test files written
          */
         function writeTest($extension) 
         {
-            $test = new CodeGen_PECL_Element_Test;
-
-            $test->setName($this->name);
-            $test->setTitle($this->name."() function");
-
-            if ($this->testIni) {
-                $test->addIni($this->testIni);
-            }
-
-            $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
-            $test->addSkipIf("!function_exists('".$this->getName()."')");
-            if ($this->testSkipIf) {
-                $test->addSkipIf($this->testSkipIf);
-            }
-
-            $test->setCode($this->testCode);
-
-            if (!empty($this->testResult)) {
-                $test->setOutput($this->testResult['result']);
-                if (isset($this->testResult['mode'])) {
-                    $test->setMode($this->testResult['mode']);
+            if ($this->testCode) {
+                $test = new CodeGen_PECL_Element_Test;
+                
+                $test->setName($this->name);
+                $test->setTitle($this->name."() function");
+                
+                if ($this->testIni) {
+                    $test->addIni($this->testIni);
                 }
+                
+                $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
+                $test->addSkipIf("!function_exists('".$this->getName()."')");
+                if ($this->testSkipIf) {
+                    $test->addSkipIf($this->testSkipIf);
+                }
+                
+                $test->setCode($this->testCode);
+                
+                if (!empty($this->testResult)) {
+                    $test->setOutput($this->testResult['result']);
+                    if (isset($this->testResult['mode'])) {
+                        $test->setMode($this->testResult['mode']);
+                    }
+                }
+                
+                $test->writeTest($extension);
+
+                return 1;
             }
 
-            $test->writeTest($extension);
+            return 0;
         }
 
 

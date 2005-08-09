@@ -174,6 +174,11 @@ class CodeGen_PECL_ExtensionParser
         }
     }
     
+    function tagend_function_notest($attr, $data)
+    {
+        return $this->helper->setTestCode("");
+    }
+
     function tagend_function_test_code($attr, $data)
     {
         return $this->helper->setTestCode(CodeGen_Tools_Indent::linetrim($data));
