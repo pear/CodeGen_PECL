@@ -1,16 +1,27 @@
 Braindump
 ---------
 
-...
+Ok, only one TODO item to finish for 0.9, and most 1.0
+items are already done, too. I think i'll might get the
+package.xml 2.0, config.w32, <notest>, constructor and 
+destructor stuff in by the end of the week.
 
+After that i may already decide to release a 1.0rc
+as the other 1.0 items (interfaces, exceptions, type 
+hints) do not interfere with the other OO features
+that much. The OO support should be strong enough
+to justtify a 1.0 release by then even without 
+these additional items, pushing them to 1.1 wont
+harm IMHO ...
 
 Milestone 0.9
 -------------
 
-- copy <changelog> to generated package.xml          -> missing
 
 - <lib> and <header> tags *within* <with>...</with>  -> in progress
   => parsing ok now, needs config.m4 output tweaks
+
+- copy <changelog> to generated package.xml          -> done
 
 - rewrite the function prototype parser
   - object type specification (as in resources)      -> done
