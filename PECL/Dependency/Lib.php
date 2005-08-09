@@ -74,7 +74,7 @@ class CodeGen_PECL_Dependency_Lib
         // TODO check name
         $this->name = $name;
 
-        $this->platform = new CodeGen_Tools_Platform($platform);
+        $this->platform = new CodeGen_PECL_Dependency_Platform($platform);
     }
 
     /**

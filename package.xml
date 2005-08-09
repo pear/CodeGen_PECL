@@ -104,6 +104,7 @@
            <file role="php">Lib.php</file>
            <file role="php">Header.php</file>
            <file role="php">Extension.php</file>
+           <file role="php">Platform.php</file>
           </dir>
           <file role="php">ExtensionParser.php</file>
         </dir>

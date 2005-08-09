@@ -43,6 +43,7 @@ require_once "CodeGen/PECL/Dependency/With.php";
 require_once "CodeGen/PECL/Dependency/Lib.php";
 require_once "CodeGen/PECL/Dependency/Header.php";
 require_once "CodeGen/PECL/Dependency/Extension.php";
+require_once "CodeGen/PECL/Dependency/Platform.php";
 
 /**
  * A class that generates PECL extension soure and documenation files
@@ -246,7 +247,7 @@ class CodeGen_PECL_Extension
     {
         $this->release = new CodeGen_PECL_Release;
         
-        $this->platform = new CodeGen_Tools_Platform("all");
+        $this->platform = new CodeGen_PECL_Dependency_Platform("all");
     }
     
     // }}} 
@@ -345,6 +346,22 @@ class CodeGen_PECL_Extension
         }
     }
 
+
+    /**
+     * Set target platform for generated code
+     *
+     * @access public
+     * @param  string  platform name
+     */
+    function setPlatform($type)
+    {
+        $this->platform = new CodeGen_PECL_Dependency_Platform($type);
+        if (PEAR::isError($this->platform)) {
+            return $this->platform;
+        }
+        
+        return true;
+    }
 
     /**
      * Add a PHP constant to the extension
@@ -2062,8 +2079,9 @@ you have been warned!
 		
 		echo "  <deps>\n";
         echo "    <dep type=\"php\" rel=\"ge\" version=\"$min_version\"/>\n";
+        echo $this->platform->packageXML();
 		foreach ($this->otherExtensions as $ext) {
-		    $ext->packageXML();
+		    echo $ext->packageXML();
         }		
 		echo "  </deps>\n";
         
@@ -2123,16 +2141,23 @@ you have been warned!
      * @access private
      */
     function writeTestFiles() {
+        $testCount=0;
         @mkdir($this->dirpath."/tests");
     
         // function related tests
         foreach ($this->functions as $function) {
             $function->writeTest($this);
+            $testCount++;
         }
 
         // custom test cases (may overwrite custom function test cases)
         foreach ($this->testcases as $test) {
             $test->writeTest($this);
+            $testCount++;
+        }
+
+        if (!$testCount) {
+            rmdir($this->dirpath."/tests");
         }
     }
 
