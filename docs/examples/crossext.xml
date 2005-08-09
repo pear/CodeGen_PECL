@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<extension name="crossext">
+ <deps>
+  <extension name="standard" version="3.14" rel="=="/>
+ </deps>
+
+ <test name="001">
+  <code>echo "OK";</code>
+ </test>
+</extension>
