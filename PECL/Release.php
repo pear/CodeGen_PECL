@@ -61,6 +61,40 @@ class CodeGen_PECL_Release
         return $code;
     }
 
+    /**
+     * generate XML fragment for package.xml 2.0
+     *
+     * @access public
+     * @param  object License 
+     * @return string XML fragment
+     */
+    function packageXml2($license)
+    {
+        $code ="";
+
+        $code.= "    <version><release>{$this->version}</release><api>{$this->version}</api></version>\n";
+        $code.= "    <stability><release>{$this->state}</release><api>{$this->state}</api></stability>\n";
+
+        // this is ugly but with package.xml 2.0 this now has to be put
+        // here whereas in 1.0 license was a tag at the same level as
+        // the release block ... :/
+        if ($license instanceof CodeGen_License) {
+            $uri = $license->getUri();
+            if (!empty($uri)) {
+                $uri = "uri=\"$uri\" ";
+            }
+
+            $code.= "    <license {$uri}filesource=\"LICENSE\">{$license->getShortName()}</license>\n";
+        } else {
+            $code.= "    <license>unknown</license\n";
+        }
+
+        $date = $this->date ? $this->date : time();
+        $code.= "    <date>".date("Y-m-d", $date)."</date>\n";       
+
+        return $code;
+    }
+
 
     /**
      * Code snippet for phpinfo output

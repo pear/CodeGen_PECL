@@ -816,6 +816,7 @@ class CodeGen_PECL_Extension
 
         // generate PEAR/PECL package.xml file
         $this->writePackageXml();        
+        $this->writePackageXml2();        
     }
     
     // {{{   docbook documentation
@@ -1149,6 +1150,23 @@ $moduleHeader
     // }}}
 
     // {{{ license and authoers
+    /**
+     * Set license
+     *
+     * @access public
+     * @param  object
+     */
+    function setLicense($license) 
+    {
+        if ($license->getShortName() == "GPL") {
+            return PEAR::raiseError("The GPL is no valid choice for PHP extensions due to license incompatibilities");
+        }
+ 
+        $this->license = $license;
+ 
+        return true;
+    }
+
     /**
      * Create the license part of the source file header comment
      *
@@ -2073,7 +2091,7 @@ you have been warned!
         $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package.xml");
 
         echo 
-"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>
+"<?xml version=\"1.0\"\"?>
 <!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">
 <package>
   <name>{$this->name}</name>
@@ -2088,7 +2106,7 @@ you have been warned!
         }
         
         if ($this->license) {
-            echo "  <license>".$this->license->shortname."</license>\n";
+            echo "  <license>".$this->license->getShortName()."</license>\n";
         }
 
         foreach ($this->with as $with) {
@@ -2153,6 +2171,52 @@ you have been warned!
         echo "    </dir>\n";
         echo "  </filelist>\n";
 
+
+        echo "</package>\n";
+        
+        return $outfile->write();
+    }
+
+    // }}}
+
+    /**
+     * Write PEAR/PECL package.xml file
+     *
+     * @access private
+     * @param  string  directory to write to
+     */
+    function writePackageXml2() 
+    {
+        $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package2.xml");
+
+        echo
+'<?xml version="1.0"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
+    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+';
+
+        echo " <name>{$this->name}</name>\n";
+		echo " <channel>pecl.php.net</channel>\n"; // TODO -> get from specs
+
+        if (isset($this->summary)) {
+            echo "  <summary>{$this->summary}</summary>\n";
+        }
+
+        if (isset($this->description)) {
+            echo "  <description>\n".rtrim($this->description)."\n  </description>\n";
+        }
+
+		uasort($this->authors, array("CodeGen_PECL_Maintainer", "comp"));
+		foreach ($this->authors as $maintainer) {
+            echo $maintainer->packageXml2();
+        }
+
+		echo $this->release->packageXml2($this->license);
 
         echo "</package>\n";
         

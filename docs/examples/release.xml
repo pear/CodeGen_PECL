@@ -10,6 +10,20 @@
  <license>php</license>
 
  <maintainer>
+  <user>user1</user>
+  <name>Hartmut Holzgrefe</name>
+  <email>hartmut@php.net</email>
+  <role>helper</role>
+ </maintainer>
+
+ <maintainer>
+  <user>user2</user>
+  <name>Hartmut Holzgrefe</name>
+  <email>hartmut@php.net</email>
+  <role>developer</role>
+ </maintainer>
+
+ <maintainer>
   <user>hholzraefe</user>
   <name>Hartmut Holzgrefe</name>
   <email>hartmut@php.net</email>
