@@ -947,7 +947,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         }
 
                         $name = $param['name']; 
-                        $argPointers[] = "&$name";
+                        $argPointers[] = "&$name" . (($param['type'] == "resource") ? "_res" : "");
 
                         if (isset($param['optional']) && !$optional) {
                             $optional = true;
@@ -1003,12 +1003,17 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             $argString .= "r";
 
                             if ($extension->haveVersion("1.0.0dev")) {
-                                $code .= "    zval * $name_res = NULL;\n";
-                                $code .= "    int {$name}_resid = -1;\n";
+                                $resVar     = $name."_res";
+                                $payloadVar = $name;
+                                $idVar      = $name."_resid";
                             } else {
-                                $code .= "    zval * $name = NULL;\n";
-                                $code .= "    int {$name}_id = -1;\n";
+                                $resVar     = $name;
+                                $payloadVar = "res_".$name;
+                                $idVar      = $name."_id";
                             }
+
+                            $code .= "    zval * $resVar = NULL;\n";
+                            $code .= "    int $idVar = -1;\n";
 
                             $resources = $extension->getResources();
                             if (isset($param['subtype']) && isset($resources[$param['subtype']])) {
@@ -1018,11 +1023,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
                                 } else {
                                     $varname = "res_{$name}";
                                 }
-                                $code .= "    ".$resource->getPayload()." * $varname;\n";
+                                $code .= "    ".$resource->getPayload()." * $payloadVar;\n";
                                 
-                                $resFetch .= "    ZEND_FETCH_RESOURCE($varname, ".$resource->getPayload()." *, &$name, {$name}_id, \"$param[subtype]\", le_$param[subtype]);\n";
+                                $resFetch .= "    ZEND_FETCH_RESOURCE($payloadVar, ".$resource->getPayload()." *, &$resVar, $idVar, \"$param[subtype]\", le_$param[subtype]);\n";
                             } else {
-                                $resFetch .="    ZEND_FETCH_RESOURCE(???, ???, $name, {$name}_id, \"???\", ???_rsrc_id);\n";
+                                $resFetch .="    ZEND_FETCH_RESOURCE(???, ???, $resVar, $idVar, \"???\", ???_rsrc_id);\n";
                             }
                             break;
 
