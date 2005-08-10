@@ -117,9 +117,7 @@ class CodeGen_PECL_Extension
      */
     function haveVersion($version)
     {
-        if ($this->version) {
-            return version_compare($version, $this->version) >= 0;
-        }
+        return version_compare(empty($this->version) ? $this->version() : $this->version, $version) >= 0;
 
         return true; // 
     }

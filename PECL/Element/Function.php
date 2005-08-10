@@ -1002,7 +1002,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             $zvalType = true;
                             $argString .= "r";
 
-                            if ($extension->haveVersion("1.0.0dev")) {
+                            if ($extension->haveVersion("1.0.0alpha")) {
                                 $resVar     = $name."_res";
                                 $payloadVar = $name;
                                 $idVar      = $name."_resid";
