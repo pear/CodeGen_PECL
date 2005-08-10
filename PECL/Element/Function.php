@@ -947,7 +947,12 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         }
 
                         $name = $param['name']; 
-                        $argPointers[] = "&$name" . (($param['type'] == "resource") ? "_res" : "");
+                        
+                        if ($param['type'] == "resource" && $extension->haveVersion("1.0.0alpha")) {
+                            $argPointers[] = "&{$name}_res";
+                        } else {
+                            $argPointers[] = "&$name";
+                        }
 
                         if (isset($param['optional']) && !$optional) {
                             $optional = true;
