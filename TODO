@@ -17,7 +17,6 @@ harm IMHO ...
 Milestone 0.9
 -------------
 
-
 - <lib> and <header> tags *within* <with>...</with>  -> in progress
   => parsing ok now, needs config.m4 output tweaks
 
@@ -67,6 +66,9 @@ test files are not yet added to package.xml          -> done
 Milestone 1.0
 -------------
 
+- change the resource variable names,            -> done
+  check extension version to provide BC
+
 - check #line numbers in generated source with libxml
   -> error messages with meaningfull line numbers need this
 
@@ -87,13 +89,13 @@ Milestone 1.0
   - <exception>                                  -> missing
   - type hints                                   -> missing
 
-- full support for .phpt test case generation    -> mostly done
+- full support for .phpt test case generation    -> done
 
   - <skipif>,<ini> in <function>                 -> done
 
-  - <notest/> for functions not needing a test   -> missing
+  - <notest/> for functions not needing a test   -> done
 
-- support for new package.xml format             -> not done yet
+- support for new package.xml 2.0 format         -> done, needs testing
 
 - support extension dependencies                 -> done
 
@@ -105,6 +107,8 @@ Milestone 1.0
 
 not necessarily 1.0
 -------------------
+
+- fix whitespace in generated code
 
 - multiple logos                                 -> started, needs checking
 
