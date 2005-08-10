@@ -1135,13 +1135,13 @@ $moduleHeader
     {
         if (empty($this->classes)) return "";
 
-        $code = "/* {{{ classes */\n";
+        $code = "/* {{{ Class definitions */\n\n";
 
         foreach ($this->classes as $class) {
             $code .= $class->globalCode($this);
         }
 
-        $code .= "/* }}} */\n\n";
+        $code .= "/* }}} Class definitions*/\n\n";
 
         return $code;
     }
@@ -1584,14 +1584,21 @@ PHP_MINFO_FUNCTION({$this->name})
             }
         }
 
-        foreach ($this->logos as $logo) {
-            echo $logo->cCode($this->name);
+
+        if (!empty($this->logos)) {
+            echo "/* {{{ phpinfo logo definitions */\n";
+            foreach ($this->logos as $logo) {
+                echo $logo->cCode($this->name);
+            }
+            echo "\n/* }}} *\n\n";
         }
 
         if (!empty($this->resources)) {
+            echo "/* {{{ Resource destructors */\n";
             foreach ($this->resources as $resource) {
                 echo $resource->cCode($this);
             }
+            echo "/* }}} *\n\n";
         }
 
         echo $this->generateClassRegistrations();

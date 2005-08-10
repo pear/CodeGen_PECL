@@ -264,72 +264,88 @@ require_once "CodeGen/Tools/Indent.php";
          */
         function globalCode($extension) 
         {
-            $code = "static zend_class_entry * {$this->name}_ce_ptr = NULL;\n\n";
+            ob_start();
 
+            echo "/* {{{ Class {$this->name} */\n\n";
+
+            echo "static zend_class_entry * {$this->name}_ce_ptr = NULL;\n\n";
+
+            echo "/* {{{ Methods */\n\n";
             foreach ($this->methods as $method) {
-                $code.= $method->cCode($extension);
-                $code.= "\n";
+                echo $method->cCode($extension);
+                echo "\n";
             }
 
-            $code.= "static zend_function_entry {$this->name}_methods[] = {\n";
+            echo "static zend_function_entry {$this->name}_methods[] = {\n";
 
             foreach ($this->methods as $method) {
-                $code.= "  ".$method->methodEntry()."\n";
+                echo "    ".$method->methodEntry()."\n";
             }
 
-            $code.= "  { NULL, NULL, NULL }\n";
-            $code.= "};\n";
+            echo "    { NULL, NULL, NULL }\n";
+            echo "};\n\n";
         
+            echo "/* }}} Methods */\n\n";
 
-            $code.= "static void class_init_{$this->name}(void)\n{\n";
+            echo "static void class_init_{$this->name}(void)\n{\n";
 
-            $code.= "   zend_class_entry ce;\n\n";
+            echo "    zend_class_entry ce;\n\n";
   
-            $code.= "INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);
-";
+            echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
 
             if ($this->extends) {
-                $code.= "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
+                echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
             } else {
-                $code.= "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
+                echo "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
             }
 
             if ($this->isFinal) {
-              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL_CLASS;\n";
+              echo "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_FINAL_CLASS;\n";
             }
 
             if ($this->isAbstract) {
-              $code.= "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;\n";
+              echo "    {$this->name}_ce_ptr->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;\n";
             }
 
-            foreach ($this->properties as $property) {
-              $code.= "    ".$property->minitCode($this->name."_ce_ptr");
+            if (!empty($this->properties)) {
+                echo "\n    /* {{{ Property registration */\n\n";
+                foreach ($this->properties as $property) {
+                    echo $property->minitCode($this->name."_ce_ptr");
+                }
+                echo "    /* }}} Property registration */\n\n";
             }
-
-            foreach ($this->constants as $constant) {
-              $code.= "    ".$constant->minitCode($this->name."_ce_ptr");
+            
+            if (!empty($this->constants)) {
+                echo "\n";
+                echo CodeGen_PECL_Element_ClassConstant::minitHeader();
+                foreach ($this->constants as $constant) {
+                    echo $constant->minitCode($this->name."_ce_ptr");
+                }
+                echo CodeGen_PECL_Element_ClassConstant::minitFooter();
             }
-
+            
             if (count($this->implements)) {
-                $code.= "    do {\n";
-                $code.= "        zend_class_entry **tmp;\n";
+                echo "    do {\n";
+                echo "        zend_class_entry **tmp;\n";
                 
                 $interfaces = array();
                 foreach ($this->implements as $interface) {
-                    $code.= sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
+                    echo sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
                                     strtolower($interface), strlen($interface)+1, $interface);
-                    $code.= "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
-                    $code.= "        } else {\n";
-                    $code.= "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
-                    $code.= "        }\n";
+                    echo "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
+                    echo "        } else {\n";
+                    echo "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
+                    echo "        }\n";
                 }
-                $code.= "    } while(0);\n";
+                echo "    } while(0);\n";
             }
                 
 
-            $code.= "}\n";
+            echo "}\n\n";
 
-            return $code;
+            echo "/* }}} Class {$this->name} */\n\n";
+
+            return ob_get_clean();
         }
 
 

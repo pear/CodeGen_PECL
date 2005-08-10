@@ -1186,7 +1186,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
                 }
                 
-                $code .= "}\n/* }}} */\n\n";
+                $code .= "}\n/* }}} {$this->name} */\n\n";
                 break;
                 
             case "internal":

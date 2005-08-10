@@ -188,8 +188,8 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @return string
          */
         function minitCode($classptr) {
-            $code = "zend_declare_property_{$this->type}({$classptr}, ";
-            $code.= '"'.$this->name.'", '.strlen($this->name).', ';
+            $code = "    zend_declare_property_{$this->type}({$classptr}, \n";
+            $code.= '        "' . $this->name . '", ' . strlen($this->name) . ", ";
 
             switch ($this->type) {
             case "string":
@@ -205,7 +205,7 @@ require_once "CodeGen/PECL/Element/Class.php";
             }
 
             
-            $code.= "ZEND_ACC_".strtoupper($this->access);
+            $code.= "\n        ZEND_ACC_".strtoupper($this->access);
             if ($this->isStatic) {
                 $code.= " | ZEND_ACC_STATIC";
             }
@@ -219,7 +219,7 @@ require_once "CodeGen/PECL/Element/Class.php";
                 $code.= " | ZEND_ACC_FINAL";
             }
 
-            $code .= " TSRMLS_DC);\n";
+            $code .= " TSRMLS_DC);\n\n";
 
             return $code;
         }

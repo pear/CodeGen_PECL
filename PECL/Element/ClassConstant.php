@@ -182,16 +182,46 @@ require_once "CodeGen/PECL/Element.php";
             $key_len = strlen($this->name) + 1;
 
             return "
-       {
-           zval *tmp;
+        tmp = (zval *) malloc(sizeof(zval));
+        INIT_PZVAL(tmp);
+        $value
+";
 
-            tmp = (zval *) malloc(sizeof(zval));
-            INIT_PZVAL(tmp);
-            $value
+        }
 
-            zend_symtable_update(&({$classptr}->constants_table), $key, $key_len, (void *) &tmp, sizeof(zval *), NULL);
-        }\n";
 
+        /** 
+         * MINIT code header
+         *
+         * @access public
+         * @return string
+         */
+        static function minitHeader()
+        {
+            ob_start();
+
+            echo "    /* {{{ Constant registration */\n\n";
+            echo "    while (0) {\n";
+            echo "        zval *tmp;\n";
+
+            return ob_get_clean();
+        }
+
+
+        /** 
+         * MINIT code footer
+         *
+         * @access public
+         * @return string
+         */
+        static function minitFooter()
+        {
+            ob_start();
+
+            echo "    };\n\n";
+            echo "    /* } Constant registration */\n\n";
+
+            return ob_get_clean();
         }
 
     }
