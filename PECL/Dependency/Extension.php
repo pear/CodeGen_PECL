@@ -207,4 +207,59 @@ static zend_module_dep pdo_".$extension->getName()."_deps[] = {
 
         return $xml;
     }
+
+
+
+    /**
+     * package.xml 2.0 dependencie entry
+     *
+     * @param  mixed  requested type(s), either string or array
+     * @return string XML snippet
+     */
+    function packageXML2($types = false)
+    {
+        $xml = "    <extension><name>{$this->name}</name>";
+
+        if (!empty($types)) {
+            $types = (array)$types;
+            if (!in_array($this->type, $types))
+            {
+                return "";
+            }
+        }
+
+        switch ($this->type ) {
+        case 'REQUIRED':
+        case 'OPTIONAL':
+            if (!empty($this->version)) {
+                $version = $this->version["version"];
+                switch ($this->version["relation"]) {
+                case 'gt':
+                    $xml.= "<exclude>$version</exclude>";
+                    /* fallthru */
+                case 'ge':
+                    $xml.= "<min>$version</min>";
+                    break;
+                case 'lt':
+                    $xml.= "<exclude>$version</exclude>";
+                    /* fallthru */
+                case 'le':
+                    $xml.= "<max>$version</max>";
+                    break;
+                case 'eq':
+                    $xml.= "<min>$version</min>";
+                    $xml.= "<max>$version</max>";
+                    break;
+                }
+            }
+            break;
+
+        case 'CONFLICTS':
+            $xml.= "<conflicts/>";
+            break;
+        }
+        $xml.= "<extension>\n";
+
+        return $xml;
+    }
 }

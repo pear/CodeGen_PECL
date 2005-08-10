@@ -50,7 +50,7 @@ class CodeGen_PECL_Release
         $code = "\n  <release>\n";
         foreach (array("version", "state", "notes") as $key) {
             if ($this->$key !== "") {
-                $code.= "    <$key>{$this->$key}</$key>\n";
+                $code.= "    <$key>".htmlentities($this->$key)."</$key>\n";
             }
         }
         if ($this->date !== "") {
@@ -72,6 +72,9 @@ class CodeGen_PECL_Release
     {
         $code ="";
 
+        $date = $this->date ? $this->date : time();
+        $code.= "    <date>".date("Y-m-d", $date)."</date>\n";       
+
         $code.= "    <version><release>{$this->version}</release><api>{$this->version}</api></version>\n";
         $code.= "    <stability><release>{$this->state}</release><api>{$this->state}</api></stability>\n";
 
@@ -89,8 +92,7 @@ class CodeGen_PECL_Release
             $code.= "    <license>unknown</license\n";
         }
 
-        $date = $this->date ? $this->date : time();
-        $code.= "    <date>".date("Y-m-d", $date)."</date>\n";       
+        $code .="    <notes>\n".htmlentities($this->notes)."\n    </notes>\n";
 
         return $code;
     }

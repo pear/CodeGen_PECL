@@ -2169,18 +2169,16 @@ you have been warned!
         echo "  </changelog>\n";
 
 
-        $min_version = "4"; 
-        if (!empty($this->classes)) {
-          $min_version = "5";
-        }
         
         echo "  <deps>\n";
-        echo "    <dep type=\"php\" rel=\"ge\" version=\"$min_version\"/>\n";
+        echo "    <dep type=\"php\" rel=\"ge\" version=\"".$this->minPhpVersion()."\"/>\n";
         echo $this->platform->packageXML();
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML();
         }       
         echo "  </deps>\n";
+
+
         
         echo "\n  <filelist>\n";
         echo $this->packageXmlFileList();
@@ -2236,6 +2234,25 @@ http://pear.php.net/dtd/package-2.0.xsd">
         echo "\n  <contents>\n";
         echo $this->packageXmlFileList();
         echo "  </contents>\n";
+
+        echo "  <dependencies>\n";
+		echo "   <required>\n";
+        echo "    <php><min>".$this->minPhpVersion()."</min></php>\n";
+        foreach ($this->otherExtensions as $ext) {
+            echo $ext->packageXML2(array("REQUIRED", "CONFLICTS"));
+        }       
+        echo $this->platform->packageXML2();
+		echo "   </required>\n";
+		echo "   <optional>\n";
+        foreach ($this->otherExtensions as $ext) {
+            echo $ext->packageXML2(array("OPTIONAL"));
+        }       
+		echo "   </optional>\n";
+        echo "  </dependencies>\n";
+
+		echo "  <providesextension>{$this->name}</providesextension>\n";
+		
+		echo "<extsrcrelease/>\n";
 
         echo "</package>\n";
         
@@ -2471,6 +2488,25 @@ of phpinfo();
 <?php
 
         $file->write();
+    }
+
+
+	/**
+	 * Return minimal PHP version required to support the requested features
+	 *
+	 * @return  string	version string
+	 */
+	function minPhpVersion()
+    {
+		if (!empty($this->otherExtensions)) {		
+		    return "5.1.0rc1";
+		}
+
+        if (!empty($this->classes)) {
+          return "5.0.0";
+        }
+
+        return "4.0.0"; // TODO test for real lower bound 
     }
 }   
 

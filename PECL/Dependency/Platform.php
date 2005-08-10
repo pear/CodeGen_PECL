@@ -56,4 +56,26 @@ class CodeGen_PECL_Dependency_Platform
 
         return $xml;
     }
+
+    /**
+     * package.xml 2.0 dependencie entry
+     *
+     * @return string XML snippet
+     */
+    function packageXML2()
+    {
+        if ($this->test("all")) return "";
+        
+        $xml = "";
+
+        if ($this->test("windows")) {
+            $xml.= "    <os><name>windows</name></os>>\n";
+        }
+
+        if ($this->test("unix")) {
+            $xml.= "    <os><name>unix</name></os>>\n";
+        }
+
+        return $xml;
+    }
 }
