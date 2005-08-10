@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="class">
+<extension name="class" version="0.9.0rc5">
 
  <class name="class1">
   <summary>Class1</summary>
