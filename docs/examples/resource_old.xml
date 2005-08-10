@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="resource_old" version="0.9.0rc5">
+<extension name="resource_old" version="0.8.9">
 
  <!-- a resource that doesn't require memory allocation -->
 
@@ -18,7 +18,7 @@
  <!-- use the resource -->
  <function name="my_fwrite">
   <proto>int my_fwrite(resource my_file fp, string text)</proto>
-  <code>RETURN_LONG(fwrite(text, 1, text_len, fp));</code>
+  <code>RETURN_LONG(fwrite(text, 1, text_len, res_fp));</code>
   <test>
    <code>
 $fp = my_fopen("test.txt", "w") or die("Failure");
@@ -34,7 +34,7 @@ my_fclose($fp);
  <!-- free the resource -->
  <function name="my_fclose">
   <proto>void my_fclose(resource my_file fp)</proto>
-  <code>FREE_RESOURCE(fp_res);</code>
+  <code>FREE_RESOURCE(fp);</code>
   <test>
    <code>
 <![CDATA[
