@@ -2080,6 +2080,42 @@ you have been warned!
         }
     }
 
+
+    /**
+    * Write file list for package.xml (both version 1.0 and 2.0)
+    *
+    * @return string
+    */
+    protected function packageXmlFileList()
+    {
+        $code = "";
+
+        $code.= "    <dir name=\"/\">\n";
+        if (@is_array($this->packageFiles['doc'])) {
+            foreach ($this->packageFiles['doc'] as $file) {
+                $code.= "      <file role=\"doc\">$file</file>\n";
+            }
+        }
+
+        foreach (array("conf", "code", "header") as $type) { 
+            foreach ($this->packageFiles[$type] as $basename => $filepath) {
+                $code.= "      <file role=\"src\">$basename</file>\n";
+            }
+        }
+
+        if (!empty($this->packageFiles['test'])) {
+            $code.= "      <dir name=\"tests\">\n";
+            foreach ($this->packageFiles['test'] as $basename => $filepath) {
+                $code.= "        <file role=\"test\">$basename</file>\n";
+            }
+            $code.= "      </dir>\n";
+        }
+
+        $code.= "    </dir>\n";
+
+        return $code;
+      }
+
     /**
      * Write PEAR/PECL package.xml file
      *
@@ -2134,41 +2170,20 @@ you have been warned!
 
 
         $min_version = "4"; 
-		if (!empty($this->classes)) {
+        if (!empty($this->classes)) {
           $min_version = "5";
         }
-		
-		echo "  <deps>\n";
+        
+        echo "  <deps>\n";
         echo "    <dep type=\"php\" rel=\"ge\" version=\"$min_version\"/>\n";
         echo $this->platform->packageXML();
-		foreach ($this->otherExtensions as $ext) {
-		    echo $ext->packageXML();
-        }		
-		echo "  </deps>\n";
+        foreach ($this->otherExtensions as $ext) {
+            echo $ext->packageXML();
+        }       
+        echo "  </deps>\n";
         
         echo "\n  <filelist>\n";
-        echo "    <dir name=\"/\">\n";
-        if (@is_array($this->packageFiles['doc'])) {
-            foreach ($this->packageFiles['doc'] as $file) {
-                echo "      <file role=\"doc\">$file</file>\n";
-            }
-        }
-
-        foreach (array("conf", "code", "header") as $type) { 
-            foreach ($this->packageFiles[$type] as $basename => $filepath) {
-                echo "      <file role=\"src\">$basename</file>\n";
-            }
-        }
-
-        if (!empty($this->packageFiles['test'])) {
-            echo "      <dir name=\"tests\">\n";
-            foreach ($this->packageFiles['test'] as $basename => $filepath) {
-                echo "        <file role=\"test\">$basename</file>\n";
-            }
-            echo "      </dir>\n";
-        }
-
-        echo "    </dir>\n";
+        echo $this->packageXmlFileList();
         echo "  </filelist>\n";
 
 
@@ -2201,7 +2216,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 ';
 
         echo " <name>{$this->name}</name>\n";
-		echo " <channel>pecl.php.net</channel>\n"; // TODO -> get from specs
+        echo " <channel>pecl.php.net</channel>\n"; // TODO -> get from specs
 
         if (isset($this->summary)) {
             echo "  <summary>{$this->summary}</summary>\n";
@@ -2211,12 +2226,16 @@ http://pear.php.net/dtd/package-2.0.xsd">
             echo "  <description>\n".rtrim($this->description)."\n  </description>\n";
         }
 
-		uasort($this->authors, array("CodeGen_PECL_Maintainer", "comp"));
-		foreach ($this->authors as $maintainer) {
+        uasort($this->authors, array("CodeGen_PECL_Maintainer", "comp"));
+        foreach ($this->authors as $maintainer) {
             echo $maintainer->packageXml2();
         }
 
-		echo $this->release->packageXml2($this->license);
+        echo $this->release->packageXml2($this->license);
+
+        echo "\n  <contents>\n";
+        echo $this->packageXmlFileList();
+        echo "  </contents>\n";
 
         echo "</package>\n";
         
