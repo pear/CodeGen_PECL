@@ -185,6 +185,7 @@ require_once "CodeGen/PECL/Element.php";
         tmp = (zval *) malloc(sizeof(zval));
         INIT_PZVAL(tmp);
         $value
+        zend_symtable_update(&({$classptr}->constants_table), $key, $key_len, (void *) &tmp, sizeof(zval *), NULL);
 ";
 
         }
@@ -201,8 +202,8 @@ require_once "CodeGen/PECL/Element.php";
             ob_start();
 
             echo "    /* {{{ Constant registration */\n\n";
-            echo "    while (0) {\n";
-            echo "        zval *tmp;\n";
+            echo "    do {\n";
+            echo "        zval *tmp, *val;\n";
 
             return ob_get_clean();
         }
@@ -218,7 +219,7 @@ require_once "CodeGen/PECL/Element.php";
         {
             ob_start();
 
-            echo "    };\n\n";
+            echo "    } while(0);\n\n";
             echo "    /* } Constant registration */\n\n";
 
             return ob_get_clean();
