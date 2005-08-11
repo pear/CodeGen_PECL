@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="class" version="0.9.0rc5">
+<extension name="class" version="0.9.0">
 
  <class name="class1">
   <summary>Class1</summary>
@@ -10,6 +10,8 @@
 
   <property name="bar" access="private" type="int" value="23"/>
   <property name="baz" access="public"  type="int" value="37" static="yes"/>
+
+  <property name="init" access="public"  type="int" value="37" static="yes"/>
 
   <constant name="c_int"    type="int"    value="23"/>
   <constant name="c_float"  type="float"  value="23"/>
@@ -25,6 +27,32 @@
    <code>RETURN_LONG(n);</code>
   </function>
 
+  <function name="__construct">
+   <proto>void __construct([int i = 451])</proto>   
+   <code>
+    <?data
+PROP_SET_LONG("init", 666);
+    ?>
+   </code>
+  </function>
+
+  <function name="getBar" procedural="yes">
+   <proto>int getBar()</proto>
+   <code>
+    <?data
+RETURN_LONG(PROP_GET_LONG("bar"));
+    ?>
+   </code>
+  </function>
+
+  <function name="getInit" procedural="gaga">
+   <proto>int getInit()</proto>
+   <code>
+    <?data
+RETURN_LONG(PROP_GET_LONG("init"));
+    ?>
+   </code>
+  </function>
  </class>
 
  <class name="class2" extends="class1">
@@ -245,5 +273,13 @@ Fatal error: Cannot instantiate abstract class class_a2 in %s on line %d
    ?>
   </code>
  </test>	
+
+ <test name="constructor">
+  <code>
+   $c = new class1(666);
+   echo gaga($c);
+  </code>
+  <result>666</result>
+ </test>
 
 </extension>
