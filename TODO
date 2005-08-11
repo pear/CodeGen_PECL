@@ -1,24 +1,25 @@
 Braindump
 ---------
 
-Ok, only one TODO item to finish for 0.9, and most 1.0
-items are already done, too. I think i'll might get the
-package.xml 2.0, config.w32, <notest>, constructor and 
-destructor stuff in by the end of the week.
+I have released 0.9stable today :)
 
-After that i may already decide to release a 1.0rc
-as the other 1.0 items (interfaces, exceptions, type 
-hints) do not interfere with the other OO features
-that much. The OO support should be strong enough
-to justtify a 1.0 release by then even without 
-these additional items, pushing them to 1.1 wont
-harm IMHO ...
+It passes all my tests, your milage may vary.
+But as it is not even a 1.0 i think i can get away
+with calling it 'stable' anyway.
+
+I've pushed back support for multiple <with> tags with
+embedded libs and headers to 1.0 for now. I might even
+delay it further if it blocks 1.0 for too long as 
+extensions based on several different libraries from
+multiple packages are not that common anyway.
+
+The main showstoppers left for 1.0 are now config.w32
+generation, documentation and testcases. Interfaces
+and type hints are candidates for being pushed back
+to 1.1 eventually.
 
 Milestone 0.9
 -------------
-
-- <lib> and <header> tags *within* <with>...</with>  -> in progress
-  => parsing ok now, needs config.m4 output tweaks
 
 - copy <changelog> to generated package.xml          -> done
 
@@ -28,10 +29,8 @@ Milestone 0.9
   - 'void' treatment                                 -> done
   - '...' not handled                                -> done
   - array() as default value                         -> done
-  - code generation for 'pass by refecence'          -> only for zval based types yet
-  - '...' code generation                            -> only if first parameter yet
-
-- allow "src='path/to/file'" in more cases           -> needs checking
+  - code generation for 'pass by refecence'          -> for zval based types yet
+  - '...' code generation                            -> if first parameter yet
 
 FREE_RESOURCE macro                                  -> done
 
@@ -62,15 +61,23 @@ check whether <header> checks work                   -> done
 
 test files are not yet added to package.xml          -> done
 
+documentation up to date for all 0.9 features        -> done
 
 Milestone 1.0
 -------------
+
+- <lib> and <header> tags *within* <with>...</with>  -> in progress
+  => parsing ok now, needs config.m4 output tweaks
 
 - change the resource variable names,            -> done
   check extension version to provide BC
 
 - check #line numbers in generated source with libxml
   -> error messages with meaningfull line numbers need this
+
+- allow "src='path/to/file'" in more cases           
+  make sure it generates #line, too
+
 
 - support new win32 configure files              -> partly done (75%?)
 
@@ -84,9 +91,8 @@ Milestone 1.0
   - <class><const>                               -> done
   - <class><property ...                         -> done
   - <class><function ...                         -> done
-  - constructor, destructor, other specials      -> missing
+  - __construct needs special handling           -> done
   - <interface>                                  -> missing
-  - <exception>                                  -> missing
   - type hints                                   -> missing
 
 - full support for .phpt test case generation    -> done
@@ -99,16 +105,15 @@ Milestone 1.0
 
 - support extension dependencies                 -> done
 
-- some clever mechanism to ease e.g. property    -> not done yet
-  access within classes? i'm afraid C prepro
-  macros won't do the trick there ...
+- better property access macros                  -> done
+
 
 
 
 not necessarily 1.0
 -------------------
 
-- fix whitespace in generated code
+- fix whitespace in generated code               -> started, work in progress
 
 - multiple logos                                 -> started, needs checking
 
@@ -116,6 +121,12 @@ not necessarily 1.0
   e.g. for version checking?
 
 - full support for stream wrappers and filters   -> started
+
+- full support for session handler API
+
+- full support for SAPI 
+
+- "object store" handling for private data       -> missing
 
 - return by reference (for 5.1 if it supports it)          
 
