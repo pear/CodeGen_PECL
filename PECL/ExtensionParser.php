@@ -130,6 +130,16 @@ class CodeGen_PECL_ExtensionParser
             }
         }
         
+        if (isset($attr["procedural"])) {
+            if ($attr["procedural"] == "" || $attr["procedural"] == "yes") {
+                $attr["procedural"] = "default";
+            }
+            $err = $method->setProceduralName($attr["procedural"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+
         return true;
     }
     
