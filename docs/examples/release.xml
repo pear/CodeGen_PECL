@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="release">
+<extension name="release" version="0.9.0">
  <summary>release test</summary>
 
  <description>

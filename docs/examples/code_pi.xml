@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="code_pi">
+<extension name="code_pi" version="0.9.0">
 <code>
 <?data
   int foo = 42; // <&>

@@ -2,7 +2,7 @@
 <!DOCTYPE extension SYSTEM "../extension.dtd" [
 <!ENTITY systemEntity SYSTEM "parsing_1.inc">
 ]>
-<extension name="parsing" xmlns:xi="http://www.w3.org/2001/XInclude">
+<extension name="parsing" version="0.9.0" xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <!-- system entity inclusion -->
 &systemEntity;

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="api_functions">
+<extension name="api_functions" version="0.9.0">
 
  <function role="internal" name="MINIT">
   <code>

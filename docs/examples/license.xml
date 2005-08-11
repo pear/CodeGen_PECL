@@ -1,4 +1,4 @@
 <?xml version='1.0'?>
-<extension name="license">
+<extension name="license" version="0.9.0">
   <license>PHP</license>
 </extension>
