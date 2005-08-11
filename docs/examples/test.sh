@@ -1,9 +1,16 @@
 #!/bin/bash
 
+if test $# -gt 0 
+then
+	files=$@
+else
+	files=`ls *.xml`
+fi
+
 export NO_INTERACTION=1
 export REPORT_EXIT_STATUS=1
 
-for spec in *.xml
+for spec in $files
 do
   echo testing $spec
   rm -rf `basename $spec .xml`
