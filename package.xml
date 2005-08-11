@@ -47,13 +47,57 @@
   <license>PHP</license>
 
   <release>
-    <state>beta</state>
-    <version>0.9.0rc5</version>
-    <date>2005-08-03</date>
+    <state>stable</state>
+    <version>0.9.0</version>
+    <date>2005-08-11</date>
     <notes>
-<![CDATA[
-- implemeted new proto parser, activate with --experimental
-]]>
+Milestone 0.9
+-------------
+
+- copy &lt;changelog&gt; to generated package.xml    - done
+
+- rewrite the function prototype parser
+  - object type specification (as in resources)      - done
+  - default values                                   - done
+  - 'void' treatment                                 - done
+  - '...' not handled                                - done
+  - array() as default value                         - done
+  - code generation for 'pass by refecence'          - for zval based types yet
+  - '...' code generation                            - if first parameter yet
+
+FREE_RESOURCE macro                                  - done
+
+allow defined PHP constants as default value         - done
+
+&lt;define&gt; tag -&gt; #define + &lt;constant&gt;? - done 
+
+allow for embedded base64 or uu encoded logo specs   - done
+
+changeable function prefix?                          - done
+
+trick parser to verbatim pass on docbook contentent  - done
+
+add configure compile test for &lt;resource&gt;      -done
+to check whether a given payload is a valid type?
+
+SYSTEM Entity and XInclude support                   - done 
+
+support for multiple &lt;with&gt; tags with distinct 
+names, name defaults to extension name if not given  - done
+
+added version attribute to &lt;extension&gt;
+to control parser features (replaces -x switch)      - done
+
+support &lt;?code ... ?&gt; as alternative to CDATA  - done 
+
+check whether &lt;header&gt; checks work             - done
+
+test files are not yet added to package.xml          - done
+
+documentation up to date for all 0.9 features        - done
+
+examples and test cases added                        - done
+
     </notes>
 
     <deps>
@@ -113,6 +157,15 @@
   </release>
 
   <changelog>
+    <release>
+      <state>beta</state>
+      <version>0.9.0rc5</version>
+      <date>2005-08-03</date>
+      <notes>
+- implemeted new proto parser, activate with --experimental
+      </notes>
+    </release>
+
     <release>
       <state>beta</state>
       <version>0.8.5</version>
