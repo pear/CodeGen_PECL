@@ -257,6 +257,25 @@ require_once "CodeGen/Tools/Indent.php";
 
 
         /**
+         * Create C header entry for clas
+         *
+         * @access public
+         * @param  class Extension  extension the function is part of
+         * @return string           C header code snippet
+         */
+        function hCode($extension) 
+        {
+            $code = "";
+
+            foreach ($this->methods as $method) {
+                $code.= $method->hCode($extension);
+            }
+
+            return $code;
+        }
+
+
+        /**
          * Generate global scope code
          *
          * @access public
