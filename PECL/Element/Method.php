@@ -67,7 +67,9 @@ require_once "CodeGen/PECL/Element/Class.php";
      
         function setProceduralName($name) 
         {
-            if (!$this->isName($name)) {
+            if ($name == "default") {
+                $name = $this->classname."_".$this->name;
+            } else if (!$this->isName($name)) {
                 return PEAR::raiseError("'$name' is not a valid function alias name");             
             }
 
@@ -176,14 +178,39 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         protected function parseParameterHook($argc, $argString, $argPointers)
         {
-            return "
+            if ($this->name == "__construct") {
+                $code = parent::parseParameterHook($argc, $argString, $argPointers);
+                $code.= "\n    _this_zval = getThis();\n";
+            } else {
+            $code = "
     if (zend_parse_method_parameters($argc TSRMLS_CC, getThis(), \"$argString\", ".join(", ",$argPointers).") == FAILURE) {
       return;
     }
 
 ";
+            }
+            $code .= "    _this_ce = Z_OBJCE_P(_this_zval);\n\n";
+
+            return $code;
         }
 
+
+        /**
+         * Generate local variable declarations
+         *
+         * @return string C code snippet
+         */
+        function localVariables($extension) 
+        {
+            $code = parent::localVariables($extension);
+            $code.= "    zend_class_entry * _this_ce;\n";
+            
+            if ($this->name == "__construct") {
+                $code .= "    zval * _this_zval; /**/\n";
+            }
+
+            return $code;
+        }
 
         /**
          * Set parameter and return value information from PHP style prototype
@@ -195,13 +222,15 @@ require_once "CodeGen/PECL/Element/Class.php";
         function setProto($proto, $extension) {
             parent::setProto($proto, $extension);
 
-            $param = array();
-            $param['name']    = "thisObj";
-            $param['type']    = "object";
-            $param['subtype'] = $this->classname;
-            $param['byRef']   = true;
+            if ($this->name != "__construct") {
+                $param = array();
+                $param['name']    = "_this_zval";
+                $param['type']    = "object";
+                $param['subtype'] = $this->classname;
+                $param['byRef']   = true;
 
-            array_unshift($this->params, $param);
+                array_unshift($this->params, $param);
+            }
         }
 
         /**
@@ -239,6 +268,20 @@ require_once "CodeGen/PECL/Element/Class.php";
         }
 
         /**
+         * Create registration line for method table
+         *
+         * @param  string  Name of class owning this method
+         * @return string  C code snippet
+         */
+        function functionAliasEntry() 
+        {
+            if (!$this->proceduralName) {
+                return "";
+            }
+
+            return "    PHP_FALIAS({$this->proceduralName}, {$this->classname}_{$this->name}, NULL)\n";      
+        }
+        /**
          * Create proto line for method 
          *
          * @param  string  Name of class owning this method
@@ -251,6 +294,21 @@ require_once "CodeGen/PECL/Element/Class.php";
             }
             
             return "PHP_METHOD({$this->classname}, {$this->name})";
+        }
+
+        /**
+         * Create C code header snippet
+         *
+         * @access public
+         * @param  class Extension  extension the function is part of
+         * @return string           C code header snippet
+         */
+        function hCode($extension) 
+        {
+
+            $code = $this->cProto();
+
+            return $code ? "$code;\n" : "";
         }
 
         /**
@@ -316,26 +374,28 @@ require_once "CodeGen/PECL/Element/Class.php";
         }
 
         /**
-	 * Method name checking is less strict
+         * Method name checking is less strict
          * 
          * Method names can't clash with PHP standard functions
          * so we can just check for syntax and keywords here
          *
          * @param string method name
-	 */
-	function setName($name)
+         */
+        function setName($name)
         {
             if (!self::isName($name)) {
                 return PEAR::raiseError("'$name' is not a valid function name");
             }
-     
+            
             if (self::isKeyword($name)) {
                 return PEAR::raiseError("'$name' is a reserved word which is not valid for function names");
             }
-
+            
             $this->name = $name;
-
+            
             return true;
         }
     }
+
+
 ?>
