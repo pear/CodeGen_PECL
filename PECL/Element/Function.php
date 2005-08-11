@@ -890,6 +890,37 @@ require_once "CodeGen/Tools/Tokenizer.php";
 ";
         }
 
+
+        /**
+         * Generate local variable declarations
+         *
+         * @return string C code snippet
+         */
+        function localVariables($extension) 
+        {
+            $code = "";
+
+            $returns = explode(" ", $this->returns);
+
+            // for functions returning a named resource we create payload pointer variable
+            $resources = $extension->getResources();
+            if ($returns[0] === "resource") {
+                if (isset($returns[1]) && isset($resources[$returns[1]])) {
+                    $resource = $resources[$returns[1]];
+                    $payload  = $resource->getPayload();
+                    if ($resource->getAlloc()) {
+                        $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
+                    } else {
+                        $code .= "    $payload * return_res;\n";
+                    }
+                } else {
+                    $code .= "    void * return_res;\n";
+                }
+            }
+
+            return $code;
+        }
+
         /**
          * Create C code implementing the PHP userlevel function
          *
@@ -916,22 +947,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 $code .= $this->cProto()."\n";
                 $code .= "{\n";
                 
-                // for functions returning a named resource we create payload pointer variable
-                $resources = $extension->getResources();
-                if ($returns[0] === "resource") {
-                    if (isset($returns[1]) && isset($resources[$returns[1]])) {
-                        $resource = $resources[$returns[1]];
-                        $payload  = $resource->getPayload();
-                        if ($resource->getAlloc()) {
-                            $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
-                        } else {
-                            $code .= "    $payload * return_res;\n";
-                        }
-                    } else {
-                        $code .= "    void * return_res;\n";
-                    }
-                }
-                
+                $code .= $this->localVariables($extension);
 
                 // now we create local variables for all parameters
                 // at the same time we put together the parameter parsing string
@@ -1118,14 +1134,14 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(8, CodeGen_Tools_Indent::linetrim($this->code));
+                        $code .= CodeGen_Tools_Indent::indent(8, $this->code);
                         $code .= "    } while(0);\n"; 
                     } else {
                         // in C++ variable may be declared at any time
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(4, CodeGen_Tools_Indent::linetrim($this->code))."\n";
+                        $code .= CodeGen_Tools_Indent::indent(4, $this->code)."\n";
                     }
 
                     // when a function returns a named resource we know what to do
@@ -1317,6 +1333,20 @@ require_once "CodeGen/Tools/Tokenizer.php";
         {
             return "PHP_FUNCTION({$this->name})";
         }
+
+        /**
+         * Create C header entry for userlevel function
+         *
+         * @access public
+         * @param  class Extension  extension the function is part of
+         * @return string           C header code snippet
+         */
+        function hCode($extension) 
+        {
+            return $this->cProto().";\n";
+        }
+
+
     }
 
 ?>
