@@ -66,7 +66,7 @@ class CodeGen_PECL_Extension
     */
     static function version() 
     {
-        return "0.9.0rc5";
+        return "0.9.0";
     }
 
     /**
@@ -235,7 +235,7 @@ class CodeGen_PECL_Extension
      * @var     bool
      * @access  private
      */
-    protected $linespecs = false;
+    protected $linespecs = true;
 
     /**
      * PHP Streams
@@ -1103,18 +1103,11 @@ $moduleHeader
         $code  = "/* {{{ {$this->name}_functions[] */\n";
         $code .= "function_entry {$this->name}_functions[] = {\n";
         foreach ($this->functions as $function) {
-            $code .=  sprintf("    PHP_FE(%-20s, NULL)\n",$function->getName());
+            $code .=  sprintf("    PHP_FE(%-20s, NULL)\n", $function->getName());
         }
         foreach ($this->classes as $class) {
             foreach ($class->methods as $method) {
-                $proceduralName = $method->getProceduralName();
-                if ($proceduralName) {
-                    $code .=  sprintf("    ZEND_FALIAS(%s_%s, %s, NULL)\n",
-                                      $class->getName(),
-                                      $method->getName().
-                                      $proceduralName()
-                                      );
-                }
+                $code.= $method->functionAliasEntry();
             }
         }
         $code .=  "    { NULL, NULL, NULL }\n";
@@ -1282,6 +1275,17 @@ PHP_MINFO_FUNCTION({$this->name});
 
 #define FREE_RESOURCE(resource) zend_list_delete(Z_LVAL_P(resource))
 
+#define PROP_GET_LONG(name)    Z_LVAL_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
+#define PROP_SET_LONG(name, l) zend_update_property_long(_this_ce, _this_zval, #name, strlen(#name), l TSRMLS_CC)
+
+#define PROP_GET_DOUBLE(name)    Z_DVAL_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
+#define PROP_SET_DOUBLE(name, d) zend_update_property_double(_this_ce, _this_zval, #name, strlen(#name), d TSRMLS_CC)
+
+#define PROP_GET_STRING(name)    Z_STRVAL_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
+#define PROP_GET_STRLEN(name)    Z_STRLEN_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
+#define PROP_SET_STRING(name, s) zend_update_property_string(_this_ce, _this_zval, #name, strlen(#name), s TSRMLS_CC)
+#define PROP_SET_STRINGL(name, s, l) zend_update_property_string(_this_ce, _this_zval, #name, strlen(#name), s, l TSRMLS_CC)
+
 ";
 
         echo $this->generateGlobalsH();
@@ -1289,9 +1293,13 @@ PHP_MINFO_FUNCTION({$this->name});
         echo "\n";
 
         foreach ($this->functions as $name => $function) {
-            echo "PHP_FUNCTION($name);\n";
+            echo $function->hCode($this);
         }
-            
+
+        foreach ($this->classes as $name => $class) {
+            echo $class->hCode($this);
+        }
+
         foreach ($this->streams as $name => $stream) {
             echo CodeGen_Tools_Indent::indent(1, $stream->hCode());
         }
