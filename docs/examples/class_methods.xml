@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<extension name="class_methods" version="1.0.0dev">
+
+<class name="myClass">
+ <summary>Simple test class with methods</summary>
+ <function name="foo">
+  <proto>string foo()</proto>
+  <code>
+   RETURN_STRING("OK", 1);
+  </code>
+  <test>
+   <code>
+    $c = new myClass;
+    echo $c->foo();
+   </code>
+  </test> 
+ </function>
+</class>
+
+</extension>

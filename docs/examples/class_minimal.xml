@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<extension name="class_minimal" version="1.0.0dev">
+
+<class name="myClass">
+ <summary>Simple test class that does exactly nothing</summary>
+</class>
+
+</extension>
