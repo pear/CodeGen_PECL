@@ -368,13 +368,12 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 return PEAR::raiseError("extra token '".$tokens[0][1]."' in function prototype");
             }
             
-    
             // 
             // now the parameters one by one
             // 
             $params = array();
             $vararg = false;
-            while ($tokens = array_shift($tokenGroups)) {
+            while ($tokens = array_shift($tokenGroups)) {    
                 if ($vararg) {
                     return PEAR::raiseError("no further parameters are allowed after '...'");
                 }
@@ -450,7 +449,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 
                 // any tokens left?
                 if (count($tokens)) {
-                    return PEAR::raiseError("extra token '".$tokens[0][1]."' in specification of parameter '$parameterName'");
+                    return PEAR::raiseError("extra token '".$tokens[0][1]."' in specification of parameter '$param[name]'");
                 }
                 
                 // do we have a default value?
@@ -769,6 +768,34 @@ require_once "CodeGen/Tools/Tokenizer.php";
         function getTestResult()
         {
             return $this->testResult;
+        }
+
+
+        /**
+         * test code description
+         *
+         * @var string
+         */
+        protected $testDescription = "";
+
+        /**
+         * testDescritpion setter
+         *
+         * @param  string text
+         */
+        function setTestDescription($text)
+        {
+            $this->testDescription = $text;
+        }
+
+        /**
+         * testDescription getter
+         *
+         * @return string
+         */
+        function getTestDescription()
+        {
+            return $this->testDescription;
         }
 
 
@@ -1313,6 +1340,10 @@ require_once "CodeGen/Tools/Tokenizer.php";
             
             $test->setName($this->name);
             $test->setTitle($this->name."() function");
+            
+            if ($this->testDescription) {
+                $test->setDescription($this->testDescription);
+            }
             
             if ($this->testIni) {
                 $test->addIni($this->testIni);
