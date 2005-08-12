@@ -48,9 +48,80 @@
 
   <release>
     <state>beta</state>
-    <version>0.9.0</version>
+    <version>1.0.0dev</version>
     <date>2005-08-11</date>
     <notes>
+- changed names of variables generated for resource parameters,
+  backwards compatibility is provided by checking the extension
+  tags version attribute, for versions &lt; 1.0.0dev the old naming
+  stile is used
+
+- added test generation for class member functions
+    </notes>
+
+    <deps>
+      <dep type="php" rel="ge" version="5"/> 
+      <dep type="pkg" rel="ge" version="0.1">CodeGen</dep>
+    </deps>
+
+    <filelist>
+      <dir name="/" baseinstalldir="/">
+        <dir name="docs">
+          <file role="doc" name="manual.html"/>
+          <dir name="examples">
+           <file role="doc" name="minimal.xml"/>
+           <file role="doc" name="release.xml"/>
+           <file role="doc" name="logo.xml"/>
+           <file role="doc" name="logo_inline.xml"/>
+           <file role="doc" name="api_functions.xml"/>
+          </dir>
+        </dir>
+        <file role="script" name="pecl-gen">
+          <replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
+          <replace from="@php_dir@"  to="php_dir"  type="pear-config" />
+        </file>
+      </dir>
+      <dir name="/" baseinstalldir="CodeGen">
+        <dir name="PECL">
+          <file role="php">Extension.php</file>
+          <file role="php">Release.php</file>
+          <file role="php">Maintainer.php</file>
+          <file role="php">Element.php</file>
+          <file role="php">Command.php</file>
+          <dir name="Element">
+            <file role="php">Constant.php</file>
+            <file role="php">Function.php</file>
+            <file role="php">Global.php</file>
+            <file role="php">Ini.php</file>
+            <file role="php">Logo.php</file>
+            <file role="php">Resource.php</file>
+            <file role="php">Test.php</file>
+            <file role="php">Class.php</file>
+            <file role="php">Interface.php</file>
+            <file role="php">Method.php</file>
+            <file role="php">Property.php</file>
+            <file role="php">ClassConstant.php</file>
+            <file role="php">Stream.php</file>
+          </dir>
+          <dir name="Dependency">
+           <file role="php">With.php</file>
+           <file role="php">Lib.php</file>
+           <file role="php">Header.php</file>
+           <file role="php">Extension.php</file>
+           <file role="php">Platform.php</file>
+          </dir>
+          <file role="php">ExtensionParser.php</file>
+        </dir>
+      </dir>
+    </filelist>
+  </release>
+
+  <changelog>
+    <release>
+      <state>beta</state>
+      <version>0.9.0</version>
+      <date>2005-08-11</date>
+      <notes>
 Milestone 0.9
 -------------
 
@@ -98,65 +169,9 @@ documentation up to date for all 0.9 features        - done
 
 examples and test cases added                        - done
 
-    </notes>
+      </notes>
+    </release>
 
-    <deps>
-      <dep type="php" rel="ge" version="5"/> 
-      <dep type="pkg" rel="ge" version="0.1">CodeGen</dep>
-    </deps>
-
-    <filelist>
-      <dir name="/" baseinstalldir="/">
-        <dir name="docs">
-          <file role="doc" name="manual.html"/>
-          <dir name="examples">
-           <file role="doc" name="minimal.xml"/>
-           <file role="doc" name="release.xml"/>
-           <file role="doc" name="logo.xml"/>
-           <file role="doc" name="logo_inline.xml"/>
-           <file role="doc" name="api_functions.xml"/>
-          </dir>
-        </dir>
-        <file role="script" name="pecl-gen">
-          <replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
-          <replace from="@php_dir@"  to="php_dir"  type="pear-config" />
-        </file>
-      </dir>
-      <dir name="/" baseinstalldir="CodeGen">
-        <dir name="PECL">
-          <file role="php">Extension.php</file>
-          <file role="php">Release.php</file>
-          <file role="php">Maintainer.php</file>
-          <file role="php">Element.php</file>
-          <file role="php">Command.php</file>
-          <dir name="Element">
-            <file role="php">Constant.php</file>
-            <file role="php">Function.php</file>
-            <file role="php">Global.php</file>
-            <file role="php">Ini.php</file>
-            <file role="php">Logo.php</file>
-            <file role="php">Resource.php</file>
-            <file role="php">Test.php</file>
-            <file role="php">Class.php</file>
-            <file role="php">Method.php</file>
-            <file role="php">Property.php</file>
-            <file role="php">ClassConstant.php</file>
-            <file role="php">Stream.php</file>
-          </dir>
-          <dir name="Dependency">
-           <file role="php">With.php</file>
-           <file role="php">Lib.php</file>
-           <file role="php">Header.php</file>
-           <file role="php">Extension.php</file>
-           <file role="php">Platform.php</file>
-          </dir>
-          <file role="php">ExtensionParser.php</file>
-        </dir>
-      </dir>
-    </filelist>
-  </release>
-
-  <changelog>
     <release>
       <state>beta</state>
       <version>0.9.0rc5</version>

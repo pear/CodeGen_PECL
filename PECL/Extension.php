@@ -37,6 +37,7 @@ require_once "CodeGen/PECL/Element/Global.php";
 require_once "CodeGen/PECL/Element/Logo.php";
 require_once "CodeGen/PECL/Element/Test.php";
 require_once "CodeGen/PECL/Element/Class.php";
+require_once "CodeGen/PECL/Element/Interface.php";
 require_once "CodeGen/PECL/Element/Stream.php";
 
 require_once "CodeGen/PECL/Dependency/With.php";
@@ -150,6 +151,13 @@ class CodeGen_PECL_Extension
      * @var array
      */
     protected $classes = array();
+    
+    /**
+     * The PHP interfaces defined by this extension
+     *
+     * @var array
+     */
+    protected $interfaces = array();
     
     /**
      * The extensions php.ini parameters
@@ -509,6 +517,23 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("class '".$class->getName()."' has been defined before");
         }
         $this->classes[$class->getName()] = $class;
+        
+        return true;
+    }
+    
+    
+    /**
+     * Add a PHP interface to the extension
+     *
+     * @access public
+     * @param  object   an interface object
+     */
+    function addInterface(CodeGen_PECL_Element_Interface $interface)
+    {
+        if (isset($this->interfaces[$interface->getName()])) {
+            return PEAR::raiseError("interface '".$interface->getName()."' has been defined before");
+        }
+        $this->interfaces[$interface->getName()] = $interface;
         
         return true;
     }
@@ -1138,6 +1163,29 @@ $moduleHeader
     }
     // }}}
 
+    // {{{
+    /**
+     * Create global interface registration code 
+     *
+     * @access private
+     * @return string  interface registration code fragments
+     */
+    function generateInterfaceRegistrations()
+    {
+        if (empty($this->interfaces)) return "";
+
+        $code = "/* {{{ Interface definitions */\n\n";
+
+        foreach ($this->interfaces as $interface) {
+            $code .= $interface->globalCode($this);
+        }
+
+        $code .= "/* }}} Interface definitions*/\n\n";
+
+        return $code;
+    }
+    // }}}
+
     // {{{ license and authoers
     /**
      * Set license
@@ -1298,6 +1346,10 @@ PHP_MINFO_FUNCTION({$this->name});
             echo $class->hCode($this);
         }
 
+        foreach ($this->interfaces as $name => $interface) {
+            echo $interface->hCode($this);
+        }
+
         foreach ($this->streams as $name => $stream) {
             echo CodeGen_Tools_Indent::indent(1, $stream->hCode());
         }
@@ -1388,6 +1440,13 @@ PHP_MINIT_FUNCTION({$this->name})
         if (count($this->classes)) {
           foreach ($this->classes as $class) {
             $code .= CodeGen_Tools_Indent::indent(4, $class->minitCode($this));
+          }
+          $need_block = true;
+        }
+
+        if (count($this->interfaces)) {
+          foreach ($this->interfaces as $interface) {
+            $code .= CodeGen_Tools_Indent::indent(4, $interface->minitCode($this));
           }
           $need_block = true;
         }
@@ -1606,6 +1665,8 @@ PHP_MINFO_FUNCTION({$this->name})
             }
             echo "/* }}} *\n\n";
         }
+
+        echo $this->generateInterfaceRegistrations();
 
         echo $this->generateClassRegistrations();
 
@@ -2516,7 +2577,7 @@ of phpinfo();
 		    return "5.1.0rc1";
 		}
 
-        if (!empty($this->classes)) {
+        if (!empty($this->classes) || !empty($this->interfaces)) {
           return "5.0.0";
         }
 
