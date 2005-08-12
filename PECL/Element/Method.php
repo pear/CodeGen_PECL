@@ -163,9 +163,25 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @returns string
          */
         function argInfoCode() {
-            if ($this->isAbstract) {
+            $code = "";
+
+            if (count($this->params) > 1) {
+                $code.= "ZEND_BEGIN_ARG_INFO({$this->classname}__{$this->name}_args, 0)\n";
+
+                foreach($this->params as $key => $param) {
+                    if ($key == 0) continue;
+
+                    if ($param['type'] == "object" && isset($param['subtype'])) {
+                        $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
+                    } else {
+                        $code.= "  ZEND_ARG_INFO(0, {$this->name})\n";
+                    }
+                }                
                 
+                $code.= "ZEND_END_ARG_INFO()\n";
             }
+
+            return $code;
         } 
 
 
@@ -206,7 +222,7 @@ require_once "CodeGen/PECL/Element/Class.php";
             $code.= "    zend_class_entry * _this_ce;\n";
             
             if ($this->name == "__construct") {
-                $code .= "    zval * _this_zval; /**/\n";
+                $code .= "    zval * _this_zval;\n";
             }
 
             return $code;
@@ -220,8 +236,11 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @return bool    Success status
          */
         function setProto($proto, $extension) {
-            parent::setProto($proto, $extension);
-
+            $err = parent::setProto($proto, $extension);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+            
             if ($this->name != "__construct") {
                 $param = array();
                 $param['name']    = "_this_zval";
@@ -245,11 +264,12 @@ require_once "CodeGen/PECL/Element/Class.php";
                 return "";
             }
 
+            $arginfo = (count($this->params)>1) ? "{$this->classname}__{$this->name}_args" : "NULL";
+
             if ($this->isAbstract) {
-                // TODO create arg_info from prototype, see also arginfoCode
-                $code = "ZEND_FENTRY({$this->name}, NULL, NULL /* arg_info */, ZEND_ACC_ABSTRACT | ";
+                $code = "ZEND_FENTRY({$this->name}, NULL, $arginfo, ZEND_ACC_ABSTRACT | ";
             } else {
-                $code = "PHP_ME({$this->classname}, {$this->name}, NULL, ";
+                $code = "PHP_ME({$this->classname}, {$this->name}, $arginfo, /**/";
             }
 
             $code.= "ZEND_ACC_".strtoupper($this->access);
@@ -305,10 +325,14 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function hCode($extension) 
         {
-
             $code = $this->cProto();
+            if ($code) {
+                $code.= ";\n";
+            }
 
-            return $code ? "$code;\n" : "";
+            $code.= $this->argInfoCode();
+
+            return $code;
         }
 
         /**
@@ -321,7 +345,7 @@ require_once "CodeGen/PECL/Element/Class.php";
         function cCode($extension) 
         {
             if ($this->isAbstract || $this->isInterface) {
-                return "";
+                return $this->argInfoCode();
             }
 
             return parent::cCode($extension);
@@ -346,6 +370,8 @@ require_once "CodeGen/PECL/Element/Class.php";
             if ($this->isAbstract && !empty($this->code)) {
                 return PEAR::raiseError("A method can't be abstract and implemented at the same time");
             }
+
+            // TODO type hinting checks
 
             return true;
         }
@@ -408,8 +434,8 @@ require_once "CodeGen/PECL/Element/Class.php";
         {
             $test = parent::createTest($extension);
 
-            $test->setName($this->classname."::".$this->name);
-            $test->setTitle($this->name."() member function of class ".$this->classname);
+            $test->setName($this->classname."__".$this->name);
+            $test->setTitle($this->classname."::".$this->name."() member function");
             
             return $test;
         }
