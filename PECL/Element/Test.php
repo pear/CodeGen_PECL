@@ -83,7 +83,7 @@ class CodeGen_PECL_Element_Test
     }
 
     /**
-     * Testcase description
+     * Testcase title
      *
      * @type   string
      */
@@ -109,6 +109,35 @@ class CodeGen_PECL_Element_Test
     function setTitle($title) 
     {
         $this->title = $title;
+    }
+    
+    /**
+     * Testcase description
+     *
+     * @type   string
+     */
+    protected $description = "";
+
+    /**
+     * Getter for testcase description
+     *
+     * @access public
+     * @return string  value of
+     */
+    function getDescription() 
+    {
+        return $this->description;
+    }
+    
+    /**
+     * Setter for testcase description
+     *
+     * @access public
+     * @param  string  new value for
+     */
+    function setDescription($text) 
+    {
+        $this->description = $text;
     }
     
     /**
@@ -392,6 +421,10 @@ class CodeGen_PECL_Element_Test
 
         echo "--TEST--\n{$this->title}\n";
 
+        if (!empty($this->description)) {
+            echo "--DESCRIPTION--\n{$this->description}\n";
+        }
+        
         if (!empty($this->ini)) {
             echo "--INI--\n{$this->ini}\n";
         }
