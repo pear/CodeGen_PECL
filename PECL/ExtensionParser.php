@@ -143,6 +143,24 @@ class CodeGen_PECL_ExtensionParser
         return true;
     }
     
+    function tagstart_extension_interface_function($attr)
+    {
+        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
+
+        $this->pushHelper($method);
+        
+        if (isset($attr["name"])) {
+            $err = $method->setName($attr["name"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        } else {
+            return PEAR::raiseError("'name' attribut for <function> missing");
+        }
+
+        return true;
+    }
+    
     function tagend_function_summary($attr, $data) 
     {
         return $this->helper->setSummary(trim($data));
@@ -187,6 +205,11 @@ class CodeGen_PECL_ExtensionParser
     function tagend_function_notest($attr, $data)
     {
         return $this->helper->setTestCode("");
+    }
+
+    function tagend_function_test_description($attr, $data)
+    {
+        return $this->helper->setTestDescription(CodeGen_Tools_Indent::linetrim($data));
     }
 
     function tagend_function_test_code($attr, $data)
@@ -241,6 +264,15 @@ class CodeGen_PECL_ExtensionParser
         return $err;
     }
     
+    function tagend_interface_function($attr, $data) 
+    {
+        $method = $this->helper;
+        $this->popHelper();
+        $err = $this->helper->addMethod($method);
+        return $err;
+    }
+    
+
     function tagend_functions($attr, $data) {
         return true;
     }        
@@ -746,23 +778,27 @@ class CodeGen_PECL_ExtensionParser
         $this->pushHelper($test);
     }
 
-    function tagend_extension_test_title($attr, $data) {
+    function tagend_test_title($attr, $data) {
         $this->helper->setTitle(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagend_extension_test_skipif($attr, $data) {
+    function tagend_test_description($attr, $data) {
+        $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+    }
+
+    function tagend_test_skipif($attr, $data) {
         $this->helper->setSkipIf(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagend_extension_test_get($attr, $data) {
+    function tagend_test_get($attr, $data) {
         $this->helper->setGet(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagend_extension_test_post($attr, $data) {
+    function tagend_test_post($attr, $data) {
         $this->helper->setPost(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagstart_extension_test_code($attr)
+    function tagstart_test_code($attr)
     {
         if (isset($attr["src"])) {
             if (!file_exists($attr["src"])) {
@@ -774,7 +810,7 @@ class CodeGen_PECL_ExtensionParser
         }
     }
 
-    function tagend_extension_test_code($attr, $data) {
+    function tagend_test_code($attr, $data) {
         if (isset($attr["src"])) {
             $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
         } else {
@@ -782,7 +818,7 @@ class CodeGen_PECL_ExtensionParser
         }
     }
 
-    function tagend_extension_test_result($attr, $data) {
+    function tagend_test_result($attr, $data) {
         $err = $this->helper->setOutput(CodeGen_Tools_Indent::linetrim($data));
             
         if (isset($attr['mode']) && !PEAR::isError($err)) {
@@ -939,6 +975,39 @@ class CodeGen_PECL_ExtensionParser
     function tagend_class($attr, $data) 
     {
         $err = $this->extension->addClass($this->helper);
+        $this->popHelper();
+        return true;
+    }
+
+    function tagstart_interface($attr)
+    {
+        $class = new CodeGen_PECL_Element_Interface;
+
+        $this->pushHelper($class);
+
+        if (isset($attr["name"])) {
+            $err = $class->setName($attr["name"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        } else {
+            return PEAR::raiseError("name attribut for class missing");
+        }
+
+        if (isset($attr["extends"])) {
+            $err = $class->setExtends($attr["extends"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+            
+        return true;
+    }
+
+    function tagend_interface($attr, $data) 
+    {
+        print_r($this->helper);
+        $err = $this->extension->addInterface($this->helper);
         $this->popHelper();
         return true;
     }
