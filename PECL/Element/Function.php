@@ -1282,45 +1282,57 @@ require_once "CodeGen/Tools/Tokenizer.php";
         
 
         /**
-         * Create test case for this function
+         * write test case for this function
          *
          * @access public
          * @param  class Extension  extension the function is part of
-         * @return int              number of test files written
          */
-        function writeTest($extension) 
+        function writeTest(CodeGen_PECL_Extension $extension) 
         {
-            if ($this->testCode) {
-                $test = new CodeGen_PECL_Element_Test;
-                
-                $test->setName($this->name);
-                $test->setTitle($this->name."() function");
-                
-                if ($this->testIni) {
-                    $test->addIni($this->testIni);
-                }
-                
-                $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
-                $test->addSkipIf("!function_exists('".$this->getName()."')");
-                if ($this->testSkipIf) {
-                    $test->addSkipIf($this->testSkipIf);
-                }
-                
-                $test->setCode($this->testCode);
-                
-                if (!empty($this->testResult)) {
-                    $test->setOutput($this->testResult['result']);
-                    if (isset($this->testResult['mode'])) {
-                        $test->setMode($this->testResult['mode']);
-                    }
-                }
-                
-                $test->writeTest($extension);
+            $test = $this->createTest($extension);
 
-                return 1;
+            if ($test instanceof CodeGen_PECL_Element_Test) {
+                $test->writeTest($extension);
+            }
+        }
+
+        /**
+         * Create test case for this function
+         *
+         * @access public
+         * @param  object  extension the function is part of
+         * @return object  generated test case
+         */
+        function createTest(CodeGen_PECL_Extension $extension) 
+        {
+            if (!$this->testCode) {
+                return false;
             }
 
-            return 0;
+            $test = new CodeGen_PECL_Element_Test;
+            
+            $test->setName($this->name);
+            $test->setTitle($this->name."() function");
+            
+            if ($this->testIni) {
+                $test->addIni($this->testIni);
+            }
+            
+            $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
+            if ($this->testSkipIf) {
+                $test->addSkipIf($this->testSkipIf);
+            }
+            
+            $test->setCode($this->testCode);
+            
+            if (!empty($this->testResult)) {
+                $test->setOutput($this->testResult['result']);
+                if (isset($this->testResult['mode'])) {
+                    $test->setMode($this->testResult['mode']);
+                }
+            }
+            
+            return $test;
         }
 
 

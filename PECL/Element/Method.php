@@ -395,6 +395,25 @@ require_once "CodeGen/PECL/Element/Class.php";
             
             return true;
         }
+
+        
+        /**
+         * Create test case for this function
+         *
+         * @access public
+         * @param  object  extension the function is part of
+         * @return object  generated test case
+         */
+        function createTest(CodeGen_PECL_Extension $extension) 
+        {
+            $test = parent::createTest($extension);
+
+            $test->setName($this->classname."::".$this->name);
+            $test->setTitle($this->name."() member function of class ".$this->classname);
+            
+            return $test;
+        }
+
     }
 
 

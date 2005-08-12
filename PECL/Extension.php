@@ -66,7 +66,7 @@ class CodeGen_PECL_Extension
     */
     static function version() 
     {
-        return "0.9.0";
+        return "1.0.0dev";
     }
 
     /**
@@ -1106,9 +1106,7 @@ $moduleHeader
             $code .=  sprintf("    PHP_FE(%-20s, NULL)\n", $function->getName());
         }
         foreach ($this->classes as $class) {
-            foreach ($class->methods as $method) {
-                $code.= $method->functionAliasEntry();
-            }
+            $code.= $class->functionAliasEntries();
         }
         $code .=  "    { NULL, NULL, NULL }\n";
         $code .=  "};\n/* }}} */\n\n";
@@ -2303,16 +2301,19 @@ http://pear.php.net/dtd/package-2.0.xsd">
         // function related tests
         foreach ($this->functions as $function) {
             $function->writeTest($this);
-            $testCount++;
+        }
+
+        // class method related tests
+        foreach ($this->classes as $class) {
+            $class->writeTests($this);            
         }
 
         // custom test cases (may overwrite custom function test cases)
         foreach ($this->testcases as $test) {
             $test->writeTest($this);
-            $testCount++;
         }
 
-        if (!$testCount) {
+        if (0 == count(glob($this->dirpath."/tests/*.phpt"))) {
             rmdir($this->dirpath."/tests");
         }
     }

@@ -196,7 +196,7 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   array
          */
-        public $methods = array();
+        protected $methods = array();
         
         function addMethod(CodeGen_PECL_Element_Method $method) 
         {
@@ -391,6 +391,34 @@ require_once "CodeGen/Tools/Indent.php";
             $xml = "";
  
             return $xml;
+        }
+
+        /**
+         * Write method test cases
+         *
+         * @param object Extension to write tests for
+         */
+        function writeTests(CodeGen_PECL_Extension $extension)
+        {
+            foreach ($this->methods as $method) {
+                $method->writeTest($extension);
+            }
+        }
+
+        /**
+         * Return function alias entries for all methods
+         *
+         */
+        function functionAliasEntries()
+        {
+            $code = "";
+
+            foreach($this->methods as $method) 
+            {
+                $code.= $method->functionAliasEntry();
+            }
+
+            return $code;
         }
         
     }
