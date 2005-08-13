@@ -27,8 +27,8 @@ Milestone 1.0
   - <class><property ...                         -> done
   - <class><function ...                         -> done
   - __construct needs special handling           -> done
-  - <interface>                                  -> missing
-  - type hints                                   -> missing
+  - <interface>                                  -> done
+  - type hints                                   -> done
 
 - full support for .phpt test case generation    -> done
 
