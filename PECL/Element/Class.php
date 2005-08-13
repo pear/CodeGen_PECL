@@ -350,7 +350,7 @@ require_once "CodeGen/Tools/Indent.php";
                 $interfaces = array();
                 foreach ($this->implements as $interface) {
                     echo sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
-                                    strtolower($interface), strlen($interface)+1);
+                                    strtolower($interface), strlen($interface) + 1);
                     echo "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
                     echo "        } else {\n";
                     echo "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
