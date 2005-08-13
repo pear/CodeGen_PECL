@@ -54,7 +54,7 @@ class CodeGen_PECL_Command
     {
         parent::__construct($extension);
         
-        if ($this->options->have("linespecs", "l")) {
+        if ($this->options->have("linespecs")) {
             $this->extension->setLinespecs(true);
         }
     }
@@ -67,8 +67,6 @@ class CodeGen_PECL_Command
     function commandOptions()
     {
         list($shortOptions, $longOptions) = parent::commandOptions();
-
-        $shortOptions .= "l";
 
         $longOptions= array_merge($longOptions, array("extname=", 
                                                       "full-xml", 
@@ -103,7 +101,8 @@ pecl-gen [-h] [--force] [--experimental] [--version]
   -h|--help          this message
   -f|--force         overwrite existing directories
   -d|--dir           output directory (defaults to extension name)
-  -l|--linespecs     generate #line specs
+  -l|--lint          check syntax only, don't create output
+  --linespecs        generate #line specs
   -x|--experimental  deprecated
   --function         create a function skeleton from a proto right away
   --version          show version info
