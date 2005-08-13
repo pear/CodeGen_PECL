@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<extension name="class_extends" version="1.0.0dev">
+
+ <class name="class1"/>
+
+ <class name="class2" extends="class1"/>
+
+ <test name="extend">
+  <code>
+   <?data 
+    $c2 = new class2; 
+    echo $c2 instanceof class1 ? "OK" : "Failure";
+   ?>
+  </code>
+ </test>
+
+</extension>

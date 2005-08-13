@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<extension name="class_abstract" version="1.0.0dev">
+
+<class name="class_a1" abstract="yes"/>
+
+ <test name="abstract_class_1">
+  <code>$c = new class_a1;</code>
+  <result mode="format">
+Fatal error: Cannot instantiate abstract class class_a1 in %s on line %d
+  </result>
+ </test>	
+
+ <test name="abstract_class_2">
+  <code>
+   class class_a1_ex extends class_a1 { }; 
+   $c = new class_a1_ex; 
+   echo "OK";
+  </code>
+ </test>	
+
+
+
+</extension>

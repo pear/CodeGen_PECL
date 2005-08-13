@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<extension name="class_type_hints" version="1.0.0dev">
+
+ <class name="class1"/>
+
+ <class name="class2">
+  <function name="foo" access="public">
+   <proto>int foo(object class1 c1, object class1 c2)</proto>
+   <code>
+RETURN_STRING("OK", 1);
+   </code>
+  </function>
+ </class>
+
+  <test>
+   <code>
+    <?data
+
+$p1 = new class1;
+$p2 = new class1;
+
+$c = new class2;
+
+echo $c->foo($p1, $p2);
+    ?>
+   </code>
+  </test>
+
+  <test>
+   <code>
+    <?data
+$c = new class2;
+
+echo $c->foo(1,2);
+    ?>
+   </code>
+   <result mode="format">
+Fatal error: Argument 1 must be an object of class class1 in %s on line %d
+   </result>
+  </test>
+
+
+
+
+
+</extension>
