@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<extension name="interface_simple" version="1.0.0dev">
+
+ <class name="c1">
+ </class>
+
+ <interface name="foo">
+   <function name="bar"><proto>int bar(object c1 xoc)</proto></function>
+ </interface>
+
+ <test name="001">
+  <code>
+   class test1 implements foo {
+     function bar(c1 $p) { }
+   }
+
+   $c = new c1;
+   $t = new test1;
+   echo "OK";
+  </code>
+ </test>
+
+ <test name="002">
+  <code>
+   class test1 implements foo {
+   }
+
+   $c = new c1;
+   $t = new test1;
+   echo "OK";
+  </code>
+  <result mode="format">
+Fatal error: Class test1 contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (foo::bar) in %s on line %d
+  </result>
+ </test>
+ 
+ <test name="003">
+  <code>
+   class test1 implements foo {
+     function bar($p) { }
+   }
+
+   $c = new c1;
+   $t = new test1;
+   echo "OK";
+  </code>
+  <result mode="format">
+Fatal error: Declaration of test1::bar() must be compatible with that of foo::bar() in %s on line %d
+  </result>
+ </test>
+
+</extension>
