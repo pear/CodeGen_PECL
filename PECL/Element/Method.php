@@ -156,49 +156,6 @@ require_once "CodeGen/PECL/Element/Class.php";
         }
 
         /**
-         * Code needed ahead of the method table 
-         *
-         * Abstract/Interface methods need to define their argument
-         * list ahead of the method table
-         *
-         * @returns string
-         */
-        function argInfoCode() {
-            $code = "";
-
-            if (count($this->params) > 1) {
-                $code.= "ZEND_BEGIN_ARG_INFO({$this->classname}__{$this->name}_args, 0)\n";
-
-                $params = $this->params;
-                array_shift($params);
-
-                $useTypeHints = true;
-
-                foreach($params as $param) {
-                    if ($param['type'] != "object" || !isset($param['subtype'])) {
-                        $useTypeHints = false;
-                        break;
-                    }
-                }
-
-                // TODO optional paramteres?
-                foreach($params as $param) {
-                    $byRef = empty($param["byRef"]) ? 0 : 1;
-                    if ($uesTypeHints) {
-                        $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
-                    } else {
-                        $code.= "  ZEND_ARG_INFO($byRef, $param[name])\n";
-                    }
-                }                
-                
-                $code.= "ZEND_END_ARG_INFO()\n";
-            }
-
-            return $code;
-        } 
-
-
-        /**
          * Hook for parameter parsing API function 
          *
          * @param  string  C expr. for number of arguments
@@ -330,24 +287,6 @@ require_once "CodeGen/PECL/Element/Class.php";
             return "PHP_METHOD({$this->classname}, {$this->name})";
         }
 
-        /**
-         * Create C code header snippet
-         *
-         * @access public
-         * @param  class Extension  extension the function is part of
-         * @return string           C code header snippet
-         */
-        function hCode($extension) 
-        {
-            $code = $this->cProto();
-            if ($code) {
-                $code.= ";\n";
-            }
-
-            $code.= $this->argInfoCode();
-
-            return $code;
-        }
 
         /**
          * Create C code implementing the PHP userlevel function
@@ -358,11 +297,11 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function cCode($extension) 
         {
-            if ($this->isAbstract || $this->isInterface) {
-                return $this->argInfoCode();
+            if (!$this->isAbstract && !$this->isInterface) {
+                return parent::cCode($extension);
             }
 
-            return parent::cCode($extension);
+            return "";
         }
 
         /**
@@ -445,6 +384,10 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function createTest(CodeGen_PECL_Extension $extension) 
         {
+            if ($this->isAbstract || $this->isInterface) {
+                return null;
+            }
+
             $test = parent::createTest($extension);
 
             $test->setName($this->classname."__".$this->name);

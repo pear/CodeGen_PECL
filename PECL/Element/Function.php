@@ -1386,10 +1386,58 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function hCode($extension) 
         {
-            return $this->cProto().";\n";
+            $code = $this->cProto();
+            if ($code) {
+                $code.= ";\n";
+            }
+
+            $code.= $this->argInfoCode();
+
+            return $code;
         }
 
 
+        /**
+         * Code needed ahead of the method table 
+         *
+         * Abstract/Interface methods need to define their argument
+         * list ahead of the method table
+         *
+         * @returns string
+         */
+        function argInfoCode() {
+            $code = "";
+
+            if (count($this->params) > 1) {
+                $code.= "ZEND_BEGIN_ARG_INFO({$this->classname}__{$this->name}_args, 0)\n";
+
+                $params = $this->params;
+                array_shift($params);
+
+                $useTypeHints = true;
+
+                foreach($params as $param) {
+                    if ($param['type'] != "object" || !isset($param['subtype'])) {
+                        $useTypeHints = false;
+                        break;
+                    }
+                }
+
+                // TODO optional paramteres?
+                foreach($params as $param) {
+                    $byRef = empty($param["byRef"]) ? 0 : 1;
+                    if ($useTypeHints) {
+                        $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
+                    } else {
+                        $code.= "  ZEND_ARG_INFO($byRef, $param[name])\n";
+                    }
+                }                
+                
+                $code.= "ZEND_END_ARG_INFO()\n";
+            }
+
+            return $code;
+        } 
     }
 
 ?>
