@@ -42,11 +42,16 @@ Milestone 1.0
 
 - better property access macros                  -> done
 
+- add a -l --lint option                         -> done
 
 
 
 not necessarily 1.0
 -------------------
+
+- write to tmpfiles first, only overwrite existing 
+  files if actual changes are detected, preserve
+  unchanged files (to make "make" happy)
 
 - fix whitespace in generated code               -> started, work in progress
 
