@@ -29,12 +29,13 @@ to select version-specific features
 if ($command->options->have("function"))
 {
 	$command->singleFunction();
-    exit(0);
+	exit(0);
 }
 
 // ext_skel compatibility?
 if ($command->options->have("extname")) {
 	$command->extSkelCompat();
+	exit(0);
 } 
 
 
