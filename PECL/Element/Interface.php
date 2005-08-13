@@ -181,6 +181,11 @@ require_once "CodeGen/Tools/Indent.php";
                 return PEAR::raiseError("method '$name' already exists");
             }
 
+# TODO
+#            if (!$method->isAbstract || !$method->isInterface) {
+#                return PEAR::raiseError("an interface method has to be declated both abstract and interface");
+#            }
+            
             $this->methods[$name] = $method;
 
             return true;
