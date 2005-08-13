@@ -2458,7 +2458,9 @@ Debug_TS
     */
     function successMsg()
     {
-        $msg = "Your extension has been created in directory {$this->dirpath}.\n";
+        $relpath = str_replace(getcwd(), '.', $this->dirpath);
+    
+        $msg = "Your extension has been created in directory $relpath.\n";
         if (!isset($this->readme)) {
             $msg.= "See ".basename($this->dirpath)."/README for further instructions.\n";
         }
@@ -2475,7 +2477,7 @@ Debug_TS
     */
     function writeReadme() 
     {
-        $file = new CodeGen_Tools_Outbuf("README");
+        $file = new CodeGen_Tools_Outbuf($this->dirpath."/README");
 
         $configOption = isset($this->with[$this->name]) ? "--with-" : "--enable-";
         $configOption.= $this->name;
