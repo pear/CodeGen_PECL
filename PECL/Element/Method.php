@@ -169,13 +169,25 @@ require_once "CodeGen/PECL/Element/Class.php";
             if (count($this->params) > 1) {
                 $code.= "ZEND_BEGIN_ARG_INFO({$this->classname}__{$this->name}_args, 0)\n";
 
-                foreach($this->params as $key => $param) {
-                    if ($key == 0) continue;
+                $params = $this->params;
+                array_shift($params);
 
-                    if ($param['type'] == "object" && isset($param['subtype'])) {
+                $useTypeHints = true;
+
+                foreach($params as $param) {
+                    if ($param['type'] != "object" || !isset($param['subtype'])) {
+                        $useTypeHints = false;
+                        break;
+                    }
+                }
+
+                // TODO optional paramteres?
+                foreach($params as $param) {
+                    $byRef = empty($param["byRef"]) ? 0 : 1;
+                    if ($uesTypeHints) {
                         $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
                     } else {
-                        $code.= "  ZEND_ARG_INFO(0, {$this->name})\n";
+                        $code.= "  ZEND_ARG_INFO($byRef, $param[name])\n";
                     }
                 }                
                 
