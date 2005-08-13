@@ -146,7 +146,8 @@ class CodeGen_PECL_ExtensionParser
     function tagstart_extension_interface_function($attr)
     {
         $method = new CodeGen_PECL_Element_Method($this->helper->getName());
-
+        $method->isAbstract();
+        $method->isInterface();
         $this->pushHelper($method);
         
         if (isset($attr["name"])) {
