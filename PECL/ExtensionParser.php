@@ -763,6 +763,7 @@ class CodeGen_PECL_ExtensionParser
 
 
     function tagstart_extension_test($attr) {
+        static $testCount = 0;
         $test = new CodeGen_PECL_Element_Test();
 
         if (isset($attr["name"])) {
@@ -771,12 +772,19 @@ class CodeGen_PECL_ExtensionParser
                 return $err;
             }
         } else {
-            return PEAR::raiseError("name attribut for <test> missing");
+            if (!$test->getName()) {
+                $test->setName(sprintf("%03d", ++$testCount));
+            }
         }
 
         $test->setSkipIf("!extension_loaded('".$this->extension->getName()."')");
 
         $this->pushHelper($test);
+    }
+
+    function tagstart_extension_tests_test($attr) 
+    {
+        return $this->tagstart_extension_test($attr);
     }
 
     function tagend_test_title($attr, $data) {
@@ -830,12 +838,16 @@ class CodeGen_PECL_ExtensionParser
     }
 
     function tagend_extension_test($attr, $data) {
-        $err = $this->extension->addTest($this->helper);
-        $this->popHelper();
+        $test =  $this->popHelper();
+        $err = $this->extension->addTest($test);
         return $err;
     }
 
-    function tagend_tests($attr, $data) {
+    function tagend_extension_tests_test($attr, $data) {
+        return $this->tagend_extension_test($attr, $data);
+    }
+
+    function tagend_extension_tests($attr, $data) {
         return true;
     }
 
