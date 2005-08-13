@@ -102,6 +102,7 @@ require_once "CodeGen/PECL/Element/Class.php";
         function isInterface() 
         {
             $this->isInterface = true;
+            $this->isAbstract  = true;
 
             return $this->validate();
         }
@@ -260,16 +261,17 @@ require_once "CodeGen/PECL/Element/Class.php";
          */
         function methodEntry() 
         {
-            if ($this->isInterface) {
-                return "";
-            }
+            $code = "";
 
             $arginfo = (count($this->params)>1) ? "{$this->classname}__{$this->name}_args" : "NULL";
 
-            if ($this->isAbstract) {
-                $code = "ZEND_FENTRY({$this->name}, NULL, $arginfo, ZEND_ACC_ABSTRACT | ";
+            if ($this->isAbstract || $this->isInterface) {
+                $code.= "ZEND_FENTRY({$this->name}, NULL, $arginfo, ZEND_ACC_ABSTRACT | ";
+                if ($this->isInterface) {
+                    $code.= " ZEND_ACC_INTERFACE | ";
+                }
             } else {
-                $code = "PHP_ME({$this->classname}, {$this->name}, $arginfo, /**/";
+                $code.= "PHP_ME({$this->classname}, {$this->name}, $arginfo, /**/";
             }
 
             $code.= "ZEND_ACC_".strtoupper($this->access);
@@ -371,8 +373,7 @@ require_once "CodeGen/PECL/Element/Class.php";
                 return PEAR::raiseError("A method can't be abstract and implemented at the same time");
             }
 
-            // TODO type hinting checks
-
+            // TODO add "abstract may not have test" as soon as test mess is cleaned up
             return true;
         }
 
