@@ -44,14 +44,16 @@ Milestone 1.0
 
 - add a -l --lint option                         -> done
 
+- write to tmpfiles first, only overwrite        -> done
+  existing files if actual changes are 
+  detected, preserve unchanged files 
+  (to make "make" happy)
 
 
 not necessarily 1.0
 -------------------
 
-- write to tmpfiles first, only overwrite existing 
-  files if actual changes are detected, preserve
-  unchanged files (to make "make" happy)
+- "object store" handling for private data       -> missing
 
 - fix whitespace in generated code               -> started, work in progress
 
@@ -65,8 +67,6 @@ not necessarily 1.0
 - full support for session handler API
 
 - full support for SAPI 
-
-- "object store" handling for private data       -> missing
 
 - return by reference (for 5.1 if it supports it)          
 
@@ -91,7 +91,6 @@ not necessarily 1.0
 
 - support compiler/linker flags setting using config programs
   like pkg-config, mysql_config etc.
-
 
 - <lib> shared=no 
   -> drop EXTNAME_SHARED_LIBADD parameter to PHP_ADD_LIBRARY_WITH_PATH
