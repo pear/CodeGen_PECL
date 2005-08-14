@@ -919,7 +919,7 @@ class CodeGen_PECL_Extension
         $fp->close();
   
         // configure options and dependencies have their own file
-        $fp = new CodeGen_PECL_CodeGen("$docdir/configure.xml");
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/configure.xml");
 
         $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
         if (empty($this->libs) && empty($this->headers)) {
@@ -1748,7 +1748,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
             if ($withName != $this->name) {
                 echo " 
-PHP_ARG_WITH({$withName}, {".$with->getSummary()."},
+PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
 [  --with-{$withName}[=DIR]      With {$withName} support])
 \n";
             }
