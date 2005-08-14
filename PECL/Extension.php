@@ -803,9 +803,9 @@ class CodeGen_PECL_Extension
         $this->writeCodeFile();
 
         foreach($this->logos as $logo) {
-            $fp = fopen("{$this->dirpath}/".$logo->getName()."_logos.h", "w");
-            fwrite($fp, CodeGen_Tools_Indent::tabify($logo->hCode()));
-            fclose($fp);
+            $fp = new CodeGen_PECL_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
+            $fp->puts($fp, CodeGen_Tools_Indent::tabify($logo->hCode()));
+            $fp->close();
         }
         
         // generate project files for configure (unices and similar platforms like cygwin)
@@ -854,8 +854,8 @@ class CodeGen_PECL_Extension
     {
         $idName = str_replace('_', '-', $this->name);
         
-        $fp = fopen("$docdir/reference.xml", "w");
-        fputs($fp,
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/reference.xml");
+        $fp->puts(
 "<?xml version='1.0' encoding='iso-8859-1'?>
 <!-- ".'$'."Revision: 1.1 $ -->
  <reference id='ref.$idName'>
@@ -877,15 +877,15 @@ class CodeGen_PECL_Extension
 ");
 
         if (empty($this->resources)) {
-            fputs($fp, "   &no.resource;\n");
+            $fp->puts("   &no.resource;\n");
         } else {
             foreach ($this->resources as $resource) {
-                fputs($fp, $resource->docEntry($idName));
+                $fp->puts($resource->docEntry($idName));
             }
         }
 
 
-        fputs($fp,
+        $fp->puts(
 "   </section>
 
    <section id='$idName.constants'>
@@ -893,18 +893,18 @@ class CodeGen_PECL_Extension
 ");
 
         if (empty($this->constants)) {
-            fputs($fp, "    &no.constants;\n");
+            $fp->puts("    &no.constants;\n");
         } else {
-            fputs($fp, CodeGen_PECL_Element_Constant::docHeader($idName));
+            $fp->puts(CodeGen_PECL_Element_Constant::docHeader($idName));
 
             foreach ($this->constants as $constant) {
-                fputs($fp, $constant->docEntry($idName));
+                $fp->puts($constant->docEntry($idName));
             }
 
-            fputs($fp, CodeGen_PECL_Element_Constant::docFooter());
+            $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
         }
 
-        fputs($fp,
+        $fp->puts(
 "   </section>
    
   </partintro>
@@ -914,16 +914,16 @@ class CodeGen_PECL_Extension
  </reference>
 ");
 
-        fputs($fp, CodeGen_PECL_Element::docEditorSettings());
+        $fp->puts(CodeGen_PECL_Element::docEditorSettings());
 
-        fclose($fp);
+        $fp->close();
   
         // configure options and dependencies have their own file
-        $fp = fopen("$docdir/configure.xml","w");
+        $fp = new CodeGen_PECL_CodeGen("$docdir/configure.xml");
 
-        fputs($fp,"\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
+        $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
         if (empty($this->libs) && empty($this->headers)) {
-            fputs($fp, "    &no.requirement;\n");
+            $fp->puts("    &no.requirement;\n");
         } else {
             // TODO allow custom text
             if (isset($this->libs)) {
@@ -932,7 +932,7 @@ class CodeGen_PECL_Extension
                     $libs[] = $lib->getName();
                 }
                 $ies = count($libs)>1 ? "ies" :"y";
-                fputs($fp, "<para>This extension requires the following librar$ies: ".join(",", $libs)."</para>\n");
+                $fp->puts("<para>This extension requires the following librar$ies: ".join(",", $libs)."</para>\n");
             }
             if (isset($this->headers)) {
                 $headers = array();
@@ -940,50 +940,50 @@ class CodeGen_PECL_Extension
                     $headers[] = $header->getName();
                 }
                 $s = count($headers)>1 ? "s" : "";
-                fputs($fp, "<para>This extension requires the following header$s: ".join(",", $headers)."</para>\n");
+                $fp->puts("<para>This extension requires the following header$s: ".join(",", $headers)."</para>\n");
             }
         }
-        fputs($fp, "\n   </section>\n\n");
+        $fp->puts("\n   </section>\n\n");
 
-        fputs($fp,"\n   <section id='$idName.install'>\n    &reftitle.install;\n");
+        $fp->puts("\n   <section id='$idName.install'>\n    &reftitle.install;\n");
         if (empty($this->with)) {
-            fputs($fp, "    &no.install;\n");
+            $fp->puts("    &no.install;\n");
         } else {
             foreach ($this->with as $with) {
                 if (isset($with->summary)) {
                     if (strstr($with->summary, "<para>")) {
-                        fputs($fp, $with->summary);
+                        $fp->puts($with->summary);
                     } else {
-                        fputs($fp, "    <para>\n".rtrim($with->summary)."\n    </para>\n");
+                        $fp->puts("    <para>\n".rtrim($with->summary)."\n    </para>\n");
                     }
                 } else {
                    // TODO default text
                 } 
             }
         }
-        fputs($fp, "\n   </section>\n\n");
+        $fp->puts("\n   </section>\n\n");
 
-        fputs($fp,"\n   <section id='$idName.configuration'>\n    &reftitle.runtime;\n");
+        $fp->puts("\n   <section id='$idName.configuration'>\n    &reftitle.runtime;\n");
         if (empty($this->phpini)) {
-            fputs($fp, "    &no.config;\n");
+            $fp->puts("    &no.config;\n");
         } else {
-            fputs($fp, CodeGen_PECL_Element_Ini::docHeader($this->name)); 
+            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
             foreach ($this->phpini as $phpini) {
-                fputs($fp, $phpini->docEntry($idName));
+                $fp->puts($phpini->docEntry($idName));
             }
-            fputs($fp, CodeGen_PECL_Element_Ini::docFooter()); 
+            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
         }
-        fputs($fp, "\n   </section>\n\n");
+        $fp->puts("\n   </section>\n\n");
             
-        fputs($fp, CodeGen_PECL_Element::docEditorSettings());
-        fclose($fp);
+        $fp->puts(CodeGen_PECL_Element::docEditorSettings());
+        $fp->close();
 
         @mkdir("$docdir/functions");
         foreach ($this->functions as $name => $function) {
             $filename = $docdir . "/functions/" . strtolower(str_replace("_", "-", $name)) . ".xml";
-            $funcfile = fopen($filename, "w");
-            fputs($funcfile, $function->docEntry($idName));
-            fclose($funcfile);
+            $funcfile = new CodeGen_PECL_FileReplacer($filename);
+            $funcfile->puts($function->docEntry($idName));
+            $funcfile->close();
         } 
     }
 
@@ -1846,11 +1846,11 @@ PHP_ARG_WITH({$withName}, {".$with->getSummary()."},
         if (count($this->makefragments)) {
             echo "  PHP_ADD_MAKEFILE_FRAGMENT\n";
 
-            $frag = fopen($this->dirpath."/Makefile.frag","w");
+            $frag = new CodeGen_PECL_FileReplacer($this->dirpath."/Makefile.frag");
             foreach($this->makefragments as $block) {
-                fputs($frag, CodeGen_Tools_Indent::tabify("\n$block\n"));
+                $frag->puts(CodeGen_Tools_Indent::tabify("\n$block\n"));
             }
-            fclose($frag);
+            $frag->close();
         }
 
         foreach ($this->configfragments['bottom'] as $fragment) {
@@ -2118,14 +2118,14 @@ SOURCE=$filename
     {
         if (count($this->authors)) {
             $this->addPackageFile("doc", "CREDITS");
-            $fp = fopen($this->dirpath."/CREDITS", "w");
-            fputs($fp, "{$this->name}\n");
+            $fp = new CodeGen_PECL_FileReplacer($this->dirpath."/CREDITS");
+            $fp->puts("{$this->name}\n");
             $names = array();
             foreach($this->authors as $author) {
                 $names[] = $author->getName();
             }
-            fputs($fp, join(", ", $names) . "\n"); 
-            fclose($fp);
+            $fp->puts(join(", ", $names) . "\n"); 
+            $fp->close();
         }
     }
 
@@ -2140,15 +2140,15 @@ SOURCE=$filename
     {
         if (($this->release) && isset($this->release->state) && $this->release->state !== 'stable') {
             $this->addPackageFile("doc", "EXPERIMENTAL");
-            $fp = fopen($this->dirpath."/EXPERIMENTAL", "w");
-            fputs($fp,
+            $fp = new CodeGen_PECL_FileReplacer($this->dirpath."/EXPERIMENTAL");
+            $fp->puts(
 "this extension is experimental,
 its functions may change their names 
 or move to extension all together 
 so do not rely to much on them 
 you have been warned!
 ");
-            fclose($fp);
+            $fp->close();
         }
     }
 
