@@ -19,6 +19,9 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
+/**
+ * include
+ */
 require_once "CodeGen/Element.php";
 
 /**

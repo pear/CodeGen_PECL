@@ -19,6 +19,9 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
+/**
+ * include
+ */
 require_once "CodeGen/PECL/Element.php";
 
 /**
@@ -138,7 +141,7 @@ class CodeGen_PECL_Dependency_With
      */
     function getSummary()
     {
-        return $this->summary;
+        return $this->summary ? $this->summary : "whether {$this->name} is available";
     }
 
     /**

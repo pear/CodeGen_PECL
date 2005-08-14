@@ -85,7 +85,7 @@ class CodeGen_PECL_Element_Test
     /**
      * Testcase title
      *
-     * @type   string
+     * @var   string
      */
     protected $title = "";
 
@@ -114,7 +114,7 @@ class CodeGen_PECL_Element_Test
     /**
      * Testcase description
      *
-     * @type   string
+     * @var   string
      */
     protected $description = "";
 
@@ -143,7 +143,7 @@ class CodeGen_PECL_Element_Test
     /**
      * php.ini settings for this test
      *
-     * @type   string
+     * @var   string
      */
     protected $ini = "";
 
@@ -184,7 +184,7 @@ class CodeGen_PECL_Element_Test
     /**
      * Test code to decide whether to skip a test
      *
-     * @type   string
+     * @var   string
      */
     protected $skipif = "";
 
@@ -239,7 +239,7 @@ class CodeGen_PECL_Element_Test
      * GET data
      *
      * @access protected
-     * @type   string
+     * @var   string
      */
     protected $get = false;
 
@@ -269,7 +269,7 @@ class CodeGen_PECL_Element_Test
      * raw POST data
      *
      * @access protected
-     * @type   string
+     * @var   string
      */
     protected $post = false;
 
@@ -298,7 +298,7 @@ class CodeGen_PECL_Element_Test
     /**
      * actual test code
      *
-     * @type   string
+     * @var   string
      */
     protected $code;
 
@@ -327,7 +327,7 @@ class CodeGen_PECL_Element_Test
     /**
      * expected output for test code
      *
-     * @type   string
+     * @var   string
      */
     protected $output = "OK";
 
@@ -356,7 +356,7 @@ class CodeGen_PECL_Element_Test
     /**
      * Output block style
      *
-     * @type   string
+     * @var   string
      */
     protected $mode = "plain";
 
