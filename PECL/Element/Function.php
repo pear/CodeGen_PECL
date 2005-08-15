@@ -96,6 +96,19 @@ require_once "CodeGen/Tools/Tokenizer.php";
             return $this->name;
         }
 
+        /**
+         * distinguishable name getter
+         *
+         * here it's just the same as the plain name
+         * but e.g. for class methods that wouldn't
+         * be enough
+         *
+         * @return string
+         */
+        function getFullName()
+        {
+            return $this->name;
+        }
 
         /**
          * A short description
@@ -1409,7 +1422,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
             $code = "";
 
             if (count($this->params) > 1) {
-                $code.= "ZEND_BEGIN_ARG_INFO({$this->classname}__{$this->name}_args, 0)\n";
+                $code.= "ZEND_BEGIN_ARG_INFO(".$this->getFullName()."_args, 0)\n";
 
                 $params = $this->params;
                 array_shift($params);

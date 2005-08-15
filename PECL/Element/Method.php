@@ -79,6 +79,16 @@ require_once "CodeGen/PECL/Element/Class.php";
         }
 
         /**
+         * distinguishable name getter
+         *
+         * @return string
+         */
+        function getFullName()
+        {
+            return $this->classname."__".$this->name;
+        }
+
+        /**
          * Is this an abstract method?
          *
          * @var   bool
@@ -232,7 +242,7 @@ require_once "CodeGen/PECL/Element/Class.php";
         {
             $code = "";
 
-            $arginfo = (count($this->params)>1) ? "{$this->classname}__{$this->name}_args" : "NULL";
+            $arginfo = (count($this->params)>1) ? ($this->getFullName()."_args") : "NULL";
 
             if ($this->isAbstract || $this->isInterface) {
                 $code.= "ZEND_FENTRY({$this->name}, NULL, $arginfo, ZEND_ACC_ABSTRACT | ";
@@ -390,7 +400,7 @@ require_once "CodeGen/PECL/Element/Class.php";
 
             $test = parent::createTest($extension);
 
-            $test->setName($this->classname."__".$this->name);
+            $test->setName($this->getFullName());
             $test->setTitle($this->classname."::".$this->name."() member function");
             
             return $test;
