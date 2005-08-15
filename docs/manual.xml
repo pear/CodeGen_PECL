@@ -222,11 +222,22 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     generated C code.
    </para>
    <para>
-	You can specify which CodeGen_Pecl version your specification file
+	You can specify which CodeGen_PECL version your specification file
     was build for using the <literal>version=...</literal> attribute.
     The <filename>pecl-gen</filename> command will not accept specifications
     written for a newer version of CodeGen_PECL than the one installed.
+    If the requested version is older then the current one then CodeGen_PECL
+    will try to fall back to the older versions behavior for features
+    that have changed in incompatible ways.
    </para>
+   <note>
+    <para>
+     So far two such changes have happened: in version 0.9.0 a new
+     prototype parser was introduced that might not be 100% backwards
+     compatible with the older one and with 1.0.0 the names of some
+     of the variables in the generated code changed.
+    </para>
+   </note>
    <para>
     The tags <literal>&lt;summary&gt;</literal> and
     <literal>&lt;description&gt;</literal> should be added at the very top of
@@ -237,11 +248,11 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     extension. The summary line is also put into the
     <literal>phpinfo()</literal> output of your extension.
    </para>
-   <example>
+      <example>
     <title>Extension basics</title>
     <programlisting role="xml">
 <![CDATA[
-<extension name="sample">
+<extension name="sample" version="0.9.0">
  <summary>A sample PHP extension</summary>
  <description>
   This is a sample extension specification
