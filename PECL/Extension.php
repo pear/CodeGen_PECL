@@ -803,7 +803,7 @@ class CodeGen_PECL_Extension
         $this->writeCodeFile();
 
         foreach($this->logos as $logo) {
-            $fp = new CodeGen_PECL_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
+            $fp = new CodeGen_Tools_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
             $fp->puts($fp, CodeGen_Tools_Indent::tabify($logo->hCode()));
             $fp->close();
         }
@@ -1846,7 +1846,7 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
         if (count($this->makefragments)) {
             echo "  PHP_ADD_MAKEFILE_FRAGMENT\n";
 
-            $frag = new CodeGen_PECL_FileReplacer($this->dirpath."/Makefile.frag");
+            $frag = new CodeGen_Tools_FileReplacer($this->dirpath."/Makefile.frag");
             foreach($this->makefragments as $block) {
                 $frag->puts(CodeGen_Tools_Indent::tabify("\n$block\n"));
             }
@@ -2118,7 +2118,7 @@ SOURCE=$filename
     {
         if (count($this->authors)) {
             $this->addPackageFile("doc", "CREDITS");
-            $fp = new CodeGen_PECL_FileReplacer($this->dirpath."/CREDITS");
+            $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/CREDITS");
             $fp->puts("{$this->name}\n");
             $names = array();
             foreach($this->authors as $author) {
@@ -2140,7 +2140,7 @@ SOURCE=$filename
     {
         if (($this->release) && isset($this->release->state) && $this->release->state !== 'stable') {
             $this->addPackageFile("doc", "EXPERIMENTAL");
-            $fp = new CodeGen_PECL_FileReplacer($this->dirpath."/EXPERIMENTAL");
+            $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/EXPERIMENTAL");
             $fp->puts(
 "this extension is experimental,
 its functions may change their names 
