@@ -981,7 +981,7 @@ class CodeGen_PECL_Extension
         @mkdir("$docdir/functions");
         foreach ($this->functions as $name => $function) {
             $filename = $docdir . "/functions/" . strtolower(str_replace("_", "-", $name)) . ".xml";
-            $funcfile = new CodeGen_PECL_FileReplacer($filename);
+            $funcfile = new CodeGen_Tools_FileReplacer($filename);
             $funcfile->puts($function->docEntry($idName));
             $funcfile->close();
         } 
