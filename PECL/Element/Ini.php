@@ -97,23 +97,31 @@ require_once "CodeGen/PECL/Element.php";
       {
           switch ($type) {
           case "bool":
-              $this->onupdate = "OnUpdateBool";
               $this->cType = "zend_bool";
+              if (!$this->onupdate) {
+                  $this->onupdate = "OnUpdateBool";
+              }
               return true;          
 
           case "int":
-              $this->onupdate = "OnUpdateLong";
               $this->cType = "long";
+              if (!$this->onupdate) {
+                  $this->onupdate = "OnUpdateLong";
+              }
               return true;
 
           case "float":
-              $this->onupdate = "OnUpdateReal";
               $this->cType = "double";
+              if (!$this->onupdate) {
+                  $this->onupdate = "OnUpdateReal";
+              }
               return true;
 
           case "string":
-              $this->onupdate = "OnUpdateString";
               $this->cType = "char *";
+              if (!$this->onupdate) {
+                  $this->onupdate = "OnUpdateString";
+              }
               return true;
 
           default:
@@ -130,7 +138,7 @@ require_once "CodeGen/PECL/Element.php";
        */
       function getType()
       {
-          return $this->type;
+          return $this->cType;
       }
 
 

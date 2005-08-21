@@ -530,19 +530,14 @@ class CodeGen_PECL_ExtensionParser
             
         // php.ini settings are stored in modul-global variables
         $global = new CodeGen_PECL_Element_Global;
-        $err = $global->setName($ini->name);
+        $err = $global->setName($ini->getName());
         if (PEAR::isError($err)) {
             return $err;
         }
-        $err = $global->setType($ini->c_type);
+        $err = $global->setType($ini->getType());
         if (PEAR::isError($err)) {
             return $err;
         }
-        $err = $global->setValue($ini->value);
-        if (PEAR::isError($err)) {
-            return $err;
-        }
-            
         $err = $this->extension->addGlobal($global);
 
         return $err;
