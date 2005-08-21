@@ -122,7 +122,7 @@ class CodeGen_PECL_Element_Global
      * @access private
      * @var     string
      */
-    protected $value;
+    protected $value = null;
 
     /**
      * Set method for default value
@@ -196,11 +196,19 @@ class CodeGen_PECL_Element_Global
     function cCode($name) 
     {
         $code = "  {$name}_globals->{$this->name} = ";
-        if (strstr($this->type, "*")) {
-            $code .= "NULL;\n";
+
+        if ($this->value != null) {
+            $code .= $this->value;
         } else {
-            $code .= "0;\n";
-        }
+            if (strstr($this->type, "*")) {
+                $code .= "NULL";
+            } else {
+                $code .= "0";
+            }
+        } 
+        
+        $code .= ";\n";
+
         return $code;
     }
   
