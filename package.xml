@@ -21,6 +21,13 @@
     </maintainer>
 
     <maintainer>
+      <user>luckec</user>
+      <name>Carsten Lucke</name>
+      <email>luckec@php.net</email>
+      <role>contributor</role>
+    </maintainer>
+
+    <maintainer>
       <user>pajoye</user>
       <name>Pierre-Alain Joye</name>
       <email>pajoye@php.net</email>
@@ -33,6 +40,7 @@
       <email>hartmann@php.net</email>
       <role>helper</role>
     </maintainer>
+
   </maintainers>
 
   <description>
