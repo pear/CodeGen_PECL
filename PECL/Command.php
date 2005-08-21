@@ -136,7 +136,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     {
         $func = new CodeGen_PECL_Element_Function;
 
-        $func->set_role("public");
+        $func->setRole("public");
 
         $err = $func->setProto(trim($this->options->value("function")));
         if (PEAR::isError($err)) {
