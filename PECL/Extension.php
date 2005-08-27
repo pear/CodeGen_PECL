@@ -804,7 +804,7 @@ class CodeGen_PECL_Extension
 
         foreach($this->logos as $logo) {
             $fp = new CodeGen_Tools_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
-            $fp->puts($fp, CodeGen_Tools_Indent::tabify($logo->hCode()));
+            $fp->puts(CodeGen_Tools_Indent::tabify($logo->hCode()));
             $fp->close();
         }
         
