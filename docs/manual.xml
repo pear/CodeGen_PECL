@@ -15,7 +15,7 @@
    <para>
     <literal>CodeGen_PECL</literal> (formerly known as <literal>PECL_Gen</literal>
     is a tool that can automatically create the basic framework for a PHP extension 
-    from a rather simple XML specification file. The actual funcionality is provided
+    from a rather simple XML specification file. The actual functionality is provided
     by the script <filename>pecl-gen</filename> that is installed by the 
     <literal>CodeGen_PECL</literal> package.
    </para>
