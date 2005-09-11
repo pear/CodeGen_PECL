@@ -146,10 +146,20 @@ class CodeGen_PECL_Dependency_Lib
             $first = false;
         }
         
-        $ret.= "  PHP_ADD_LIBRARY_WITH_PATH({$this->name}, \$PHP_{$withUpname}_DIR/{$this->path}, {$extUpname}_SHARED_LIBADD)\n";
-            
         if ($this->function) {
-            $ret.= "  AC_CHECK_LIB({$this->name}, {$this->function}, [AC_DEFINE(HAVE_{$extUpname},1,[ ])], [AC_MSG_ERROR({$this->name} library not found or wrong version)],)\n";
+            $ret.= "
+  PHP_CHECK_LIBRARY({$this->name}, {$this->function},
+  [
+    PHP_ADD_LIBRARY_WITH_PATH({$this->name}, \$PHP_{$withUpname}_DIR/{$this->path}, {$extUpname}_SHARED_LIBADD)
+  ],[
+    AC_MSG_ERROR([wrong {$this->name} lib version or lib not found])
+  ],[
+    -L\$PHP_{$withUpname}_DIR/{$this->path}
+  ])
+";
+        } else {
+            $ret.= "  PHP_ADD_LIBRARY_WITH_PATH({$this->name}, \$PHP_{$withUpname}_DIR/{$this->path}, {$extUpname}_SHARED_LIBADD)\n";
+            
         }
         
         return $ret;
