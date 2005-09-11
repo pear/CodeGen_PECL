@@ -1783,11 +1783,11 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
             echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
 
             foreach($with->getHeaders() as $header) {
-                echo $header->configm4($this->name, $this->name);
+                echo $header->configm4($this->name, $with->getName());
             }  
 
             foreach ($with->getLibs() as $lib) {
-                echo $lib->configm4($this->name, $with->name);
+                echo $lib->configm4($this->name, $with->getName());
             }
             
             echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
