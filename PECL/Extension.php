@@ -11,12 +11,12 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
- * @link       http://pear.php.net/package/CodeGen
+ * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
 /**
@@ -50,12 +50,12 @@ require_once "CodeGen/PECL/Dependency/Platform.php";
  * A class that generates PECL extension soure and documenation files
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
- * @link       http://pear.php.net/package/CodeGen
+ * @link       http://pear.php.net/package/CodeGen_PECL
  */
 class CodeGen_PECL_Extension 
     extends CodeGen_Extension
@@ -1707,8 +1707,6 @@ PHP_MINFO_FUNCTION({$this->name})
     function writeConfigM4() {
         $upname = strtoupper($this->name);
 
-        $flagVar = ($this->language === "cpp") ? "CXXFLAGS" : "CFLAGS";
-
         $this->addPackageFile("conf", "config.m4");
 
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/config.m4", CodeGen_Tools_Outbuf::OB_TABIFY);
@@ -1782,10 +1780,11 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
             }
 
 
-            echo "  export OLD_$flagVar=\"\$$flagVar\"\n";
+            echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
+            echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
 
-            echo "  export $flagVar=\"\$$flagVar \$INCLUDES -DHAVE_$withUpname\"\n";
 
+echo "# headers\n";
             foreach($with->getHeaders() as $header) {
                 echo $header->configm4($this->name, $this->name);
             }  
@@ -1794,7 +1793,7 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
                 echo $lib->configm4($this->name, $with->name);
             }
             
-            echo "  export $flagVar=\"\$OLD_$flagVar\"\n";
+            echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
         }
 
         $pathes = array();
@@ -1812,9 +1811,9 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
             echo "  PHP_ADD_LIBRARY(stdc++,,{$upname}_SHARED_LIBADD)\n";
         }
 
-        echo "  export OLD_$flagVar=\"\$$flagVar\"\n";
+        echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
+        echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_".strtoupper($this->name)."\"\n";
 
-        echo "  export $flagVar=\"\$$flagVar \$INCLUDES -DHAVE_".strtoupper($this->name)."\"\n";
 
         foreach($this->headers as $header) {
             echo $header->configm4($this->name, $this->name);
@@ -1824,7 +1823,7 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
             echo "  AC_CHECK_TYPE(".$resource->getPayload().", [], [AC_MSG_ERROR(required payload type for resource ".$resource->getName()." not found)], [#include \"php_{$this->name}.h\"])\n";
         }
 
-        echo "  export $flagVar=\"\$OLD_$flagVar\"\n";
+        echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
 
         if (count($this->libs)) {
             $first = true;
