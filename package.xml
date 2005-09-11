@@ -69,7 +69,8 @@
 
     <deps>
       <dep type="php" rel="ge" version="5"/> 
-      <dep type="pkg" rel="ge" version="0.1">CodeGen</dep>
+      <dep type="pkg" rel="ge" version="1.2">PEAR</dep>
+      <dep type="pkg" rel="ge" version="0.9">CodeGen</dep>
     </deps>
 
     <filelist>
