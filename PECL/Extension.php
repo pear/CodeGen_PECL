@@ -1779,12 +1779,9 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
                 echo "  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
             }
 
-
             echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
             echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
 
-
-echo "# headers\n";
             foreach($with->getHeaders() as $header) {
                 echo $header->configm4($this->name, $this->name);
             }  
