@@ -995,7 +995,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     $argString = "";
                     $argPointers = array();
                     $optional = false;
-                    $resFetch = "";
+                    $postProcess = "";
                     $zvalType = false;
                     foreach ($this->params as $param) {
                         if ($param["type"] === "void"  || $param["type"] === "...") {
@@ -1046,6 +1046,8 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             $zvalType = true;
                             $argString .= "a";
                             $code .= "    zval * $name = NULL;\n";
+                            $code .= "    HashTable * {$name}_hash = NULL;\n";
+                            $postProcess.= "    {$name}_hash = HASH_OF($name);\n";
                             break;
 
                         case "object": 
@@ -1086,25 +1088,25 @@ require_once "CodeGen/Tools/Tokenizer.php";
                                 }
                                 $code .= "    ".$resource->getPayload()." * $payloadVar;\n";
                                 
-                                $resFetch .= "    ZEND_FETCH_RESOURCE($payloadVar, ".$resource->getPayload()." *, &$resVar, $idVar, \"$param[subtype]\", le_$param[subtype]);\n";
+                                $postProcess .= "    ZEND_FETCH_RESOURCE($payloadVar, ".$resource->getPayload()." *, &$resVar, $idVar, \"$param[subtype]\", le_$param[subtype]);\n";
                             } else {
-                                $resFetch .="    ZEND_FETCH_RESOURCE(???, ???, $resVar, $idVar, \"???\", ???_rsrc_id);\n";
+                                $postProcess .="    ZEND_FETCH_RESOURCE(???, ???, $resVar, $idVar, \"???\", ???_rsrc_id);\n";
                             }
                             break;
 
                         case "stream":
                             $zvalType = true;
                             $argString .= "r";
-                            $code .= "    zval * {$name}_zval = NULL; \n";
+                            $code .= "    zval * {$name}_zval = NULL;\n";
                             $code .= "    php_stream * $name = NULL:\n";
-                            $resFetch.= "    php_stream_from_zval($name, &_z$name);\n"; 
+                            $postProcess.= "    php_stream_from_zval($name, &_z$name);\n"; 
                             break;
 
                         case "callback": 
-                            $resFetch.= "    if (!zend_is_callable({$name}, 0 NULL) {\n";
-                            $resFetch.= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
-                            $resFetch.= "      return;";
-                            $resFetch.= "    }\n";
+                            $postProcess.= "    if (!zend_is_callable({$name}, 0 NULL) {\n";
+                            $postProcess.= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
+                            $postProcess.= "      return;";
+                            $postProcess.= "    }\n";
                             /* fallthru */
                         case "mixed":
                             $zvalType = true;
@@ -1143,8 +1145,8 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
                     
 
-                    if ($resFetch) {
-                        $code.="$resFetch\n\n";
+                    if ($postProcess) {
+                        $code.= "$postProcess\n\n";
                     }
                 }
                     
