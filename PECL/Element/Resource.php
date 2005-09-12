@@ -264,6 +264,18 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
 
 
     /** 
+     * Generate config.m4 to check for payload type
+     *
+     * @access public
+     * @return string autoconf code snippet
+     */
+    function configm4($extension_name) {
+        return "  AC_CHECK_TYPE(".$this->getPayload()." *, [], [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], [#include \"php_{$extension_name}.h\"])\n";
+    }
+
+
+
+    /** 
      * Generate documentation for this resource
      *
      * @access public 
