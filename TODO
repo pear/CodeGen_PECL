@@ -1,8 +1,9 @@
 Milestone 1.0
 -------------
 
-- <lib> and <header> tags *within* <with>...</with>  -> in progress
-  => parsing ok now, needs config.m4 output tweaks
+- "object store" handling for private data       -> missing
+
+- <lib> and <header> tags *within* <with>...</with>  -> done (needs more testing?)
 
 - change the resource variable names,            -> done
   check extension version to provide BC
@@ -53,7 +54,6 @@ Milestone 1.0
 not necessarily 1.0
 -------------------
 
-- "object store" handling for private data       -> missing
 
 - fix whitespace in generated code               -> started, work in progress
 
