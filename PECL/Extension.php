@@ -1289,6 +1289,13 @@ $moduleHeader
             echo $header->hCode(false);
         }
 
+        foreach ($this->with as $with) {
+            foreach ($with->getHeaders() as $header) {
+                echo $header->hCode(false);
+            }
+        }
+
+
         if (isset($this->code["header"]["top"])) {
             foreach ($this->code["header"]["top"] as $code) {
                 echo CodeGen_Tools_Indent::indent(0, $code);
@@ -1817,7 +1824,7 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
         }  
 
         foreach ($this->resources as $resource) {
-            echo "  AC_CHECK_TYPE(".$resource->getPayload().", [], [AC_MSG_ERROR(required payload type for resource ".$resource->getName()." not found)], [#include \"php_{$this->name}.h\"])\n";
+            echo $resource->configm4($this->name);
         }
 
         echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
