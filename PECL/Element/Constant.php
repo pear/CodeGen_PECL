@@ -152,6 +152,17 @@ require_once "CodeGen/PECL/Element.php";
         }
 
         /**
+         * Get constant value 
+         *
+         * @access public
+         * @return string  the value
+         */
+        function getValue()
+        {
+            return $this->value;
+        }
+
+        /**
          * Set constant descriptive text
          *
          * @access public

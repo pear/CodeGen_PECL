@@ -492,7 +492,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             // now see if this is a constand defined by this extension
                             $constants = $extension->getConstants();
                             if (isset($constants[$token])) {
-                                $param["default"] = $constants[$token]->value;
+                                $param["default"] = $constants[$token]->getValue();
                             } else {
                                 return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
                             }
