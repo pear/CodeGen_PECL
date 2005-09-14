@@ -114,7 +114,7 @@ class CodeGen_PECL_Dependency_With
      */
     function setName($name)
     {
-        if (!ereg("[:alpha:][[:alnum:]-]*", $name)) {
+        if (!ereg("[[:alpha:]][[:alnum:]-]*", $name)) {
             return PEAR::raiseError("'$name' is not a valid --with option name");
         }
 
