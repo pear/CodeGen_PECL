@@ -1,7 +1,7 @@
 Milestone 1.0
 -------------
 
-- "object store" handling for private data       -> missing
+- "object store" handling for private data       -> done, needs testing 
 
 - <lib> and <header> tags *within* <with>...</with>  -> done (needs more testing?)
 
@@ -56,6 +56,8 @@ not necessarily 1.0
 
 
 - fix whitespace in generated code               -> started, work in progress
+
+- postprocess code with indent if available?
 
 - multiple logos                                 -> started, needs checking
 
