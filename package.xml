@@ -56,9 +56,24 @@
 
   <release>
     <state>beta</state>
-    <version>1.0.0dev</version>
-    <date>2005-08-11</date>
+    <version>1.0.0rc1</version>
+    <date>2005-09-22</date>
     <notes>
+I'm feature-complete for a 1.0 release now :)
+
+- object store support for private C/C++ data in objects
+
+- &lt;lib&gt; and &lt;header&gt; tags within &lt;with&gt;
+
+- interface and type hints support
+
+- added a lint option (-l) for syntax checking of spec files
+
+- write to tmpfiles first, only overwrite        -> done
+  existing files if actual changes are 
+  detected, preserve unchanged files 
+  (to make "make" happy)
+
 - changed names of variables generated for resource parameters,
   backwards compatibility is provided by checking the extension
   tags version attribute, for versions &lt; 1.0.0dev the old naming
