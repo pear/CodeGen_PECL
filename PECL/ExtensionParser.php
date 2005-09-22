@@ -96,7 +96,7 @@ class CodeGen_PECL_ExtensionParser
         
     function tagstart_extension_class_function($attr)
     {
-        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
+        $method = new CodeGen_PECL_Element_Method($this->helper);
 
         $this->pushHelper($method);
         
@@ -977,6 +977,28 @@ class CodeGen_PECL_ExtensionParser
         }
 
         return $this->helper->addConstant($const);
+    }
+
+    
+    function tagend_class_payload($attr, $data) 
+    {
+        if (!isset($attr["type"])) {
+            return PEAR::raiseError("type attribute missing for class payload");
+        }
+        $this->helper->setPayloadType($attr["type"]);
+
+        $alloc = isset($attr["alloc"]) ? $this->toBool($attr["alloc"]): true;
+        $this->helper->setPayloadAlloc($alloc);
+    }
+
+    function tagend_class_init($attr, $data) 
+    {
+        $this->helper->setPayloadCtor($data);
+    }
+
+    function tagend_class_destruct($attr, $data) 
+    {
+        $this->helper->setPayloadDtor($data);
     }
 
 

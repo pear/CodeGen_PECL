@@ -49,8 +49,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var     string
          */
-        private $name  = "unknown";
+        protected $name  = "unknown";
 
+        /**
+         * class name setter
+         *
+         * @param string Classname
+         */
         function setName($name) 
         {
             if (!self::isName($name)) {
@@ -62,6 +67,11 @@ require_once "CodeGen/Tools/Indent.php";
             return true;
         }
 
+        /**
+         * class name getter
+         *
+         * @return string Classname
+         */
         function getName()
         {
             return $this->name;
@@ -74,8 +84,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var     string
          */
-        private $summary = "";
+        protected $summary = "";
 
+        /**
+         * Description summary setter
+         *
+         * @param string Description summary
+         */
         function setSummary($text)
         {
             $this->summary = $text;
@@ -90,8 +105,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var     string
          */
-        private $description  = "";
+        protected $description  = "";
 
+        /**
+         * Class description setter
+         *
+         * @param string Class description
+         */
         function setDescription($text)
         {
             $this->description = $text;
@@ -107,8 +127,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   string
          */
-        private $documentation = "";
+        protected $documentation = "";
 
+        /**
+         * Class documentation setter
+         *
+         * @param string Class documentation
+         */
         function setDocumentation($text) {
             $this->documentation = $text;
         }
@@ -120,8 +145,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   string
          */
-        private $extends = "";
+        protected $extends = "";
 
+        /**
+         * Set parent class that this class inherits from
+         *
+         * @param string parent class name
+         */
         function setExtends($parent) 
         {
             if (!self::isName($parent)) {
@@ -137,8 +167,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   array
          */
-        private $implements = array();
+        protected $implements = array();
         
+        /**
+         * Add an interface that this class implements
+         *
+         * @param string interface name
+         */
         function addInterface($interface) 
         {
             if (!self::isName($interface)) {
@@ -158,8 +193,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   array
          */
-        private $properties = array();
+        protected $properties = array();
         
+        /**
+         * Add a class property
+         *
+         * @param object a class property object
+         */
         function addProperty(CodeGen_PECL_Element_Property $property) 
         {
             $name = $property->getName();
@@ -177,8 +217,13 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   array
          */
-        private $constants = array();
+        protected $constants = array();
         
+        /**
+         * Add a constant to a class
+         *
+         * @param object a class constant object
+         */
         function addConstant(CodeGen_PECL_Element_ClassConstant $constant) 
         {
             $name = $constant->getName();
@@ -198,6 +243,11 @@ require_once "CodeGen/Tools/Indent.php";
          */
         protected $methods = array();
         
+        /**
+         * Add a method definition to the class
+         *
+         * @param object class method object
+         */
         function addMethod(CodeGen_PECL_Element_Method $method) 
         {
             $name = $method->getName();
@@ -218,8 +268,11 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   bool
          */
-        private $isAbstract = false;
+        protected $isAbstract = false;
 
+        /**
+         * Make class abstract
+         */
         function isAbstract() 
         {
             $this->isAbstract = true;
@@ -232,9 +285,12 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   bool
          */
-        private $isFinal = false;
+        protected $isFinal = false;
 
-        function isFinal() 
+        /**
+         * Make class final
+         */
+        function isFinal()
         {
             $this->isFinal = true;
         }
@@ -246,8 +302,11 @@ require_once "CodeGen/Tools/Indent.php";
          *
          * @var   bool
          */
-        private $isInterface = false;
+        protected $isInterface = false;
 
+        /**
+         * Make class an interface 
+         */
         function isInterface() 
         {
             // TODO: check for already added non-abstract stuff
@@ -256,6 +315,120 @@ require_once "CodeGen/Tools/Indent.php";
         }
 
 
+        /**
+         * Class payload data type  
+         *
+         * @var string  C type name class payload data
+         */
+        protected $payloadType = "";
+
+        /**
+         * Payload type setter
+         * 
+         * @param string
+         */
+        function setPayloadType($type) 
+        {
+            // TODO check
+            $this->payloadType = $type;
+        }
+
+        /**
+         * Payload type getter
+         *
+         * @return string
+         */
+        function getPayloadType() 
+        {
+            return $this->payloadType;
+        }
+
+
+        /**
+         * Allocate storage space for payload data? 
+         *
+         * @var bool
+         */
+        protected $payloadAlloc = true;
+
+        /**
+         * Payload alloc setter
+         * 
+         * @param string
+         */
+        function setPayloadAlloc($alloc) 
+        {
+            $this->payloadAlloc = (bool)$alloc;
+        }
+
+        /**
+         * Payload init code snippet
+         *
+         * @param string
+         */
+        protected $payloadCtor = "";
+        
+        /** 
+         * Payload init code setter
+         *
+         * @param string code snippet
+         */
+        function setPayloadCtor($code)
+        {
+            $this->payloadDtor = $code;
+        }
+
+        /**
+         * Payload init code getter
+         *
+         * @return string code snippet
+         */
+        function getPayloadCtor()
+        {
+            $code = "";
+
+            if ($this->payloadAlloc) {
+                $code.= "    intern->data = ({$this->payloadType} *)malloc(sizeof({$this->payloadType}));\n";
+            }
+
+            $code .= $this->payloadCtor; // TODO indent, block
+
+            return $code;
+        }
+
+
+        /**
+         * Payload dtor code snippet
+         *
+         * @param string
+         */
+        protected $payloadDtor = "";
+        
+        /** 
+         * Payload dtor code setter
+         *
+         * @param string code snippet
+         */
+        function setPayloadDtor($code)
+        {
+            $this->payloadDtor = $code;
+        }
+
+        /**
+         * Payload dtor code getter
+         *
+         * @return string code snippet
+         */
+        function getPayloadDtor()
+        {
+            $code = $this->payloadDtor; // TODO indent
+
+            if ($this->payloadAlloc) {
+                $code.= "    free(intern->data);\n";
+            }
+
+            return $code;
+        }
         /**
          * Create C header entry for clas
          *
@@ -266,6 +439,16 @@ require_once "CodeGen/Tools/Indent.php";
         function hCode($extension) 
         {
             $code = "";
+
+            if ($this->payloadType) {
+                $upname = strtoupper($this->name);
+                echo "
+typedef struct _php_obj_{$this->name} {
+    zend_object obj;
+    {$this->payloadType} *data;
+} php_obj_{$this->name}; 
+";
+            }
 
             foreach ($this->methods as $method) {
                 $code.= $method->hCode($extension);
@@ -283,6 +466,8 @@ require_once "CodeGen/Tools/Indent.php";
          */
         function globalCode($extension) 
         {
+            $upname = strtoupper($this->name);
+
             ob_start();
 
             echo "/* {{{ Class {$this->name} */\n\n";
@@ -306,16 +491,57 @@ require_once "CodeGen/Tools/Indent.php";
         
             echo "/* }}} Methods */\n\n";
 
+            if ($this->payloadType) {
+                echo "
+static zend_object_handlers {$this->name}_obj_handlers;
+
+static void {$this->name}_obj_free(void *object TSRMLS_DC)
+{
+                php_obj_{$this->name} *intern = (php_obj_{$this->name} *)object;
+    
+    {$this->payloadType} *data = intern->data;
+".$this->getPayloadDtor()."
+	efree(object);
+}
+
+static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type TSRMLS_DC)
+{
+	php_obj_{$this->name} *intern;
+	zval         *tmp;
+	zend_object_value retval;
+
+	intern = emalloc(sizeof(php_obj_{$this->name}));
+	memset(intern, 0, sizeof(php_obj_{$this->name}));
+	intern->obj.ce = class_type;
+".$this->getPayloadCtor()."
+	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
+	retval.handlers = &{$this->name}_obj_handlers;
+	
+	return retval;
+}
+
+";
+            }
+
             echo "static void class_init_{$this->name}(void)\n{\n";
 
             echo "    zend_class_entry ce;\n\n";
-  
+
             echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
+
+            if ($this->payloadType) {
+                echo " ce.create_object = {$this->name}_obj_create;\n";
+            }
 
             if ($this->extends) {
                 echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
             } else {
                 echo "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
+            }
+
+            if ($this->payloadType) {
+                echo "    memcpy(&{$this->name}_obj_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));\n";
+	            echo "    {$this->name}_obj_handlers.clone_obj = NULL;\n";
             }
 
             if ($this->isFinal) {

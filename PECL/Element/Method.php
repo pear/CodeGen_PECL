@@ -40,17 +40,26 @@ require_once "CodeGen/PECL/Element/Class.php";
     class CodeGen_PECL_Element_Method
       extends CodeGen_PECL_Element_Function
     {
-        function __construct($classname) 
+        function __construct(Codegen_PECL_Element_Class $class) 
         {
-            $this->classname = $classname;
+            $this->class     = $class;
+            $this->classname = $class->getName(); 
         }
 
         /**
-         * The name of the class this method belongs to
+         * The class this method belongs to
          *
-         * @var   string
+         * @var   object
          */
-        private $classname = "";
+        protected $class;
+
+        /**
+         * Name of class this method belongs to
+         *
+         * @var string
+         */
+        protected $classname;
+         
        
 
         /**
@@ -58,7 +67,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   string
          */
-        private $proceduralName = "";
+        protected $proceduralName = "";
 
         function getProceduralName() 
         {
@@ -93,7 +102,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isAbstract = false;
+        protected $isAbstract = false;
 
         function isAbstract() 
         {
@@ -107,7 +116,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isInterface = false;
+        protected $isInterface = false;
 
         function isInterface() 
         {
@@ -122,7 +131,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isFinal = false;
+        protected $isFinal = false;
 
         function isFinal() 
         {
@@ -136,7 +145,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isStatic = false;
+        protected $isStatic = false;
 
         function isStatic() 
         {
@@ -150,7 +159,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   string 
          */
-        private $access = "public";
+        protected $access = "public";
 
         function setAccess($access) 
         {
@@ -187,6 +196,11 @@ require_once "CodeGen/PECL/Element/Class.php";
             }
             $code .= "    _this_ce = Z_OBJCE_P(_this_zval);\n\n";
 
+            $payload = $this->class->getPayloadType();
+            if ($payload) {
+                $code.= "    payload = (php_obj_{$this->classname} *) zend_object_store_get_object(_this_zval TSRMLS_CC);\n";
+            }
+
             return $code;
         }
 
@@ -202,7 +216,12 @@ require_once "CodeGen/PECL/Element/Class.php";
             $code.= "    zend_class_entry * _this_ce;\n";
             
             if ($this->name == "__construct") {
-                $code .= "    zval * _this_zval;\n";
+                $code.= "    zval * _this_zval;\n";
+            }
+
+            $payload = $this->class->getPayloadType(); 
+            if ($payload) {
+                $code.= "    php_obj_{$this->classname} *payload;\n";
             }
 
             return $code;
