@@ -2141,18 +2141,20 @@ SOURCE=$filename
     */
     function writeExperimental() 
     {
-        if (($this->release) && isset($this->release->state) && $this->release->state !== 'stable') {
-            $this->addPackageFile("doc", "EXPERIMENTAL");
-            $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/EXPERIMENTAL");
-            $fp->puts(
+        if (($this->release) && $this->release->getState() === 'stable') {
+            return;
+        }
+
+        $this->addPackageFile("doc", "EXPERIMENTAL");
+        $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/EXPERIMENTAL");
+        $fp->puts(
 "this extension is experimental,
 its functions may change their names 
 or move to extension all together 
 so do not rely to much on them 
 you have been warned!
 ");
-            $fp->close();
-        }
+        $fp->close();
     }
 
 
