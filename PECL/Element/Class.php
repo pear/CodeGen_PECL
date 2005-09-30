@@ -510,7 +510,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 	zval         *tmp;
 	zend_object_value retval;
 
-	intern = emalloc(sizeof(php_obj_{$this->name}));
+	intern = (php_obj_{$this->name} *)emalloc(sizeof(php_obj_{$this->name}));
 	memset(intern, 0, sizeof(php_obj_{$this->name}));
 	intern->obj.ce = class_type;
 ".$this->getPayloadCtor()."
