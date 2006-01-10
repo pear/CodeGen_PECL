@@ -2313,23 +2313,23 @@ http://pear.php.net/dtd/package-2.0.xsd">
         echo "  </contents>\n";
 
         echo "  <dependencies>\n";
-		echo "   <required>\n";
+        echo "   <required>\n";
         echo "    <php><min>".$this->minPhpVersion()."</min></php>\n";
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML2(array("REQUIRED", "CONFLICTS"));
         }       
         echo $this->platform->packageXML2();
-		echo "   </required>\n";
-		echo "   <optional>\n";
+        echo "   </required>\n";
+        echo "   <optional>\n";
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML2(array("OPTIONAL"));
         }       
-		echo "   </optional>\n";
+        echo "   </optional>\n";
         echo "  </dependencies>\n";
 
-		echo "  <providesextension>{$this->name}</providesextension>\n";
-		
-		echo "<extsrcrelease/>\n";
+        echo "  <providesextension>{$this->name}</providesextension>\n";
+        
+        echo "<extsrcrelease/>\n";
 
         echo "</package>\n";
         
@@ -2573,16 +2573,16 @@ of phpinfo();
     }
 
 
-	/**
-	 * Return minimal PHP version required to support the requested features
-	 *
-	 * @return  string	version string
-	 */
-	function minPhpVersion()
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersion()
     {
-		if (!empty($this->otherExtensions)) {		
-		    return "5.1.0rc1";
-		}
+        if (!empty($this->otherExtensions)) {       
+            return "5.1.0rc1";
+        }
 
         if (!empty($this->classes) || !empty($this->interfaces)) {
           return "5.0.0";

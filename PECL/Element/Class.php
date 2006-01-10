@@ -501,23 +501,23 @@ static void {$this->name}_obj_free(void *object TSRMLS_DC)
     
     {$this->payloadType} *data = intern->data;
 ".$this->getPayloadDtor()."
-	efree(object);
+    efree(object);
 }
 
 static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type TSRMLS_DC)
 {
-	php_obj_{$this->name} *intern;
-	zval         *tmp;
-	zend_object_value retval;
+    php_obj_{$this->name} *intern;
+    zval         *tmp;
+    zend_object_value retval;
 
-	intern = (php_obj_{$this->name} *)emalloc(sizeof(php_obj_{$this->name}));
-	memset(intern, 0, sizeof(php_obj_{$this->name}));
-	intern->obj.ce = class_type;
+    intern = (php_obj_{$this->name} *)emalloc(sizeof(php_obj_{$this->name}));
+    memset(intern, 0, sizeof(php_obj_{$this->name}));
+    intern->obj.ce = class_type;
 ".$this->getPayloadCtor()."
-	retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
-	retval.handlers = &{$this->name}_obj_handlers;
-	
-	return retval;
+    retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
+    retval.handlers = &{$this->name}_obj_handlers;
+    
+    return retval;
 }
 
 ";
@@ -541,7 +541,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 
             if ($this->payloadType) {
                 echo "    memcpy(&{$this->name}_obj_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));\n";
-	            echo "    {$this->name}_obj_handlers.clone_obj = NULL;\n";
+                echo "    {$this->name}_obj_handlers.clone_obj = NULL;\n";
             }
 
             if ($this->isFinal) {
