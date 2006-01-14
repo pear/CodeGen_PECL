@@ -232,7 +232,9 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             if (PEAR::isError($err)) {
                 $command->terminate($err->getMessage());
             }
-            
+           
+            $this->extension->dirpath = realpath("./$extname");
+ 
             $err = $this->extension->generateSource("./$extname");
             if (PEAR::isError($err)) {
                 $command->terminate($err->getMessage());
@@ -252,7 +254,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
                 }
             }
             
-            $this->extension->write_readme("./$extname");
+            $this->extension->writeRreadme("./$extname");
             
             if (!$this->options->have("quiet")) {
                 echo $this->extension->successMsg();
