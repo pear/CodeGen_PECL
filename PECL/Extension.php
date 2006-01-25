@@ -83,46 +83,6 @@ class CodeGen_PECL_Extension
 
     // {{{ member variables
     
-    /**
-     * Version requested by input if any
-     *
-     * @var string
-     */
-    protected $version = "";
-
-    /**
-     * Get requested version
-     *
-     * @return  string
-     */
-    function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set requested version
-     *
-     * @param  string
-     */
-    function setVersion($version)
-    {
-        $this->version = $version; // TODO check
-    }
-
-    /**
-     * Check requested version
-     *
-     * @param  string version
-     * @return bool
-     */
-    function haveVersion($version)
-    {
-        return version_compare(empty($this->version) ? $this->version() : $this->version, $version) >= 0;
-
-        return true; // 
-    }
-
 
     /**
      * The public PHP functions defined by this extension
@@ -2455,23 +2415,6 @@ Debug_TS
         return $file->write();
     }
 
-    /**
-    * Describe next steps after successfull extension creation
-    *
-    * @access private
-    * @param  string  directory where extension was build
-    */
-    function successMsg()
-    {
-        $relpath = str_replace(getcwd(), '.', $this->dirpath);
-    
-        $msg = "Your extension has been created in directory $relpath.\n";
-        if (!isset($this->readme)) {
-            $msg.= "See ".basename($this->dirpath)."/README for further instructions.\n";
-        }
-
-        return $msg;
-    }
 
 
     /** 
