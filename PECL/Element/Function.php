@@ -1042,6 +1042,23 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             $argPointers[] = "&{$name}_len";
                             break;
 
+                        case "unicode":
+                            $argString .= "u";
+                            $default = $this->defaultval($param, "NULL");
+                            $code .= "    const char * $name = $default;\n";
+                            $code .= sprintf("    int {$name}_len = %d;\n", $default==="NULL" ? 0 : strlen($default) - 2);
+                            $argPointers[] = "&{$name}_len";
+                            break;
+
+                        case "text":
+                            $argString .= "t";
+                            $default = $this->defaultval($param, "NULL");
+                            $code .= "    const char * $name = $default;\n";
+                            $code .= sprintf("    int {$name}_len  = %d;\n", $default==="NULL" ? 0 : strlen($default) - 2);
+                            $code .= "    int {$name}_type = IS_STRING;\n"; // TODO depends on input encoding
+                            $argPointers[] = "&{$name}_len";
+                            break;
+
                         case "array":
                             $zvalType = true;
                             $argString .= "a";
@@ -1213,7 +1230,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     case "string":
                         $code .= "    RETURN_STRINGL(\"\", 0, 1);\n";
                         break;
-                        
+
                     case "array":
                         $code .= "    array_init(return_value);\n";
                         break;
