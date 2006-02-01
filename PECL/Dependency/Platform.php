@@ -11,12 +11,12 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
- * @link       http://pear.php.net/package/CodeGen
+ * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
 /**
@@ -28,12 +28,12 @@ require_once "CodeGen/Tools/Platform.php";
  * Class representing a platform dependency
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
- * @link       http://pear.php.net/package/CodeGen
+ * @link       http://pear.php.net/package/CodeGen_PECL
  */
 class CodeGen_PECL_Dependency_Platform
     extends CodeGen_Tools_Platform
