@@ -11,7 +11,7 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
@@ -22,13 +22,14 @@
 /**
  * include
  */
-require_once "CodeGen/PECL/Element.php";
+require_once "CodeGen/Dependency/Lib.php";
+require_once "CodeGen/PECL/Dependency/Platform.php";
 
 /**
  * Class representing a library dependencyp
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
@@ -36,36 +37,8 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Dependency_Lib
-    extends CodeGen_Element
+    extends CodeGen_Dependency_Lib
 {
-    /** 
-     * library basename
-     *
-     * @var string
-     */
-    private $name;
-
-    /**
-     * library searchpath relative to install prefix
-     *
-     * @var string
-     */
-    private $path = "lib";
-
-    /**
-     * library platform
-     *
-     * @var object
-     */
-    private $platform;
-
-    /**
-     * function to check for
-     *
-     * @var string
-     */
-    private $function = "";
-
     /**
      * Constructor
      *
@@ -78,47 +51,6 @@ class CodeGen_PECL_Dependency_Lib
         $this->name = $name;
 
         $this->platform = new CodeGen_PECL_Dependency_Platform($platform);
-    }
-
-    /**
-     * path setter
-     *
-     * @param string
-     */
-    function setPath($path) 
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * test function setter
-     *
-     * @param string
-     */
-    function setFunction($function)
-    {
-        $this->function = $function;
-    }
-    
-    /**
-     *  basename getter
-     *
-     * @return string
-     */
-    function getName()
-    {
-        return $this->name;
-    }
-    
-    /**
-     * check for platform 
-     *
-     * @param  platfrom name
-     * @return bool
-     */
-    function testPlatform($name) 
-    {
-        return $this->platform->test($name);
     }
 
     /**

@@ -736,17 +736,6 @@ class CodeGen_PECL_ExtensionParser
         }
     }
 
-    function tagend_extension_code($attr, $data) {
-        $role     = isset($attr["role"])     ? $attr["role"]     : "code";
-        $position = isset($attr["position"]) ? $attr["position"] : "bottom";
-
-        if (isset($attr["src"])) {
-            return $this->extension->addCode($role, $position, CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
-        } else {
-            return $this->extension->addCode($role, $position, CodeGen_Tools_Indent::linetrim($data));
-        }
-    }
-
     function tagend_extension_makefile($attr, $data) {
         return $this->extension->addMakeFragment(CodeGen_Tools_Indent::linetrim($data));
     }

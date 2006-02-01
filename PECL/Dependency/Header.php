@@ -11,24 +11,24 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id$
- * @link       http://pear.php.net/package/CodeGen
+ * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
 /**
  * include
  */
-require_once "CodeGen/PECL/Element.php";
+require_once "CodeGen/Dependency/Header.php";
 
 /**
  * Class representing a header file dependency
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
@@ -36,108 +36,8 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Dependency_Header
-    extends CodeGen_Element
+  extends CodeGen_Dependency_Header
 {
-    /** 
-     * Header file name
-     *
-     * @var string
-     */
-    private $name;
-
-    /**
-     * Include this file ahead of PHP headers?
-     *
-     * @var bool
-     */
-    private $prepend = false;
-
-    /**
-     * search path relative to install prefix
-     *
-     * @var string
-     */
-    private $path = "include";
-
-    /**
-     * Constructor
-     *
-     * @param  string  header file name 
-     */
-    function __construct($name)
-    {
-        // TODO check name
-        $this->name = $name;
-    }
-
-    /**
-     * name getter
-     *
-     * @return string
-     */
-    function getName() 
-    {
-        return $this->name;
-    }
-
-    /**
-     * prepend flag setter
-     *
-     * @param  bool
-     */
-    function setPrepend($prepend)
-    {
-        $this->prepend = ($prepend === "yes");
-    }
-
-    /**
-     * search path setter
-     *
-     * @param string
-     */
-    function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /** 
-     * search path getter
-     *
-     * @return string
-     */
-    function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * return header file code snippet
-     *
-     * @param  bool  
-     * @return string
-     */
-    function hCode($prepend=false)
-    {
-        if ($this->prepend != $prepend) {
-            return "";
-        }
-
-        return "#include <{$this->name}>\n";
-    }
-
-    /**
-     * return config.m4 code snippet for unix builds
-     *
-     * @param   string  Extension name
-     * @param   string  --with option name
-     * @return  string
-     */
-    function configm4($extname, $withname)
-    {
-        $upname = strtoupper($extname);
-        return "  AC_CHECK_HEADER([\$PHP_{$upname}_DIR/{$this->path}/{$this->name}], [], AC_MSG_ERROR('{$this->name}' header not found))\n";
-    }
-
     /**
      * return config.w32 code snippet for windows builds
      *

@@ -140,21 +140,6 @@ class CodeGen_PECL_Extension
      */
     protected $resources = array();
 
-    /**
-     * The package files created by this extension
-     *
-     * @var array
-     */
-    protected $packageFiles = array();
-
-    /**
-     * Code snippets
-     *
-     * @var array
-     */
-    protected $code = array();
-
-
     /** 
      * Custom test cases
      *
@@ -214,22 +199,6 @@ class CodeGen_PECL_Extension
     protected $streams = array();
 
     /**
-     * External libraries
-     *
-     * @var    array
-     * @access private
-     */
-    protected $libs = array();
-
-    /**
-     * External header files
-     *
-     * @var    array
-     * @access private
-     */
-    protected $headers = array();
-
-    /**
      * --with configure options
      * 
      * @var    array
@@ -258,62 +227,6 @@ class CodeGen_PECL_Extension
     // }}} 
     
     
-    /** 
-     * Add verbatim code snippet to extension
-     *
-     * @access public
-     * @param  string  which file to put the code to
-     * @param  string  where in the file the code should be put
-     * @param  string  the actual code
-     */
-    function addCode($role, $position, $code)
-    {
-        if (!in_array($role, array("header", "code"))) {
-            return PEAR::raiseError("'$role' is not a valid custom code role");
-        }
-        if (!in_array($position, array("top", "bottom"))) {
-            return PEAR::raiseError("'$position' is not a valid custom code position");
-        }
-        $this->code[$role][$position][] = $code;
-    }
-
-
-    /**
-     * Add toplevel library dependancy 
-     *
-     * @var  string  library basename
-     */
-    function addLib(CodeGen_PECL_Dependency_Lib $lib) 
-    {
-        $name = $lib->getName();
-       
-        if (isset($this->libs[$name])) {
-            return PEAR::raiseError("library '{$name}' added twice");
-        }
-
-        $this->libs[$name] = $lib;
-
-        return true;
-    }
-
-    /**
-     * Add toplevel header file dependancy 
-     *
-     * @var  string  header filename
-     */
-    function addHeader(CodeGen_PECL_Dependency_Header $header) 
-    {
-        $name = $header->getName();
-       
-        if (isset($this->headers[$name])) {
-            return PEAR::raiseError("header '{$name}' added twice");
-        }
-
-        $this->headers[$name] = $header;
-
-        return true;
-    }
-
 
     // {{{ member adding functions
 
