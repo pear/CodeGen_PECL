@@ -99,4 +99,4 @@ not necessarily 1.0
 	=> requires further research, doesn't work this way
 	==> how to add *static* libraries? 
 
- 
+- improve $dirpath handling 
