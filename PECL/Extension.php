@@ -469,57 +469,6 @@ class CodeGen_PECL_Extension
         return true;
     }
 
-    /**
-     * Add a source file to be copied to the extension dir
-     *
-     * @access public
-     * @param  string path
-     */
-    function addSourceFile($name) 
-    {
-        // TODO catch errors returned from addPackageFile
-
-        $filename = realpath($name);
-
-            if (!is_file($filename)) {
-                return PEAR::raiseError("'$name' is not a valid file");
-            }
-            
-            if (!is_readable($filename)) {
-                return PEAR::raiseError("'$name' is not readable");
-            }
-            
-            $pathinfo = pathinfo($filename);
-            $ext = $pathinfo["extension"];
-
-            switch ($ext) {
-            case 'c':
-                $this->addConfigFragment("AC_PROG_CC");
-                $this->addPackageFile('code', $filename);
-                break;
-            case 'cpp':
-            case 'cxx':
-            case 'c++':
-                $this->addConfigFragment("AC_PROG_CXX");
-                $this->addConfigFragment("AC_LANG([C++])");
-                $this->addPackageFile('code', $filename);
-                break;
-            case 'l':
-            case 'flex':
-                $this->addConfigFragment("AM_PROG_LEX");
-                $this->addPackageFile('code', $filename);
-                break;
-            case 'y':
-            case 'bison':
-                $this->addConfigFragment("AM_PROG_YACC");
-                $this->addPackageFile('code', $filename);
-                break;
-            default:
-                break;
-            }
-
-            return $this->addPackageFile('copy', $filename);
-    }
 
     /** 
      * Add phpinfo logo
@@ -559,35 +508,6 @@ class CodeGen_PECL_Extension
         return true;
     }
     
-    /**
-     * Add makefile fragment
-     *
-     * @access public
-     * @param  string
-     */
-    function addMakeFragment($text)
-    {
-        $this->makefragments[] = $text;
-        return true;
-    }
-            
-
-    /**
-     * Add config.m4 fragment
-     *
-     * @access public
-     * @param  string
-     */
-    function addConfigFragment($text, $position="top")
-    {
-        if (!in_array($position, array("top", "bottom"))) {
-            return PEAR::raiseError("'$position' is not a valid config snippet position");
-        }
-        $this->configfragments[$position][] = $text;
-        return true;
-    }
-            
-
     /**
      * Generate #line specs?
      *
@@ -2256,79 +2176,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
             rmdir($this->dirpath."/tests");
         }
     }
-
-    /**
-    * Write .cvsignore entries
-    *
-    * @access public
-    * @param  string  directory to write to
-    */
-    function writeDotCvsignore()
-    {
-        $file = new CodeGen_Tools_Outbuf($this->dirpath."/.cvsignore");
-
-        // unix specific entries
-        if ($this->platform->test("unix")) {
-            echo 
-"*.lo
-*.la
-.deps
-.libs
-Makefile
-Makefile.fragments
-Makefile.global
-Makefile.objects
-acinclude.m4
-aclocal.m4
-autom4te.cache
-build
-config.cache
-config.guess
-config.h
-config.h.in
-config.log
-config.nice
-config.status
-config.sub
-configure
-configure.in
-conftest
-conftest.c
-include
-install-sh
-libtool
-ltmain.sh
-missing
-mkinstalldirs
-modules
-scan_makefile_in.awk
-";
-        }
-
-        // windows specific entries
-        if ($this->platform->test("windows")) {
-            echo 
-"*.dsw
-*.plg
-*.opt
-*.ncb
-Release
-Release_inline
-Debug
-Release_TS
-Release_TSDbg
-Release_TS_inline
-Debug_TS
-";
-        }
-
-        // "pear package" creates .tgz
-        echo "{$this->name}*.tgz\n";
-
-        return $file->write();
-    }
-
-
 
     /** 
     * Generate README file (custom or default)

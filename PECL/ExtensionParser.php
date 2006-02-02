@@ -552,24 +552,7 @@ class CodeGen_PECL_ExtensionParser
 
 
 
-    function tagstart_extension_deps($attr)
-    {
-        if (isset($attr["language"])) {
-            $err = $this->extension->setLanguage($attr["language"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-
-        if (isset($attr["platform"])) {
-            $err = $this->extension->setPlatform($attr["platform"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-    }
-
-    function tagstart_extension_deps_lib($attr)
+    function tagstart_deps_lib($attr)
     {
         if (!isset($attr["name"])) {
             return PEAR::raiseError("");
@@ -594,7 +577,7 @@ class CodeGen_PECL_ExtensionParser
         return true;
     }
 
-    function tagstart_extension_deps_header($attr)
+    function tagstart_deps_header($attr)
     {
         // TODO check name
         $header = new CodeGen_PECL_Dependency_Header($attr["name"]);
@@ -611,7 +594,7 @@ class CodeGen_PECL_ExtensionParser
     }
 
 
-    function tagstart_extension_deps_extension($attr)
+    function tagstart_deps_extension($attr)
     {
         $ext = new CodeGen_PECL_Dependency_Extension;
 
@@ -645,7 +628,7 @@ class CodeGen_PECL_ExtensionParser
         $this->extension->addOtherExtension($ext);
     }
         
-    function tagstart_extension_deps_with($attr) 
+    function tagstart_deps_with($attr) 
     {
         $with = new CodeGen_PECL_Dependency_With;
 
@@ -706,7 +689,7 @@ class CodeGen_PECL_ExtensionParser
     }
 
 
-    function tagend_extension_deps_with($attr, $data) {
+    function tagend_deps_with($attr, $data) {
         $this->helper->setSummary($data);
 
         $this->extension->addWith($this->helper);
@@ -715,7 +698,7 @@ class CodeGen_PECL_ExtensionParser
     }
 
 
-    function tagstart_extension_deps_file($attr) {
+    function tagstart_deps_file($attr) {
         if (!isset($attr['name'])) {
             return PEAR::raiseError("name attribut for file missing");
         }
@@ -740,7 +723,7 @@ class CodeGen_PECL_ExtensionParser
         return $this->extension->addMakeFragment(CodeGen_Tools_Indent::linetrim($data));
     }
 
-    function tagend_extension_deps_configm4($attr, $data) {
+    function tagend_deps_configm4($attr, $data) {
         return $this->extension->addConfigFragment(CodeGen_Tools_Indent::linetrim($data), 
                                                    isset($attr['position']) ? $attr['position'] : "top");
     }
