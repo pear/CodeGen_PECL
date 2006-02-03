@@ -152,59 +152,6 @@ abstract class CodeGen_PECL_Element
         return false;
     }
 
-    /**
-     * Generate Editor settings block for C source files
-     *
-     * @access public
-     * @return string Editor settings comment block
-    */
-    static function cCodeEditorSettings() 
-  {
-            return '
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
-';
-    }
-
-
-    /**
-     * Generate Editor settings block for documentation files
-     *
-     * @access public
-     * @param  int    Directory nesting depth of target file (default: 3)
-     * @return string Editor settings comment block
-    */
-    static function docEditorSettings($level=3) 
-    {
-        return '
-<!-- Keep this comment at the end of the file
-Local'.' variables:
-mode: sgml
-sgml-omittag:t
-sgml-shorttag:t
-sgml-minimize-attributes:nil
-sgml-always-quote-attributes:t
-sgml-indent-step:1
-sgml-indent-data:t
-indent-tabs-mode:nil
-sgml-parent-document:nil
-sgml-default-dtd-file:"'.str_repeat("../",$level).'manual.ced"
-sgml-exposed-tags:nil
-sgml-local-catalogs:nil
-sgml-local-ecat-files:nil
-End:
-vim600: syn=xml fen fdm=syntax fdl=2 si
-vim: et tw=78 syn=sgml
-vi: ts=1 sw=1
--->
-';
-    }
 
 }
 

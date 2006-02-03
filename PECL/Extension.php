@@ -707,7 +707,7 @@ class CodeGen_PECL_Extension
  </reference>
 ");
 
-        $fp->puts(CodeGen_PECL_Element::docEditorSettings());
+        $fp->puts($this->docEditorSettings());
 
         $fp->close();
   
@@ -768,7 +768,7 @@ class CodeGen_PECL_Extension
         }
         $fp->puts("\n   </section>\n\n");
             
-        $fp->puts(CodeGen_PECL_Element::docEditorSettings());
+        $fp->puts($this->docEditorSettings());
         $fp->close();
 
         @mkdir("$docdir/functions");
@@ -776,6 +776,7 @@ class CodeGen_PECL_Extension
             $filename = $docdir . "/functions/" . strtolower(str_replace("_", "-", $name)) . ".xml";
             $funcfile = new CodeGen_Tools_FileReplacer($filename);
             $funcfile->puts($function->docEntry($idName));
+            $funcfile->puts($this->docEditorSettings(4));
             $funcfile->close();
         } 
     }
@@ -1182,7 +1183,7 @@ PHP_MINFO_FUNCTION({$this->name});
         echo "#endif /* PHP_HAVE_{$upname} */\n\n";
         echo "#endif /* PHP_{$upname}_H */\n\n";
 
-        echo CodeGen_PECL_Element::cCodeEditorSettings();
+        echo $this->cCodeEditorSettings();
 
         return $file->write();
     }
@@ -1488,7 +1489,7 @@ PHP_MINFO_FUNCTION({$this->name})
 
         echo "#endif /* HAVE_$upname */\n\n";
   
-        echo CodeGen_PECL_Element::cCodeEditorSettings();
+        echo $this->cCodeEditorSettings();
 
         return $file->write();
     }
@@ -2293,6 +2294,40 @@ of phpinfo();
 
         return "4.0.0"; // TODO test for real lower bound 
     }
+
+    /**
+     * Generate Editor settings block for documentation files
+     *
+     * @access public
+     * @param  int    Directory nesting depth of target file (default: 3)
+     * @return string Editor settings comment block
+    */
+    function docEditorSettings($level=3) 
+    {
+        return '
+<!-- Keep this comment at the end of the file
+Local'.' variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+indent-tabs-mode:nil
+sgml-parent-document:nil
+sgml-default-dtd-file:"'.str_repeat("../",$level).'manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+vim600: syn=xml fen fdm=syntax fdl=2 si
+vim: et tw=78 syn=sgml
+vi: ts=1 sw=1
+-->
+';
+    }
+
 }   
 
 

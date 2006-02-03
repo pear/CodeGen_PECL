@@ -1333,7 +1333,6 @@ require_once "CodeGen/Tools/Tokenizer.php";
    </refsect1>
   </refentry>
 ';
-            $xml .= $this->docEditorSettings(4);
  
             return $xml;
         }
