@@ -2302,7 +2302,7 @@ of phpinfo();
      * @param  int    Directory nesting depth of target file (default: 3)
      * @return string Editor settings comment block
     */
-    function docEditorSettings($level=3) 
+    static function docEditorSettings($level=3) 
     {
         return '
 <!-- Keep this comment at the end of the file

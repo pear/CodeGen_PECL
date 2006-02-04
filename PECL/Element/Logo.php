@@ -41,33 +41,33 @@ class CodeGen_PECL_Element_Logo
     /**
      * Basename
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $name;
+    protected $name;
     
     /**
      * ID for URL call of image ("...?=ID")
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $id;
+    protected $id;
     
     /**
      * The actual image data as a binary string
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $data;
+    protected $data;
     
     /**
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $mimeType = false;
+    protected $mimeType = false;
     
     /**
      * Constructor

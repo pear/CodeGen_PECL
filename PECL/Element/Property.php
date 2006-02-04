@@ -45,7 +45,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isAbstract = false;
+        protected $isAbstract = false;
 
         function isAbstract() 
         {
@@ -57,7 +57,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isInterface = false;
+        protected $isInterface = false;
 
         function isInterface() 
         {
@@ -69,7 +69,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isFinal = false;
+        protected $isFinal = false;
 
         function isFinal() 
         {
@@ -81,7 +81,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   bool
          */
-        private $isStatic = false;
+        protected $isStatic = false;
 
         function isStatic() 
         {
@@ -93,7 +93,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var   string 
          */
-        private $access = "public";
+        protected $access = "public";
 
         function setAccess($access) 
         {
@@ -114,7 +114,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var string
          */
-        private $type = "null";
+        protected $type = "null";
 
         function setType($type) 
         {
@@ -147,7 +147,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          *
          * @var string
          */
-        private $name = "unknown";
+        protected $name = "unknown";
 
         function setName($name) 
         {
@@ -171,7 +171,7 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @var    string
          * @access private
          */
-        private $value = "";
+        protected $value = "";
 
         function setValue($value) 
         {

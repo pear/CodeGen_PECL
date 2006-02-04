@@ -44,7 +44,7 @@ class CodeGen_PECL_Dependency_With
      * @var    name
      * @access private
      */
-    private $name = false;
+    protected $name = false;
 
     /**
      * Short Summary
@@ -52,7 +52,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $summary = "";
+    protected $summary = "";
 
     /**
      * Long Description
@@ -60,7 +60,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $description = "";
+    protected $description = "";
 
     /**
      * A file to test for to check a given argument path
@@ -68,7 +68,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $testfile = false;
+    protected $testfile = false;
 
     /**
      * Default search path
@@ -76,7 +76,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $defaults = "/usr:/usr/local";
+    protected $defaults = "/usr:/usr/local";
 
     /**
      * dependant libraries
@@ -84,7 +84,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $libs = array();
+    protected $libs = array();
 
 
     /**
@@ -93,7 +93,7 @@ class CodeGen_PECL_Dependency_With
      * @var    string
      * @access private
      */
-    private $headers = array();
+    protected $headers = array();
 
 
     /**
