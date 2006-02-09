@@ -213,7 +213,7 @@ require_once "CodeGen/PECL/Element.php";
                 return "REGISTER_DOUBLE_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
 
             case "string":
-                return "REGISTER_STRING_CONSTANT(\"{$this->name}\", \"$value\", ".strlen($this->value).", CONST_PERSISTENT | CONST_CS);\n";
+                return "REGISTER_STRINGL_CONSTANT(\"{$this->name}\", \"{$this->value}\", ".strlen($this->value).", CONST_PERSISTENT | CONST_CS);\n";
             }
         }
 
