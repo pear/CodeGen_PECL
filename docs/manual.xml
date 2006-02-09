@@ -84,7 +84,7 @@
    <title>Installation</title>
    <para>
     <literal>CodeGen_PECL</literal> is available in PEAR, the
-    PHP Extension and Application Repository, on <literal>http://pear.php.net</literal>.
+    PHP Extension and Application Repository, on <literal>http://pear.php.net/</literal>.
    </para>
 
    <section>
