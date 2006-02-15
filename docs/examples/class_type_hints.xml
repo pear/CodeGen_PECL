@@ -35,7 +35,7 @@ echo $c->foo(1,2);
     ?>
    </code>
    <result mode="format">
-Fatal error: Argument 1 must be an object of class class1 in %s on line %d
+Fatal error: Argument 1 %s an object of class class1 in %s on line %d
    </result>
   </test>
 
