@@ -1169,7 +1169,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     
                 // for functions returning an array we initialize return_value
                 if ($returns[0] === "array") {
-                    $code.="array_init(return_value);\n\n";
+                    $code.="    array_init(return_value);\n\n";
                 }
 
                 if ($this->code) {
