@@ -55,31 +55,11 @@
   <license>PHP</license>
 
   <release>
-    <state>beta</state>
-    <version>1.0.0rc1</version>
-    <date>2005-09-22</date>
+    <state>stable</state>
+    <version>1.0.0</version>
+    <date>2006-02-15</date>
     <notes>
-I'm feature-complete for a 1.0 release now :)
-
-- object store support for private C/C++ data in objects
-
-- &lt;lib&gt; and &lt;header&gt; tags within &lt;with&gt;
-
-- interface and type hints support
-
-- added a lint option (-l) for syntax checking of spec files
-
-- write to tmpfiles first, only overwrite        -> done
-  existing files if actual changes are 
-  detected, preserve unchanged files 
-  (to make "make" happy)
-
-- changed names of variables generated for resource parameters,
-  backwards compatibility is provided by checking the extension
-  tags version attribute, for versions &lt; 1.0.0dev the old naming
-  stile is used
-
-- added test generation for class member functions
+- 1.0.0 stable release (finally)
     </notes>
 
     <deps>
@@ -107,7 +87,9 @@ I'm feature-complete for a 1.0 release now :)
       </dir>
       <dir name="/" baseinstalldir="CodeGen">
         <dir name="PECL">
-          <file role="php">Extension.php</file>
+          <file role="php" name="Extension.php">
+            <replace from="@package_version@" to="version" type="package-info" />
+          </file>
           <file role="php">Release.php</file>
           <file role="php">Maintainer.php</file>
           <file role="php">Element.php</file>
@@ -141,6 +123,35 @@ I'm feature-complete for a 1.0 release now :)
   </release>
 
   <changelog>
+    <release>
+      <state>beta</state>
+      <version>1.0.0rc1</version>
+      <date>2005-09-22</date>
+      <notes>
+I'm feature-complete for a 1.0 release now :)
+
+- object store support for private C/C++ data in objects
+
+- &lt;lib&gt; and &lt;header&gt; tags within &lt;with&gt;
+
+- interface and type hints support
+
+- added a lint option (-l) for syntax checking of spec files
+
+- write to tmpfiles first, only overwrite        -> done
+  existing files if actual changes are 
+  detected, preserve unchanged files 
+  (to make "make" happy)
+
+- changed names of variables generated for resource parameters,
+  backwards compatibility is provided by checking the extension
+  tags version attribute, for versions &lt; 1.0.0dev the old naming
+  stile is used
+
+- added test generation for class member functions
+      </notes>
+    </release>
+
     <release>
       <state>beta</state>
       <version>0.9.0</version>

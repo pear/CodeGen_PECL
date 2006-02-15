@@ -67,7 +67,7 @@ class CodeGen_PECL_Extension
     */
     static function version() 
     {
-        return "1.0.0dev";
+        return "@package_version@";
     }
 
     /**

@@ -1,4 +1,5 @@
-<extension name="class_payload" version="1.0.0dev">
+<?xml version="1.0"?>
+<extension name="class_payload" version="1.0.0">
 
  <class name="p">
   <payload type="FILE" alloc="no"/>

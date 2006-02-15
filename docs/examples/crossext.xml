@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="crossext" version="0.9.0">
+<extension name="crossext" version="1.0.0">
  <deps>
   <extension name="standard" version="3.14" rel="=="/>
  </deps>

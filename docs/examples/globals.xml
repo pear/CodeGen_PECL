@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<extension name="globals" version="0.9.0">
+<extension name="globals" version="1.0.0">
  <global name="foo" type="int" value="42"/>
 
  <function name="get_foo">
