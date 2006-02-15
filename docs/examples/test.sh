@@ -12,6 +12,8 @@ export REPORT_EXIT_STATUS=1
 
 mkdir -p testing
 cd testing
+ln -fs ../logo.gif .
+ln -fs ../test.zip .
 
 for spec in $files
 do
