@@ -114,7 +114,7 @@ class CodeGen_PECL_Dependency_With
      */
     function setName($name)
     {
-        if (!preg_match('|[a-z][a-z0-9-]*|i', $name)) {
+        if (!preg_match('|^[a-z][a-z0-9-]*$|i', $name)) {
             return PEAR::raiseError("'$name' is not a valid --with option name");
         }
 
