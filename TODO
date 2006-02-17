@@ -1,20 +1,18 @@
 Milestone 1.0
 -------------
 
-- support new win32 configure files              -> partly done (75%?)
+- <lib> and <header> tags *within* <with>        -> done 
 
-- "object store" handling for private data       -> done, needs testing 
+- "object store" handling for private data       -> done
 
-- <lib> and <header> tags *within* <with>        -> done (needs more testing?)
-
-- support for new package.xml 2.0 format         -> done, needs testing
+- support for new package.xml 2.0 format         -> done
 
 - change the resource variable names,            -> done
   check extension version to provide BC
 
 - test suite                                     -> done
 
-- class implementation and documentation support 
+- class implementation and documentation support -> done
  
   - <class>                                      -> done
   - <class extends="..."                         -> done
@@ -49,6 +47,12 @@ Milestone 1.0
 
 not necessarily 1.0
 -------------------
+
+- finish config.w32 generation (~75% done, need someone 
+  with windows build experience to finish and test this,
+  probably at php|tek if not earlier)
+
+- package2.xml <installdeps>               
 
 - add more tests
 
