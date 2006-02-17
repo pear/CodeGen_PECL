@@ -211,6 +211,30 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
     }
 
 
+    /**
+     * Generate C code header block for resources
+     *
+     * @access public
+     * @param  string Extension name
+     * @return string C code
+     */
+    static function cCodeHeader($name) 
+    {
+        return "/* {{{ Resource destructors */\n";
+    }
+
+    /**
+     * Generate C code footer block for resources
+     *
+     * @access public
+     * @param  string Extension name
+     * @return string C code
+     */
+    static function cCodeFooter($name) 
+    {
+      return "/* }}} *\n\n";
+    }
+
     /** 
      * Generate C code for resource destructor callback
      *
