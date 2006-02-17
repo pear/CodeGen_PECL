@@ -52,11 +52,12 @@ Milestone 1.0
 
 - multiple logos                                 -> done
 
+- fix whitespace in generated code               -> done
+
 not necessarily 1.0
 -------------------
 
 
-- fix whitespace in generated code               -> started, work in progress
 
 - postprocess code with indent if available?
 
