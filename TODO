@@ -1,23 +1,18 @@
 Milestone 1.0
 -------------
 
+- support new win32 configure files              -> partly done (75%?)
+
 - "object store" handling for private data       -> done, needs testing 
 
-- <lib> and <header> tags *within* <with>...</with>  -> done (needs more testing?)
+- <lib> and <header> tags *within* <with>        -> done (needs more testing?)
+
+- support for new package.xml 2.0 format         -> done, needs testing
 
 - change the resource variable names,            -> done
   check extension version to provide BC
 
-- check #line numbers in generated source with libxml
-  -> error messages with meaningfull line numbers need this
-
-- allow "src='path/to/file'" in more cases           
-  make sure it generates #line, too
-
-
-- support new win32 configure files              -> partly done (75%?)
-
-- test suite                                     -> done, but needs more tests/examples
+- test suite                                     -> done
 
 - class implementation and documentation support 
  
@@ -37,8 +32,6 @@ Milestone 1.0
 
   - <notest/> for functions not needing a test   -> done
 
-- support for new package.xml 2.0 format         -> done, needs testing
-
 - support extension dependencies                 -> done
 
 - better property access macros                  -> done
@@ -57,6 +50,13 @@ Milestone 1.0
 not necessarily 1.0
 -------------------
 
+- add more tests
+
+- check #line numbers in generated source with libxml
+  -> error messages with meaningfull line numbers need this
+
+- allow "src='path/to/file'" in more cases           
+  make sure it generates #line, too
 
 
 - postprocess code with indent if available?
