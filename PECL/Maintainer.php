@@ -80,12 +80,12 @@ class CodeGen_PECL_Maintainer
      {
          $code = "";
 
-         $code.= "    <{$this->role}>\n";
-         $code.= "      <user>{$this->user}</user>\n";
-         $code.= "      <name>{$this->name}</name>\n";
-         $code.= "      <email>{$this->email}</email>\n";
-         $code.= "      <active>yes</active>\n"; // TODO add something like this on the input side, too
-         $code.= "    </{$this->role}>\n";
+         $code.= "  <{$this->role}>\n";
+         $code.= "    <name>{$this->name}</name>\n";
+         $code.= "    <user>{$this->user}</user>\n";
+         $code.= "    <email>{$this->email}</email>\n";
+         $code.= "    <active>yes</active>\n"; // TODO add something like this on the input side, too
+         $code.= "  </{$this->role}>\n";
          
          return $code;
      }
