@@ -50,6 +50,7 @@ Milestone 1.0
   detected, preserve unchanged files 
   (to make "make" happy)
 
+- multiple logos                                 -> done
 
 not necessarily 1.0
 -------------------
@@ -59,7 +60,6 @@ not necessarily 1.0
 
 - postprocess code with indent if available?
 
-- multiple logos                                 -> started, needs checking
 
 - add configure test code within DATA section of <lib> and <header> tags?
   e.g. for version checking?
