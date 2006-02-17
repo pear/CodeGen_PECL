@@ -597,10 +597,10 @@ class CodeGen_PECL_Extension
 
         foreach($this->logos as $logo) {
             $fp = new CodeGen_Tools_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
-            $fp->puts(CodeGen_Tools_Indent::tabify($logo->hCode()));
+            $fp->puts($logo->hCode());
             $fp->close();
         }
-        
+            
         // generate project files for configure (unices and similar platforms like cygwin)
         if ($this->platform->test("unix")) {
             $this->writeConfigM4();
@@ -1260,7 +1260,7 @@ PHP_MINIT_FUNCTION({$this->name})
         }
             
         if (isset($this->internalFunctions['MINIT'])) {
-            $indent = $need_block ? 6 : 4;
+            $indent = $need_block ? 8 : 4;
             if ($need_block) $code .= "\n    do {\n";
             $code .= CodeGen_Tools_Indent::indent($indent, $this->internalFunctions['MINIT']->getCode());
             if ($need_block) $code .= "\n    } while (0);\n";
@@ -1293,7 +1293,7 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
         }
             
         if (isset($this->internalFunctions['MSHUTDOWN'])) {
-            $indent = $need_block ? 6 : 4;
+            $indent = $need_block ? 8 : 4;
             if (count($this->phpini)) $code .= "\n    do {\n";
             $code .= CodeGen_Tools_Indent::indent(4, $this->internalFunctions['MSHUTDOWN']->getCode());
             if (count($this->phpini)) $code .= "\n    } while (0);\n";
@@ -1380,7 +1380,7 @@ PHP_MINFO_FUNCTION({$this->name})
         // TODO move this decision up?
         if (isset($this->internalFunctions['MINFO'])) {
             $code .= "\n    do {\n";
-            $code .= CodeGen_Tools_Indent::indent(6, $this->internalFunctions['MINFO']->getCode());
+            $code .= CodeGen_Tools_Indent::indent(8, $this->internalFunctions['MINFO']->getCode());
             $code .= "\n    } while (0);\n";
         } else {
             $code .= "    /* add your stuff here */\n";
@@ -1452,19 +1452,19 @@ PHP_MINFO_FUNCTION({$this->name})
 
 
         if (!empty($this->logos)) {
-            echo "/* {{{ phpinfo logo definitions */\n";
+            echo CodeGen_PECL_Element_Logo::cCodeHeader($this->name);
             foreach ($this->logos as $logo) {
                 echo $logo->cCode($this->name);
             }
-            echo "\n/* }}} *\n\n";
+            echo CodeGen_PECL_Element_Logo::cCodeFooter($this->name);
         }
 
         if (!empty($this->resources)) {
-            echo "/* {{{ Resource destructors */\n";
+            echo CodeGen_PECL_Element_Resource::cCodeHeader($this->name);
             foreach ($this->resources as $resource) {
                 echo $resource->cCode($this);
             }
-            echo "/* }}} *\n\n";
+            echo CodeGen_PECL_Element_Resource::cCodeFooter($this->name);
         }
 
         echo $this->generateInterfaceRegistrations();
