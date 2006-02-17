@@ -159,9 +159,9 @@ class CodeGen_PECL_Dependency_Extension
     function cCode($extension)
     {
         if (!empty($this->version)) {
-            return sprintf('ZEND_MOD_%s_EX("%s", "%s", "%s")', $this->type, $this->name, $this->version["relation"], $this->version["version"])."\n";
+            return sprintf('    ZEND_MOD_%s_EX("%s", "%s", "%s")', $this->type, $this->name, $this->version["relation"], $this->version["version"])."\n";
         } else {
-            return sprintf('ZEND_MOD_%s("%s")', $this->type, $this->name)."\n";
+            return sprintf('    ZEND_MOD_%s("%s")', $this->type, $this->name)."\n";
         }
     }
 
@@ -187,7 +187,7 @@ static zend_module_dep pdo_".$extension->getName()."_deps[] = {
      */
     static function cCodeFooter($extension)
     {
-        return "        {NULL, NULL, NULL, 0}
+        return "    {NULL, NULL, NULL, 0}
 };
 #endif
 /* }}} */

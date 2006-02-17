@@ -530,7 +530,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
             echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
 
             if ($this->payloadType) {
-                echo " ce.create_object = {$this->name}_obj_create;\n";
+                echo "    ce.create_object = {$this->name}_obj_create;\n";
             }
 
             if ($this->extends) {

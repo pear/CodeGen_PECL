@@ -195,7 +195,7 @@ class CodeGen_PECL_Element_Global
      */
     function cCode($name) 
     {
-        $code = "  {$name}_globals->{$this->name} = ";
+        $code = "    {$name}_globals->{$this->name} = ";
 
         if ($this->value != null) {
             $code .= $this->value;

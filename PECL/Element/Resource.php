@@ -203,9 +203,7 @@ class CodeGen_PECL_Element_Resource
     function minitCode() {
         return "
 le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor, 
-                                                     NULL, 
-                                                     \"{$this->name}\", 
-                                                     module_number);
+                       NULL, \"{$this->name}\", module_number);
 
 ";
     }
