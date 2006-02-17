@@ -165,6 +165,34 @@ class CodeGen_PECL_Element_Logo
     }
 
     /**
+     * Generate C code header block for logos
+     *
+     * @access public
+     * @param  string Extension name
+     * @return string C code
+     */
+    static function cCodeHeader($name) 
+    {
+        return "
+/* {{{ phpinfo logo definitions */\n
+#include \"php_logos.h\"
+
+";
+    }
+
+    /**
+     * Generate C code footer block for logos
+     *
+     * @access public
+     * @param  string Extension name
+     * @return string C code
+     */
+    static function cCodeFooter($name) 
+    {
+        return "/* }}} */\n\n";
+    }
+
+    /**
      * Code snippet for image data declaration
      *
      * @access public
@@ -174,8 +202,6 @@ class CodeGen_PECL_Element_Logo
     function cCode($name) 
     {
         return "
-#include \"php_logos.h\"
-
 static unsigned char {$this->name}_logo[] = {
 #include \"{$this->name}_logos.h\"
 }; 
