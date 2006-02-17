@@ -73,10 +73,16 @@ class CodeGen_PECL_Release
         $code ="";
 
         $date = $this->date ? $this->date : time();
-        $code.= "    <date>".date("Y-m-d", $date)."</date>\n";       
+        $code.= "  <date>".date("Y-m-d", $date)."</date>\n";       
 
-        $code.= "    <version><release>{$this->version}</release><api>{$this->version}</api></version>\n";
-        $code.= "    <stability><release>{$this->state}</release><api>{$this->state}</api></stability>\n";
+        $code.= "  <version>\n";
+        $code.= "    <release>{$this->version}</release>\n";
+        $code.= "    <api>{$this->version}</api>\n";
+        $code.= "  </version>\n";
+        $code.= "  <stability>\n";
+        $code.= "    <release>{$this->state}</release>\n";
+        $code.= "    <api>{$this->state}</api>\n";
+        $code.= "  </stability>\n\n";
 
         // this is ugly but with package.xml 2.0 this now has to be put
         // here whereas in 1.0 license was a tag at the same level as
@@ -87,12 +93,12 @@ class CodeGen_PECL_Release
                 $uri = "uri=\"$uri\" ";
             }
 
-            $code.= "    <license {$uri}filesource=\"LICENSE\">{$license->getShortName()}</license>\n";
+            $code.= "  <license {$uri}filesource=\"LICENSE\">{$license->getShortName()}</license>\n\n";
         } else {
-            $code.= "    <license>unknown</license\n";
+            $code.= "  <license>unknown</license\n\n";
         }
 
-        $code .="    <notes>\n".htmlentities($this->notes)."\n    </notes>\n";
+        $code .="  <notes>\n".htmlentities($this->notes)."\n  </notes>\n\n";
 
         return $code;
     }
