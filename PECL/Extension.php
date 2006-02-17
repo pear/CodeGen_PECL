@@ -1964,20 +1964,20 @@ you have been warned!
         $code.= "    <dir name=\"/\">\n";
         if (@is_array($this->packageFiles['doc'])) {
             foreach ($this->packageFiles['doc'] as $file) {
-                $code.= "      <file role=\"doc\">$file</file>\n";
+                $code.= "      <file role='doc' name='$file'/>\n";
             }
         }
 
         foreach (array("conf", "code", "header") as $type) { 
             foreach ($this->packageFiles[$type] as $basename => $filepath) {
-                $code.= "      <file role=\"src\">$basename</file>\n";
+                $code.= "      <file role='src' name='$basename'/>\n";
             }
         }
 
         if (!empty($this->packageFiles['test'])) {
             $code.= "      <dir name=\"tests\">\n";
             foreach ($this->packageFiles['test'] as $basename => $filepath) {
-                $code.= "        <file role=\"test\">$basename</file>\n";
+                $code.= "        <file role='test' name='$basename'/>\n";
             }
             $code.= "      </dir>\n";
         }
@@ -1998,9 +1998,10 @@ you have been warned!
         $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package.xml");
 
         echo 
-"<?xml version=\"1.0\"\"?>
+"<?xml version=\"1.0\"?>
 <!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">
 <package>
+
   <name>{$this->name}</name>
 ";
 
@@ -2013,13 +2014,15 @@ you have been warned!
         }
         
         if ($this->license) {
-            echo "  <license>".$this->license->getShortName()."</license>\n";
+            echo "\n  <license>".$this->license->getShortName()."</license>\n";
         }
 
-        foreach ($this->with as $with) {
-            $configOption = "--with-".$with->getName();
-            echo "  <configureoptions>\n";
-            echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"".$with->getName()." installation directory?\" />\n";
+        if (count($this->with)) {
+            echo "\n  <configureoptions>\n";
+            foreach ($this->with as $with) {
+                $configOption = "with-".$with->getName();
+                echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"".$with->getName()." installation directory?\" />\n";
+            }
             echo "  </configureoptions>\n";
         }
 
@@ -2064,7 +2067,7 @@ you have been warned!
     // }}}
 
     /**
-     * Write PEAR/PECL package.xml file
+     * Write PEAR/PECL package2.xml file
      *
      * @access private
      * @param  string  directory to write to
@@ -2082,48 +2085,71 @@ you have been warned!
 http://pear.php.net/dtd/tasks-1.0.xsd
 http://pear.php.net/dtd/package-2.0
 http://pear.php.net/dtd/package-2.0.xsd">
+
 ';
 
-        echo " <name>{$this->name}</name>\n";
-        echo " <channel>pecl.php.net</channel>\n"; // TODO -> get from specs
+        echo "  <name>{$this->name}</name>\n";
+        echo "  <channel>pecl.php.net</channel>\n\n"; // TODO -> get from specs
 
         if (isset($this->summary)) {
-            echo "  <summary>{$this->summary}</summary>\n";
+            echo "  <summary>{$this->summary}</summary>\n\n";
         }
 
         if (isset($this->description)) {
-            echo "  <description>\n".rtrim($this->description)."\n  </description>\n";
+            echo "  <description>\n".rtrim($this->description)."\n  </description>\n\n";
         }
 
         uasort($this->authors, array("CodeGen_PECL_Maintainer", "comp"));
         foreach ($this->authors as $maintainer) {
             echo $maintainer->packageXml2();
         }
+        echo "\n";
 
         echo $this->release->packageXml2($this->license);
 
-        echo "\n  <contents>\n";
+        echo "  <contents>\n";
         echo $this->packageXmlFileList();
-        echo "  </contents>\n";
+        echo "  </contents>\n\n";
 
         echo "  <dependencies>\n";
-        echo "   <required>\n";
-        echo "    <php><min>".$this->minPhpVersion()."</min></php>\n";
+        echo "    <required>\n";
+        echo "      <php>\n";
+        echo "        <min>".$this->minPhpVersion()."</min>\n";
+        echo "      </php>\n";
+        echo "      <pearinstaller>\n";
+        echo "        <min>1.4.0a1</min>\n";
+        echo "      </pearinstaller>\n";
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML2(array("REQUIRED", "CONFLICTS"));
         }       
         echo $this->platform->packageXML2();
-        echo "   </required>\n";
-        echo "   <optional>\n";
-        foreach ($this->otherExtensions as $ext) {
-            echo $ext->packageXML2(array("OPTIONAL"));
-        }       
-        echo "   </optional>\n";
-        echo "  </dependencies>\n";
+        echo "    </required>\n";
 
-        echo "  <providesextension>{$this->name}</providesextension>\n";
+        $optional = "";
+        foreach ($this->otherExtensions as $ext) {
+            $optional.= $ext->packageXML2(array("OPTIONAL"));
+        }       
+        if (!empty($optional)) {
+          echo "    <optional>\n";
+          echo $optional;
+          echo "    </optional>\n";
+        }
+
+        echo "  </dependencies>\n\n";
+
+        echo "  <providesextension>{$this->name}</providesextension>\n\n";
         
-        echo "<extsrcrelease/>\n";
+
+        if (count($this->with)) {
+            echo "  <extsrcrelease>\n";
+            foreach ($this->with as $with) {
+                $configOption = "with-".$with->getName();
+                echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"".$with->getName()." installation directory?\" />\n";
+            }
+            echo "  </extsrcrelease>\n\n";
+        } else {
+            echo "  <extsrcrelease/>\n\n";
+        }
 
         echo "</package>\n";
         
