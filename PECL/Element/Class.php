@@ -391,7 +391,7 @@ require_once "CodeGen/Tools/Indent.php";
                 $code.= "    intern->data = ({$this->payloadType} *)malloc(sizeof({$this->payloadType}));\n";
             }
 
-            $code .= $this->payloadCtor; // TODO indent, block
+            $code .= CodeGen_Tools_Indent::indent(4, $this->payloadCtor); // TODO while(0) block?
 
             return $code;
         }
@@ -421,7 +421,7 @@ require_once "CodeGen/Tools/Indent.php";
          */
         function getPayloadDtor()
         {
-            $code = $this->payloadDtor; // TODO indent
+            $code = CodeGen_Tools_Indent::indent(4, $this->payloadDtor); // TODO while(0) block?
 
             if ($this->payloadAlloc) {
                 $code.= "    free(intern->data);\n";

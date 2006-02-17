@@ -1,4 +1,4 @@
-#!/usr/local/bin/php -Cq
+#!/usr/local/bin/php -ddisplay_errors=off -dlog_errors=on -Cq
 <?php
 
 /**
