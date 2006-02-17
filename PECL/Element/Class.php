@@ -497,7 +497,7 @@ static zend_object_handlers {$this->name}_obj_handlers;
 
 static void {$this->name}_obj_free(void *object TSRMLS_DC)
 {
-                php_obj_{$this->name} *intern = (php_obj_{$this->name} *)object;
+    php_obj_{$this->name} *intern = (php_obj_{$this->name} *)object;
     
     {$this->payloadType} *data = intern->data;
 ".$this->getPayloadDtor()."

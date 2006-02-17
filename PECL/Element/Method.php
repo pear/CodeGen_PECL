@@ -189,7 +189,7 @@ require_once "CodeGen/PECL/Element/Class.php";
             } else {
             $code = "
     if (zend_parse_method_parameters($argc TSRMLS_CC, getThis(), \"$argString\", ".join(", ",$argPointers).") == FAILURE) {
-      return;
+        return;
     }
 
 ";
