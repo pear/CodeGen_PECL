@@ -72,11 +72,11 @@ class CodeGen_PECL_Dependency_Platform
         $xml = "";
 
         if ($this->test("windows")) {
-            $xml.= "    <os><name>windows</name></os>>\n";
+            $xml.= "    <os><name>windows</name></os>\n";
         }
 
         if ($this->test("unix")) {
-            $xml.= "    <os><name>unix</name></os>>\n";
+            $xml.= "    <os><name>unix</name></os>\n";
         }
 
         return $xml;
