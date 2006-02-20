@@ -1120,7 +1120,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             break;
 
                         case "callback": 
-                            $postProcess.= "    if (!zend_is_callable({$name}, 0 NULL) {\n";
+                            $postProcess.= "    if (!zend_is_callable({$name}, 0, NULL)) {\n";
                             $postProcess.= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
                             $postProcess.= "      return;";
                             $postProcess.= "    }\n";
