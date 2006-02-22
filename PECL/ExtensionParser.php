@@ -100,84 +100,27 @@ class CodeGen_PECL_ExtensionParser
         return $this->tagstart_extension_function($attr);
     }
         
-    function tagstart_extension_class_function($attr)
+    function tagstart_function_summary($attr) 
     {
-        $err = $this->checkAttributes($attr, array("name", "access", "abstract", "final", "procedural"));
-        if (PEAR::isError($err)) {
-            return $err;
-        }
-                                      
-        $method = new CodeGen_PECL_Element_Method($this->helper);
-
-        $this->pushHelper($method);
-        
-        if (isset($attr["name"])) {
-            $err = $method->setName($attr["name"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        } else {
-            return PEAR::raiseError("'name' attribut for <function> missing");
-        }
-
-        if (isset($attr["access"])) {
-            $err = $method->setAccess($attr["access"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-        
-        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
-            $err = $method->isAbstract();
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-        
-        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
-            $err = $method->isFinal();
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-        
-        if (isset($attr["procedural"])) {
-            if ($attr["procedural"] == "" || $attr["procedural"] == "yes") {
-                $attr["procedural"] = "default";
-            }
-            $err = $method->setProceduralName($attr["procedural"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        }
-
-        return true;
+        return $this->noAttributes($attr);
     }
-    
-    function tagstart_extension_interface_function($attr)
+
+    function tagend_function_summary($attr, $data) 
     {
-        $err = $this->checkAttributes($attr, array("name"));
-        if (PEAR::isError($err)) {
-            return $err;
-        }
-                                      
-        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
-        $method->isAbstract();
-        $method->isInterface();
-        $this->pushHelper($method);
-        
-        if (isset($attr["name"])) {
-            $err = $method->setName($attr["name"]);
-            if (PEAR::isError($err)) {
-                return $err;
-            }
-        } else {
-            return PEAR::raiseError("'name' attribut for <function> missing");
-        }
-
-        return true;
+        return $this->helper->setSummary(trim($data));
     }
-    
+
+    function tagstart_function_description($attr)
+    {
+        $this->verbatim();
+        return $this->noAttributes($attr);
+    }
+
+    function tagend_function_description($attr, $data) 
+    {
+        return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+    }
+
     function tagstart_function_proto($attr)
     {
         return $this->noAttributes($attr);
@@ -251,7 +194,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_function_test_result($attr)
     {
-        return $this->noAttributes($attr);
+        return $this->checkAttributes($attr, array("mode"));
     }
 
     function tagend_function_test_result($attr, $data)
@@ -300,25 +243,8 @@ class CodeGen_PECL_ExtensionParser
 
 
 
-    function tagend_class_function($attr, $data) 
-    {
-        $method = $this->helper;
-        $this->popHelper();
-        $err = $this->helper->addMethod($method);
-        return $err;
-    }
-    
-    function tagend_interface_function($attr, $data) 
-    {
-        $method = $this->helper;
-        $this->popHelper();
-        $err = $this->helper->addMethod($method);
-        return $err;
-    }
-    
-
-    function tagend_functions($attr, $data) {
-        return true;
+    function tagstart_functions($attr) {
+        return $this->noAttributes($attr);
     }        
 
 
@@ -1017,6 +943,68 @@ class CodeGen_PECL_ExtensionParser
     }
 
 
+    function tagstart_class_function($attr)
+    {
+        $err = $this->checkAttributes($attr, array("name", "access", "abstract", "final", "procedural"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
+        $method = new CodeGen_PECL_Element_Method($this->helper);
+
+        $this->pushHelper($method);
+        
+        if (isset($attr["name"])) {
+            $err = $method->setName($attr["name"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        } else {
+            return PEAR::raiseError("'name' attribut for <function> missing");
+        }
+
+        if (isset($attr["access"])) {
+            $err = $method->setAccess($attr["access"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
+            $err = $method->isAbstract();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
+            $err = $method->isFinal();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr["procedural"])) {
+            if ($attr["procedural"] == "" || $attr["procedural"] == "yes") {
+                $attr["procedural"] = "default";
+            }
+            $err = $method->setProceduralName($attr["procedural"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+
+        return true;
+    }
+    
+    function tagend_class_function($attr, $data) 
+    {
+        $method = $this->helper;
+        $this->popHelper();
+        $err = $this->helper->addMethod($method);
+        return $err;
+    }
+    
     function tagend_class($attr, $data) 
     {
         $err = $this->extension->addClass($this->helper);
@@ -1026,6 +1014,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_interface($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "extends"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
         $class = new CodeGen_PECL_Element_Interface;
 
         $this->pushHelper($class);
@@ -1049,6 +1042,39 @@ class CodeGen_PECL_ExtensionParser
         return true;
     }
 
+    function tagstart_interface_function($attr)
+    {
+        $err = $this->checkAttributes($attr, array("name"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
+        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
+        $method->isAbstract();
+        $method->isInterface();
+        $this->pushHelper($method);
+        
+        if (isset($attr["name"])) {
+            $err = $method->setName($attr["name"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        } else {
+            return PEAR::raiseError("'name' attribut for <function> missing");
+        }
+
+        return true;
+    }
+    
+    function tagend_interface_function($attr, $data) 
+    {
+        $method = $this->helper;
+        $this->popHelper();
+        $err = $this->helper->addMethod($method);
+        return $err;
+    }
+    
+
     function tagend_interface($attr, $data) 
     {
         print_r($this->helper);
@@ -1059,6 +1085,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_stream($attr)
     {
+        $err = $this->checkAttributes($attr, array("name"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
         $this->pushHelper(new CodeGen_PECL_Element_Stream);            
 
         if (isset($attr["name"])) {
