@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <extension name="with_1" version="1.0.0">
- <deps lang="c">
+ <deps language="c">
   <with name="libz" defaults='/usr:/usr/local' testfile='include/zlib.h'>
   </with>
  </deps>
