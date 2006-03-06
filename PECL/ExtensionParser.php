@@ -795,7 +795,7 @@ class CodeGen_PECL_ExtensionParser
     function tagstart_class($attr)
     {
         $err = $this->checkAttributes($attr, array("name", "extends", "final", "abstract"));
-        if ($err) {
+        if (PEAR::isError($err)) {
             return $err;
         }
 
@@ -844,6 +844,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_class_implements($attr, $data)
     {
+        $err = $this->checkAttributes($attr, array("interface"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
         if (!isset($attr["interface"])) {
             return PEAR::raiseError("intarface attribute missing for <implements>");
         }
@@ -854,6 +859,9 @@ class CodeGen_PECL_ExtensionParser
     function tagstart_class_property($attr)
     {
         $err = $this->checkAttributes($attr, array("name", "type", "value", "access", "static"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
 
         $prop = new CodeGen_PECL_Element_Property;
 
@@ -898,6 +906,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_constant($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "type", "value"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
         $const = new CodeGen_PECL_Element_ClassConstant;
 
         if (!isset($attr["name"])) {
@@ -927,6 +940,13 @@ class CodeGen_PECL_ExtensionParser
         return $this->helper->addConstant($const);
     }
 
+    function tagstart_class_payload($attr)
+    {
+        $err = $this->checkAttributes($attr, array("type", "alloc"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+    }
     
     function tagend_class_payload($attr, $data) 
     {
