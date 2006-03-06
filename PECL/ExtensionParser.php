@@ -794,6 +794,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "extends", "final", "abstract"));
+        if ($err) {
+            return $err;
+        }
+
         $class = new CodeGen_PECL_Element_Class;
 
         $this->pushHelper($class);
@@ -848,6 +853,8 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_property($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "type", "value", "access", "static"));
+
         $prop = new CodeGen_PECL_Element_Property;
 
         if (!isset($attr["name"])) {
