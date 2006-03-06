@@ -240,6 +240,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
         protected $optional = 0;
 
         /**
+         * Does this function have by-reference parameters?
+         *
+         * @var bool
+         */
+        protected $hasRefArgs = false;
+
+        /**
          * Set parameter and return value information from PHP style prototype
          *
          * @access public
@@ -454,10 +461,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
                 }
                 
-                // return by reference?
+                //  pass by reference?
                 if (count($tokens) && $tokens[0][0] === 'char' && $tokens[0][1] === '&') {
                     list($type, $token) = array_shift($tokens);
                     $param['byRef'] = true;
+                    $this->hasRefArgs = true;
                 }
                 
                 // any tokens left?
@@ -1132,7 +1140,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                             break;                          
                         }
 
-                        if (empty($param['byRef']) && $param['type'] != 'object') {
+                        if (empty($param['byRef']) && ($param['type'] == 'mixed' || $param['type'] == 'array')) {
                             $argString .= "/";
                         } else if (!$zvalType) {
                             // TODO: pass by ref for 'simple' types requires further thinking
@@ -1429,46 +1437,38 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
 
         /**
-         * Code needed ahead of the method table 
+         * Code needed ahead of the function table 
          *
-         * Abstract/Interface methods need to define their argument
-         * list ahead of the method table
+         * Only required for functions that accept parameters by reference
          *
          * @returns string
          */
         function argInfoCode() {
             $code = "";
 
-            if (count($this->params) > 1) {
-                $code.= "ZEND_BEGIN_ARG_INFO(".$this->getFullName()."_args, 0)\n";
-
-                $params = $this->params;
-                array_shift($params);
-
-                $useTypeHints = true;
-
-                foreach($params as $param) {
-                    if ($param['type'] != "object" || !isset($param['subtype'])) {
-                        $useTypeHints = false;
-                        break;
-                    }
+            // generate refargs mask if needed
+            if ($this->hasRefArgs) {              
+                $code.= "ZEND_BEGIN_ARG_INFO({$this->name}_arg_info, 0)\n";
+                foreach ($this->params as $param)
+                {
+                    $code.= "  ZEND_ARG_PASS_INFO(". (isset($param["byRef"]) ? 1 : 0) .")\n";
                 }
-
-                // TODO optional paramteres?
-                foreach($params as $param) {
-                    $byRef = empty($param["byRef"]) ? 0 : 1;
-                    if ($useTypeHints) {
-                        $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
-                    } else {
-                        $code.= "  ZEND_ARG_INFO($byRef, $param[name])\n";
-                    }
-                }                
-                
                 $code.= "ZEND_END_ARG_INFO()\n";
             }
 
             return $code;
         } 
+
+        /**
+         * Generate registration entry for extension function table
+         *
+         * @return string
+         */
+        function functionEntry()
+        {
+          $arginfo = $this->hasRefArgs ? "{$this->name}_arg_info" : "NULL";
+          return sprintf("    PHP_FE(%-20s, %s)\n", $this->name, $arginfo);
+        }
     }
 
 ?>

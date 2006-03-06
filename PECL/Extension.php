@@ -922,7 +922,7 @@ $moduleHeader
         $code  = "/* {{{ {$this->name}_functions[] */\n";
         $code .= "function_entry {$this->name}_functions[] = {\n";
         foreach ($this->functions as $function) {
-            $code .=  sprintf("    PHP_FE(%-20s, NULL)\n", $function->getName());
+            $code.= $function->functionEntry();
         }
         foreach ($this->classes as $class) {
             $code.= $class->functionAliasEntries();
