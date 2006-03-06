@@ -1179,26 +1179,56 @@ HASSQgRukwiZmpucmwYRADs=
    <warning>
     <simpara>
      The OO APIs differ between PHP 4 and 5,  
-     CodeGen_PECL supports only PHP 5 when it 
-     comes to this.
-    </simpara>
-    <simpara>
-     The OO support in CodeGen_PECL is also
-     rather new and not as well tested as the
-     rest of it in some places.
+     CodeGen_PECL only supports the newer PHP 5 API. 
     </simpara>
    </warning>
 
    <section>
     <title>Classes</title>
     <para>
-     
+     Classes are declared using the <sgmltag>class</sgmltag> container.
+	 Each class needs to be given a unique class name using the 
+     <literal>name=...</literal> attribute.
+    </para>
+    <para>
+     Using the <literal>extends=...</literal> attribut it is possible
+     to inherit from another internal class. The class inherited from
+     does not necessarily have to be defined in the same package so
+     the given name is not checked for existance. An attempt to extend
+     from a non-existing class will only be caught at PHP runtine.
+    </para>
+    <para>
+	 The optional <literal>abstract=...</literal> and 
+     <literal>final=...</literal> attributes can be used to declare
+     a class as abstract (can be inherited from but can't be instanciated)
+     or final (can't be inherited from anymore).
     </para>
    </section>
 
    <section>
     <title>Properties</title>
     <para>
+     Class properties are defined using the <sgmltag>property</sgmltag> tag.
+     The property name is given using the <literal>name=...</literal> tag and
+     is mandatory.
+    </para>
+    <para>
+     Access to the property is public by default, it can be set to either
+     <literal>public</literal>, <literal>protected</literal> or 
+     <literal>private</literal> using the optional 
+     <literal>access=...</literal> attribute.
+    </para>
+    <para>
+     Property default type and value can be specified using the optional
+     <literal>type=...</literal> and <literal>value=...</literal> attributes.
+     Possible types are <literal>long</literal>, <literal>double</literal>,
+     <literal>string</literal> and <literal>NULL</literal>. The default
+     value and type of a property are <literal>NULL</literal> if not
+     specified using these attributes.
+    </para>
+    <para>
+     A property can be declared static using the <literal>static=...</literal>
+     attribute. A static attribute is shared by all instances of the class.
     </para>
    </section>
 
