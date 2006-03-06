@@ -1,63 +1,26 @@
-Milestone 1.0
+milestone 1.1
 -------------
 
-- <lib> and <header> tags *within* <with>        -> done 
-
-- "object store" handling for private data       -> done
-
-- support for new package.xml 2.0 format         -> done
-
-- change the resource variable names,            -> done
-  check extension version to provide BC
-
-- test suite                                     -> done
-
-- class implementation and documentation support -> done
- 
-  - <class>                                      -> done
-  - <class extends="..."                         -> done
-  - <class><implements interface="..."           -> done
-  - <class><const>                               -> done
-  - <class><property ...                         -> done
-  - <class><function ...                         -> done
-  - __construct needs special handling           -> done
-  - <interface>                                  -> done
-  - type hints                                   -> done
-
-- full support for .phpt test case generation    -> done
-
-  - <skipif>,<ini> in <function>                 -> done
-
-  - <notest/> for functions not needing a test   -> done
-
-- support extension dependencies                 -> done
-
-- better property access macros                  -> done
-
-- add a -l --lint option                         -> done
-
-- write to tmpfiles first, only overwrite        -> done
-  existing files if actual changes are 
-  detected, preserve unchanged files 
-  (to make "make" happy)
-
-- multiple logos                                 -> done
-
-- fix whitespace in generated code               -> done
-
-not necessarily 1.0
--------------------
+- implement pass-by-reference, currently its not really working
 
 - finish config.w32 generation (~75% done, need someone 
   with windows build experience to finish and test this,
   probably at php|tek if not earlier)
 
+- check #line numbers in generated source with libxml
+  -> error messages with meaningfull line numbers need this
+
+- return by reference (for 5.1 if it supports it)          
+
+- allow addition of files to directories (eg. test),
+  
+
+not necessarily 1.0
+-------------------
+
 - package2.xml <installdeps>               
 
 - add more tests
-
-- check #line numbers in generated source with libxml
-  -> error messages with meaningfull line numbers need this
 
 - allow "src='path/to/file'" in more cases           
   make sure it generates #line, too
@@ -75,8 +38,6 @@ not necessarily 1.0
 
 - full support for SAPI 
 
-- return by reference (for 5.1 if it supports it)          
-
 - VC++ 7 (VS.net) project files
   => not needed anymore as we now have config.w32?
 
@@ -92,8 +53,6 @@ not necessarily 1.0
 
 - create seperate target dir for copied spec files
 
-- allow addition of files to directories (eg. test),
-  
 - allow specification of file role instead of guessing by extension?
 
 - support compiler/linker flags setting using config programs
