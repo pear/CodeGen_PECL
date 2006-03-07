@@ -667,15 +667,6 @@ class CodeGen_PECL_ExtensionParser
     }
 
 
-    function tagstart_deps_file($attr) {
-        if (!isset($attr['name'])) {
-            return PEAR::raiseError("name attribut for file missing");
-        }
- 
-        return $this->extension->addSourceFile($attr['name']);
-    }
-
-
     function tagstart_extension_code($attr)
     {
         if (isset($attr["src"])) {

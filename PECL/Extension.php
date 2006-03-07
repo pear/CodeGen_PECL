@@ -428,27 +428,7 @@ class CodeGen_PECL_Extension
         return true;
     }
     
-    
-    /**
-     * Add a package file by type and path
-     *
-     * @access  public
-     * @param   string  type
-     * @param   string  path
-     * @returns bool    success state
-     */
-    function addPackageFile($type, $path)
-    {
-        $basename = basename($path);
-
-        if (isset($this->packageFiles[$type][$basename])) {
-            return PEAR::raiseError("duplicate distribution file name '$basename'");
-        }
-
-        $this->packageFiles[$type][$basename] = $path;
-        return true;
-    }
-    
+        
     /** 
      * Add a --with configure option
      *
@@ -568,8 +548,12 @@ class CodeGen_PECL_Extension
 
         // copy additional source files
         if (isset($this->packageFiles['copy'])) {
-            foreach ($this->packageFiles['copy'] as $basename => $filepath) {
-                copy($filepath, $this->dirpath."/".$basename);
+            foreach ($this->packageFiles['copy'] as $targetpath => $sourcepath) {
+                $targetpath = $this->dirpath."/".$targetpath;
+                if (!is_dir(dirname($targetpath))) {
+                    mkdir(dirname($targetpath), 0777, true);
+                }
+                copy($sourcepath, $targetpath);
             }
         }
         
