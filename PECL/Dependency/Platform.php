@@ -50,11 +50,11 @@ class CodeGen_PECL_Dependency_Platform
         $xml = "";
 
         if ($this->test("windows")) {
-            $xml.= "    <dep type=\"os\">windows</dep>\n";
+            $xml.= "    <dep type='os' rel='has' name='windows'/>\n";
         }
 
         if ($this->test("unix")) {
-            $xml.= "    <dep type=\"os\">unix</dep>\n";
+            $xml.= "    <dep type='os' rel='has' name='unix'/>\n";
         }
 
         return $xml;
