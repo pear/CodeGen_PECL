@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<extension name="function_by_ref" version="1.0.0">
+ <function name="foo">
+  <proto>bool foo(array bar)</proto>
+  <code>
+   add_index_long(bar, 23, 42);
+   RETURN_TRUE;
+  </code>
+  <test>
+   <code>
+<?data
+$a = array(5=>23, 37=>"in a row");
+foo($a);
+echo count($a);
+?>
+   </code>
+   <result>
+2
+   </result>
+  </test>
+ </function>
+
+ <function name="foo_by_ref">
+  <proto>bool foo_by_ref(array &amp;bar)</proto>
+  <code>
+   add_index_long(bar, 23, 42);
+   RETURN_TRUE;
+  </code>
+  <test>
+   <code>
+<?data
+$a = array(5=>23, 37=>"in a row");
+foo_by_ref($a);
+echo count($a);
+?>
+   </code>
+   <result>
+3
+   </result>
+  </test>
+ </function>
+
+ <function name="bar">
+  <proto>bool bar(mixed foo)</proto>
+  <code>
+convert_to_double(foo);
+Z_DVAL_P(foo) = 3.14;
+RETURN_TRUE;
+  </code>
+  <test>
+   <code>$f = 42; bar($f); echo $f;</code>
+   <result>42</result>
+  </test>
+ </function>
+
+ <function name="bar_by_ref">
+  <proto>bool bar_by_ref(mixed &amp;foo)</proto>
+  <code>
+convert_to_double(foo);
+Z_DVAL_P(foo) = 3.14;
+RETURN_TRUE;
+  </code>
+  <test>
+   <code>$f = 42; bar_by_ref($f); echo $f;</code>
+   <result>3.14</result>
+  </test>
+ </function>
+
+</extension>
