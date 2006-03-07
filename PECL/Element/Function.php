@@ -464,6 +464,9 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 //  pass by reference?
                 if (count($tokens) && $tokens[0][0] === 'char' && $tokens[0][1] === '&') {
                     list($type, $token) = array_shift($tokens);
+					if ($type != "array" && $type != "mixed") {
+					  return PEAR::raiseError("only 'array' and 'mixed' arguments may be passed by reference, '{$param[name]}' is of type '$type'");
+					}
                     $param['byRef'] = true;
                     $this->hasRefArgs = true;
                 }
