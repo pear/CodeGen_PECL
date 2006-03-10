@@ -222,6 +222,8 @@ class CodeGen_PECL_Extension
         $this->release = new CodeGen_PECL_Release;
         
         $this->platform = new CodeGen_PECL_Dependency_Platform("all");
+
+        parent::__construct();
     }
     
     // }}} 
