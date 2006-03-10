@@ -11,7 +11,7 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
@@ -28,7 +28,7 @@ require_once "CodeGen/PECL/Element.php";
  * Class for testfile generation as needed for 'make test'
  *
  * @category   Tools and Utilities
- * @package    CodeGen
+ * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
