@@ -175,7 +175,7 @@ class CodeGen_PECL_Dependency_Extension
     {
         return "/* {{{ cross-extension dependencies */\n
 #if ZEND_EXTENSION_API_NO >= 220050617
-static zend_module_dep $extension->getName()."_deps[] = {
+static zend_module_dep ".$extension->getName()."_deps[] = {
 ";
     }
 
