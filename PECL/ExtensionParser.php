@@ -548,6 +548,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_deps_header($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "prepend", "path"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
         // TODO check name
         $header = new CodeGen_PECL_Dependency_Header($attr["name"]);
 
