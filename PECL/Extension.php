@@ -797,7 +797,7 @@ class CodeGen_PECL_Extension
            $moduleHeader = 
 "#if ZEND_EXTENSION_API_NO >= 220050617
         STANDARD_MODULE_HEADER_EX, NULL,
-        pdo_{$this->name}_deps,
+        {$this->name}_deps,
 #else
         STANDARD_MODULE_HEADER,
 #endif
