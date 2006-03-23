@@ -523,6 +523,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_deps_lib($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "platform", "path", "function"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                 
         if (!isset($attr["name"])) {
             return PEAR::raiseError("");
         }
@@ -531,6 +536,8 @@ class CodeGen_PECL_ExtensionParser
             $attr["platform"] = "all";
         }
 
+        error_log("Warning: Use of <header> tags out of <with> sections is deprecated");
+     
         $lib = new CodeGen_PECL_Dependency_Lib($attr["name"], $attr["platform"]);
 
         if (isset($attr['path'])) {
@@ -552,7 +559,9 @@ class CodeGen_PECL_ExtensionParser
         if (PEAR::isError($err)) {
             return $err;
         }
-                                      
+                                 
+        error_log("Warning: Use of <header> tags out of <with> sections is deprecated");
+     
         // TODO check name
         $header = new CodeGen_PECL_Dependency_Header($attr["name"]);
 
