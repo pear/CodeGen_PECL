@@ -1598,9 +1598,14 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
         echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
         echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_".strtoupper($this->name)."\"\n";
 
+        if (count($this->headers)) {
+            if (!isset($this->with[$this->name])) {
+                $this->terminate("global headers not bound to a --with option found and no --with option by the default name");
+            }
 
-        foreach($this->headers as $header) {
-            echo $header->configm4($this->name, $this->name);
+            foreach($this->headers as $header) {
+                echo $header->configm4($this->name, $this->name);
+            }
         }  
 
         foreach ($this->resources as $resource) {
@@ -1610,8 +1615,9 @@ PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
         echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
 
         if (count($this->libs)) {
-            $first = true;
-
+            if (!isset($this->with[$this->name])) {
+                $this->terminate("global libs not bound to a --with option found and no --with option by the default name");
+            }
             foreach ($this->libs as $lib) {
                 echo $lib->configm4($this->name, $this->name);
             }
@@ -2340,6 +2346,26 @@ vi: ts=1 sw=1
 ';
     }
 
+
+
+    /**
+     * Show error message and bailout
+     *
+     * @param string  error message
+     */
+    function terminate($msg)
+    {
+        while (@ob_end_clean()); // purge output buffers
+
+        $stderr = fopen("php://stderr", "w");
+        if ($stderr) {
+            fprintf($stderr, "%s\n", $msg);
+            fclose($stderr);
+        } else {
+            echo "$msg\n";
+        }
+        exit(3);
+    }
 }   
 
 
