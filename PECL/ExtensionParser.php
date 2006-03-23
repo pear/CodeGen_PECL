@@ -536,7 +536,7 @@ class CodeGen_PECL_ExtensionParser
             $attr["platform"] = "all";
         }
 
-        error_log("Warning: Use of <header> tags out of <with> sections is deprecated");
+        error_log("Warning: Use of <lib> tags out of <with> sections is deprecated");
      
         $lib = new CodeGen_PECL_Dependency_Lib($attr["name"], $attr["platform"]);
 
