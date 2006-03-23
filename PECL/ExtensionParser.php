@@ -638,6 +638,11 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_deps_with_header($attr) 
     {
+        $err = $this->checkAttributes($attr, array("name", "prepend", "path"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                 
         // TODO check name
         $header = new CodeGen_PECL_Dependency_Header($attr["name"]);
 
@@ -654,6 +659,15 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_deps_with_lib($attr) 
     {
+        $err = $this->checkAttributes($attr, array("name", "platform", "path", "function"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                 
+        if (!isset($attr["name"])) {
+            return PEAR::raiseError("");
+        }
+
         if (!isset($attr["platform"])) {
             $attr["platform"] = "all";
         }
