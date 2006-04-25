@@ -167,7 +167,8 @@ class CodeGen_PECL_Element_Global
         $array = explode(" ", str_replace('*',' ',$type));
         foreach ($array as $name) {
             if (empty($name)) continue;
-            if (!$this->isName($name)) return false;
+            // TODO :: should only be allowed for C++, not C extensions
+            if (!$this->isName(str_replace("::","", $name))) return false; 
         }
         return true;
     }
