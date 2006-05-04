@@ -39,6 +39,20 @@ class CodeGen_PECL_Dependency_Header
   extends CodeGen_Dependency_Header
 {
     /**
+     * return config.m4 code snippet for unix builds
+     *
+     * @param   string  Extension name
+     * @param   string  --with option name
+     * @return  string
+     */
+    function configm4($extname, $withname)
+    {
+        $upname = strtoupper($extname);
+        $withUpname = strtoupper($withname);
+        return "  AC_CHECK_HEADER([\$PHP_{$withUpname}_DIR/{$this->path}/{$this->name}], [], AC_MSG_ERROR('{$this->name}' header not found))\n";
+    }
+
+    /**
      * return config.w32 code snippet for windows builds
      *
      * @param   string  Extension name
