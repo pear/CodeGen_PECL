@@ -1,7 +1,11 @@
 milestone 1.1
 -------------
 
-- implement pass-by-reference, currently its not really working
+- fix OS deps entries in package.xml (done)
+
+- implement pass-by-reference for array and mixed parameters (done)
+
+- allow addition of files to directories (eg. test) (done)
 
 - finish config.w32 generation (~75% done, need someone 
   with windows build experience to finish and test this,
@@ -12,11 +16,14 @@ milestone 1.1
 
 - return by reference (for 5.1 if it supports it)          
 
-- allow addition of files to directories (eg. test),
   
 
-not necessarily 1.0
+not necessarily 1.1
 -------------------
+
+- implement pass-by-reference for all parameter types
+
+- setter/getter code for properties
 
 - package2.xml <installdeps>               
 
@@ -63,4 +70,4 @@ not necessarily 1.0
 	=> requires further research, doesn't work this way
 	==> how to add *static* libraries? 
 
-- improve $dirpath handling 
+- improve $dirpath handling (?)
