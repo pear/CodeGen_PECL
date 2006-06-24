@@ -52,7 +52,7 @@ class CodeGen_PECL_ExtensionParser
         return $this->noAttributes($attr);
     }
 
-    function tagstart_extension_release($attr)
+    function tagstart_release($attr)
     {
         $this->pushHelper(new CodeGen_PECL_Release);
         return $this->noAttributes($attr);
