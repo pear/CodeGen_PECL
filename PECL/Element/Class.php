@@ -27,7 +27,7 @@ require_once "CodeGen/PECL/Element/Property.php";
 require_once "CodeGen/PECL/Element/ClassConstant.php";
 require_once "CodeGen/PECL/Element/Method.php";
 
-require_once "CodeGen/Tools/Indent.php";
+require_once "CodeGen/Tools/IndentC.php";
 
 /**
  * Class describing a PHP class within a PECL extension 
@@ -391,7 +391,7 @@ require_once "CodeGen/Tools/Indent.php";
                 $code.= "    intern->data = ({$this->payloadType} *)malloc(sizeof({$this->payloadType}));\n";
             }
 
-            $code .= CodeGen_Tools_Indent::indent(4, $this->payloadCtor); // TODO while(0) block?
+            $code .= CodeGen_Tools_IndentC::indent(4, $this->payloadCtor); // TODO while(0) block?
 
             return $code;
         }
@@ -421,7 +421,7 @@ require_once "CodeGen/Tools/Indent.php";
          */
         function getPayloadDtor()
         {
-            $code = CodeGen_Tools_Indent::indent(4, $this->payloadDtor); // TODO while(0) block?
+            $code = CodeGen_Tools_IndentC::indent(4, $this->payloadDtor); // TODO while(0) block?
 
             if ($this->payloadAlloc) {
                 $code.= "    free(intern->data);\n";

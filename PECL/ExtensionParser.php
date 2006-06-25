@@ -118,7 +118,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_description($attr, $data) 
     {
-        return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagstart_function_proto($attr)
@@ -151,7 +151,7 @@ class CodeGen_PECL_ExtensionParser
     function tagend_function_code($attr, $data, $line=0, $file="")
     {
         if (isset($attr["src"])) {
-            return $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
+            return $this->helper->setCode(CodeGen_Tools_IndentC::linetrim(file_get_contents($attr["src"])));
         } else {
             return $this->helper->setCode($data, $line, $file);
         }
@@ -179,7 +179,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_test_description($attr, $data)
     {
-        return $this->helper->setTestDescription(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setTestDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagstart_function_test_code($attr)
@@ -189,7 +189,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_test_code($attr, $data)
     {
-        return $this->helper->setTestCode(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setTestCode(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagstart_function_test_result($attr)
@@ -199,7 +199,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_test_result($attr, $data)
     {
-        return $this->helper->setTestResult(CodeGen_Tools_Indent::linetrim($data), @$attr['mode']);
+        return $this->helper->setTestResult(CodeGen_Tools_IndentC::linetrim($data), @$attr['mode']);
     } 
 
     function tagstart_function_test_ini($attr)
@@ -209,7 +209,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_test_ini($attr, $data)
     {
-        return $this->helper->setTestIni(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setTestIni(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagstart_function_test_skipif($attr)
@@ -219,7 +219,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_function_test_skipif($attr, $data)
     {
-        return $this->helper->setTestSkipIf(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setTestSkipIf(CodeGen_Tools_IndentC::linetrim($data));
     }
 
 
@@ -287,12 +287,12 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_resource_destruct($attr, $data)
     {
-        return $this->helper->setDestruct(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setDestruct(CodeGen_Tools_IndentC::linetrim($data));
     }
     
     function tagend_resource_description($attr, $data)
     {
-        return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_extension_resource($attr, $data) {
@@ -393,7 +393,7 @@ class CodeGen_PECL_ExtensionParser
             return $err;
         }
 
-        $const->setDesc(CodeGen_Tools_Indent::linetrim($data));
+        $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         return $this->extension->addConstant($const);
     }
@@ -490,7 +490,7 @@ class CodeGen_PECL_ExtensionParser
             }
         } 
 
-        $ini->setDesc(CodeGen_Tools_Indent::linetrim($data));
+        $ini->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         $err = $this->extension->addPhpini($ini);
         if (PEAR::isError($err)) {
@@ -708,11 +708,11 @@ class CodeGen_PECL_ExtensionParser
     }
 
     function tagend_extension_makefile($attr, $data) {
-        return $this->extension->addMakeFragment(CodeGen_Tools_Indent::linetrim($data));
+        return $this->extension->addMakeFragment(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_deps_configm4($attr, $data) {
-        return $this->extension->addConfigFragment(CodeGen_Tools_Indent::linetrim($data), 
+        return $this->extension->addConfigFragment(CodeGen_Tools_IndentC::linetrim($data), 
                                                    isset($attr['position']) ? $attr['position'] : "top");
     }
 
@@ -743,23 +743,23 @@ class CodeGen_PECL_ExtensionParser
     }
 
     function tagend_test_title($attr, $data) {
-        $this->helper->setTitle(CodeGen_Tools_Indent::linetrim($data));
+        $this->helper->setTitle(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_test_description($attr, $data) {
-        $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+        $this->helper->setDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_test_skipif($attr, $data) {
-        $this->helper->setSkipIf(CodeGen_Tools_Indent::linetrim($data));
+        $this->helper->setSkipIf(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_test_get($attr, $data) {
-        $this->helper->setGet(CodeGen_Tools_Indent::linetrim($data));
+        $this->helper->setGet(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_test_post($attr, $data) {
-        $this->helper->setPost(CodeGen_Tools_Indent::linetrim($data));
+        $this->helper->setPost(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagstart_test_code($attr)
@@ -776,14 +776,14 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_test_code($attr, $data) {
         if (isset($attr["src"])) {
-            $this->helper->setCode(CodeGen_Tools_Indent::linetrim(file_get_contents($attr["src"])));
+            $this->helper->setCode(CodeGen_Tools_IndentC::linetrim(file_get_contents($attr["src"])));
         } else {
-            $this->helper->setCode(CodeGen_Tools_Indent::linetrim($data));
+            $this->helper->setCode(CodeGen_Tools_IndentC::linetrim($data));
         }
     }
 
     function tagend_test_result($attr, $data) {
-        $err = $this->helper->setOutput(CodeGen_Tools_Indent::linetrim($data));
+        $err = $this->helper->setOutput(CodeGen_Tools_IndentC::linetrim($data));
             
         if (isset($attr['mode']) && !PEAR::isError($err)) {
             $err = $this->helper->setMode($attr['mode']);
@@ -858,7 +858,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_class_description($attr, $data) 
     {
-        return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->setDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
     function tagend_class_implements($attr, $data)

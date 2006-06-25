@@ -24,7 +24,7 @@
  */
 require_once "CodeGen/PECL/Element.php";
 
-require_once "CodeGen/Tools/Indent.php";
+require_once "CodeGen/Tools/IndentC.php";
 require_once "CodeGen/Tools/Tokenizer.php";
 
 /**
@@ -1204,14 +1204,14 @@ require_once "CodeGen/Tools/Tokenizer.php";
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(8, $this->code);
+                        $code .= CodeGen_Tools_IndentC::indent(8, $this->code);
                         $code .= "    } while(0);\n"; 
                     } else {
                         // in C++ variable may be declared at any time
                         if (isset($linedef)) {
                             $code .= "$linedef\n";
                         }
-                        $code .= CodeGen_Tools_Indent::indent(4, $this->code)."\n";
+                        $code .= CodeGen_Tools_IndentC::indent(4, $this->code)."\n";
                     }
 
                     // when a function returns a named resource we know what to do
@@ -1278,7 +1278,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
             case "internal":
                 if (!empty($this->code)) {
                     $code .= "    {\n";
-                    $code .= CodeGen_Tools_Indent::indent(8, $this->code."\n");
+                    $code .= CodeGen_Tools_IndentC::indent(8, $this->code."\n");
                     $code .= "    }\n";
                 }
                 break;

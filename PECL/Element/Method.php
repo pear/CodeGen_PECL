@@ -261,6 +261,7 @@ require_once "CodeGen/PECL/Element/Class.php";
         {
             $code = "";
 
+			// TODO catch arg #2->type == void
             $arginfo = (count($this->params)>1) ? ($this->getFullName()."_args") : "NULL";
 
             if ($this->isAbstract || $this->isInterface) {
