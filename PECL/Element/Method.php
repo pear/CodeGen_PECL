@@ -40,7 +40,7 @@ require_once "CodeGen/PECL/Element/Class.php";
     class CodeGen_PECL_Element_Method
       extends CodeGen_PECL_Element_Function
     {
-        function __construct(Codegen_PECL_Element_Class $class) 
+        function __construct(Codegen_PECL_Element_ObjectInterface $class) 
         {
             $this->class     = $class;
             $this->classname = $class->getName(); 

@@ -1095,7 +1095,7 @@ class CodeGen_PECL_ExtensionParser
             return $err;
         }
                                       
-        $method = new CodeGen_PECL_Element_Method($this->helper->getName());
+        $method = new CodeGen_PECL_Element_Method($this->helper);
         $method->isAbstract();
         $method->isInterface();
         $this->pushHelper($method);
@@ -1123,7 +1123,6 @@ class CodeGen_PECL_ExtensionParser
 
     function tagend_interface($attr, $data) 
     {
-        print_r($this->helper);
         $err = $this->extension->addInterface($this->helper);
         $this->popHelper();
         return true;

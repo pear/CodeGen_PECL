@@ -24,6 +24,7 @@
  */
 require_once "CodeGen/PECL/Element.php";
 require_once "CodeGen/PECL/Element/Method.php";
+require_once "CodeGen/PECL/Element/ObjectInterface.php";
 
 require_once "CodeGen/Tools/Indent.php";
 
@@ -41,6 +42,7 @@ require_once "CodeGen/Tools/Indent.php";
 
     class CodeGen_PECL_Element_Interface
       extends CodeGen_PECL_Element 
+	  implements CodeGen_PECL_Element_ObjectInterface
     {
         /**
          * The class name
@@ -286,7 +288,10 @@ require_once "CodeGen/Tools/Indent.php";
             return $xml;
         }
 
-        
+        function getPayloadType() 
+        {
+		    return "";
+        }
     }
 
 ?>

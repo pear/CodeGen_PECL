@@ -26,6 +26,7 @@ require_once "CodeGen/PECL/Element.php";
 require_once "CodeGen/PECL/Element/Property.php";
 require_once "CodeGen/PECL/Element/ClassConstant.php";
 require_once "CodeGen/PECL/Element/Method.php";
+require_once "CodeGen/PECL/Element/ObjectInterface.php";
 
 require_once "CodeGen/Tools/IndentC.php";
 
@@ -43,6 +44,7 @@ require_once "CodeGen/Tools/IndentC.php";
 
     class CodeGen_PECL_Element_Class
       extends CodeGen_PECL_Element 
+      implements CodeGen_PECL_Element_ObjectInterface
     {
         /**
          * The class name

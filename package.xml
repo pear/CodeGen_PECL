@@ -76,7 +76,9 @@
            <file role="doc" name="minimal.xml"/>
            <file role="doc" name="release.xml"/>
            <file role="doc" name="logo.xml"/>
+<!--
            <file role="doc" name="logo_inline.xml"/>
+-->
            <file role="doc" name="api_functions.xml"/>
           </dir>
         </dir>
@@ -102,6 +104,7 @@
             <file role="php">Logo.php</file>
             <file role="php">Resource.php</file>
             <file role="php">Test.php</file>
+            <file role="php">ObjectInterface.php</file>
             <file role="php">Class.php</file>
             <file role="php">Interface.php</file>
             <file role="php">Method.php</file>
