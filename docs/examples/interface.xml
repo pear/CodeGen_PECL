@@ -55,20 +55,20 @@ $class = new ReflectionClass('c3');
 var_dump($class->getInterfaces());
    ?>
   </code>
-  <result>
+  <result mode="format">
    <?data
   array(3) {
-  [0]=>
+  [%s]=>
   &object(ReflectionClass)#2 (1) {
     ["name"]=>
     string(9) "Countable"
   }
-  [1]=>
+  [%s]=>
   &object(ReflectionClass)#3 (1) {
     ["name"]=>
     string(8) "Iterator"
   }
-  [2]=>
+  [%s]=>
   &object(ReflectionClass)#4 (1) {
     ["name"]=>
     string(11) "Traversable"
