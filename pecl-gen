@@ -1,5 +1,7 @@
-#!/usr/local/bin/php -ddisplay_errors=off -dlog_errors=on -Cq
+#!/usr/local/bin/php 
 <?php
+
+# -ddisplay_errors=off -dlog_errors=on -Cq
 
 /**
 * Console script to generate PECL extensions from command line
