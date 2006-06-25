@@ -300,7 +300,8 @@ require_once "CodeGen/PECL/Element/Class.php";
                 return "";
             }
 
-            return "    PHP_FALIAS({$this->proceduralName}, {$this->classname}_{$this->name}, NULL)\n";      
+			// TODO arg_info?
+            return "    PHP_MALIAS({$this->classname}, {$this->proceduralName}, {$this->name}, NULL, ZEND_ACC_PUBLIC)\n";
         }
         /**
          * Create proto line for method 
