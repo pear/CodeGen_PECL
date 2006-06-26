@@ -371,7 +371,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
             
             // some types may carry a name
             if ($token === "object" || $token == "resource") {
-                if ($tokens[0][0] === 'name') {
+                if (isset($tokens[0][0]) && $tokens[0][0] === 'name') {
                     list($type, $token) = array_shift($tokens);
                     $returnSubtype = $token;
                 }
@@ -464,9 +464,9 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 //  pass by reference?
                 if (count($tokens) && $tokens[0][0] === 'char' && $tokens[0][1] === '&') {
                     list($type, $token) = array_shift($tokens);
-					if ($type != "array" && $type != "mixed") {
-					  return PEAR::raiseError("only 'array' and 'mixed' arguments may be passed by reference, '$param[name]' is of type '$type'");
-					}
+                    if ($type != "array" && $type != "mixed") {
+                      return PEAR::raiseError("only 'array' and 'mixed' arguments may be passed by reference, '$param[name]' is of type '$type'");
+                    }
                     $param['byRef'] = true;
                     $this->hasRefArgs = true;
                 }
@@ -967,6 +967,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 } else {
                     $code .= "    void * return_res;\n";
                 }
+                $code .= "    long return_res_id = -1;\n";
             }
 
             return $code;
@@ -1216,7 +1217,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
                     // when a function returns a named resource we know what to do
                     if ($returns[0] == "resource" && isset($returns[1])) {
-                        $code .= "    ZEND_REGISTER_RESOURCE(return_value, return_res, le_$returns[1]);\n";
+                        $code .= "    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_$returns[1]);\n";
                     }
                 } else {
                     // no code snippet was given so we produce a suggestion for the return statement
