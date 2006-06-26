@@ -16,6 +16,8 @@ milestone 1.1
 
 - return by reference (for 5.1 if it supports it)          
 
+- fix pass by reference for array/mixed
+
   
 
 not necessarily 1.1
@@ -41,12 +43,9 @@ not necessarily 1.1
 
 - full support for stream wrappers and filters   -> started
 
-- full support for session handler API
+- full support for session handler API -> started
 
 - full support for SAPI 
-
-- VC++ 7 (VS.net) project files
-  => not needed anymore as we now have config.w32?
 
 - have different levels of comment (and code?) generation
   similar to --no-help in ext_skel
@@ -60,6 +59,8 @@ not necessarily 1.1
 
 - create seperate target dir for copied spec files
 
+  - extended Makefile rules to regenerate stuff from embedded XML specs
+
 - allow specification of file role instead of guessing by extension?
 
 - support compiler/linker flags setting using config programs
@@ -71,3 +72,10 @@ not necessarily 1.1
 	==> how to add *static* libraries? 
 
 - improve $dirpath handling (?)
+
+- add "if" attribute to element tags, to genereate code wrappers like
+
+    #ifdef HAVE_SOME_FEATURE
+      ...
+    #endif
+    
