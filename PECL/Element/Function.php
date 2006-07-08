@@ -24,7 +24,6 @@
  */
 require_once "CodeGen/PECL/Element.php";
 
-require_once "CodeGen/Tools/IndentC.php";
 require_once "CodeGen/Tools/Tokenizer.php";
 
 /**
@@ -1198,22 +1197,10 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
 
                     // if function code is specified so we add it here
-                    if ($extension->getLanguage() == "c") {
-                        // in C variable declarations have to be at the very beginning
-                        // of a block, so we have to add {...} around the snippet
-                        $code .= "    do {\n";
-                        if (isset($linedef)) {
-                            $code .= "$linedef\n";
-                        }
-                        $code .= CodeGen_Tools_IndentC::indent(8, $this->code);
-                        $code .= "    } while(0);\n"; 
-                    } else {
-                        // in C++ variable may be declared at any time
-                        if (isset($linedef)) {
-                            $code .= "$linedef\n";
-                        }
-                        $code .= CodeGen_Tools_IndentC::indent(4, $this->code)."\n";
-                    }
+					if (isset($linedef)) {
+					  $code .= "$linedef\n";
+					}
+					$code .= $extension->codegen->varblock($this->code);
 
                     // when a function returns a named resource we know what to do
                     if ($returns[0] == "resource" && isset($returns[1])) {
@@ -1278,9 +1265,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 
             case "internal":
                 if (!empty($this->code)) {
-                    $code .= "    {\n";
-                    $code .= CodeGen_Tools_IndentC::indent(8, $this->code."\n");
-                    $code .= "    }\n";
+                    $code .= $extension->codegen->varblock($this->code."\n");
                 }
                 break;
             }

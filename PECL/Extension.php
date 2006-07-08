@@ -26,8 +26,6 @@ require_once "System.php";
 
 require_once "CodeGen/Extension.php";
 
-require_once "CodeGen/Tools/IndentC.php";
-    
 require_once "CodeGen/PECL/Release.php";
 
 require_once "CodeGen/PECL/Element.php";
@@ -1080,7 +1078,7 @@ $moduleHeader
 
         if (isset($this->code["header"]["top"])) {
             foreach ($this->code["header"]["top"] as $code) {
-                echo CodeGen_Tools_IndentC::indent(0, $code);
+                echo $this->codegen->block($code, 0);
             }
         }
 
@@ -1140,7 +1138,7 @@ PHP_MINFO_FUNCTION({$this->name});
         }
 
         foreach ($this->streams as $name => $stream) {
-            echo CodeGen_Tools_IndentC::indent(1, $stream->hCode());
+            echo $this->codegen->block($stream->hCode());
         }
 
         echo "#ifdef  __cplusplus\n";
@@ -1163,7 +1161,7 @@ PHP_MINFO_FUNCTION({$this->name});
         if (isset($this->code["header"]["bottom"])) {
             echo "/* 'bottom' header snippets*/\n";
             foreach ($this->code["header"]["bottom"] as $code) {
-                echo CodeGen_Tools_IndentC::indent(0, $code);
+                echo $this->codegen->block($code, 0);
             }
             echo "\n";
         }
@@ -1208,50 +1206,47 @@ PHP_MINIT_FUNCTION({$this->name})
         }
            
         foreach ($this->logos as $logo) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $logo->minitCode());
+            $code .= $this->codegen->block($logo->minitCode());
             $need_block = true;
         }
             
         if (count($this->constants)) {
             foreach ($this->constants as $constant) {
-                $code .= CodeGen_Tools_IndentC::indent(4, $constant->cCode($this->name));
+                $code .= $this->codegen->block($constant->cCode($this->name));
             }
             $need_block = true;
         }
             
         if (count($this->resources)) {
             foreach ($this->resources as $resource) {
-                $code .= CodeGen_Tools_IndentC::indent(4, $resource->minitCode());
+                $code .= $this->codegen->block($resource->minitCode());
             }
             $need_block = true;         
         }
 
         if (count($this->classes)) {
           foreach ($this->classes as $class) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $class->minitCode($this));
+            $code .= $this->codegen->block($class->minitCode($this));
           }
           $need_block = true;
         }
 
         if (count($this->interfaces)) {
           foreach ($this->interfaces as $interface) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $interface->minitCode($this));
+              $code .= $this->codegen->block($interface->minitCode($this));
           }
           $need_block = true;
         }
             
         if (count($this->streams)) {
           foreach ($this->streams as $stream) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $stream->minitCode($this));
+            $code .= $this->codegen->block($stream->minitCode($this));
           }
           $need_block = true;
         }
             
         if (isset($this->internalFunctions['MINIT'])) {
-            $indent = $need_block ? 8 : 4;
-            if ($need_block) $code .= "\n    do {\n";
-            $code .= CodeGen_Tools_IndentC::indent($indent, $this->internalFunctions['MINIT']->getCode());
-            if ($need_block) $code .= "\n    } while (0);\n";
+            $code .= $this->codegen->varblock($this->internalFunctions['MINIT']->getCode());
         } else {
             $code .="\n    /* add your stuff here */\n";
         }
@@ -1275,16 +1270,13 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
 
         if (count($this->logos)) {
             foreach ($this->logos as $logo) {
-                $code .= CodeGen_Tools_IndentC::indent(4, $logo->mshutdownCode());
+                $code .= $this->codegen->block($logo->mshutdownCode());
             }
             $need_block = true;
         }
             
         if (isset($this->internalFunctions['MSHUTDOWN'])) {
-            $indent = $need_block ? 8 : 4;
-            if (count($this->phpini)) $code .= "\n    do {\n";
-            $code .= CodeGen_Tools_IndentC::indent(4, $this->internalFunctions['MSHUTDOWN']->getCode());
-            if (count($this->phpini)) $code .= "\n    } while (0);\n";
+            $code .= $this->codegen->varblock($this->internalFunctions['MSHUTDOWN']->getCode());
         } else {
             $code .="\n    /* add your stuff here */\n";
         }
@@ -1303,7 +1295,7 @@ PHP_RINIT_FUNCTION({$this->name})
 ";
 
         if (isset($this->internalFunctions['RINIT'])) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $this->internalFunctions['RINIT']->getCode());
+            $code .= $this->codegen->block($this->internalFunctions['RINIT']->getCode());
         } else {
           $code .= "    /* add your stuff here */\n";
         }
@@ -1322,7 +1314,7 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 ";
 
         if (isset($this->internalFunctions['RSHUTDOWN'])) {
-            $code .= CodeGen_Tools_IndentC::indent(4, $this->internalFunctions['RSHUTDOWN']->getCode());
+            $code .= $this->codegen->block($this->internalFunctions['RSHUTDOWN']->getCode());
         } else {
             $code .= "    /* add your stuff here */\n";
         }
@@ -1357,7 +1349,7 @@ PHP_MINFO_FUNCTION({$this->name})
         if (count($this->authors)) {
             $code .= "    php_printf(\"<p><b>Authors:</b></p>\\n\");\n";
             foreach ($this->authors as $author) {
-                $code.= CodeGen_Tools_IndentC::indent(4, $author->phpinfoCode($this->name));
+                $code.= $this->codegen->block($author->phpinfoCode($this->name));
             }
         }
 
@@ -1367,9 +1359,7 @@ PHP_MINFO_FUNCTION({$this->name})
 
         // TODO move this decision up?
         if (isset($this->internalFunctions['MINFO'])) {
-            $code .= "\n    do {\n";
-            $code .= CodeGen_Tools_IndentC::indent(8, $this->internalFunctions['MINFO']->getCode());
-            $code .= "\n    } while (0);\n";
+            $code .= $this->codegen->varblock($this->internalFunctions['MINFO']->getCode());
         } else {
             $code .= "    /* add your stuff here */\n";
         }
@@ -1434,7 +1424,7 @@ PHP_MINFO_FUNCTION({$this->name})
   
         if (isset($this->code["code"]["top"])) {
             foreach ($this->code["code"]["top"] as $code) {
-                echo CodeGen_Tools_IndentC::indent(0, $code);
+                echo $this->codegen->block($code, 0);
             }
         }
 
@@ -1471,7 +1461,7 @@ PHP_MINFO_FUNCTION({$this->name})
 
         if (isset($this->code["code"]["bottom"])) {
             foreach ($this->code["code"]["bottom"] as $code) {
-                echo CodeGen_Tools_IndentC::indent(0, $code);
+                echo $this->codegen->block($code, 0);
             }
         }
 

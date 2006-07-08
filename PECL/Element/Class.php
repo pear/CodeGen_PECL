@@ -28,8 +28,6 @@ require_once "CodeGen/PECL/Element/ClassConstant.php";
 require_once "CodeGen/PECL/Element/Method.php";
 require_once "CodeGen/PECL/Element/ObjectInterface.php";
 
-require_once "CodeGen/Tools/IndentC.php";
-
 /**
  * Class describing a PHP class within a PECL extension 
  *
@@ -385,15 +383,15 @@ require_once "CodeGen/Tools/IndentC.php";
          *
          * @return string code snippet
          */
-        function getPayloadCtor()
+        function getPayloadCtor($extension)
         {
             $code = "";
 
             if ($this->payloadAlloc) {
-                $code.= "    intern->data = ({$this->payloadType} *)malloc(sizeof({$this->payloadType}));\n";
+                $code.= "    payload->data = ({$this->payloadType} *)malloc(sizeof({$this->payloadType}));\n";
             }
 
-            $code .= CodeGen_Tools_IndentC::indent(4, $this->payloadCtor); // TODO while(0) block?
+            $code .= $extension->codegen->varblock($this->payloadCtor);
 
             return $code;
         }
@@ -421,12 +419,12 @@ require_once "CodeGen/Tools/IndentC.php";
          *
          * @return string code snippet
          */
-        function getPayloadDtor()
+        function getPayloadDtor($extension)
         {
-            $code = CodeGen_Tools_IndentC::indent(4, $this->payloadDtor); // TODO while(0) block?
+            $code = $extension->codegen->varblock($this->payloadDtor);
 
             if ($this->payloadAlloc) {
-                $code.= "    free(intern->data);\n";
+                $code.= "    free(payload->data);\n";
             }
 
             return $code;
@@ -499,24 +497,24 @@ static zend_object_handlers {$this->name}_obj_handlers;
 
 static void {$this->name}_obj_free(void *object TSRMLS_DC)
 {
-    php_obj_{$this->name} *intern = (php_obj_{$this->name} *)object;
+    php_obj_{$this->name} *payload = (php_obj_{$this->name} *)object;
     
-    {$this->payloadType} *data = intern->data;
-".$this->getPayloadDtor()."
+    {$this->payloadType} *data = payload->data;
+".$this->getPayloadDtor($extension)."
     efree(object);
 }
 
 static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type TSRMLS_DC)
 {
-    php_obj_{$this->name} *intern;
+    php_obj_{$this->name} *payload;
     zval         *tmp;
     zend_object_value retval;
 
-    intern = (php_obj_{$this->name} *)emalloc(sizeof(php_obj_{$this->name}));
-    memset(intern, 0, sizeof(php_obj_{$this->name}));
-    intern->obj.ce = class_type;
-".$this->getPayloadCtor()."
-    retval.handle = zend_objects_store_put(intern, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
+    payload = (php_obj_{$this->name} *)emalloc(sizeof(php_obj_{$this->name}));
+    memset(payload, 0, sizeof(php_obj_{$this->name}));
+    payload->obj.ce = class_type;
+".$this->getPayloadCtor($extension)."
+    retval.handle = zend_objects_store_put(payload, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
     retval.handlers = &{$this->name}_obj_handlers;
     
     return retval;
@@ -572,19 +570,21 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
             }
             
             if (count($this->implements)) {
-                echo "    do {\n";
-                echo "        zend_class_entry **tmp;\n";
+                ob_start();
+
+                echo "zend_class_entry **tmp;\n";
                 
                 $interfaces = array();
                 foreach ($this->implements as $interface) {
-                    echo sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
+                    echo sprintf("if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
                                     strtolower($interface), strlen($interface) + 1);
-                    echo "            zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
-                    echo "        } else {\n";
-                    echo "            php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
-                    echo "        }\n";
+                    echo "    zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
+                    echo "} else {\n";
+                    echo "    php_error(E_WARNING, \"Couldn't find interface '$interface' while setting up class '{$this->name}', skipped\");\n";
+                    echo "}\n";
                 }
-                echo "    } while(0);\n";
+
+                echo $extension->codegen->varblock(ob_get_clean());
             }
                 
 

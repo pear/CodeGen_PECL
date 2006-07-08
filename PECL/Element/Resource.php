@@ -254,7 +254,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
 
 ";
 
-        $dtor .= CodeGen_Tools_IndentC::indent(4, $this->destruct);
+        $dtor .= $extension->codegen->varblock($this->destruct);
 
         if ($this->alloc) {
             $dtor .= "\n\tefree(resource);\n";
