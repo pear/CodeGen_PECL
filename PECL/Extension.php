@@ -1400,7 +1400,7 @@ PHP_MINFO_FUNCTION({$this->name})
         $code = "";
 
         foreach ($this->functions as $function) {
-            $code .= $function->cCode(&$this);
+            $code .= $function->cCode($this);
         }
         
         return $code;
