@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="function_type_hints" version="1.0.0">
 
   <class name="class1"/>

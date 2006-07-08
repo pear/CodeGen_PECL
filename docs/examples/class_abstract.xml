@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="class_abstract" version="1.0.0dev">
 
 <class name="class_a1" abstract="yes"/>

@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="constants" version="1.0.0">
  <constant name="C_INT" type="int" value="23"/>
  <test>

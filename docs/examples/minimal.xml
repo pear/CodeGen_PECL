@@ -1,2 +1,3 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
 <extension name="minimal" version="1.0.0" />

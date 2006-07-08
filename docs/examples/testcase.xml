@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="testcase" version="1.0.0">
 <!-- testing test cases -->
 
@@ -13,12 +14,14 @@
   <test name="002">
    <title>Skip #1</title>
    <skipif>1==1</skipif>
+   <code>echo "OK";</code>
   </test>
 
   <!-- a dummy 'skip' test using a full statement -->
   <test name="003">
    <title>Skip #2</title>
    <skipif>if (1==1) die("skip");</skipif>
+   <code>echo "OK";</code>
   </test>
 
   <!-- embeded function testcase -->

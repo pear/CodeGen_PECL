@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="resource_old" version="0.9.0">
 
  <!-- a resource that doesn't require memory allocation -->
