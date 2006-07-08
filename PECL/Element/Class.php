@@ -377,7 +377,7 @@ require_once "CodeGen/Tools/IndentC.php";
          */
         function setPayloadCtor($code)
         {
-            $this->payloadDtor = $code;
+            $this->payloadCtor = $code;
         }
 
         /**
