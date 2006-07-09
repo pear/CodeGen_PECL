@@ -1203,6 +1203,55 @@ HASSQgRukwiZmpucmwYRADs=
      a class as abstract (can be inherited from but can't be instanciated)
      or final (can't be inherited from anymore).
     </para>
+    <para>
+     A class can implement one or more interfaces, the interfaces 
+     implemented by a class are declared using the <sgmltag>implements</sgmltag>
+     tag and its <literal>interface=...</literal> attribute. The interface
+     needs to be defined in the extension specification (see "Interfaces"
+     later in this section) or by one of the extensions specified in the
+     package dependencies.
+    </para>
+   </section>
+
+   <section>
+    <title>Methods</title>
+    <para>
+     Class methods (or member functions) are defined similar to regular
+     functions using the <sgmltag>function</sgmltag> tag. In addition 
+     to its global counterpart the <sgmltag>function</sgmltag>.
+    </para>
+    <para>
+     The <literal>access=...</literal> attribute defines the methods
+     PPP access rights, possible values are <literal>public</literal>,
+     <literal>protected</literal> and <literal>private</literal> 
+     (although defining a <literal>private</literal> native method
+     doesn't really make sense).
+    </para>
+    <para>
+     The <literal>abstract</literal> and <literal>final</literal>
+     attributes declare a method as abstract or final and have the
+     same effect as the PHP keywords of the same name.
+    </para>
+    <para>
+     The <literal>procedural=...</literal> attribute requests the
+     registration of a procedural alternative for this method. 
+     This is a regular function that takes an instance of the class
+     as first argument and allows to call
+     <programlisting>function($class, ...parameters...)</programlisting>
+     instead of 
+     <programlisting>$class->method(...parameters...)</programlisting>.
+    </para>
+    <para>
+     This feature is usefull when creating an extension that implements
+     something as OO classes that used to be a resource type before,
+     see the way <literal>ext/mysqli</literal> reimplements the older
+     <literal>ext/mysql</literal> for example.
+    </para>
+    <para>
+     The procedural functions name is <literal>classname_methodname</literal>
+     if you just use  <literal>procedural='yes'</literal>, any other attribute
+     value will be used as the functions name.
+    </para>
    </section>
 
    <section>
@@ -1235,19 +1284,32 @@ HASSQgRukwiZmpucmwYRADs=
    <section>
     <title>Constants</title>
     <para>
+     Class constants are defined like regular constants, just within a 
+     <sgmltag>class</sgmltag> tag. Class constants are always public
+     so there is no need for extra attributes.
     </para>
    </section>
 
-
-   <section>
-    <title>Methods</title>
-    <para>
-    </para>
-   </section>
 
    <section>
     <title>Interfaces</title>
     <para>
+     Interfaces are declared using the <sgmltag>interface</sgmltag>
+     which has two attributes: the mandatory <literal>name=...</literal> 
+     attribute defines the name of the interface and the optional 
+     <literal>extends=...</literal> attribute can be used to specify
+     that this interface extends another already existing interface.
+     If the interface that is to be extended is defined in another
+     extension then an extension dependency should be declared, too.
+    </para>
+    <para>
+     Interface methods are declared using the <sgmltag>function</sgmltag>
+     tag. In this context only the <literal>name=...</literal> attribute
+     is supported as interface methods are always public and abstract and
+     never final anyway. Within the <sgmltag>function</sgmltag> a 
+     <sgmltag>proto</sgmltag> needs to be defined but there is no support
+     for <sgmltag>code</sgmltag> or <sgmltag>test</sgmltag> tags within
+     interface method declarations.
     </para>
    </section>
   </section>
