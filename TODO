@@ -3,20 +3,22 @@ milestone 1.1
 
 - fix OS deps entries in package.xml (done)
 
-- implement pass-by-reference for array and mixed parameters (done)
+- implement pass-by-reference for array and mixed parameters (almost done)
 
 - allow addition of files to directories (eg. test) (done)
 
-- finish config.w32 generation (~75% done, need someone 
+- finish config.w32 generation (almost done, need someone 
   with windows build experience to finish and test this,
   probably at php|tek if not earlier)
 
 - check #line numbers in generated source with libxml
   -> error messages with meaningfull line numbers need this
 
-- return by reference (for 5.1 if it supports it)          
+- return by reference (for 5.1 and above)          
 
-- fix pass by reference for array/mixed
+- PHP version check in config.m4
+
+- re2c and lemon support in config.m4 / Makefile.frag generation?
 
   
 
@@ -27,7 +29,7 @@ not necessarily 1.1
 
 - setter/getter code for properties
 
-- package2.xml <installdeps>               
+- package2.xml <installdeps> (?)
 
 - add more tests
 
@@ -37,9 +39,16 @@ not necessarily 1.1
 
 - postprocess code with indent if available?
 
+  => problem with z_function_entry lists as these 
+     have no , delimiter
+
 
 - add configure test code within DATA section of <lib> and <header> tags?
   e.g. for version checking?
+
+  => wouldn't work this way due to config.m4/.w32 differences
+     define attributes that call a single m4/w32 function instead
+     which needs to be defined in seperate config snippets?
 
 - full support for stream wrappers and filters   -> started
 

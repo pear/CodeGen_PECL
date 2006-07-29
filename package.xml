@@ -56,16 +56,29 @@
 
   <release>
     <state>stable</state>
-    <version>1.0.0</version>
-    <date>2006-02-17</date>
+    <version>1.0.1</version>
+    <date>2006-07-09</date>
     <notes>
-1.0.0 stable release (finally)
+Changes since 1.0.0:
+- now using codegen helper object for indent and code blocks
+- updated the DTD 
+- added DOCTYPE specs to all examples
+- package.xml 1.0 OS dependencies generation fixed
+- some config.m4 generation stuff ended up in CodeGen, now moved back
+- added config.m4 checks for header files
+- added new interface CodeGen_PECL_Element_ObjectInterface for methods
+  that can take both Classes and Interfaces as argument
+- fixed typo in class payload constructor code generation
+- allow :: in names when using C++ only
+- use PHP_MALIAS instead of PHP_FALIAS for methods
+- improved attribute checking in XML parser
+- started support for arg_info and pass/return by reference (work in progress)
     </notes>
 
     <deps>
       <dep type="php" rel="ge" version="5"/> 
       <dep type="pkg" rel="ge" version="1.2">PEAR</dep>
-      <dep type="pkg" rel="ge" version="1.0">CodeGen</dep>
+      <dep type="pkg" rel="eq" version="1.0.1">CodeGen</dep>
     </deps>
 
     <filelist>
@@ -75,8 +88,8 @@
           <dir name="examples">
            <file role="doc" name="minimal.xml"/>
            <file role="doc" name="release.xml"/>
-           <file role="doc" name="logo.xml"/>
 <!--
+           <file role="doc" name="logo.xml"/>
            <file role="doc" name="logo_inline.xml"/>
 -->
            <file role="doc" name="api_functions.xml"/>
@@ -126,6 +139,21 @@
   </release>
 
   <changelog>
+    <release>
+      <state>stable</state>
+      <version>1.0.0</version>
+      <date>2006-02-17</date>
+      <notes>
+1.0.0 stable release (finally)
+      </notes>
+
+      <deps>
+        <dep type="php" rel="ge" version="5"/> 
+        <dep type="pkg" rel="ge" version="1.2">PEAR</dep>
+        <dep type="pkg" rel="ge" version="1.0">CodeGen</dep>
+      </deps>
+    </release>
+
     <release>
       <state>beta</state>
       <version>1.0.0rc1</version>
