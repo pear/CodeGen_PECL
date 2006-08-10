@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<extension name="cairo" version="1.0.0">
+ <deps>
+  <with name="cairo">
+   <header name="cairo/cairo.h"/>
+  </with>
+ </deps>
+
+ <constant name="CAIRO_FORMAT_ARGB32"/>
+ <constant name="CAIRO_FONT_SLANT_NORMAL"/>
+ <constant name="CAIRO_FONT_WEIGHT_BOLD"/>
+
+ <resource name="cairo_surface" payload="cairo_surface_t" alloc="no">
+  <destruct>
+   cairo_surface_destroy(resource);   
+  </destruct>
+ </resource>
+
+ <function name="cairo_image_surface_create">
+  <proto>resource cairo_surface cairo_image_surface_create(int format, int x, int y)</proto>
+  <code>
+    if (!(return_res = cairo_image_surface_create(format, x, y))) {
+      RETURN_FALSE;
+    }
+  </code>
+ </function>
+
+ <function name="cairo_surface_destroy">
+  <proto>void cairo_surface_destroy(resource cairo_surface surface)</proto>
+  <code>
+    FREE_RESOURCE(surface_res);
+  </code>
+ </function>
+
+ <resource name="cairo" payload="cairo_t" alloc="no">
+  <destruct>
+   cairo_destroy(resource);   
+  </destruct>
+ </resource>
+
+ <function name="cairo_create">
+  <proto>resource cairo cairo_create(resource cairo_surface surface)</proto>
+  <code>
+    if (!(return_res = cairo_create(surface))) {
+      RETURN_FALSE;
+    }
+  </code>
+ </function>
+
+ <function name="cairo_destroy">
+  <proto>void cairo_destroy(resource cairo cr)</proto>
+  <code>
+    FREE_RESOURCE(cr_res);
+  </code>
+ </function>
+
+ <resource name="cairo_pattern" payload="cairo_pattern_t" alloc="no">
+  <destruct>
+   cairo_destroy(resource);   
+  </destruct>
+ </resource>
+
+ <function name="cairo_pattern_create_linear">
+  <proto>resource cairo_pattern cairo_pattern_create_linear(float x0, float y0, float x1, float y1)</proto>
+  <code>
+    if (!(return_res = cairo_pattern_create_linear(x0, y0, x1, y1))) {
+      RETURN_FALSE;
+    }
+  </code>
+ </function>
+
+ <function name="cairo_pattern_create_radial">
+  <proto>resource cairo_pattern cairo_pattern_create_radial(float cx0, float cy0, float radius0, float cx1, float cy1, float radius1)</proto>
+  <code>
+    if (!(return_res = cairo_pattern_create_radial(cx0,  cy0,  radius0,  cx1,  cy1,  radius1))) {
+      RETURN_FALSE;
+    }
+  </code>
+ </function>
+
+ <function name="cairo_pattern_destroy">
+  <proto>void cairo_pattern_destroy(resource cairo_pattern cr)</proto>
+  <code>
+    FREE_RESOURCE(cr_res);
+  </code>
+ </function>
+
+ <function name="cairo_select_font_face">
+  <proto>void cairo_select_font_face(resource cairo cr, string fontname, int slant, int weight)</proto>
+  <code>
+    cairo_select_font_face(cr, fontname, slant, weight);
+  </code>
+ </function>
+
+ <function name="cairo_set_font_size">
+  <proto>void cairo_set_font_size(resource cairo cr, float size)</proto>
+  <code>
+    cairo_set_font_size(cr, size);
+  </code>
+ </function>
+
+ <function name="cairo_set_source_rgba">
+  <proto>void cairo_set_source_rgba(resource cairo cr, float red, float green, float blue, float alpha)</proto>
+  <code>
+    cairo_set_source_rgba(cr, red, green, blue, alpha);
+  </code>
+ </function>
+
+ <function name="cairo_move_to">
+  <proto>void cairo_move_to(resource cairo cr, float x, float y)</proto>
+  <code>
+    cairo_move_to(cr, x, y);
+  </code>
+ </function>
+
+ <function name="cairo_show_text">
+  <proto>void cairo_show_text(resource cairo cr, string text)</proto>
+  <code>
+    cairo_show_text(cr, text);
+  </code>
+ </function>
+
+ <function name="cairo_surface_write_to_png">
+  <proto>void cairo_surface_write_to_png(resource cairo_surface surface, string path)</proto>
+  <code>
+    cairo_surface_write_to_png(surface, path);
+  </code>
+ </function>
+
+ <function name="cairo_stroke">
+  <proto>void cairo_stroke(resource cairo cr)</proto>
+  <code>
+    cairo_stroke(cr);
+  </code>
+ </function>
+
+ <function name="cairo_arc">
+  <proto>void cairo_arc(resource cairo cr, float xc, float yc, float radius, float angle1, float angle2);</proto>
+  <code>
+    cairo_arc (cr, xc, yc, radius, angle1, angle2);
+  </code>
+ </function>
+
+ <function name="cairo_fill">
+  <proto>void cairo_fill(resource cairo cr)</proto>
+  <code>
+    cairo_fill(cr);
+  </code>
+ </function>
+
+ <function name="cairo_set_line_width">
+  <proto>void cairo_set_line_width(resource cairo cr, float width)</proto>
+  <code>
+    cairo_set_line_width(cr, width);
+  </code>
+ </function>
+
+ <function name="cairo_line_to">
+  <proto>void cairo_line_to(resource cairo cr, float xc, float yc)</proto>
+  <code>
+    cairo_line_to(cr, xc, yc);
+  </code>
+ </function>
+
+ <function name="cairo_pattern_add_color_stop_rgba">
+  <proto>void cairo_pattern_add_color_stop_rgba(resource cairo_pattern pattern, float offset, float red, float green, float blue, float alpha)</proto>
+  <code>
+    cairo_pattern_add_color_stop_rgba(pattern, offset, red, green, blue, alpha);
+  </code>
+ </function>
+
+ <function name="cairo_rectangle">
+  <proto>void cairo_line_to(resource cairo cr, float x, float y, float width, float height)</proto>
+  <code>
+    cairo_rectangle(cr, x, y, width, height);
+  </code>
+ </function>
+
+ <function name="cairo_set_source">
+  <proto>void cairo_set_source (resource cairo cr, resource cairo_pattern pattern)</proto>
+  <code>
+    cairo_set_source(cr, pattern);
+  </code>
+ </function>
+
+ <function name="cairo_scale">
+  <proto>void cairo_scale (resource cairo cr, int width, int height)</proto>
+  <code>
+    cairo_scale(cr, width, height);
+  </code>
+ </function>
+
+
+ <test>
+  <code>
+<![CDATA[
+        $surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 200, 100);
+        $cr = cairo_create($surface);
+        cairo_select_font_face($cr, "Serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+        cairo_set_font_size($cr, 32.0);
+        cairo_set_source_rgba($cr, 0.0, 0.3, 1.0, 1.0);
+        cairo_move_to($cr, 10.0, 50.0);
+        cairo_show_text($cr, "Hello World");
+        cairo_destroy($cr);
+        cairo_surface_write_to_png($surface, "hw.png");
+        cairo_surface_destroy($surface);
+]]>
+  </code>
+ </test>
+
+ <test>
+  <code>
+<![CDATA[
+$surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 800, 600);
+$cr = cairo_create($surface);
+
+$xc = 400.5;
+$yc = 300.5;
+$radius = 100;
+$angle1 = 45.0  * (M_PI/180.0);  /* angles are specified */
+$angle2 = 180.0 * (M_PI/180.0);  /* in radians           */
+
+cairo_arc ($cr, $xc, $yc, $radius, $angle1, $angle2);
+cairo_stroke ($cr);
+
+/* draw helping lines */
+cairo_set_source_rgba ($cr, 1,0.2,0.2,0.6);
+cairo_arc ($cr, $xc, $yc, 25, 0, 2*M_PI);
+cairo_fill ($cr);
+cairo_set_line_width ($cr, 3);
+cairo_arc ($cr, $xc, $yc, $radius, $angle1, $angle1);
+cairo_line_to ($cr, $xc, $yc);
+cairo_arc ($cr, $xc, $yc, $radius, $angle2, $angle2);
+cairo_line_to ($cr, $xc, $yc);
+cairo_stroke ($cr);
+
+        cairo_destroy($cr);
+        cairo_surface_write_to_png($surface, "hw002.png");
+        cairo_surface_destroy($surface);
+]]>
+  </code>
+ </test>
+ 
+ <test>
+  <code>
+<![CDATA[
+$surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 800, 600);
+$cr = cairo_create($surface);
+
+$pat = cairo_pattern_create_linear (0.0, 0.0,  0.0, 100);
+cairo_pattern_add_color_stop_rgba ($pat, 1, 0, 0, 0, 1);
+cairo_pattern_add_color_stop_rgba ($pat, 0, 1, 1, 1, 1);
+cairo_rectangle ($cr, 0, 0, 100, 100);
+cairo_set_source ($cr, $pat);
+cairo_fill ($cr);
+cairo_pattern_destroy ($pat);
+
+$pat = cairo_pattern_create_radial (45, 40, 10,
+                                   40,  40, 50);
+cairo_pattern_add_color_stop_rgba ($pat, 0, 1, 1, 1, 1);
+cairo_pattern_add_color_stop_rgba ($pat, 1, 0, 0, 0, 1);
+cairo_set_source ($cr, $pat);
+cairo_arc ($cr, 50, 50, 30, 0, 2 * M_PI);
+cairo_fill ($cr);
+cairo_pattern_destroy ($pat);
+
+        cairo_destroy($cr);
+        cairo_surface_write_to_png($surface, "hw003.png");
+        cairo_surface_destroy($surface);
+
+]]>
+  </code>
+ </test>
+
+</extension>
