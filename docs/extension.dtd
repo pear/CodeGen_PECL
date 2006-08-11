@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT extension (summary|description|license|maintainers|maintainer|logo|release|changelog|functions|function|constants|constant|globals|global|phpini|deps|resources|resource|code|streams|stream|tests|test|makefile|classes|class|interface)*>
+<!ELEMENT extension (summary|description|license|maintainers|maintainer|logo|release|changelog|functions|function|constants|constant|globals|global|phpini|deps|resources|resource|code|streams|stream|tests|test|makefile|classes|class|interface|channel)*>
 <!ATTLIST extension
   name    CDATA #REQUIRED
   version CDATA #IMPLIED

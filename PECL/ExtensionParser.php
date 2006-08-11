@@ -1232,6 +1232,16 @@ class CodeGen_PECL_ExtensionParser
         $this->extension->addStream($this->helper);
         $this->popHelper();
     }
+
+    function tagstart_channel($attr)
+    {
+        return $this->noAttributes($attr);
+    }
+
+    function tagend_channel($attr, $data)
+    {
+        return $this->extension->setChannel($data);
+    }
 }
 
 

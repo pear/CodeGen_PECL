@@ -206,6 +206,13 @@ class CodeGen_PECL_Extension
      */
     protected $with = array();
 
+    /**
+     * pear installer channel name
+     *
+     * @var    string
+     * @access private
+     */
+    protected $channel = "pecl.php.net";
 
     // }}} 
 
@@ -1016,6 +1023,22 @@ $moduleHeader
     }
     
     // }}} 
+
+    
+    /**
+     * Set pear installer channel
+     *
+     * @access public
+     * @param  string
+     */
+    function setChannel($channel)
+    {
+        if (! preg_match('/^[a-z\-_\.]+$/i', $channel)) {
+            return PEAR::raiseError("'$channel' is not a valid pear installer channel name");
+        }
+
+        $this->channel = $channel;
+    }
 
 
     // {{{ header file
@@ -2073,7 +2096,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 ';
 
         echo "  <name>{$this->name}</name>\n";
-        echo "  <channel>pecl.php.net</channel>\n\n"; // TODO -> get from specs
+        echo "  <channel>{$this->channel}</channel>\n\n"; 
 
         if (isset($this->summary)) {
             echo "  <summary>{$this->summary}</summary>\n\n";

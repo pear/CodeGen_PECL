@@ -3,6 +3,8 @@ milestone 1.1
 
 - fix OS deps entries in package.xml (done)
 
+- add support for pear channels (done)
+
 - implement pass-by-reference for array and mixed parameters (almost done)
 
 - allow addition of files to directories (eg. test) (done)
