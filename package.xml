@@ -57,7 +57,7 @@
   <release>
     <state>stable</state>
     <version>1.0.1</version>
-    <date>2006-07-09</date>
+    <date>2006-08-14</date>
     <notes>
 Changes since 1.0.0:
 - now using codegen helper object for indent and code blocks
@@ -72,6 +72,8 @@ Changes since 1.0.0:
 - allow :: in names when using C++ only
 - use PHP_MALIAS instead of PHP_FALIAS for methods
 - improved attribute checking in XML parser
+- pear channel support
+- pkg-config support in --with options
 - started support for arg_info and pass/return by reference (work in progress)
     </notes>
 

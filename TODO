@@ -9,6 +9,8 @@ milestone 1.1
 
 - allow addition of files to directories (eg. test) (done)
 
+- pkg-config support (almost done)
+
 - finish config.w32 generation (almost done, need someone 
   with windows build experience to finish and test this,
   probably at php|tek if not earlier)
@@ -75,7 +77,7 @@ not necessarily 1.1
 - allow specification of file role instead of guessing by extension?
 
 - support compiler/linker flags setting using config programs
-  like pkg-config, mysql_config etc.
+  similar to  pkg-config: mysql_config, apxs etc.
 
 - <lib> shared=no 
   -> drop EXTNAME_SHARED_LIBADD parameter to PHP_ADD_LIBRARY_WITH_PATH
