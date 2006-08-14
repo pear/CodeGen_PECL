@@ -95,7 +95,6 @@ class CodeGen_PECL_Dependency_With
      */
     protected $headers = array();
 
-
     /**
      * name getter
      * 
@@ -114,11 +113,11 @@ class CodeGen_PECL_Dependency_With
      */
     function setName($name)
     {
-        if (!preg_match('|^[a-z][a-z0-9-]*$|i', $name)) {
+        if (!preg_match('|^[a-z][a-z0-9_-]*$|i', $name)) {
             return PEAR::raiseError("'$name' is not a valid --with option name");
         }
 
-        $this->name = $name;
+        $this->name = str_replace("_", "-", $name);
         return true;
     }
 
@@ -196,6 +195,7 @@ class CodeGen_PECL_Dependency_With
         return $this->defaults;
     }
 
+	
     /**
      * add library dependency
      * 
