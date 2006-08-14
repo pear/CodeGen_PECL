@@ -1522,10 +1522,7 @@ dnl
         
         if (isset($this->with[$this->name])) {
             $with = $this->with[$this->name];
-            echo " 
-PHP_ARG_WITH({$this->name}, whether to enable {$this->name} functions,
-[  --with-{$this->name}[=DIR]      With {$this->name} support])
-\n";
+            echo "\n".$with->m4Line()."\n";
         } else {
             echo "
 PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
@@ -1543,56 +1540,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
 
         foreach ($this->with as $with) {
-            $withName   = $with->getName();
-            $withUpname = strtoupper($withName);
-
-            if ($withName != $this->name) {
-                echo " 
-PHP_ARG_WITH({$withName}, ".trim($with->getSummary()).",
-[  --with-{$withName}[=DIR]      With {$withName} support])
-\n";
-            }
-
-            echo "
-  if test -r \"\$PHP_$withUpname/".$with->getTestfile()."\"; then
-    PHP_{$withUpname}_DIR=\"\$PHP_$withUpname\"
-  else
-    AC_MSG_CHECKING(for ".$with->getName()." in default path)
-    for i in ".str_replace(":"," ",$with->getDefaults())."; do
-      if test -r \"\$i/".$with->getTestfile()."\"; then
-        PHP_{$withUpname}_DIR=\$i
-        AC_MSG_RESULT(found in \$i)
-        break
-      fi
-    done
-    if test \"x\" = \"x\$PHP_{$withUpname}_DIR\"; then
-      AC_MSG_ERROR(not found)
-    fi
-  fi
-
-";
-
-            $pathes = array();
-            foreach($with->getHeaders() as $header) {
-               $pathes[$header->getPath()] = true; // TODO WTF???
-            }
-       
-            foreach (array_keys($pathes) as $path) {
-                echo "  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
-            }
-
-            echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
-            echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
-
-            foreach($with->getHeaders() as $header) {
-                echo $header->configm4($this->name, $with->getName());
-            }  
-
-            foreach ($with->getLibs() as $lib) {
-                echo $lib->configm4($this->name, $with->getName());
-            }
-            
-            echo "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
+           echo $with->configm4($this);
         }
 
         $pathes = array();

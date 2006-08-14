@@ -96,6 +96,13 @@ class CodeGen_PECL_Dependency_With
     protected $headers = array();
 
     /**
+     * operation mode
+     *
+     * @var  string
+     */
+    protected $mode = "default";
+
+    /**
      * name getter
      * 
      * @param string
@@ -117,7 +124,8 @@ class CodeGen_PECL_Dependency_With
             return PEAR::raiseError("'$name' is not a valid --with option name");
         }
 
-        $this->name = str_replace("_", "-", $name);
+        $this->name = $name;
+
         return true;
     }
 
@@ -128,8 +136,8 @@ class CodeGen_PECL_Dependency_With
      */
     function setSummary($text)
     {
-        $this->summary = $text;
-
+        $this->summary = trim($text);
+      
         return true;
     }
 
@@ -195,7 +203,24 @@ class CodeGen_PECL_Dependency_With
         return $this->defaults;
     }
 
-	
+    /**
+     * mode setter
+     *
+     * @param string
+     */
+    function setMode($mode)
+    {
+      switch ($mode) {
+      case "default":
+      case "pkg-config":
+        $this->mode = $mode;
+        return true;
+
+      default:
+        return PEAR::raiseError("'$mode' is not a valid <with> mode");
+      }
+    }
+    
     /**
      * add library dependency
      * 
@@ -252,6 +277,103 @@ class CodeGen_PECL_Dependency_With
         return $this->headers;
     }
 
+    /** 
+     * m4 PHP_ARG_WITH line
+     *
+     * @parameter string  optional help text
+     * @return    string
+     */
+    function m4Line() 
+    {
+      $optname = str_replace("_", "-", $this->name);
+
+      return sprintf("PHP_ARG_WITH(%s, %s,[  %-20s With %s support])\n",
+                     $optname,
+                     $this->getSummary(),
+                     sprintf("--with-%s[=DIR]", $optname),
+                     $this->name);
+    }
+
+    
+    /**
+     * config.m4 code snippet
+     *
+     * @return string
+     */
+    function configm4(CodeGen_PECL_Extension $extension) 
+    {
+        $code = "\n";
+
+        $withName   = str_replace("-", "_", $this->getName());
+        $withUpname = strtoupper($withName);
+        $extName    = $extension->getName();
+        $extUpname  = strtoupper($extName);
+        
+        if ($withName != $extName) {
+            $code.= $this->m4Line()."\n\n";
+        }
+        
+        switch ($this->mode) {
+        case "pkg-config":
+          // TODO support --with-pkgconfig
+          // TODO check "--exists" first
+          // TODO add version checks
+          $code.= "  if test -z \"\$PKG_CONFIG\"; then\n";
+          $code.= "    AC_PATH_PROG(PKG_CONFIG, pkg-config, no)\n";
+          $code.= "  fi\n";
+          $code.= "  PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $withName`)\n";
+          $code.= "  PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $withName`, {$extUpname}_SHARED_LIBADD)\n\n";
+          break;
+
+        default:
+            if ($this->testfile) {
+            $code.= "
+  if test -r \"\$PHP_$withUpname/".$this->testfile."\"; then
+    PHP_{$withUpname}_DIR=\"\$PHP_$withUpname\"
+  else
+    AC_MSG_CHECKING(for ".$this->name." in default path)
+    for i in ".str_replace(":"," ",$this->getDefaults())."; do
+      if test -r \"\$i/".$this->testfile."\"; then
+        PHP_{$withUpname}_DIR=\$i
+        AC_MSG_RESULT(found in \$i)
+        break
+      fi
+    done
+    if test \"x\" = \"x\$PHP_{$withUpname}_DIR\"; then
+      AC_MSG_ERROR(not found)
+    fi
+  fi
+
+";
+            }
+            
+            $pathes = array();
+            foreach($this->getHeaders() as $header) {
+              $pathes[$header->getPath()] = true;
+            }
+            foreach (array_keys($pathes) as $path) {
+              $code .="  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
+            }       
+            break;
+        }
+
+        $code.= "\n";
+        $code.= "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
+        $code.= "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
+        
+        foreach($this->headers as $header) {
+            $code.= $header->configm4($extName, $this->name);
+        }  
+
+        foreach ($this->getLibs() as $lib) {
+            $code.= $lib->configm4($extName, $this->name);
+        }
+            
+        $code.= "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";     
+
+        return $code."\n";
+    }
+    
 }
 
 ?>

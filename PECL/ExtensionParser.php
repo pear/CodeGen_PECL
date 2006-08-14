@@ -547,7 +547,6 @@ class CodeGen_PECL_ExtensionParser
         if (isset($attr['function'])) {
             $lib->setFunction($attr['function']);
         }
-
         $this->extension->addLib($lib);
 
         return true;
@@ -629,6 +628,13 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["defaults"])) {
             $with->setDefaults($attr["defaults"]);
+        }
+
+        if (isset($attr["mode"])) {
+            $err = $with->setMode($attr["mode"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
 
         $this->pushHelper($with);

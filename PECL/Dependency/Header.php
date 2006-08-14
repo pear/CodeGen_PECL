@@ -49,7 +49,7 @@ class CodeGen_PECL_Dependency_Header
     {
         $upname = strtoupper($extname);
         $withUpname = strtoupper($withname);
-        return "  AC_CHECK_HEADER([\$PHP_{$withUpname}_DIR/{$this->path}/{$this->name}], [], AC_MSG_ERROR('{$this->name}' header not found))\n";
+        return "  AC_CHECK_HEADER([{$this->name}], [], AC_MSG_ERROR('{$this->name}' header not found))\n";
     }
 
     /**
