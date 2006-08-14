@@ -66,7 +66,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_extension_function($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "role"));
+        $err = $this->checkAttributes($attr, array("name", "role", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -91,6 +91,10 @@ class CodeGen_PECL_ExtensionParser
         $err = $this->helper->setRole($role);
         if (PEAR::isError($err)) {
             return $err;
+        }
+
+        if (isset($attr["if"])) {
+            $this->helper->setIfCondition($attr["if"]);
         }
         
         return true;

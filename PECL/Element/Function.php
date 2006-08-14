@@ -981,14 +981,19 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function cCode($extension) 
         {
-            $code = "";
+            $code = "\n";
 
             $returns = explode(" ", $this->returns);
 
             switch ($this->role) {
             case "public":
+              
+                if ($this->ifCondition) {
+                  $code .= "#if {$this->ifCondition}\n";
+                }
+
                 // function prototype comment
-                $code .= "\n/* {{{ proto {$this->proto}\n  ";
+                $code .= "/* {{{ proto {$this->proto}\n  ";
                 if (!empty($this->summary)) {
                     $code .= $this->summary;
                 }
@@ -1197,10 +1202,10 @@ require_once "CodeGen/Tools/Tokenizer.php";
                     }
 
                     // if function code is specified so we add it here
-					if (isset($linedef)) {
-					  $code .= "$linedef\n";
-					}
-					$code .= $extension->codegen->varblock($this->code);
+                    if (isset($linedef)) {
+                      $code .= "$linedef\n";
+                    }
+                    $code .= $extension->codegen->varblock($this->code);
 
                     // when a function returns a named resource we know what to do
                     if ($returns[0] == "resource" && isset($returns[1])) {
@@ -1261,6 +1266,11 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 }
                 
                 $code .= "}\n/* }}} {$this->name} */\n\n";
+
+                if ($this->ifCondition) {
+                    $code .= "#endif\n";
+                } 
+
                 break;
                 
             case "internal":
@@ -1414,12 +1424,22 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function hCode($extension) 
         {
-            $code = $this->cProto();
+          $code = "";
+
+            if ($this->ifCondition) {
+              $code .= "#if {$this->ifCondition}\n";
+            }
+
+            $code .= $this->cProto();
             if ($code) {
                 $code.= ";\n";
             }
 
             $code.= $this->argInfoCode();
+
+            if ($this->ifCondition) {
+               $code .= "#endif\n";
+            }
 
             return $code;
         }
@@ -1455,8 +1475,21 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function functionEntry()
         {
-          $arginfo = $this->hasRefArgs ? "{$this->name}_arg_info" : "NULL";
-          return sprintf("    PHP_FE(%-20s, %s)\n", $this->name, $arginfo);
+            $code = "";
+
+            $arginfo = $this->hasRefArgs ? "{$this->name}_arg_info" : "NULL";
+
+            if ($this->ifCondition) {
+                $code .= "#if {$this->ifCondition}\n";
+            }
+
+            $code .= sprintf("    PHP_FE(%-20s, %s)\n", $this->name, $arginfo);
+
+            if ($this->ifCondition) {
+                $code .= "#endif\n";
+            }
+
+            return $code;
         }
     }
 

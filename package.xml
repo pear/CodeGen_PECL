@@ -60,6 +60,7 @@
     <date>2006-08-14</date>
     <notes>
 Changes since 1.0.1:
+- conditional compile support for functions
     </notes>
 
     <deps>
