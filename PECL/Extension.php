@@ -188,7 +188,7 @@ class CodeGen_PECL_Extension
      * @var     bool
      * @access  private
      */
-    protected $linespecs = true;
+    protected $linespecs = false;
 
     /**
      * PHP Streams
