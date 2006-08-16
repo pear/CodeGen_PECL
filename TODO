@@ -21,7 +21,13 @@ milestone 1.1
 - return by reference (for 5.1 and above)          
 
 - conditional compilation control (only done for functions yet)
+  
+    add "if" attribute to element tags, to genereate code wrappers like
 
+    #ifdef HAVE_SOME_FEATURE
+      ...
+    #endif
+    
 - PHP version check in config.m4
 
 - re2c and lemon support in config.m4 / Makefile.frag generation?
@@ -42,13 +48,6 @@ not necessarily 1.1
 - allow "src='path/to/file'" in more cases           
   make sure it generates #line, too
 
-
-- postprocess code with indent if available?
-
-  => problem with z_function_entry lists as these 
-     have no , delimiter
-
-
 - add configure test code within DATA section of <lib> and <header> tags?
   e.g. for version checking?
 
@@ -64,13 +63,6 @@ not necessarily 1.1
 
 - have different levels of comment (and code?) generation
   similar to --no-help in ext_skel
-
-- protos
-
-  - option for 'old style' parameter parsing code generation ?
-    (less readable but faster and more flexible)
-    also needed if '...' is not the only parameter
-    unless parse_params_ex with ZEND_PARSE_PARAMS_QUIET fills params anyway??
 
 - create seperate target dir for copied spec files
 
@@ -88,9 +80,3 @@ not necessarily 1.1
 
 - improve $dirpath handling (?)
 
-- add "if" attribute to element tags, to genereate code wrappers like
-
-    #ifdef HAVE_SOME_FEATURE
-      ...
-    #endif
-    
