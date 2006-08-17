@@ -79,7 +79,13 @@ require_once "CodeGen/PECL/Element.php";
          * @var    bool
          */
         protected $define = false;
-         
+
+		/**
+		 * Resource group
+		 *
+		 * @var string
+		 */
+		protected $group = "default";
 
         /**
          * Set constant name 
@@ -175,6 +181,31 @@ require_once "CodeGen/PECL/Element.php";
 
             return true;
         }
+
+		/**
+		 * Set group this constant belongs to
+		 *
+		 * @access public
+		 * @param string  group name
+         * @return bool   true on success
+		 */
+		function setGroup($group)
+		{
+		  $this->group = $group;
+
+		  return true;
+		}
+
+		/**
+		 * Get group thsi constant belongs to
+		 *
+		 * @access public
+		 * @return string group name
+		 */
+		function getGroup()
+		{
+		  return $this->group;
+		}
 
         /**
          * Set define flag
@@ -272,15 +303,14 @@ require_once "CodeGen/PECL/Element.php";
          */
         function docEntry($base) {
             return trim("
-<row>
- <entry>
-  <constant id='constant".strtolower(str_replace("_","-",$this->name))."'>{$this->name}</constant>
-  (<link linkend='language.types.integer'>integer</link>)
- </entry>
- <entry>{$this->value}</entry>
- <entry>{$this->desc}</entry>
-</row>
-")."\n";
+        <row>
+         <entry>
+          <constant id='constant".strtolower(str_replace("_","-",$this->name))."'>{$this->name}</constant>
+          (<link linkend='language.types.integer'>integer</link>)
+         </entry>
+         <entry>{$this->value}</entry>
+         <entry>{$this->desc}</entry>
+        </row>\n\n");
         }
 
         /** 

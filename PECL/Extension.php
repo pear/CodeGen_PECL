@@ -681,13 +681,25 @@ class CodeGen_PECL_Extension
         if (empty($this->constants)) {
             $fp->puts("    &no.constants;\n");
         } else {
-            $fp->puts(CodeGen_PECL_Element_Constant::docHeader($idName));
+            $const_groups = array();
 
             foreach ($this->constants as $constant) {
-                $fp->puts($constant->docEntry($idName));
+              $const_groups[$constant->getGroup()][] = $constant;
             }
 
-            $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
+            foreach ($const_groups as $group => $constants) {
+                if ($group == "default") {
+                  $group = $idName;
+                }
+
+                $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
+
+                foreach ($constants as $constant) {
+                    $fp->puts($constant->docEntry($group));
+                }
+
+                $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
+            }
         }
 
         $fp->puts(
@@ -708,6 +720,9 @@ class CodeGen_PECL_Extension
         $fp = new CodeGen_Tools_FileReplacer("$docdir/configure.xml");
 
         $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
+
+        // TODO headers and libs are now "hidden" in $with 
+
         if (empty($this->libs) && empty($this->headers)) {
             $fp->puts("    &no.requirement;\n");
         } else {

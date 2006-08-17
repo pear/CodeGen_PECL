@@ -352,6 +352,9 @@ class CodeGen_PECL_ExtensionParser
     }
     
     
+    function tagstart_constants($attr) {
+        $this->pushHelper($attr);
+    }
     
     function tagend_extension_constant($attr, $data)
     {
@@ -397,12 +400,22 @@ class CodeGen_PECL_ExtensionParser
             return $err;
         }
 
+        if (isset($attr["group"])) {
+            $err = $const->setGroup($attr["group"]);
+        } else if (is_array($this->helper) && isset($this->helper["group"])) {
+            $err = $const->setGroup($this->helper["group"]);
+        }
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+
         $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         return $this->extension->addConstant($const);
     }
 
     function tagend_constants($attr, $data) {
+        $this->popHelper();
         return true;
     }
 
