@@ -687,11 +687,25 @@ class CodeGen_PECL_Extension
 
         $makefile = new CodeGen_Tools_FileReplacer("$docdir/Makefile");
         $makefile->puts("# 
-all:
+all: html
+
+confcheck:
 \t@if test \"x$(PHPDOC)\" = \"x\"; then echo PHPDOC not set; exit 3; fi
-\trm -rf html; mkdir html
+
+manual.xml: manual.xml.in
 \tsed -e's:@PHPDOC@:\$(PHPDOC):g' < manual.xml.in > manual.xml
-\tSP_ENCODING=XML SP_CHARSET_FIXED=YES /usr/bin/openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/entities/ISO/catalog -c $(PHPDOC)/dsssl/docbook/catalog -c /usr/share/sgml/CATALOG.docbk41 -c /usr/share/sgml/CATALOG.jade_dsl -c $(PHPDOC)/dsssl/defaults/catalog -d dsssl/html.dsl -V use-output-dir -t sgml $(PHPDOC)/dtds/dbxml-4.1.2/phpdocxml.dcl manual.xml
+
+html: confcheck manual.xml
+\trm -rf html; mkdir html
+\tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/entities/ISO/catalog -c $(PHPDOC)/dsssl/docbook/catalog -c $(PHPDOC)/dsssl/defaults/catalog -d $(PHPDOC)/dsssl/html.dsl -V use-output-dir -t sgml $(PHPDOC)/dtds/dbxml-4.1.2/phpdocxml.dcl manual.xml
+
+tex: manual.tex
+
+manual.tex: confcheck manual.xml
+\tSP_ENCODING=XML SP_CHARSET_FIXED=YES /usr/bin/openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/entities/ISO/catalog -c $(PHPDOC)/dsssl/docbook/catalog -c $(PHPDOC)/dsssl/defaults/catalog -d $(PHPDOC)/dsssl/print.dsl -t tex $(PHPDOC)/dtds/dbxml-4.1.2/phpdocxml.dcl manual.xml
+
+pdf: manual.tex
+\tpdfjadetex manual.tex && pdfjadetex manual.tex && pdfjadetex manual.tex
 ");
 
         $makefile->close();
@@ -860,12 +874,12 @@ all:
         $entities->puts("<!ENTITY reference.$idName.functions SYSTEM './functions.xml'>\n");
         $entities->close();
 
+        $functionsXml = new CodeGen_Tools_FileReplacer($docdir."/functions.xml");
         sort($function_entities);
         foreach ($function_entities as $entity) {
-          $functionsXml = new CodeGen_Tools_FileReplacer($docdir."/functions.xml");
-          $functionsXml->puts("&$entity;\n");
-          $functionsXml->close();
+          $functionsXml->puts(" &$entity;\n");
         }
+        $functionsXml->close();
     }
 
     // }}} 
