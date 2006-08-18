@@ -32,6 +32,11 @@ milestone 1.1
 
 - re2c and lemon support in config.m4 / Makefile.frag generation?
 
+- headers and libs within <with> are not taken into account in the
+  documentation
+
+- make standalone docs Makefile more clever
+
   
 
 not necessarily 1.1

@@ -708,7 +708,6 @@ class CodeGen_PECL_ExtensionParser
         $this->helper->addLib($lib);
     }
 
-
     function tagend_deps_with($attr, $data) {
         $this->helper->setSummary($data);
 

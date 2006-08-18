@@ -56,17 +56,18 @@
 
   <release>
     <state>stable</state>
-    <version>1.0.2</version>
-    <date>2006-08-14</date>
+    <version>1.0.4</version>
+    <date>2006-08-17</date>
     <notes>
-Changes since 1.0.1:
-- conditional compile support for functions
+Changes since 1.0.3:
+- added support for constant grouping
+- standalone documentation support hacked in
     </notes>
 
     <deps>
       <dep type="php" rel="ge" version="5"/> 
       <dep type="pkg" rel="ge" version="1.2">PEAR</dep>
-      <dep type="pkg" rel="eq" version="1.0.1">CodeGen</dep>
+      <dep type="pkg" rel="eq" version="1.0.2">CodeGen</dep>
     </deps>
 
     <filelist>
@@ -127,6 +128,17 @@ Changes since 1.0.1:
   </release>
 
   <changelog>
+   <release>
+    <state>stable</state>
+    <version>1.0.3</version>
+    <date>2006-08-16</date>
+    <notes>
+Changes since 1.0.2:
+- fixed CodeGen dependency entry
+- disabled #line output by default
+    </notes>
+   </release>
+
    <release>
      <state>stable</state>
      <version>1.0.1</version>
