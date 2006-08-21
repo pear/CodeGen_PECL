@@ -103,6 +103,13 @@ class CodeGen_PECL_Dependency_With
     protected $mode = "default";
 
     /**
+     * required version
+     *
+     * @var  string
+     */
+    protected $version = "";
+
+    /**
      * name getter
      * 
      * @param string
@@ -222,6 +229,16 @@ class CodeGen_PECL_Dependency_With
     }
     
     /**
+     * version setter
+     *
+     * @param string
+     */
+    function setVersion($version)
+    {
+        $this->version = $version;
+    }
+    
+    /**
      * add library dependency
      * 
      * @param  object
@@ -315,14 +332,36 @@ class CodeGen_PECL_Dependency_With
         
         switch ($this->mode) {
         case "pkg-config":
-          // TODO support --with-pkgconfig
-          // TODO check "--exists" first
-          // TODO add version checks
-          $code.= "  if test -z \"\$PKG_CONFIG\"; then\n";
-          $code.= "    AC_PATH_PROG(PKG_CONFIG, pkg-config, no)\n";
-          $code.= "  fi\n";
-          $code.= "  PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $withName`)\n";
-          $code.= "  PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $withName`, {$extUpname}_SHARED_LIBADD)\n\n";
+          $code.= "  
+  if test -z \"\$PKG_CONFIG\"
+  then
+    AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+  fi
+  if test \"$PKG_CONFIG\" = \"no\"
+  then
+    AC_MSG_ERROR([required utility 'pkg-config' not found])
+  fi
+
+  if ! \$PKG_CONFIG --exists $withName
+  then
+    AC_MSG_ERROR(['$withName' not known to pkg-config])
+  fi
+";
+
+          if ($this->version) {
+            $code .= "
+  if ! \$PKG_CONFIG --atleast-version {$this->version} $withName
+  then
+    PKG_VERSION=`\$PKG_CONFIG --modversion $withName`
+    AC_MSG_ERROR(['$withName'\ is version \$PKG_VERSION, {$this->version} required])
+  fi
+";
+          }
+
+          $code .= "
+  PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $withName`)
+  PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $withName`, {$extUpname}_SHARED_LIBADD)
+";
           break;
 
         default:

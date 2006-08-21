@@ -654,6 +654,10 @@ class CodeGen_PECL_ExtensionParser
             }
         }
 
+        if (isset($attr["version"])) {
+            $with->setVersion($attr["version"]);
+        }
+
         $this->pushHelper($with);
 
         return true;
