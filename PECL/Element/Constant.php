@@ -302,7 +302,7 @@ require_once "CodeGen/PECL/Element.php";
          * @return string  DocBook XML snippet
          */
         function docEntry($base) {
-            return trim("
+            return "
         <row>
          <entry>
           <constant id='constant".strtolower(str_replace("_","-",$this->name))."'>{$this->name}</constant>
@@ -310,7 +310,7 @@ require_once "CodeGen/PECL/Element.php";
          </entry>
          <entry>{$this->value}</entry>
          <entry>{$this->desc}</entry>
-        </row>\n\n");
+        </row>\n\n";
         }
 
         /** 
