@@ -988,9 +988,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
             switch ($this->role) {
             case "public":
               
-                if ($this->ifCondition) {
-                  $code .= "#if {$this->ifCondition}\n";
-                }
+                $code .= $this->ifConditionStart();
 
                 // function prototype comment
                 $code .= "/* {{{ proto {$this->proto}\n  ";
@@ -1267,9 +1265,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
                 
                 $code .= "}\n/* }}} {$this->name} */\n\n";
 
-                if ($this->ifCondition) {
-                    $code .= "#endif\n";
-                } 
+                $code .= $this->ifConditionEnd();
 
                 break;
                 
@@ -1427,11 +1423,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function hCode($extension) 
         {
-          $code = "";
-
-            if ($this->ifCondition) {
-              $code .= "#if {$this->ifCondition}\n";
-            }
+            $code = $this->ifConditionStart();
 
             $code .= $this->cProto();
             if ($code) {
@@ -1440,9 +1432,7 @@ require_once "CodeGen/Tools/Tokenizer.php";
 
             $code.= $this->argInfoCode();
 
-            if ($this->ifCondition) {
-               $code .= "#endif\n";
-            }
+            $code.= $this->ifConditionEnd();
 
             return $code;
         }
@@ -1478,19 +1468,13 @@ require_once "CodeGen/Tools/Tokenizer.php";
          */
         function functionEntry()
         {
-            $code = "";
+            $code = $this->ifConditionStart();
 
             $arginfo = $this->hasRefArgs ? "{$this->name}_arg_info" : "NULL";
 
-            if ($this->ifCondition) {
-                $code .= "#if {$this->ifCondition}\n";
-            }
-
             $code .= sprintf("    PHP_FE(%-20s, %s)\n", $this->name, $arginfo);
 
-            if ($this->ifCondition) {
-                $code .= "#endif\n";
-            }
+            $code.= $this->ifConditionEnd();
 
             return $code;
         }
