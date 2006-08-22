@@ -80,12 +80,12 @@ require_once "CodeGen/PECL/Element.php";
          */
         protected $define = false;
 
-		/**
-		 * Resource group
-		 *
-		 * @var string
-		 */
-		protected $group = "default";
+        /**
+         * Resource group
+         *
+         * @var string
+         */
+        protected $group = "default";
 
         /**
          * Set constant name 
@@ -182,30 +182,30 @@ require_once "CodeGen/PECL/Element.php";
             return true;
         }
 
-		/**
-		 * Set group this constant belongs to
-		 *
-		 * @access public
-		 * @param string  group name
+        /**
+         * Set group this constant belongs to
+         *
+         * @access public
+         * @param string  group name
          * @return bool   true on success
-		 */
-		function setGroup($group)
-		{
-		  $this->group = $group;
+         */
+        function setGroup($group)
+        {
+          $this->group = $group;
 
-		  return true;
-		}
+          return true;
+        }
 
-		/**
-		 * Get group thsi constant belongs to
-		 *
-		 * @access public
-		 * @return string group name
-		 */
-		function getGroup()
-		{
-		  return $this->group;
-		}
+        /**
+         * Get group thsi constant belongs to
+         *
+         * @access public
+         * @return string group name
+         */
+        function getGroup()
+        {
+          return $this->group;
+        }
 
         /**
          * Set define flag
@@ -235,7 +235,8 @@ require_once "CodeGen/PECL/Element.php";
          * @param  class Extension  extension we are owned by
          * @return sting            C code snippet
          */
-        function cCode($extension) {
+        function cCode($extension) 
+        {
             switch ($this->type) {
             case "int":
                 return "REGISTER_LONG_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
@@ -255,7 +256,8 @@ require_once "CodeGen/PECL/Element.php";
          * @param  class Extension  extension we are owned by
          * @return sting            C code snippet
          */
-        function hCode($extension) {
+        function hCode($extension) 
+        {
             if ($this->define) {
                 switch ($this->type) {
                 case "int":
@@ -278,7 +280,8 @@ require_once "CodeGen/PECL/Element.php";
          * @param  string  Extension name
          * @return string  DocBook XML snippet
          */
-        static function docHeader($name) {
+        static function docHeader($name) 
+        {
             return
 "    <table>
      <title>$name constants</title>
@@ -301,7 +304,8 @@ require_once "CodeGen/PECL/Element.php";
          * @param  string  Extension name (currently unused)
          * @return string  DocBook XML snippet
          */
-        function docEntry($base) {
+        function docEntry($base) 
+        {
             return "
         <row>
          <entry>
@@ -320,7 +324,8 @@ require_once "CodeGen/PECL/Element.php";
          * @param  string  Extension name
          * @return string  DocBook XML snippet
          */
-        static function docFooter() {
+        static function docFooter() 
+        {
             return
 "     </tbody>
     </tgroup>
