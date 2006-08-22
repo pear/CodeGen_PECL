@@ -261,7 +261,7 @@ require_once "CodeGen/PECL/Element/Class.php";
         {
             $code = "";
 
-			// TODO catch arg #2->type == void
+            // TODO catch arg #2->type == void
             $arginfo = (count($this->params)>1) ? ($this->getFullName()."_args") : "NULL";
 
             if ($this->isAbstract || $this->isInterface) {
@@ -300,7 +300,7 @@ require_once "CodeGen/PECL/Element/Class.php";
                 return "";
             }
 
-			// TODO arg_info?
+            // TODO arg_info?
             return "    PHP_MALIAS({$this->classname}, {$this->proceduralName}, {$this->name}, NULL, ZEND_ACC_PUBLIC)\n";
         }
         /**
