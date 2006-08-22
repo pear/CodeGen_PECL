@@ -42,7 +42,7 @@ require_once "CodeGen/Tools/Indent.php";
 
     class CodeGen_PECL_Element_Interface
       extends CodeGen_PECL_Element 
-	  implements CodeGen_PECL_Element_ObjectInterface
+      implements CodeGen_PECL_Element_ObjectInterface
     {
         /**
          * The class name
@@ -210,6 +210,10 @@ require_once "CodeGen/Tools/Indent.php";
                 $code.= $method->hCode($extension);
             }
 
+            if ($code) {
+                $code = $this->ifConditionStart() . $code . $this->ifConditionEnd();
+            }
+
             return $code;
         }
 
@@ -225,6 +229,8 @@ require_once "CodeGen/Tools/Indent.php";
             ob_start();
 
             echo "/* {{{ Interface {$this->name} */\n\n";
+
+            echo $this->ifConditionStart();
 
             echo "static zend_class_entry * {$this->name}_ce_ptr = NULL;\n\n";
 
@@ -257,6 +263,8 @@ require_once "CodeGen/Tools/Indent.php";
 
             echo "}\n\n";    
 
+            echo  $this->ifConditionEnd();
+
             echo "/* }}} Class {$this->name} */\n\n";
 
             return ob_get_clean();
@@ -271,7 +279,7 @@ require_once "CodeGen/Tools/Indent.php";
          */
         function minitCode($extension) 
         {
-            return "interface_init_{$this->name}();\n";
+            return $this->ifConditionStart() . "interface_init_{$this->name}();\n" . $this->ifConditionEnd();
         }
         
 
@@ -290,7 +298,7 @@ require_once "CodeGen/Tools/Indent.php";
 
         function getPayloadType() 
         {
-		    return "";
+            return "";
         }
     }
 

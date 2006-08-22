@@ -1113,7 +1113,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_interface($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "extends"));
+        $err = $this->checkAttributes($attr, array("name", "extends", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -1138,6 +1138,10 @@ class CodeGen_PECL_ExtensionParser
             }
         }
             
+        if (isset($attr["if"])) {
+            $this->setIfCondition($attr["if"]);
+        }
+
         return true;
     }
 
