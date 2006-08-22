@@ -930,7 +930,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_property($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "type", "value", "access", "static"));
+        $err = $this->checkAttributes($attr, array("name", "type", "value", "access", "static", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -973,12 +973,16 @@ class CodeGen_PECL_ExtensionParser
             $prop->isStatic();
         }
 
+        if (isset($attr["if"])) {
+            $prop->setIfCondition($attr["if"]);
+        }
+
         return $this->helper->addProperty($prop);
     }
 
     function tagstart_class_constant($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "type", "value"));
+        $err = $this->checkAttributes($attr, array("name", "type", "value", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -1007,6 +1011,10 @@ class CodeGen_PECL_ExtensionParser
         $err = $const->setValue($attr["value"]);
         if (PEAR::isError($err)) {
             return $err;
+        }
+
+        if (isset($attr["if"])) {
+            $prop->setIfCondition($attr["if"]);
         }
 
         return $this->helper->addConstant($const);

@@ -181,13 +181,19 @@ require_once "CodeGen/PECL/Element.php";
             $key = '"'.$this->name.'"';
             $key_len = strlen($this->name) + 1;
 
-            return "
+
+            $code = $this->ifConditionStart();
+            
+            $code.=  "
         tmp = (zval *) malloc(sizeof(zval));
         INIT_PZVAL(tmp);
         $value
         zend_symtable_update(&({$classptr}->constants_table), $key, $key_len, (void *) &tmp, sizeof(zval *), NULL);
 ";
 
+            $code.= $this->ifConditionEnd();
+
+            return $code;
         }
 
 

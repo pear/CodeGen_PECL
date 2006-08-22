@@ -188,7 +188,9 @@ require_once "CodeGen/PECL/Element/Class.php";
          * @return string
          */
         function minitCode($classptr) {
-            $code = "    zend_declare_property_{$this->type}({$classptr}, \n";
+            $code = $this->ifConditionStart();
+
+            $code.= "    zend_declare_property_{$this->type}({$classptr}, \n";
             $code.= '        "' . $this->name . '", ' . strlen($this->name) . ", ";
 
             switch ($this->type) {
@@ -220,6 +222,8 @@ require_once "CodeGen/PECL/Element/Class.php";
             }
 
             $code .= " TSRMLS_DC);\n\n";
+
+            $code.= $this->ifConditionEnd();
 
             return $code;
         }
