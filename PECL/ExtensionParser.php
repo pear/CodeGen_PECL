@@ -420,7 +420,7 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["if"])) {
             $condition = ($attr["if"] == "yes) ? $attr["name"] : $attr["if"];
-            $this->helper->setIfCondition($condition);
+            $const->setIfCondition($condition);
         }                
         
         $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
@@ -471,7 +471,7 @@ class CodeGen_PECL_ExtensionParser
         } 
 
         if (isset($attr["if"])) {
-            $this->setIfCondition($attr["if"]);
+            $global->setIfCondition($attr["if"]);
         }
 
         return $this->extension->addGlobal($global);
@@ -898,7 +898,7 @@ class CodeGen_PECL_ExtensionParser
         }
 
         if (isset($attr["if"])) {
-            $this->helper->setIfCondition($attr["if"]);
+            $class->setIfCondition($attr["if"]);
         }
         
         return true;
@@ -1044,7 +1044,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_function($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "access", "abstract", "final", "procedural"));
+        $err = $this->checkAttributes($attr, array("name", "access", "abstract", "final", "procedural", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -1093,6 +1093,10 @@ class CodeGen_PECL_ExtensionParser
             }
         }
 
+        if (isset($attr["if"])) {
+            $method->setIfCondition($attr["if"]);
+        }
+
         return true;
     }
     
@@ -1118,12 +1122,12 @@ class CodeGen_PECL_ExtensionParser
             return $err;
         }
                                       
-        $class = new CodeGen_PECL_Element_Interface;
+        $interface = new CodeGen_PECL_Element_Interface;
 
-        $this->pushHelper($class);
+        $this->pushHelper($interface);
 
         if (isset($attr["name"])) {
-            $err = $class->setName($attr["name"]);
+            $err = $interface->setName($attr["name"]);
             if (PEAR::isError($err)) {
                 return $err;
             }
@@ -1132,14 +1136,14 @@ class CodeGen_PECL_ExtensionParser
         }
 
         if (isset($attr["extends"])) {
-            $err = $class->setExtends($attr["extends"]);
+            $err = $interface->setExtends($attr["extends"]);
             if (PEAR::isError($err)) {
                 return $err;
             }
         }
             
         if (isset($attr["if"])) {
-            $this->setIfCondition($attr["if"]);
+            $interface->setIfCondition($attr["if"]);
         }
 
         return true;
