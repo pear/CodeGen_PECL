@@ -454,6 +454,10 @@ typedef struct _php_obj_{$this->name} {
                 $code.= $method->hCode($extension);
             }
 
+            if ($code) {
+                $code = $this->ifConditionStart() . $code . $this->ifConditionEnd();
+            }
+
             return $code;
         }
 
@@ -470,7 +474,10 @@ typedef struct _php_obj_{$this->name} {
 
             ob_start();
 
+            
             echo "/* {{{ Class {$this->name} */\n\n";
+
+            echo $this->ifConditionStart();
 
             echo "static zend_class_entry * {$this->name}_ce_ptr = NULL;\n\n";
 
@@ -590,6 +597,8 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 
             echo "}\n\n";
 
+            echo $this->ifConditionEnd();
+
             echo "/* }}} Class {$this->name} */\n\n";
 
             return ob_get_clean();
@@ -604,7 +613,9 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
          */
         function minitCode($extension) 
         {
-            return "class_init_{$this->name}();\n";
+            return $this->ifConditionStart() 
+              . "class_init_{$this->name}();\n"
+              . $this->ifConditionEnd();
         }
         
 
@@ -640,12 +651,16 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         function functionAliasEntries()
         {
             $code = "";
-
+        
             foreach($this->methods as $method) 
             {
                 $code.= $method->functionAliasEntry();
             }
 
+            if ($code) {
+                $code = $this->ifConditionStart() . $code . $this->ifConditionEnd();
+            }
+    
             return $code;
         }
         
