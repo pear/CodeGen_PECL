@@ -470,6 +470,10 @@ class CodeGen_PECL_ExtensionParser
             }
         } 
 
+        if (isset($attr["if"])) {
+            $this->setIfCondition($attr["if"]);
+        }
+
         return $this->extension->addGlobal($global);
     }
 
@@ -521,6 +525,10 @@ class CodeGen_PECL_ExtensionParser
             }
         } 
 
+        if (isset($attr["if"])) {
+            $ini->setIfCondition($attr["if"]);
+        }
+
         $ini->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         $err = $this->extension->addPhpini($ini);
@@ -538,6 +546,7 @@ class CodeGen_PECL_ExtensionParser
         if (PEAR::isError($err)) {
             return $err;
         }
+        $global->setIfCondition($ini->getIfCondition());
         $err = $this->extension->addGlobal($global);
 
         return $err;

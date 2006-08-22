@@ -196,7 +196,9 @@ class CodeGen_PECL_Element_Global
      */
     function cCode($name) 
     {
-        $code = "    {$name}_globals->{$this->name} = ";
+        $code = $this->ifCondtionStart();
+
+        $code.= "    {$name}_globals->{$this->name} = ";
 
         if ($this->value != null) {
             $code .= $this->value;
@@ -209,6 +211,8 @@ class CodeGen_PECL_Element_Global
         } 
         
         $code .= ";\n";
+
+        $code.= $this->ifConditionEnd();
 
         return $code;
     }
@@ -252,7 +256,13 @@ static void php_'.$name.'_shutdown_globals(zend_'.$name.'_globals *'.$name.'_glo
      */
     function hCode($name) 
     {
-        return "  {$this->type} {$this->name};\n";
+        $code = $this->ifConditionStart();
+
+        $code.= "  {$this->type} {$this->name};\n";
+
+        $code.= $this->ifConditionEnd();
+
+        return $code;
     }
 
     /**
