@@ -217,7 +217,7 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @param  string  new value for
      */
-    function addSkipIf($code) 
+    function addSkipIf($code, $reason='') 
     {
         // check whether $code is just an expression or a complete code snippet
         $isExpression = true;
@@ -229,7 +229,7 @@ class CodeGen_PECL_Element_Test
         }
 
         if ($isExpression) {
-            $this->skipif.= "\nif($code) die('skip');\n";
+            $this->skipif.= "\nif($code) die('skip $reason');\n";
         } else {
             $this->skipif.= "\n$code";
         }
