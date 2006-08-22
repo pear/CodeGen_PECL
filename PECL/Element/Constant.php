@@ -237,16 +237,22 @@ require_once "CodeGen/PECL/Element.php";
          */
         function cCode($extension) 
         {
+            $code = $this->ifConditionStart();
+
             switch ($this->type) {
             case "int":
-                return "REGISTER_LONG_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
+                $code.= "REGISTER_LONG_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
             
             case "float":
-                return "REGISTER_DOUBLE_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
+                $code.= "REGISTER_DOUBLE_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
 
             case "string":
-                return "REGISTER_STRINGL_CONSTANT(\"{$this->name}\", \"{$this->value}\", ".strlen($this->value).", CONST_PERSISTENT | CONST_CS);\n";
+                $code.= "REGISTER_STRINGL_CONSTANT(\"{$this->name}\", \"{$this->value}\", ".strlen($this->value).", CONST_PERSISTENT | CONST_CS);\n";
             }
+
+            $code.= $this->ifConditionEnd();
+
+            return $code;
         }
 
         /** 
@@ -258,18 +264,24 @@ require_once "CodeGen/PECL/Element.php";
          */
         function hCode($extension) 
         {
-            if ($this->define) {
-                switch ($this->type) {
-                case "int":
-                case "float":
-                    return "#define {$this->name} {$this->value}\n";
-                    
-                case "string":
-                    return "#define {$this->name} \"$value\"\n";
-                }
-            } 
+            if (!$this->define) {
+                return "";
+            }
 
-            return "";
+            $code = $this->ifConditionStart();
+            
+            switch ($this->type) {
+            case "int":
+            case "float":
+              $code.= "#define {$this->name} {$this->value}\n";
+              
+            case "string":
+              $code.= "#define {$this->name} \"$value\"\n";
+            }
+             
+            $this->ifConditionEnd();
+
+            return $code;
         }
 
 

@@ -418,6 +418,11 @@ class CodeGen_PECL_ExtensionParser
             return $err;
         }
 
+        if (isset($attr["if"])) {
+            $condition = ($attr["if"] == "yes) ? $attr["name"] : $attr["if"];
+            $this->helper->setIfCondition($condition);
+        }                
+        
         $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         return $this->extension->addConstant($const);
