@@ -337,7 +337,7 @@ class CodeGen_PECL_Dependency_With
   then
     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
   fi
-  if test \"$PKG_CONFIG\" = \"no\"
+  if test \"\$PKG_CONFIG\" = \"no\"
   then
     AC_MSG_ERROR([required utility 'pkg-config' not found])
   fi
