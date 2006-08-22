@@ -259,6 +259,11 @@ class CodeGen_PECL_ExtensionParser
     
     function tagstart_resources_resource($attr)
     {
+        $err = $this->checkAttributes($attr, array("name", "payload", "alloc", "if"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+                                      
         $this->pushHelper(new CodeGen_PECL_Element_Resource);
         
         if (isset($attr["name"])) {
@@ -285,6 +290,10 @@ class CodeGen_PECL_ExtensionParser
                 return $err;
             }
         } 
+        
+        if (isset($attr["if"])) {
+            $this->helper->setIfCondition($attr["if"]);
+        }
         
         return true;
     }

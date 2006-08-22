@@ -201,11 +201,17 @@ class CodeGen_PECL_Element_Resource
      * @return string C code snippet
      */
     function minitCode() {
-        return "
+        $code = $this->ifConditionStart();
+
+        $code.= "
 le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor, 
                        NULL, \"{$this->name}\", module_number);
 
 ";
+
+        $code.= $this->ifConditionEnd();
+  
+        return $code;
     }
 
 
@@ -241,28 +247,34 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @return string C code snippet
      */
     function cCode($extension) {
-        $dtor = "int le_{$this->name};\n";
+        $code = $this->ifConditionStart();
+
+        $code.= "int le_{$this->name};\n";
 
         if ($extension->getLanguage() == "cpp") {
-            $dtor.= 'extern "C" ';
+            $code.= 'extern "C" ';
         }
 
-        $dtor.= 
+        $code.= 
 "void {$this->name}_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC)
 {
     {$this->payload} * resource = ({$this->payload} *)(rsrc->ptr);
 
 ";
 
-        $dtor .= $extension->codegen->varblock($this->destruct);
+        $code .= $extension->codegen->varblock($this->destruct);
 
         if ($this->alloc) {
-            $dtor .= "\n\tefree(resource);\n";
+            $code .= "\n\tefree(resource);\n";
         }
         
-        $dtor .= "}\n\n";
+        $code.= "}\n";
+
+        $code.= $this->ifConditionEnd();
+
+        $code.= "\n";
         
-        return $dtor;
+        return $code;
     }
 
 
@@ -276,11 +288,18 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
     function hCode() {
         $upname = strtoupper($this->name);
         
-        return "
+        $code = $this->ifConditionStart();
+
+        $code.= "
 #define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name });
 #define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, ${$this->name}, le_{$this->name }); if (!r) { RETURN_FALSE; }
-
 ";
+
+        $code.= $this->ifConditionEnd();
+
+        $code.= "\n";
+
+        return $code;
     }
 
 
@@ -292,6 +311,10 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @return string autoconf code snippet
      */
     function configm4($extension_name) {
+        if ($this->ifCondition) {
+            return ""; // TODO implement more clever checking
+        }
+
         return "  AC_CHECK_TYPE(".$this->getPayload()." *, [], [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], [#include \"\$srcdir/php_{$extension_name}.h\"])\n";
     }
 
