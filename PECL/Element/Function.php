@@ -1388,6 +1388,9 @@ require_once "CodeGen/Tools/Tokenizer.php";
             }
             
             $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
+            if ($this->ifCondition) {
+              $test->addSkipIf("!function_exists('{$this->name}')", "not compiled in ($this->ifCondition)");
+            }
             if ($this->testSkipIf) {
                 $test->addSkipIf($this->testSkipIf);
             }
