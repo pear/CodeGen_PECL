@@ -419,7 +419,7 @@ class CodeGen_PECL_ExtensionParser
         }
 
         if (isset($attr["if"])) {
-            $condition = ($attr["if"] == "yes) ? $attr["name"] : $attr["if"];
+            $condition = ($attr["if"] == "yes") ? $attr["name"] : $attr["if"];
             $const->setIfCondition($condition);
         }                
         
