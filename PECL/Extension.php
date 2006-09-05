@@ -680,7 +680,7 @@ class CodeGen_PECL_Extension
 ]>
 
 <book id='manual' lang='en'>
-   &reference.cairo-wrapper.reference;
+   &reference.$idName.reference;
 </book>
 ");
         $manual->close();
