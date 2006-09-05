@@ -242,12 +242,15 @@ require_once "CodeGen/PECL/Element.php";
             switch ($this->type) {
             case "int":
                 $code.= "REGISTER_LONG_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
-            
+                break;
+
             case "float":
                 $code.= "REGISTER_DOUBLE_CONSTANT(\"{$this->name}\", {$this->value}, CONST_PERSISTENT | CONST_CS);\n";
+                break;
 
             case "string":
                 $code.= "REGISTER_STRINGL_CONSTANT(\"{$this->name}\", \"{$this->value}\", ".strlen($this->value).", CONST_PERSISTENT | CONST_CS);\n";
+                break;
             }
 
             $code.= $this->ifConditionEnd();
@@ -274,9 +277,10 @@ require_once "CodeGen/PECL/Element.php";
             case "int":
             case "float":
               $code.= "#define {$this->name} {$this->value}\n";
-              
+              break;
             case "string":
               $code.= "#define {$this->name} \"$value\"\n";
+              break;
             }
              
             $this->ifConditionEnd();
