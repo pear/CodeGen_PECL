@@ -1052,7 +1052,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_class_function($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "access", "abstract", "final", "procedural", "if"));
+        $err = $this->checkAttributes($attr, array("name", "access", "static", "abstract", "final", "procedural", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -1077,6 +1077,12 @@ class CodeGen_PECL_ExtensionParser
             }
         }
         
+        if (isset($attr["static"]) && $this->toBool($attr["static"])) {
+            $err = $method->isStatic();
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
         if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
             $err = $method->isAbstract();
             if (PEAR::isError($err)) {
