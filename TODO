@@ -9,6 +9,8 @@ milestone 1.1
 
 - allow addition of files to directories (eg. test) (done)
 
+- static methods (done)
+
 - pkg-config support (almost done)
 
 - finish config.w32 generation (almost done, need someone 
@@ -20,14 +22,19 @@ milestone 1.1
   
 - return by reference (for 5.1 and above)          
 
-- conditional compilation control (only done for functions yet)
+- conditional compilation control (only done for functions and resources yet)
   
     add "if" attribute to element tags, to genereate code wrappers like
 
     #ifdef HAVE_SOME_FEATURE
       ...
     #endif
-    
+   
+  - improve configure check for conditional resource types
+
+  - have functions using a conditional resource type as 
+    default set their ifCondition automaticly
+ 
 - PHP version check in config.m4
 
 - re2c and lemon support in config.m4 / Makefile.frag generation?
