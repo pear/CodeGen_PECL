@@ -65,7 +65,7 @@ class CodeGen_PECL_Dependency_Lib
         static $first = true;
 
         $extUpname  = strtoupper($extName);
-        $withUpname = strtoupper($withName);
+        $withUpname = str_replace("-", "_", strtoupper($withName));
 
         if (!$this->platform->test("unix")) {
             return "";
