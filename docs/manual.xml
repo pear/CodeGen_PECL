@@ -291,6 +291,12 @@ pecl-gen [-h] [--force] [--experimental] [--version]
     <ulink url="http://pear.php.net/manual/en/developers.packagedef.php">PEAR documentation</ulink> 
     here.
    </para>
+
+   <para>
+    If you are going to release the extension using your own channel server instead of pear.php.net
+    you have to add a &lt;channel&gt; tag that specifies the channel host you are releasing on, too.
+   </para>
+
    <example>
     <title>Release information</title>
     <programlisting>
@@ -304,6 +310,10 @@ pecl-gen [-h] [--force] [--experimental] [--version]
       <role>lead</role>
     </maintainer>
   </maintainers>
+
+  <license>PHP</license>
+
+  <channel>pear.php-baustelle.de</channel>
 
   <release>
     <version>1.0</version>
@@ -1262,27 +1272,56 @@ HASSQgRukwiZmpucmwYRADs=
 	 Each class needs to be given a unique class name using the 
      <literal>name=...</literal> attribute.
     </para>
-    <para>
-     Using the <literal>extends=...</literal> attribut it is possible
-     to inherit from another internal class. The class inherited from
-     does not necessarily have to be defined in the same package so
-     the given name is not checked for existance. An attempt to extend
-     from a non-existing class will only be caught at PHP runtine.
-    </para>
-    <para>
-	 The optional <literal>abstract=...</literal> and 
-     <literal>final=...</literal> attributes can be used to declare
-     a class as abstract (can be inherited from but can't be instanciated)
-     or final (can't be inherited from anymore).
-    </para>
-    <para>
-     A class can implement one or more interfaces, the interfaces 
-     implemented by a class are declared using the <sgmltag>implements</sgmltag>
-     tag and its <literal>interface=...</literal> attribute. The interface
-     needs to be defined in the extension specification (see "Interfaces"
-     later in this section) or by one of the extensions specified in the
-     package dependencies.
-    </para>
+    <example>
+     <title>A minimal class</title>
+     <programlisting>
+<![CDATA[
+  <class name="minimal"/>
+]]>
+     </programlisting>
+    </example>
+    <section>
+     <title>Inheritance</title>
+     <para>
+      Using the <literal>extends=...</literal> attribut it is possible
+      to inherit from another internal class. The class inherited from
+      does not necessarily have to be defined in the same package so
+      the given name is not checked for existance. An attempt to extend
+      from a non-existing class will only be caught at PHP runtine.
+     </para>
+    <example>
+     <title>Simple inheritence</title>
+     <programlisting>
+<![CDATA[
+  <class name="parent">
+   <function name="foo">
+    <proto>int foo()</proto>
+    <code>RETURN_LONG(42);</code>
+   </function>
+
+   <function name="bar">
+    <proto>float bar()</proto>
+    <code>RETURN_DOUBLE(3.14);</code>
+   </function>
+  </class>
+
+  <!-- child overwrites foo() -->
+  <class name="child" extends="parent">
+   <function name="foo">
+    <proto>int foo()</proto>
+    <code>RETURN_LONG(23);</code>
+   </function>
+  </class>
+]]>
+     </programlisting>
+    </example>
+     <para>
+ 	  The optional <literal>abstract=...</literal> and 
+      <literal>final=...</literal> attributes can be used to declare
+      a class as abstract (can be inherited from but can't be instanciated)
+      or final (can't be inherited from anymore).
+     </para>
+    </section>
    </section>
 
    <section>
@@ -1309,9 +1348,9 @@ HASSQgRukwiZmpucmwYRADs=
      registration of a procedural alternative for this method. 
      This is a regular function that takes an instance of the class
      as first argument and allows to call
-     <programlisting>function($class, ...parameters...)</programlisting>
+     <programlisting>function($object, ...parameters...)</programlisting>
      instead of 
-     <programlisting>$class->method(...parameters...)</programlisting>.
+     <programlisting>$object->method(...parameters...)</programlisting>.
     </para>
     <para>
      This feature is usefull when creating an extension that implements
@@ -1382,6 +1421,14 @@ HASSQgRukwiZmpucmwYRADs=
      <sgmltag>proto</sgmltag> needs to be defined but there is no support
      for <sgmltag>code</sgmltag> or <sgmltag>test</sgmltag> tags within
      interface method declarations.
+    </para>
+    <para>
+     A class can implement one or more interfaces, the interfaces 
+     implemented by a class are declared using the <sgmltag>implements</sgmltag>
+     tag and its <literal>interface=...</literal> attribute. The interface
+     needs to be defined in the extension specification (see "Interfaces"
+     later in this section) or by one of the extensions specified in the
+     package dependencies.
     </para>
    </section>
   </section>
