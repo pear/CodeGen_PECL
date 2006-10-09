@@ -15,16 +15,26 @@
 	echo "Params:   "; var_dump($this->params);
   }
 }
+%syntax_error {
+  $expect = array();
+  foreach ($this->yy_get_expected_tokens($yymajor) as $token) {
+	$expect[] = self::$yyTokenName[$token];
+  }
+  throw new Exception('Unexpected ' . $this->tokenName($yymajor) . '(' . $TOKEN
+					  . '), expected one of: ' . implode(',', $expect));
+}
 
 proto_line ::= proto.
 proto_line ::= proto SEMICOLON.
 
-proto ::= typespec(A) NAME(B) PAR_OPEN param_spec PAR_CLOSE. {
+proto ::= rettype(A) NAME(B) PAR_OPEN param_spec PAR_CLOSE. {
   $this->returns = A;
   $this->name    = B;
 }
 
-typespec(A) ::= VOID.                  { A = array("type" => "void"); }
+rettype(A) ::= VOID.                  { A = array("type" => "void"); }
+rettype(A) ::= typespec(B).           { A = B; }
+
 typespec(A) ::= typename(B).           { A = B; }
 typespec(A) ::= typename(B) AMPERSAND. { A = B; A["byref"] = true; }
 
@@ -34,30 +44,50 @@ typename(A) ::= FLOAT.                 { A = array("type" => "float"); }
 typename(A) ::= STRING.                { A = array("type" => "string"); }
 typename(A) ::= ARRAY_.                { A = array("type" => "array"); }
 typename(A) ::= CLASS_ NAME(B).        { A = array("type" => "class ",    "subtype" => B); }
-typename(A) ::= RESOURCE NAME.         { A = array("type" => "resource ", "subtype" => B); }
+typename(A) ::= RESOURCE NAME(B).      { A = array("type" => "resource ", "subtype" => B); }
 typename(A) ::= MIXED.                 { A = array("type" => "mixed"); }
 typename(A) ::= CALLBACK.              { A = array("type" => "callback"); }
 typename(A) ::= STREAM.                { A = array("type" => "stream"); }
 
 param_spec ::= param_list.
+param_spec ::= SQUARE_OPEN param(P) SQUARE_CLOSE. {
+  P["optional"] = true;
+  $this->params[] = P;
+}
+param_spec ::= SQUARE_OPEN param(P) optional_params SQUARE_CLOSE. {
+  P["optional"] = true;
+  $this->params[] = P;
+}
 param_spec ::= ELLIPSE.                { $this->varargs = true; }
 param_spec ::= VOID.
+param_spec ::= .
 
 param_list ::= param_list COMMA ELLIPSE. { $this->varargs = true; }
-param_list ::= param_list COMMA param.
-param_list ::= param.
-param_list ::= .
-
-param ::= typename(A) NAME(B). {
-  $param = A;
-  $param["name"] = B;
-  $this->params[] = $param;
+param_list ::= param_list COMMA param(P). {
+  $this->params[] = P;
 }
-param ::= typename(A) NAME(B) EQ default(C). {
-  $param = A;
-  $param["name"] = B;
-  $param["default"] = C;
-  $this->params[] = $param;
+param_list ::= param_list optional_params.
+param_list ::= param(P). {
+  $this->params[] = P;
+}
+optional_params ::= SQUARE_OPEN COMMA param(P) SQUARE_CLOSE. {
+  P["optional"] = true;
+  $this->params[] = P;
+}
+optional_params ::= SQUARE_OPEN COMMA param(P) optional_params SQUARE_CLOSE. {
+  P["optional"] = true;
+  $this->params[] = P;
+}
+
+param(P) ::= typespec(A) NAME(B). {
+  P = A;
+  P["name"] = B;
+}
+param(P) ::= typespec(A) NAME(B) EQ default(C). {
+  P = A;
+  P["name"] = B;
+  P["default"] = C;		
+  P["optional"] = true;
 }
 
 default(A) ::= TRUE_.  { A = "true"; }
