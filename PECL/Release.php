@@ -116,8 +116,7 @@ class CodeGen_PECL_Release
         return sprintf("    php_printf(\"<p>Version %s%s (%s)</p>\\n\");\n",
                        $this->version,
                        $this->state,
-                       date("Y-m-d", $this->date)
-                       );
+                       date("Y-m-d", $this->date));
     }
 }
 

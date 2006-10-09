@@ -164,11 +164,11 @@ class CodeGen_PECL_Element_Global
            so we check for a sequence of valid names for now
            TODO: check for either simple type, struct/class or single word (typedef)
         */
-        $array = explode(" ", str_replace('*',' ',$type));
+        $array = explode(" ", str_replace('*', ' ', $type));
         foreach ($array as $name) {
             if (empty($name)) continue;
             // TODO :: should only be allowed for C++, not C extensions
-            if (!$this->isName(str_replace("::","", $name))) return false; 
+            if (!$this->isName(str_replace("::", "", $name))) return false; 
         }
         return true;
     }
@@ -245,7 +245,7 @@ static void php_'.$name.'_shutdown_globals(zend_'.$name.'_globals *'.$name.'_glo
     static function hCodeHeader($name) 
     {
         return "ZEND_BEGIN_MODULE_GLOBALS({$name})\n";
-     }
+    }
 
     /**
      * Generate declaration for this global variable in header file

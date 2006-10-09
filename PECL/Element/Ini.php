@@ -35,269 +35,269 @@ require_once "CodeGen/PECL/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-  class CodeGen_PECL_Element_Ini 
+class CodeGen_PECL_Element_Ini 
     extends CodeGen_PECL_Element 
-  {
-      // TODO this should be a subclass of CodeGen_PECL_Element_Global ?
+{
+    // TODO this should be a subclass of CodeGen_PECL_Element_Global ?
 
-      /**
-       * Directive name
-       *
-       * @access private
-       * @var     string
-       */
-      protected $name;
+    /**
+     * Directive name
+     *
+     * @access private
+     * @var     string
+     */
+    protected $name;
       
-      /**
-       * Set method for name
-       *
-       * @access public
-       * @var string directive name
-       */
-      function setName($name)
-      {
-          if (!self::isName($name)) {
-              return PEAR::raiseError("'$name' is not a valid php.ini directive name");
-          }
+    /**
+     * Set method for name
+     *
+     * @access public
+     * @var string directive name
+     */
+    function setName($name)
+    {
+        if (!self::isName($name)) {
+            return PEAR::raiseError("'$name' is not a valid php.ini directive name");
+        }
           
-          $this->name = $name;
+        $this->name = $name;
           
-          return true;
-      }
+        return true;
+    }
 
-      /**
-       * Get method for name
-       *
-       * @access public
-       * @return string
-       */
-      function getName()
-      {
-          return $this->name;
-      }
-
-
-
-
-      /**
-       * Directive data type
-       *
-       * @access private
-       * @var     string
-       */
-      protected $type;
-
-      /**
-       * Set method for data type
-       *
-       * @access public
-       * @param string one of bool, int, float, string
-       */
-      function setType($type)
-      {
-          switch ($type) {
-          case "bool":
-              $this->cType = "zend_bool";
-              if (!$this->onupdate) {
-                  $this->onupdate = "OnUpdateBool";
-              }
-              return true;          
-
-          case "int":
-              $this->cType = "long";
-              if (!$this->onupdate) {
-                  $this->onupdate = "OnUpdateLong";
-              }
-              return true;
-
-          case "float":
-              $this->cType = "double";
-              if (!$this->onupdate) {
-                  $this->onupdate = "OnUpdateReal";
-              }
-              return true;
-
-          case "string":
-              $this->cType = "char *";
-              if (!$this->onupdate) {
-                  $this->onupdate = "OnUpdateString";
-              }
-              return true;
-
-          default:
-              return PEAR::raiseError("'$this->type' not supported, only bool, int, float and string"); 
-          }
-      }
-
-
-      /**
-       * Get method for type
-       *
-       * @access public
-       * @return string
-       */
-      function getType()
-      {
-          return $this->cType;
-      }
+    /**
+     * Get method for name
+     *
+     * @access public
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
+    }
 
 
 
-      /**
-       * Directive default value
-       *
-       * @access private
-       * @var     string
-       */
-      protected $value;
+
+    /**
+     * Directive data type
+     *
+     * @access private
+     * @var     string
+     */
+    protected $type;
+
+    /**
+     * Set method for data type
+     *
+     * @access public
+     * @param string one of bool, int, float, string
+     */
+    function setType($type)
+    {
+        switch ($type) {
+        case "bool":
+            $this->cType = "zend_bool";
+            if (!$this->onupdate) {
+                $this->onupdate = "OnUpdateBool";
+            }
+            return true;          
+
+        case "int":
+            $this->cType = "long";
+            if (!$this->onupdate) {
+                $this->onupdate = "OnUpdateLong";
+            }
+            return true;
+
+        case "float":
+            $this->cType = "double";
+            if (!$this->onupdate) {
+                $this->onupdate = "OnUpdateReal";
+            }
+            return true;
+
+        case "string":
+            $this->cType = "char *";
+            if (!$this->onupdate) {
+                $this->onupdate = "OnUpdateString";
+            }
+            return true;
+
+        default:
+            return PEAR::raiseError("'$this->type' not supported, only bool, int, float and string"); 
+        }
+    }
+
+
+    /**
+     * Get method for type
+     *
+     * @access public
+     * @return string
+     */
+    function getType()
+    {
+        return $this->cType;
+    }
+
+
+
+    /**
+     * Directive default value
+     *
+     * @access private
+     * @var     string
+     */
+    protected $value;
       
-      /**
-       * Set method for default value
-       *
-       * @access public
-       * @param string default value 
-       */
-      function setValue($value)
-      {
-          // TODO checks
-          $this->value = $value;
+    /**
+     * Set method for default value
+     *
+     * @access public
+     * @param string default value 
+     */
+    function setValue($value)
+    {
+        // TODO checks
+        $this->value = $value;
           
-          return true;
-      }
+        return true;
+    }
 
-      /**
-       * Get method for default value
-       *
-       * @access public
-       * @return string
-       */
-      function getValue()
-      {
-          return $this->value;
-      }
-
-
+    /**
+     * Get method for default value
+     *
+     * @access public
+     * @return string
+     */
+    function getValue()
+    {
+        return $this->value;
+    }
 
 
-      /**
-       * Directive description
-       *
-       * @access private
-       * @var     string
-       */
-      protected $desc;
+
+
+    /**
+     * Directive description
+     *
+     * @access private
+     * @var     string
+     */
+    protected $desc;
       
-      /**
-       * Set method for directive description
-       *
-       * @access public
-       * @param string description
-       */
-      function setDesc($desc)
-      {
-          $this->desc = $desc;
+    /**
+     * Set method for directive description
+     *
+     * @access public
+     * @param string description
+     */
+    function setDesc($desc)
+    {
+        $this->desc = $desc;
           
-          return true;
-      }
+        return true;
+    }
       
 
-      /**
-       * Get method for description
-       *
-       * @access public
-       * @return string
-       */
-      function getDesc()
-      {
-          return $this->desc;
-      }
+    /**
+     * Get method for description
+     *
+     * @access public
+     * @return string
+     */
+    function getDesc()
+    {
+        return $this->desc;
+    }
 
 
 
-      /**
-       * Directive access mode
-       *
-       * @access private
-       * @var     string
-       */
-      protected $access = "PHP_INI_ALL";
+    /**
+     * Directive access mode
+     *
+     * @access private
+     * @var     string
+     */
+    protected $access = "PHP_INI_ALL";
 
-      /**
-       * Set method for access mode
-       *
-       * @access private
-       * @param string access mode specification (system|perdir|user|all)
-       */
-      function setAccess($access)
-      {
-          switch ($access) {
-          case "system":
-              $this->access = "PHP_INI_SYSTEM";
-              return true;
-          case "perdir":
-              $this->access = "PHP_INI_PERDIR";
-              return true;
-          case "user":
-              // TODO shouldn't this be ALL instead?
-              $this->access = "PHP_INI_USER";
-              return true;
-          case "all":
-          case "":
-              $this->access = "PHP_INI_ALL";
-              return true;
-          default:
-              return PEAR::raiseError("'$access' is not a valid access mode (system|perdir|user|all)");
-          }
-      }
+    /**
+     * Set method for access mode
+     *
+     * @access private
+     * @param string access mode specification (system|perdir|user|all)
+     */
+    function setAccess($access)
+    {
+        switch ($access) {
+        case "system":
+            $this->access = "PHP_INI_SYSTEM";
+            return true;
+        case "perdir":
+            $this->access = "PHP_INI_PERDIR";
+            return true;
+        case "user":
+            // TODO shouldn't this be ALL instead?
+            $this->access = "PHP_INI_USER";
+            return true;
+        case "all":
+        case "":
+            $this->access = "PHP_INI_ALL";
+            return true;
+        default:
+            return PEAR::raiseError("'$access' is not a valid access mode (system|perdir|user|all)");
+        }
+    }
 
-      /**
-       * Get method for access
-       *
-       * @access public
-       * @return string
-       */
-      function getAccess()
-      {
-          return $this->access;
-      }
+    /**
+     * Get method for access
+     *
+     * @access public
+     * @return string
+     */
+    function getAccess()
+    {
+        return $this->access;
+    }
 
 
 
-      /**
-       * Directive OnUpdate handler
-       *
-       * @access private
-       * @var     string
-       */
-      protected $onupdate;
+    /**
+     * Directive OnUpdate handler
+     *
+     * @access private
+     * @var     string
+     */
+    protected $onupdate;
       
-      /**
-       * Set method for OnUpdate handler
-       *
-       * @access public
-       * @param string C function name
-       */
-      function setOnUpdate($name)
-      {
-          if (!self::isName($name)) {
-              return PEAR::raiseError("'$name' is not a valid update function name");
-          }
+    /**
+     * Set method for OnUpdate handler
+     *
+     * @access public
+     * @param string C function name
+     */
+    function setOnUpdate($name)
+    {
+        if (!self::isName($name)) {
+            return PEAR::raiseError("'$name' is not a valid update function name");
+        }
           
-          $this->onupdate = $name;
+        $this->onupdate = $name;
           
-          return true;
-      }
+        return true;
+    }
       
-      /**
-       * Get method for update handler
-       *
-       * @access public
-       * @return string
-       */
-      function getOnupdate()
-      {
-          return $this->onupdate;
-      }
+    /**
+     * Get method for update handler
+     *
+     * @access public
+     * @return string
+     */
+    function getOnupdate()
+    {
+        return $this->onupdate;
+    }
 
 
 
@@ -317,7 +317,7 @@ require_once "CodeGen/PECL/Element.php";
      */
     function __construct() 
     {
-      $this->setType("string");
+        $this->setType("string");
     }
 
 
@@ -332,21 +332,21 @@ require_once "CodeGen/PECL/Element.php";
      */
     static function cCodeHeader($name) 
     {
-            // this is a small incompatibility between ZE1 and ZE2 APIs
-            // "OnUpdateInt" was changed to "OnUpdateLong" as it actualy
-            // works on C type "long", not "int"
-            // the actual implementation didn't change so it is safe to
-            // just revert the name change using a cpp #define
-            // TODO: skip this for extensions that depend on PHP 5 anyway
-            $code = "
+        // this is a small incompatibility between ZE1 and ZE2 APIs
+        // "OnUpdateInt" was changed to "OnUpdateLong" as it actualy
+        // works on C type "long", not "int"
+        // the actual implementation didn't change so it is safe to
+        // just revert the name change using a cpp #define
+        // TODO: skip this for extensions that depend on PHP 5 anyway
+        $code = "
 #ifndef ZEND_ENGINE_2
 #define OnUpdateLong OnUpdateInt
 #endif
 ";
 
-      $code .="PHP_INI_BEGIN()\n";
+        $code .="PHP_INI_BEGIN()\n";
             
-            return $code;
+        return $code;
     }
 
     /**
@@ -391,7 +391,7 @@ require_once "CodeGen/PECL/Element.php";
     static function docHeader($name) 
     {
         return
-"    <table>
+            "    <table>
      <title>$name runtime configuration</title>
       <tgroup cols='3'>
        <thead>
@@ -415,7 +415,7 @@ require_once "CodeGen/PECL/Element.php";
     function docEntry($base) 
     {
         return 
-"    <row>
+            "    <row>
      <entry>$this->name</entry>
      <entry>$this->value</entry>
      <entry>$this->desc</entry>
@@ -433,11 +433,19 @@ require_once "CodeGen/PECL/Element.php";
     static function docFooter() 
     {
         return
-"     </tbody>
+            "     </tbody>
     </tgroup>
    </table>
 ";
     }
-  }
+}
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * indent-tabs-mode:nil
+ * End:
+ */
 
 ?>

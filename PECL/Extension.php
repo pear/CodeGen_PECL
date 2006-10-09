@@ -540,7 +540,7 @@ class CodeGen_PECL_Extension
         
         // purge and create extension directory
         if ($dirpath !== ".") {
-            if (!$force && file_exists($dirpath))  {
+            if (!$force && file_exists($dirpath)) {
                 return PEAR::raiseError("'$dirpath' already exists, can't create that directory (use '--force' to override)"); 
             } else if (!@System::mkdir("-p $dirpath")) {
                 return PEAR::raiseError("can't create '$dirpath'");
@@ -588,7 +588,7 @@ class CodeGen_PECL_Extension
         $this->writeHeaderFile();
         $this->writeCodeFile();
 
-        foreach($this->logos as $logo) {
+        foreach ($this->logos as $logo) {
             $fp = new CodeGen_Tools_FileReplacer("{$this->dirpath}/".$logo->getName()."_logos.h");
             $fp->puts($logo->hCode());
             $fp->close();
@@ -858,9 +858,10 @@ pdf: manual.tex
         @mkdir("$docdir/$idName/functions");
         foreach ($this->functions as $name => $function) {
             $functionId = strtolower(str_replace("_", "-", $name));
-            $filepath = "$idName/functions/$functionId.xml";
+            $filepath   = "$idName/functions/$functionId.xml";
 
             $entity = "reference.$idName.functions.$functionId";
+
             $function_entities[] = $entity;
             $entities->puts("<!ENTITY $entity SYSTEM './$filepath'>\n");
 
@@ -895,10 +896,9 @@ pdf: manual.tex
      * @return string  zend_module_entry code fragment
      */
     function generateExtensionEntry() {
-        $name = $this->name;
+        $name   = $this->name;
         $upname = strtoupper($this->name);
-
-        $code = "";
+        $code   = "";
 
         if (empty($this->otherExtensions)) {
            $moduleHeader = "    STANDARD_MODULE_HEADER,";
@@ -1327,7 +1327,7 @@ PHP_MINIT_FUNCTION({$this->name})
 ";
 
         if (count($this->globals)) {
-            $code .= "    ZEND_INIT_MODULE_GLOBALS({$this->name}, php_{$this->name}_init_globals, php_{$this->name}_shutdown_globals)\n";
+            $code      .= "    ZEND_INIT_MODULE_GLOBALS({$this->name}, php_{$this->name}_init_globals, php_{$this->name}_shutdown_globals)\n";
             $need_block = true;
         }
 
@@ -1464,8 +1464,7 @@ PHP_MINFO_FUNCTION({$this->name})
     php_info_print_box_start(0);
 ";
 
-        foreach ($this->logos as $logo)
-        {
+        foreach ($this->logos as $logo) {
             $code.= $logo->phpinfoCode($this->name);
         }
 
@@ -1517,7 +1516,8 @@ PHP_MINFO_FUNCTION({$this->name})
      * @access private
      * @return string  code snippet
      */
-    function publicFunctionsC() {
+    function publicFunctionsC() 
+    {
         $code = "";
 
         foreach ($this->functions as $function) {
@@ -1538,7 +1538,8 @@ PHP_MINFO_FUNCTION({$this->name})
      * @access private
      * @param  string  directory to write to
      */
-    function writeCodeFile() {
+    function writeCodeFile() 
+    {
         $filename = "{$this->name}.{$this->language}";  // todo extension logic
 
         $upname = strtoupper($this->name);
@@ -1614,7 +1615,8 @@ PHP_MINFO_FUNCTION({$this->name})
      * @access private
      * @param  string  directory to write to
      */
-    function writeConfigM4() {
+    function writeConfigM4() 
+    {
         $upname = strtoupper($this->name);
 
         $this->addPackageFile("conf", "config.m4");
@@ -1652,7 +1654,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
         }
 
         $pathes = array();
-        foreach($this->headers as $header) {
+        foreach ($this->headers as $header) {
            $pathes[$header->getPath()] = true; // TODO WTF???
         }
        
@@ -1674,7 +1676,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
                 $this->terminate("global headers not bound to a --with option found and no --with option by the default name");
             }
 
-            foreach($this->headers as $header) {
+            foreach ($this->headers as $header) {
                 echo $header->configm4($this->name, $this->name);
             }
         }  
@@ -1707,7 +1709,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
             echo "  PHP_ADD_MAKEFILE_FRAGMENT\n";
 
             $frag = new CodeGen_Tools_FileReplacer($this->dirpath."/Makefile.frag");
-            foreach($this->makefragments as $block) {
+            foreach ($this->makefragments as $block) {
                 $frag->puts(CodeGen_Tools_IndentC::tabify("\n$block\n"));
             }
             $frag->close();
@@ -1737,7 +1739,8 @@ fi
      * @access private
      * @param  string  directory to write to
      */
-    function writeConfigW32() {
+    function writeConfigW32() 
+    {
         // TODO fragments
         $upname = strtoupper($this->name);
 
@@ -1770,7 +1773,7 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
             echo $lib->configw32($this->name, $this->name);
         }
 
-        foreach($this->headers as $header) {
+        foreach ($this->headers as $header) {
             echo $header->configw32($this->name, $this->name);
         }
 
@@ -1981,7 +1984,7 @@ SOURCE=$filename
             $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/CREDITS");
             $fp->puts("{$this->name}\n");
             $names = array();
-            foreach($this->authors as $author) {
+            foreach ($this->authors as $author) {
                 $names[] = $author->getName();
             }
             $fp->puts(join(", ", $names) . "\n"); 
@@ -2031,7 +2034,7 @@ you have been warned!
             }
         }
 
-        foreach (array("conf", "code", "header") as $type) { 
+        foreach (array("conf", "code", "header") as $type) {
             foreach ($this->packageFiles[$type] as $basename => $filepath) {
                 $code.= "      <file role='src' name='$basename'/>\n";
             }
@@ -2227,7 +2230,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
      * @access public
      * @param  object  a Test object
      */
-    function addTest(CodeGen_PECL_Element_Test $test) {
+    function addTest(CodeGen_PECL_Element_Test $test) 
+    {
         $name = $test->getName();
        
         if (isset($this->testcases[$name])) {
@@ -2243,7 +2247,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
      *
      * @access private
      */
-    function writeTestFiles() {
+    function writeTestFiles() 
+    {
         $testCount=0;
         @mkdir($this->dirpath."/tests");
     
@@ -2373,7 +2378,7 @@ of phpinfo();
      */
     function minPhpVersion()
     {
-        if (!empty($this->otherExtensions)) {       
+        if (!empty($this->otherExtensions)) {
             return "5.1.0rc1";
         }
 
@@ -2405,7 +2410,7 @@ sgml-indent-step:1
 sgml-indent-data:t
 indent-tabs-mode:nil
 sgml-parent-document:nil
-sgml-default-dtd-file:"'.str_repeat("../",$level).'manual.ced"
+sgml-default-dtd-file:"'.str_repeat("../", $level).'manual.ced"
 sgml-exposed-tags:nil
 sgml-local-catalogs:nil
 sgml-local-ecat-files:nil

@@ -200,7 +200,8 @@ class CodeGen_PECL_Element_Resource
      * @access public
      * @return string C code snippet
      */
-    function minitCode() {
+    function minitCode() 
+    {
         $code = $this->ifConditionStart();
 
         $code.= "
@@ -236,7 +237,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      */
     static function cCodeFooter($name) 
     {
-      return "/* }}} *\n\n";
+        return "/* }}} *\n\n";
     }
 
     /** 
@@ -246,7 +247,8 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @param  object extension
      * @return string C code snippet
      */
-    function cCode($extension) {
+    function cCode($extension) 
+    {
         $code = $this->ifConditionStart();
 
         $code.= "int le_{$this->name};\n";
@@ -285,7 +287,8 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @access public
      * @return string C code snippet
      */
-    function hCode() {
+    function hCode() 
+    {
         $upname = strtoupper($this->name);
         
         $code = $this->ifConditionStart();
@@ -310,7 +313,8 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @access public
      * @return string autoconf code snippet
      */
-    function configm4($extension_name) {
+    function configm4($extension_name) 
+    {
         if ($this->ifCondition) {
             return ""; // TODO implement more clever checking
         }
@@ -327,7 +331,8 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @param  string id basename for extension
      * @return string DocBook XML code snippet
      */
-    function docEntry($base) {
+    function docEntry($base) 
+    {
         return "
     <section id='$base.resources.{$this->name}'>
      <title><literal>{$this->name}</literal></title>

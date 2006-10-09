@@ -74,7 +74,7 @@ class CodeGen_PECL_Command
                                                       "linespecs",
                                                       "no-help",
                                                       "proto=",
-                                                      "skel="    , 
+                                                      "skel=", 
                                                       "stubs=",  
                                                       "xml==")); 
 
@@ -153,7 +153,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
         echo "\n\n/*----------------------------------------------------------------------*/\n\n";
         
         foreach ($this->extension->functions as $name => $function) {
-            echo sprintf("\tPHP_FE(%-20s, NULL)\n",$name);
+            echo sprintf("\tPHP_FE(%-20s, NULL)\n", $name);
         }
         
         echo "\n\n/*----------------------------------------------------------------------*/\n\n";
@@ -211,7 +211,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
             
             foreach ($this->extension->functions as $name => $function) {
-                fputs($fp, sprintf("\tPHP_FE(%-20s, NULL)\n",$name));
+                fputs($fp, sprintf("\tPHP_FE(%-20s, NULL)\n", $name));
             }
             
             fputs($fp, "\n\n/*----------------------------------------------------------------------*/\n\n");
@@ -223,7 +223,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             fclose($fp);
             
             echo "$stubname successfully written\n";
-        } else { 
+        } else {
             if (file_exists("./$extname")  && !$this->options->have("f", "force")) {
                 $command->terminate("'$extname' already exists, can't create directory (use '--force' to override)"); 
             }

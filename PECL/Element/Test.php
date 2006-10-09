@@ -59,7 +59,8 @@ class CodeGen_PECL_Element_Test
      *
      * @access public
      * @return string  value of
-     */ function setName($name) 
+     */ 
+    function setName($name) 
     {
         if (! preg_match('|^[\w-]+$|i', $name)) {
             return PEAR::raiseError("'$name' is not a valid test case basename");

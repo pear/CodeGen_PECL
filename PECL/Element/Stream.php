@@ -155,7 +155,8 @@ class CodeGen_PECL_Element_Stream
      * @access public
      * @return string C code snippet
      */
-    function minitCode() {
+    function minitCode() 
+    {
         return "/* ".$this->name." stream goes here */\n";
     }
 
@@ -167,7 +168,8 @@ class CodeGen_PECL_Element_Stream
      * @param  object extension
      * @return string C code snippet
      */
-    function cCode($extension) {
+    function cCode($extension) 
+    {
         ob_start();
 
         echo "static php_stream_ops php_{$this->name}_stream_ops = {\n";
@@ -215,7 +217,8 @@ class CodeGen_PECL_Element_Stream
      * @access public
      * @return string C code snippet
      */
-    function hCode() {
+    function hCode() 
+    {
         return "/* ".$this->name." stream goes here */\n";
     }
 
@@ -228,7 +231,8 @@ class CodeGen_PECL_Element_Stream
      * @param  string id basename for extension
      * @return string DocBook XML code snippet
      */
-    function docEntry($base) {
+    function docEntry($base) 
+    {
         return "   ";
     }
     

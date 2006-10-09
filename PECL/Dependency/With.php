@@ -371,7 +371,7 @@ class CodeGen_PECL_Dependency_With
     PHP_{$withUpname}_DIR=\"\$PHP_$withUpname\"
   else
     AC_MSG_CHECKING(for ".$this->name." in default path)
-    for i in ".str_replace(":"," ",$this->getDefaults())."; do
+    for i in ".str_replace(":", " ", $this->getDefaults())."; do
       if test -r \"\$i/".$this->testfile."\"; then
         PHP_{$withUpname}_DIR=\$i
         AC_MSG_RESULT(found in \$i)
@@ -387,7 +387,7 @@ class CodeGen_PECL_Dependency_With
             }
             
             $pathes = array();
-            foreach($this->getHeaders() as $header) {
+            foreach ($this->getHeaders() as $header) {
               $pathes[$header->getPath()] = true;
             }
             foreach (array_keys($pathes) as $path) {
@@ -400,7 +400,7 @@ class CodeGen_PECL_Dependency_With
         $code.= "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
         $code.= "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
         
-        foreach($this->headers as $header) {
+        foreach ($this->headers as $header) {
             $code.= $header->configm4($extName, $this->name);
         }  
 

@@ -47,7 +47,7 @@ class CodeGen_PECL_Dependency_Header
      */
     function configm4($extname, $withname)
     {
-        $upname = strtoupper($extname);
+        $upname     = strtoupper($extname);
         $withUpname = strtoupper($withname);
         return "  AC_CHECK_HEADER([{$this->name}], [], AC_MSG_ERROR('{$this->name}' header not found))\n";
     }

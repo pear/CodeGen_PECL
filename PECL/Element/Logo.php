@@ -110,11 +110,11 @@ class CodeGen_PECL_Element_Logo
             // perform a little magic
             // we only accept GIF, PNG and JPEG here, so we can test 
             // for the 'magic' signatures ourself
-            if (!strncmp("GIF8", $data, 4)) { 
+            if (!strncmp("GIF8", $data, 4)) {
                 $this->mimetype = "image/gif";
-            } else if(!strncmp(chr(0x89)."PNG\r\n", $data, 6)) {
+            } else if (!strncmp(chr(0x89)."PNG\r\n", $data, 6)) {
                 $this->mimetype = "image/png";
-            } else if(ord($data[0]) == 0xff && ord($data[1]) == 0xd8) {
+            } else if (ord($data[0]) == 0xff && ord($data[1]) == 0xd8) {
                 $this->mimetype = "image/jpeg";
             } else {
                 return PEAR::raiseError("can't detect mimetype for logo image data, pease add 'mimetype=...' attribute");
@@ -220,7 +220,7 @@ static unsigned char {$this->name}_logo[] = {
         $code = " ";
         $i=0;
         for ($n = 0; $n < $len; $n++) {
-            $code .= sprintf(" %3d",ord($this->data[$n]));
+            $code .= sprintf(" %3d", ord($this->data[$n]));
             if ($n == $len - 1) break;
             $code .=  ",";
             if (++$i==8) {

@@ -225,8 +225,7 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
 
         if (!empty($types)) {
             $types = (array)$types;
-            if (!in_array($this->type, $types))
-            {
+            if (!in_array($this->type, $types)) {
                 return "";
             }
         }
