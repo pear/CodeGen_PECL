@@ -552,7 +552,7 @@ class CodeGen_PECL_Element_Function
                 $name .= $char;
             } else if ($char == '.' && $proto{$n+1} == '.' && $proto{$n+2} == '.') {
                 $name = "...";
-                $n += 2;
+                $n    += 2;
             } else {
                 if ($name) $tokens[] = $name;
                 $name = "";
@@ -577,7 +577,7 @@ class CodeGen_PECL_Element_Function
 
         if ($returnType === "resource" && $tokens[$n] !== "(") {
             $returnSubtype = $functionName;
-            $functionName = $tokens[$n++];
+            $functionName  = $tokens[$n++];
         }
 
         // function name is not really used, taken from <function> tag instead
@@ -1012,15 +1012,15 @@ class CodeGen_PECL_Element_Function
                     }
 
                     if (isset($param['optional']) && !$optional) {
-                        $optional = true;
+                        $optional   = true;
                         $argString .= "|";
                     }
 
                     switch ($param['type']) {
                     case "bool":
                         $argString .= "b";
-                        $default = $this->defaultval($param, "0");
-                        $code .= "    zend_bool $name = $default;\n";
+                        $default    = $this->defaultval($param, "0");
+                        $code      .= "    zend_bool $name = $default;\n";
                         break;
 
                     case "int":
@@ -1116,23 +1116,23 @@ class CodeGen_PECL_Element_Function
                         break;
 
                     case "stream":
-                        $zvalType = true;
-                        $argString .= "r";
-                        $code .= "    zval * {$name}_zval = NULL;\n";
-                        $code .= "    php_stream * $name = NULL:\n";
-                        $postProcess.= "    php_stream_from_zval($name, &_z$name);\n"; 
+                        $zvalType     = true;
+                        $argString   .= "r";
+                        $code        .= "    zval * {$name}_zval = NULL;\n";
+                        $code        .= "    php_stream * $name = NULL:\n";
+                        $postProcess .= "    php_stream_from_zval($name, &_z$name);\n"; 
                         break;
 
                     case "callback": 
-                        $postProcess.= "    if (!zend_is_callable({$name}, 0, NULL)) {\n";
-                        $postProcess.= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
-                        $postProcess.= "      return;";
-                        $postProcess.= "    }\n";
+                        $postProcess .= "    if (!zend_is_callable({$name}, 0, NULL)) {\n";
+                        $postProcess .= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
+                        $postProcess .= "      return;";
+                        $postProcess .= "    }\n";
                         /* fallthru */
                     case "mixed":
                         $zvalType = true;
                         $argString .= "z";
-                        $code .= "    zval * {$name} = NULL;\n";
+                        $code      .= "    zval * {$name} = NULL;\n";
                         break;                          
                     }
 
@@ -1436,7 +1436,7 @@ class CodeGen_PECL_Element_Function
         $code = "";
 
         // generate refargs mask if needed
-        if ($this->hasRefArgs) {   
+        if ($this->hasRefArgs) {
             $code.= "ZEND_BEGIN_ARG_INFO({$this->name}_arg_info, 0)\n";
             foreach ($this->params as $param) {
                 $code.= "  ZEND_ARG_PASS_INFO(". (isset($param["byRef"]) ? 1 : 0) .")\n";

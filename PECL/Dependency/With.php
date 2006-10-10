@@ -217,15 +217,15 @@ class CodeGen_PECL_Dependency_With
      */
     function setMode($mode)
     {
-      switch ($mode) {
-      case "default":
-      case "pkg-config":
-        $this->mode = $mode;
-        return true;
+        switch ($mode) {
+        case "default":
+        case "pkg-config":
+            $this->mode = $mode;
+            return true;
 
-      default:
-        return PEAR::raiseError("'$mode' is not a valid <with> mode");
-      }
+        default:
+            return PEAR::raiseError("'$mode' is not a valid <with> mode");
+        }
     }
     
     /**
@@ -302,13 +302,13 @@ class CodeGen_PECL_Dependency_With
      */
     function m4Line() 
     {
-      $optname = str_replace("_", "-", $this->name);
+        $optname = str_replace("_", "-", $this->name);
 
-      return sprintf("PHP_ARG_WITH(%s, %s,[  %-20s With %s support])\n",
-                     $optname,
-                     $this->getSummary(),
-                     sprintf("--with-%s[=DIR]", $optname),
-                     $this->name);
+        return sprintf("PHP_ARG_WITH(%s, %s,[  %-20s With %s support])\n",
+                       $optname,
+                       $this->getSummary(),
+                       sprintf("--with-%s[=DIR]", $optname),
+                       $this->name);
     }
 
     
@@ -332,7 +332,7 @@ class CodeGen_PECL_Dependency_With
         
         switch ($this->mode) {
         case "pkg-config":
-          $code.= "  
+            $code.= "  
   if test -z \"\$PKG_CONFIG\"
   then
     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -348,25 +348,25 @@ class CodeGen_PECL_Dependency_With
   fi
 ";
 
-          if ($this->version) {
-            $code .= "
+            if ($this->version) {
+                $code .= "
   if ! \$PKG_CONFIG --atleast-version {$this->version} $withName
   then
     PKG_VERSION=`\$PKG_CONFIG --modversion $withName`
     AC_MSG_ERROR(['$withName'\ is version \$PKG_VERSION, {$this->version} required])
   fi
 ";
-          }
+            }
 
-          $code .= "
+            $code .= "
   PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $withName`)
   PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $withName`, {$extUpname}_SHARED_LIBADD)
 ";
-          break;
+            break;
 
         default:
             if ($this->testfile) {
-            $code.= "
+                $code.= "
   if test -r \"\$PHP_$withUpname/".$this->testfile."\"; then
     PHP_{$withUpname}_DIR=\"\$PHP_$withUpname\"
   else
@@ -388,10 +388,10 @@ class CodeGen_PECL_Dependency_With
             
             $pathes = array();
             foreach ($this->getHeaders() as $header) {
-              $pathes[$header->getPath()] = true;
+                $pathes[$header->getPath()] = true;
             }
             foreach (array_keys($pathes) as $path) {
-              $code .="  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
+                $code .="  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
             }       
             break;
         }
@@ -415,4 +415,11 @@ class CodeGen_PECL_Dependency_With
     
 }
 
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * indent-tabs-mode:nil
+ * End:
+ */
 ?>

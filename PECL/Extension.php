@@ -757,12 +757,12 @@ pdf: manual.tex
             $const_groups = array();
 
             foreach ($this->constants as $constant) {
-              $const_groups[$constant->getGroup()][] = $constant;
+                $const_groups[$constant->getGroup()][] = $constant;
             }
 
             foreach ($const_groups as $group => $constants) {
                 if ($group == "default") {
-                  $group = $idName;
+                    $group = $idName;
                 }
 
                 $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
@@ -832,7 +832,7 @@ pdf: manual.tex
                         $fp->puts("    <para>\n".rtrim($with->summary)."\n    </para>\n");
                     }
                 } else {
-                   $fp->puts("    <para>Requires <literal>".$with->getName()."</literal></para>\n");
+                    $fp->puts("    <para>Requires <literal>".$with->getName()."</literal></para>\n");
                 } 
             }
         }
@@ -878,7 +878,7 @@ pdf: manual.tex
         $functionsXml = new CodeGen_Tools_FileReplacer($docdir."/functions.xml");
         sort($function_entities);
         foreach ($function_entities as $entity) {
-          $functionsXml->puts(" &$entity;\n");
+            $functionsXml->puts(" &$entity;\n");
         }
         $functionsXml->close();
     }
@@ -895,21 +895,22 @@ pdf: manual.tex
      * @access private
      * @return string  zend_module_entry code fragment
      */
-    function generateExtensionEntry() {
+    function generateExtensionEntry() 
+    {
         $name   = $this->name;
         $upname = strtoupper($this->name);
         $code   = "";
 
         if (empty($this->otherExtensions)) {
-           $moduleHeader = "    STANDARD_MODULE_HEADER,";
+            $moduleHeader = "    STANDARD_MODULE_HEADER,";
         } else {
-           $code.= CodeGen_PECL_Dependency_Extension::cCodeHeader($this);
-           foreach ($this->otherExtensions as $ext) {
-               $code.= $ext->cCode($this);
-           }
-           $code.= CodeGen_PECL_Dependency_Extension::cCodeFooter($this);
+            $code.= CodeGen_PECL_Dependency_Extension::cCodeHeader($this);
+            foreach ($this->otherExtensions as $ext) {
+                $code.= $ext->cCode($this);
+            }
+            $code.= CodeGen_PECL_Dependency_Extension::cCodeFooter($this);
 
-           $moduleHeader = 
+            $moduleHeader = 
 "#if ZEND_EXTENSION_API_NO >= 220050617
         STANDARD_MODULE_HEADER_EX, NULL,
         {$this->name}_deps,
@@ -1332,12 +1333,12 @@ PHP_MINIT_FUNCTION({$this->name})
         }
 
         if (count($this->phpini)) {
-            $code .= "    REGISTER_INI_ENTRIES();\n";
+            $code      .= "    REGISTER_INI_ENTRIES();\n";
             $need_block = true;
         }
            
         foreach ($this->logos as $logo) {
-            $code .= $this->codegen->block($logo->minitCode());
+            $code      .= $this->codegen->block($logo->minitCode());
             $need_block = true;
         }
             
@@ -1356,24 +1357,24 @@ PHP_MINIT_FUNCTION({$this->name})
         }
 
         if (count($this->classes)) {
-          foreach ($this->classes as $class) {
-            $code .= $this->codegen->block($class->minitCode($this));
-          }
-          $need_block = true;
+            foreach ($this->classes as $class) {
+                $code .= $this->codegen->block($class->minitCode($this));
+            }
+            $need_block = true;
         }
 
         if (count($this->interfaces)) {
-          foreach ($this->interfaces as $interface) {
-              $code .= $this->codegen->block($interface->minitCode($this));
-          }
-          $need_block = true;
+            foreach ($this->interfaces as $interface) {
+                $code .= $this->codegen->block($interface->minitCode($this));
+            }
+            $need_block = true;
         }
             
         if (count($this->streams)) {
-          foreach ($this->streams as $stream) {
-            $code .= $this->codegen->block($stream->minitCode($this));
-          }
-          $need_block = true;
+            foreach ($this->streams as $stream) {
+                $code .= $this->codegen->block($stream->minitCode($this));
+            }
+            $need_block = true;
         }
             
         if (isset($this->internalFunctions['MINIT'])) {
@@ -1395,7 +1396,7 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
 ";
             
         if (count($this->phpini)) {
-            $code .= "    UNREGISTER_INI_ENTRIES();\n";
+            $code      .= "    UNREGISTER_INI_ENTRIES();\n";
             $need_block = true;
         }
 
@@ -1428,7 +1429,7 @@ PHP_RINIT_FUNCTION({$this->name})
         if (isset($this->internalFunctions['RINIT'])) {
             $code .= $this->codegen->block($this->internalFunctions['RINIT']->getCode());
         } else {
-          $code .= "    /* add your stuff here */\n";
+            $code .= "    /* add your stuff here */\n";
         }
 
         $code .= "
@@ -1530,7 +1531,7 @@ PHP_MINFO_FUNCTION({$this->name})
     // }}} 
 
 
-  // {{{ code file
+    // {{{ code file
 
     /**
      * Write the complete C code file
@@ -1650,12 +1651,12 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
 
         foreach ($this->with as $with) {
-           echo $with->configm4($this);
+            echo $with->configm4($this);
         }
 
         $pathes = array();
         foreach ($this->headers as $header) {
-           $pathes[$header->getPath()] = true; // TODO WTF???
+            $pathes[$header->getPath()] = true; // TODO WTF???
         }
        
         foreach (array_keys($pathes) as $path) {

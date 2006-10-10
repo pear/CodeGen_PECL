@@ -187,7 +187,8 @@ class CodeGen_PECL_Element_Property
      * @access public
      * @return string
      */
-    function minitCode($classptr) {
+    function minitCode($classptr) 
+    {
         $code = $this->ifConditionStart();
 
         $code.= "    zend_declare_property_{$this->type}({$classptr}, \n";

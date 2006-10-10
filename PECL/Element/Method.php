@@ -188,7 +188,7 @@ class CodeGen_PECL_Element_Method
             $code.= "\n    _this_zval = getThis();\n";
         } else {
             $code = "
-    if (zend_parse_method_parameters($argc TSRMLS_CC, getThis(), \"$argString\", ".join(", ",$argPointers).") == FAILURE) {
+    if (zend_parse_method_parameters($argc TSRMLS_CC, getThis(), \"$argString\", ".join(", ", $argPointers).") == FAILURE) {
         return;
     }
 
@@ -242,7 +242,7 @@ class CodeGen_PECL_Element_Method
         }
             
         if ($this->name != "__construct") {
-            $param = array();
+            $param            = array();
             $param['name']    = "_this_zval";
             $param['type']    = "object";
             $param['subtype'] = $this->classname;
