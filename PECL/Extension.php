@@ -376,6 +376,22 @@ class CodeGen_PECL_Extension
     }
 
     /**
+     * Get a specific resource by name
+     *
+     * @access public
+     * @param  string  resource name
+     * @return object  resource object or false if not found
+     */
+    function getResource($name)
+    {
+        if (isset($this->resources[$name])) {
+            return $this->resources[$name];
+        }
+
+        return false;
+    }
+
+    /**
      * Get PHP constants 
      *
      * @access public
@@ -384,6 +400,22 @@ class CodeGen_PECL_Extension
     function getConstants()
     {
         return $this->constants;
+    }
+
+    /**
+     * Get a specific constant by name
+     *
+     * @access public
+     * @param  string  constant name
+     * @return object  constant object or false if not found
+     */
+    function getConstant($name)
+    {
+        if (isset($this->constants[$name])) {
+            return $this->constants[$name];
+        }
+
+        return false;
     }
 
     

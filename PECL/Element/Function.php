@@ -492,8 +492,8 @@ class CodeGen_PECL_Element_Function
                         break;                          
                     default:
                         // now see if this is a constand defined by this extension
-                        $constants = $extension->getConstants();
-                        if (isset($constants[$token])) {
+                        $constant = $extension->getConstant($token);
+                        if ($constant) {
                             $param["default"] = $constants[$token]->getValue();
                         } else {
                             return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
@@ -941,15 +941,16 @@ class CodeGen_PECL_Element_Function
         $returns = explode(" ", $this->returns);
 
         // for functions returning a named resource we create payload pointer variable
-        $resources = $extension->getResources();
         if ($returns[0] === "resource") {
-            if (isset($returns[1]) && isset($resources[$returns[1]])) {
-                $resource = $resources[$returns[1]];
-                $payload  = $resource->getPayload();
-                if ($resource->getAlloc()) {
-                    $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
-                } else {
-                    $code .= "    $payload * return_res;\n";
+            if (isset($returns[1])) {
+                $resource = $extension->getResource($returns[1]);
+                if ($resource) {
+                    $payload  = $resource->getPayload();
+                    if ($resource->getAlloc()) {
+                        $code .= "    $payload * return_res = ($payload *)ecalloc(1, sizeof($payload));\n";
+                    } else {
+                        $code .= "    $payload * return_res;\n";
+                    }
                 }
             } else {
                 $code .= "    void * return_res;\n";
@@ -1084,6 +1085,7 @@ class CodeGen_PECL_Element_Function
 
                     case "resource":
                         $zvalType   = true;
+                        $resource   = false;
                         $argString .= "r";
 
                         if ($extension->haveVersion("1.0.0alpha")) {
@@ -1099,9 +1101,11 @@ class CodeGen_PECL_Element_Function
                         $code .= "    zval * $resVar = NULL;\n";
                         $code .= "    int $idVar = -1;\n";
 
-                        $resources = $extension->getResources();
-                        if (isset($param['subtype']) && isset($resources[$param['subtype']])) {
-                            $resource = $resources[$param['subtype']];
+                        if (isset($param['subtype'])) {
+                            $resource = $extension->getResource($param['subtype']);                            
+                        }
+
+                        if ($resource) {
                             if ($extension->haveVersion("1.0.0dev")) {
                                 $varname = $name;
                             } else {
