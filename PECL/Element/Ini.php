@@ -358,7 +358,7 @@ class CodeGen_PECL_Element_Ini
      */
     function cCode($name) 
     {
-        $code = $this->ifCondtionStart();
+        $code = $this->ifConditionStart();
      
         $code.= "  STD_PHP_INI_ENTRY(\"$name.{$this->name}\", \"{$this->value}\", {$this->access}, {$this->onupdate}, {$this->name}, zend_{$name}_globals, {$name}_globals)\n";
 
