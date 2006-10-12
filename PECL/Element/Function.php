@@ -26,6 +26,9 @@ require_once "CodeGen/PECL/Element.php";
 
 require_once "CodeGen/Tools/Tokenizer.php";
 
+require_once "CodeGen/PECL/Tools/ProtoLexer.php";
+require_once "CodeGen/PECL/Tools/ProtoParser.php";
+
 /**
  * Class describing a function within a PECL extension 
  *
@@ -213,7 +216,7 @@ class CodeGen_PECL_Element_Function
      *
      * @var     string
      */
-    protected $returns = "void";
+    protected $returns = array();
 
     /**
      * Function parameters (parsed from proto)
@@ -221,13 +224,6 @@ class CodeGen_PECL_Element_Function
      * @var     array
      */
     protected $params = array();
-
-    /**
-     * Number of optional parameters (parsed from proto)
-     *
-     * @var     int
-     */
-    protected $optional = 0;
 
     /**
      * Does this function have by-reference parameters?
@@ -240,13 +236,16 @@ class CodeGen_PECL_Element_Function
      * Set parameter and return value information from PHP style prototype
      *
      * @param  string  PHP style prototype 
+     * @param  object  Extension object owning this function
      * @return bool    Success status
      */
     function setProto($proto, $extension) 
     {
         $this->proto = $proto;
 
-        if ($extension->haveVersion("0.9.0rc1")) {
+        if ($extension->haveVersion("1.1.0")) {
+            $stat = $this->newSetProto2($proto, $extension);
+        } else if ($extension->haveVersion("0.9.0rc1")) {
             $stat = $this->newSetProto($proto, $extension);
         } else {
             $stat = $this->oldSetProto($proto);
@@ -258,7 +257,32 @@ class CodeGen_PECL_Element_Function
     /**
      * Set parameter and return value information from PHP style prototype
      *
+     * new (and hopefully final) version using a PHP_LexerGenerator and
+     * PHP_ParserGenerator generated prototype parser
+     *
      * @param  string  PHP style prototype 
+     * @param  object  Extension object owning this function
+     * @return bool    Success status
+     */
+    protected function newSetProto2($proto, $extension) 
+    {
+        try {
+            $lex    = new CodeGen_PECL_Tools_ProtoLexer($proto);
+            $parser = new CodeGen_PECL_Tools_ProtoParser($extension, $this);
+            while ($lex->yylex()) {
+                $parser->doParse($lex->token, $lex->value);
+            }
+            $parser->doParse(0, 0);
+        } catch (Exception $e) {
+            return PEAR::raiseError($e->getMessage());
+        }
+    }
+
+    /**
+     * Set parameter and return value information from PHP style prototype
+     *
+     * @param  string  PHP style prototype 
+     * @param  object  Extension object owning this function
      * @return bool    Success status
      */
     protected function newSetProto($proto, $extension) 
@@ -494,7 +518,7 @@ class CodeGen_PECL_Element_Function
                         // now see if this is a constand defined by this extension
                         $constant = $extension->getConstant($token);
                         if ($constant) {
-                            $param["default"] = $constants[$token]->getValue();
+                            $param["default"] = $constant->getValue();
                         } else {
                             return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
                         }
@@ -516,18 +540,17 @@ class CodeGen_PECL_Element_Function
             $params[] = $param;
         }
 
-        $this->returns  = $returnType;
+        $this->returns['type']  = $returnType;
 
         if (isset($returnSubtype)) {
-            $this->returns .= " $returnSubtype";
+            $this->returns['subtype'] = $returnSubtype;
         }
 
         if (isset($returnByRef)) {
-            $this->returns .= " &";
+            $this->returns["byRef"] = true;
         }
 
         $this->params   = $params;
-        $this->optional = $optionals;
         $this->vararg   = $vararg;
 
         return true;
@@ -662,14 +685,13 @@ class CodeGen_PECL_Element_Function
             return PEAR::raiseError("')' expected instead of '$tokens[$n]'");
         }
 
-        $this->returns  = $returnType;
+        $this->returns['type']  = $returnType;
 
         if (isset($returnSubtype)) {
-            $this->returns .= " $returnSubtype";
+            $this->returns['subtype'] = $returnSubtype;
         }
 
         $this->params   = $params;
-        $this->optional = $numopts;
 
         return true;
     }
@@ -938,12 +960,10 @@ class CodeGen_PECL_Element_Function
     {
         $code = "";
 
-        $returns = explode(" ", $this->returns);
-
         // for functions returning a named resource we create payload pointer variable
-        if ($returns[0] === "resource") {
-            if (isset($returns[1])) {
-                $resource = $extension->getResource($returns[1]);
+        if ($this->returns['type'] === "resource") {
+            if (isset($this->returns['subtype'])) {
+                $resource = $extension->getResource($this->returns['subtype']);
                 if ($resource) {
                     $payload  = $resource->getPayload();
                     if ($resource->getAlloc()) {
@@ -970,8 +990,6 @@ class CodeGen_PECL_Element_Function
     function cCode($extension) 
     {
         $code = "\n";
-
-        $returns = explode(" ", $this->returns);
 
         switch ($this->role) {
         case "public":
@@ -1176,7 +1194,7 @@ class CodeGen_PECL_Element_Function
             }
                     
             // for functions returning an array we initialize return_value
-            if ($returns[0] === "array") {
+            if ($this->returns['type'] === "array") {
                 $code.="    array_init(return_value);\n\n";
             }
 
@@ -1200,14 +1218,15 @@ class CodeGen_PECL_Element_Function
                 $code .= $extension->codegen->varblock($this->code);
 
                 // when a function returns a named resource we know what to do
-                if ($returns[0] == "resource" && isset($returns[1])) {
-                    $code .= "    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_$returns[1]);\n";
+                if ($this->returns['type'] == "resource" && isset($this->returns['subtype'])) {
+                    $code .= "    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
+                        .$this->returns['subtype'].");\n";
                 }
             } else {
                 // no code snippet was given so we produce a suggestion for the return statement
                 $code .= "    php_error(E_WARNING, \"{$this->name}: not yet implemented\"); RETURN_FALSE;\n\n";
                     
-                switch ($returns[0]) {
+                switch ($this->returns['type']) {
                 case "void":
                     break;
                         
@@ -1236,8 +1255,9 @@ class CodeGen_PECL_Element_Function
                     break;
                         
                 case "resource":
-                    if (isset($returns[1])) {
-                        $code .= "    ZEND_REGISTER_RESOURCE(return_value, return_res, le_$returns[1]);\n";
+                    if (isset($this->returns['subtype'])) {
+                        $code .= "    ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
+                            .$this->returns['subtype'].");\n";
                     } else {
                         $code .= "    /* RETURN_RESOURCE(...); */\n";
                     }
@@ -1252,7 +1272,7 @@ class CodeGen_PECL_Element_Function
                     break;
                         
                 default: 
-                    $code .= "    /* UNKNOWN RETURN TYPE '$this->returns' */\n";
+                    $code .= "    /* UNKNOWN RETURN TYPE '".$this->returns['type']."' */\n";
                     break;
                 }
             }
@@ -1294,8 +1314,16 @@ class CodeGen_PECL_Element_Function
     <title>Description</title>
      <methodsynopsis>
 ';
+
+        $returns = $this->returns['type'];
+        if (isset($this->returns['subtype'])) {
+            $returns .= " ".$this->returns['subtype'];
+        }
+        if (@$this->returns['byref']) {
+            $returns .= " &";
+        }
             
-        $xml .= "      <type>{$this->returns}</type><methodname>{$this->name}</methodname>\n";
+        $xml .= "      <type>$returns</type><methodname>{$this->name}</methodname>\n";
         if (empty($this->params) || $this->params[0]["type"] === "void") {
             $xml .= "      <void/>\n";
         } else if ($this->params[0]["type"] === "...") {
@@ -1441,11 +1469,19 @@ class CodeGen_PECL_Element_Function
 
         // generate refargs mask if needed
         if ($this->hasRefArgs) {
+            $code.="#if (PHP_MAJOR_VERSION < 5)\n";
+            $code.="static unsigned char {$this->name}_arg_info[] = {".count($this->params);
+            foreach ($this->params as $param) {
+                $code.= ", ". (isset($param["byRef"]) ? "BYREF_FORCE" : "BYREF_NONE");
+            }
+            $code.="};\n";
+            $code.="#else\n";
             $code.= "ZEND_BEGIN_ARG_INFO({$this->name}_arg_info, 0)\n";
             foreach ($this->params as $param) {
-                $code.= "  ZEND_ARG_PASS_INFO(". (isset($param["byRef"]) ? 1 : 0) .")\n";
+                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", isset($param["byRef"]), $param["name"]);
             }
             $code.= "ZEND_END_ARG_INFO()\n";
+            $code.= "#endif\n\n";
         }
 
         return $code;
@@ -1467,6 +1503,19 @@ class CodeGen_PECL_Element_Function
         $code.= $this->ifConditionEnd();
 
         return $code;
+    }
+
+    function addParam($param) 
+    {
+        $this->params[] = $param;
+        if (@$param['byRef']) {
+            $this->hasRefArgs = true;
+        }
+    }
+
+    function setReturns($returns)
+    {
+        $this->returns  = $returns;
     }
 }
 

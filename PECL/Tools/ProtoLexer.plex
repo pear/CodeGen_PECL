@@ -23,27 +23,18 @@ class CodeGen_PECL_Tools_ProtoLexer
 whitespace = /[ \t\n]+/
 par_open   = /\(/
 par_close  = /\)/
+square_open   = /\[/
+square_close  = /\]/
 eq         = /=/
+ampersand  = /[&@]/
 comma      = /,/
 semicolon  = /;/
-void       = /void/
-bool       = /bool(ean)?/
-int        = /int(eger)?|long/
-float      = /float|double/
-string     = /string/
-array      = /array/
-class      = /class|object/
-resource   = /resource/
-mixed      = /mixed/
-callback   = /callback/
-stream     = /stream/
 ellipse    = /\.\.\./
-true       = /true/
-false      = /false/
-null       = /null/
-numval     = /[0-9]+|0x[0-9a-fA-F]+/
+name       = /[_a-zA-Z][_a-zA-Z0-9]*/
 strval     = /"[^"]*"|'[^']*'/
-name       = /[_a-zA-Z][_a-zA-Z0-9]+/
+floatval   = /[0-9]*(\.[0-9]+)?([eE][+-]?[0-9]+)?/
+intval     = /[+-]?[0-9]+/
+hexval     = /0x[0-9a-fA-F]+/
 */
 
 /*!lex2php
@@ -56,6 +47,12 @@ par_open {
 par_close {
 	$this->token = CodeGen_PECL_Tools_ProtoParser::PAR_CLOSE;
 }
+square_open {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_OPEN;
+}
+square_close {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_CLOSE;
+}
 eq {
 	$this->token = CodeGen_PECL_Tools_ProtoParser::EQ;
 }
@@ -65,61 +62,78 @@ comma {
 semicolon {
 	$this->token = CodeGen_PECL_Tools_ProtoParser::SEMICOLON;
 }
-void {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::VOID;
-}
-bool {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::BOOL;
-}
-int {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::INT;
-}
-float {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::FLOAT;
-}
-string {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::STRING;
-}
-array {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::ARRAY_;
-}
-class {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::CLASS_;
-}
-resource {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::RESOURCE;
-}
-mixed {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::MIXED;
-}
-callback {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::CALLBACK;
-}
-stream {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::STREAM;
-}
 ellipse {
 	$this->token = CodeGen_PECL_Tools_ProtoParser::ELLIPSE;
 }
-true {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::TRUE_;
-}
-false {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::FALSE_;
-}
-null {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NULL_;
+ampersand {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::AMPERSAND;
 }
 name {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NAME;
-}
-numval {
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+	switch ($this->value) {
+	case "void":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::VOID;
+		break;
+	case "bool": 	
+    case "boolean":
+	    $this->token = CodeGen_PECL_Tools_ProtoParser::BOOL;
+		break;
+	case "int": 
+	case "integer":
+	case "long":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::INT;
+		break;
+	case "float":
+	case "double":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::FLOAT;
+		break;
+	case "string": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::STRING;
+		break;
+	case "array": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::ARRAY_;
+		break;
+	case "class":
+	case "object":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::CLASS_;
+		break;
+	case "resource": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::RESOURCE;
+		break;
+	case "mixed": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::MIXED;
+		break;
+	case "callback": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::CALLBACK;
+		break;
+	case "stream": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::STREAM;
+		break;
+	case "true": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::TRUE_;
+		break;
+	case "false":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::FALSE_;
+		break;
+	case "null": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::NULL_;
+		break;
+	default:
+		$this->token = CodeGen_PECL_Tools_ProtoParser::NAME;
+		break;
+	}
 }
 strval {
 	$this->token = CodeGen_PECL_Tools_ProtoParser::STRVAL;
 }
+floatval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
+intval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
+hexval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
 */
-
 }
 

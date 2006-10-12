@@ -56,12 +56,11 @@
 
   <release>
     <state>stable</state>
-    <version>1.0.4</version>
-    <date>2006-08-17</date>
+    <version>1.1.0</version>
+    <date>2006-10-11</date>
     <notes>
-Changes since 1.0.3:
-- added support for constant grouping
-- standalone documentation support hacked in
+Changes since 1.0.4:
+- working on new parser
     </notes>
 
     <deps>
@@ -121,6 +120,10 @@ Changes since 1.0.3:
            <file role="php">Extension.php</file>
            <file role="php">Platform.php</file>
           </dir>
+          <dir name="Tools">
+           <file role="php">ProtoLexer.php</file>
+           <file role="php">ProtoParser.php</file>
+          </dir>
           <file role="php">ExtensionParser.php</file>
         </dir>
       </dir>
@@ -128,6 +131,17 @@ Changes since 1.0.3:
   </release>
 
   <changelog>
+   <release>
+    <state>stable</state>
+    <version>1.0.4</version>
+    <date>2006-08-17</date>
+    <notes>
+Changes since 1.0.3:
+- added support for constant grouping
+- standalone documentation support hacked in
+    </notes>
+   </release>
+
    <release>
     <state>stable</state>
     <version>1.0.3</version>
