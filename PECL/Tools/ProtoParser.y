@@ -38,8 +38,8 @@ typename(A) ::= INT.                   { A = array("type" => "int"); }
 typename(A) ::= FLOAT.                 { A = array("type" => "float"); }
 typename(A) ::= STRING.                { A = array("type" => "string"); }
 typename(A) ::= ARRAY_.                { A = array("type" => "array"); }
-typename(A) ::= CLASS_ NAME(B).        { A = array("type" => "class ",    "subtype" => B); }
-typename(A) ::= RESOURCE NAME(B).      { A = array("type" => "resource ", "subtype" => B); }
+typename(A) ::= CLASS_ NAME(B).        { A = array("type" => "object",    "subtype" => B); }
+typename(A) ::= RESOURCE NAME(B).      { A = array("type" => "resource", "subtype" => B); }
 typename(A) ::= MIXED.                 { A = array("type" => "mixed"); }
 typename(A) ::= CALLBACK.              { A = array("type" => "callback"); }
 typename(A) ::= STREAM.                { A = array("type" => "stream"); }
