@@ -940,10 +940,10 @@ static public $yy_action = array(
     function yy_r11(){ $this->_retvalue = array("type" => "array");     }
 #line 946 "ProtoParser.php"
 #line 41 "ProtoParser.y"
-    function yy_r12(){ $this->_retvalue = array("type" => "class ",    "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+    function yy_r12(){ $this->_retvalue = array("type" => "object",    "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
 #line 949 "ProtoParser.php"
 #line 42 "ProtoParser.y"
-    function yy_r13(){ $this->_retvalue = array("type" => "resource ", "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+    function yy_r13(){ $this->_retvalue = array("type" => "resource", "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
 #line 952 "ProtoParser.php"
 #line 43 "ProtoParser.y"
     function yy_r14(){ $this->_retvalue = array("type" => "mixed");     }
