@@ -993,7 +993,7 @@ class CodeGen_PECL_Element_Function
 
         switch ($this->role) {
         case "public":
-            $code .= $this->ifConditionStart();
+            $code .= $this->ifConditionStart($extension);
 
             // function prototype comment
             $code .= "/* {{{ proto {$this->proto}\n  ";
@@ -1278,7 +1278,7 @@ class CodeGen_PECL_Element_Function
                 
             $code .= "}\n/* }}} {$this->name} */\n\n";
 
-            $code .= $this->ifConditionEnd();
+            $code .= $this->ifConditionEnd($extension);
 
             break;
                 
@@ -1562,6 +1562,62 @@ class CodeGen_PECL_Element_Function
     function setReturns($returns)
     {
         $this->returns  = $returns;
+    }
+
+    function ifConditionStart($extension = false)
+    {
+        $code = parent::ifConditionStart();
+
+        if ($extension) {
+            $params = $this->params;
+            $params[] = $this->returns;
+            
+            foreach ($params as $param) {
+                switch ($param["type"]) {
+                case "resource":
+                    if (isset($param['subtype'])) {
+                        $code.= $extension->getResource($param['subtype'])->ifConditionStart();
+                    }
+                    break;
+                case "object":
+                    // TODO
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        
+        return $code;
+    }
+
+    function ifConditionEnd($extension = false)
+    {
+        $code = "";
+        
+        if ($extension) { 
+            $params = $this->params;
+            $params[] = $this->returns;
+            
+            foreach ($params as $param) {
+                switch ($param["type"]) {
+                case "resource":
+                    if (isset($param['subtype'])) {
+                        $code.= $extension->getResource($param['subtype'])->ifConditionEnd();
+                    }
+                    break;
+                case "object":
+                    // TODO
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        $code .= parent::ifConditionEnd();
+
+        return $code;
     }
 }
 

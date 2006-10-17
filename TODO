@@ -17,6 +17,10 @@ milestone 1.1
 
 - pkg-config support (almost done)
 
+- have functions using a conditional element in their proto
+  modify their ifCondition automaticly (done for resources,
+  still open for classes and for constants in default values)
+ 
 - finish config.w32 generation (almost done, need someone 
   with windows build experience to finish and test this)
 
@@ -26,11 +30,6 @@ milestone 1.1
 
 - return by reference for 5.1 and above
 
-- improve configure check for conditional resource types
-
-- have functions using a conditional resource type as 
-  default set their ifCondition automaticly
- 
 - re2c and lemon support in config.m4 / Makefile.frag generation?
 
 - headers and libs within <with> are not taken into account in the

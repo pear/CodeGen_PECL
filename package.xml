@@ -62,7 +62,8 @@
 Changes since 1.0.4:
 - new function prototype parser
 - added PHP version check to config.m4
-- 
+- functions accepting/returning resources now "inherit"
+  those resources conditional compilation settings
     </notes>
 
     <deps>
