@@ -1704,6 +1704,18 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
         echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
         echo "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_".strtoupper($this->name)."\"\n";
 
+        echo "
+  AC_MSG_CHECKING(PHP version)
+  AC_TRY_COMPILE([#include <php_version.h>], [
+#if PHP_VERSION_ID < ".$this->minPhpVersionId()."
+#error  this extension requires at least PHP version ".$this->minPhpVersion()."
+#endif
+],
+[AC_MSG_RESULT(ok)],
+[AC_MSG_ERROR([need at least PHP ".$this->minPhpVersion()."])])
+
+";
+
         if (count($this->headers)) {
             if (!isset($this->with[$this->name])) {
                 $this->terminate("global headers not bound to a --with option found and no --with option by the default name");
@@ -2420,6 +2432,18 @@ of phpinfo();
         }
 
         return "4.0.0"; // TODO test for real lower bound 
+    }
+
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersionId()
+    {
+       $id = explode('.', $this->minPhpVersion());
+
+       return (int)$id[0] * 10000 + (int)$id[1] * 100 + (int)$id[2];
     }
 
     /**
