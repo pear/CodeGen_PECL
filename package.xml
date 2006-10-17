@@ -60,7 +60,9 @@
     <date>2006-10-11</date>
     <notes>
 Changes since 1.0.4:
-- working on new parser
+- new function prototype parser
+- added PHP version check to config.m4
+- 
     </notes>
 
     <deps>
