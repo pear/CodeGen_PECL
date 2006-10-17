@@ -993,7 +993,6 @@ class CodeGen_PECL_Element_Function
 
         switch ($this->role) {
         case "public":
-              
             $code .= $this->ifConditionStart();
 
             // function prototype comment
@@ -1448,7 +1447,7 @@ class CodeGen_PECL_Element_Function
             $code.= ";\n";
         }
 
-        $code.= $this->argInfoCode();
+        $code.= $this->argInfoCode($this->params);
 
         $code.= $this->ifConditionEnd();
 
@@ -1459,33 +1458,80 @@ class CodeGen_PECL_Element_Function
     /**
      * Code needed ahead of the function table 
      *
-     * Only required for functions that accept parameters by reference
-     *
-     * @returns string
+     * @param  array 
+     * @return string
      */
-    function argInfoCode() 
+    function argInfoCode($params) 
     {
+        // TODO only generate code for versions actually requested
+        // TODO only allow null on objects/arrays with default=NULL ?
+
+        $argInfoName = $this->argInfoName();
+
         $code = "";
 
         // generate refargs mask if needed
+        $code.= "#if (PHP_MAJOR_VERSION >= 5)\n";
+
+        $code.= "ZEND_BEGIN_ARG_INFO($argInfoName, 0)\n";
+
+        foreach ($params as $param) {
+            switch ($param["type"]) {
+            case 'object':
+                $code.= sprintf("  ZEND_ARG_OBJ_INFO(%d, %s, %s, 1)\n", 
+                                isset($param["byRef"]), 
+                                $param["name"],
+                                $param["subtype"]);
+                break;
+            case 'array':
+                $code.= "#if (PHP_MINOR_VERSION > 0)\n";
+                $code.= sprintf("  ZEND_ARG_ARRAY_INFO(%d, %s, %s, %d)\n", 
+                                isset($param["byRef"]), 
+                                $param["name"],
+                                $param["subtype"],
+                                1 /*allow NULL*/);
+                $code.= "#else\n";
+                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", 
+                                isset($param["byRef"]), 
+                                $param["name"],
+                                1 /*allow NULL*/);
+                $code.= "#endif\n";
+                break;
+            default:
+                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", 
+                                isset($param["byRef"]), 
+                                $param["name"]);
+                break;
+            }
+        }
+
+        $code.= "ZEND_END_ARG_INFO()\n";
+
+        $code.= "#else /* PHP 4.x */\n";
+
         if ($this->hasRefArgs) {
-            $code.="#if (PHP_MAJOR_VERSION < 5)\n";
-            $code.="static unsigned char {$this->name}_arg_info[] = {".count($this->params);
-            foreach ($this->params as $param) {
+            $code.= "static unsigned char {$argInfoName}[] = {".count($params);
+            foreach ($params as $param) {
                 $code.= ", ". (isset($param["byRef"]) ? "BYREF_FORCE" : "BYREF_NONE");
             }
             $code.="};\n";
-            $code.="#else\n";
-            $code.= "ZEND_BEGIN_ARG_INFO({$this->name}_arg_info, 0)\n";
-            foreach ($this->params as $param) {
-                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", isset($param["byRef"]), $param["name"]);
-            }
-            $code.= "ZEND_END_ARG_INFO()\n";
-            $code.= "#endif\n\n";
+        } else {
+            $code .= "#define $argInfoName NULL\n";
         }
-
+        $code.= "#endif\n\n";
+        
         return $code;
     } 
+
+    /**
+     * Name for ARG_INFO definition
+     *
+     * @return string
+     */
+    function argInfoName()
+    {
+        return $this->name."_arg_info";
+    }
 
     /**
      * Generate registration entry for extension function table

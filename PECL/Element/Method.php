@@ -434,42 +434,24 @@ class CodeGen_PECL_Element_Method
      * Abstract/Interface methods need to define their argument
      * list ahead of the method table
      *
+     * @param   array
      * @returns string
      */
-    function argInfoCode() 
+    function argInfoCode($params) 
     {
-        $code = "";
-
-        if (count($this->params) > 0) {
-            $code.= "ZEND_BEGIN_ARG_INFO(".$this->getFullName()."_args, 0)\n";
-
-            $params = $this->params;
-            array_shift($params);
-
-            $useTypeHints = true;
-
-            foreach ($params as $param) {
-                if ($param['type'] != "object" || !isset($param['subtype'])) {
-                    $useTypeHints = false;
-                    break;
-                }
-            }
-
-            // TODO optional paramteres?
-            foreach ($params as $param) {
-                $byRef = empty($param["byRef"]) ? 0 : 1;
-                if ($useTypeHints) {
-                    $code.= "  ZEND_ARG_OBJ_INFO(0, $param[name], $param[subtype], 0)\n";
-                } else {
-                    $code.= "  ZEND_ARG_INFO($byRef, $param[name])\n";
-                }
-            }                
-                
-            $code.= "ZEND_END_ARG_INFO()\n";
-        }
-
-        return $code;
+        array_shift($params);
+        return parent::argInfoCode($params);
     } 
+
+    /**
+     * Name for ARG_INFO definition
+     *
+     * @return string
+     */
+    function argInfoName()
+    {
+        return $this->getFullName()."_args";
+    }
 
 }
 
