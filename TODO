@@ -11,6 +11,10 @@ milestone 1.1
 
 - static methods (done)
 
+- conditional compilation control (done)
+  
+- PHP version check in config.m4 (done)
+
 - pkg-config support (almost done)
 
 - finish config.w32 generation (almost done, need someone 
@@ -19,24 +23,14 @@ milestone 1.1
 - check #line numbers in generated source with libxml
   -> error messages with meaningfull line numbers need this
   (pretty ok by now but not perfect)
-  
-- return by reference (for 5.1 and above)          
 
-- conditional compilation control (only done for functions and resources yet)
-  
-    add "if" attribute to element tags, to genereate code wrappers like
+- return by reference for 5.1 and above
 
-    #ifdef HAVE_SOME_FEATURE
-      ...
-    #endif
-   
-  - improve configure check for conditional resource types
+- improve configure check for conditional resource types
 
-  - have functions using a conditional resource type as 
-    default set their ifCondition automaticly
+- have functions using a conditional resource type as 
+  default set their ifCondition automaticly
  
-- PHP version check in config.m4
-
 - re2c and lemon support in config.m4 / Makefile.frag generation?
 
 - headers and libs within <with> are not taken into account in the
