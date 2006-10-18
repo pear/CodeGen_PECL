@@ -927,6 +927,9 @@ class CodeGen_PECL_Element_Function
     function defaultval($param, $default) 
     {
         if (isset($param["default"])) {
+            if (is_object($param["default"])) {
+                return $param["default"]->getValue();
+            } 
             return $param["default"];
         }
 
@@ -1573,18 +1576,16 @@ class CodeGen_PECL_Element_Function
             $params[] = $this->returns;
             
             foreach ($params as $param) {
-                switch ($param["type"]) {
-                case "resource":
-                    if (isset($param['subtype'])) {
-                        $code.= $extension->getResource($param['subtype'])->ifConditionStart();
-                    }
-                    break;
-                case "object":
-                    // TODO
-                    break;
-                default:
-                    break;
+                if ($param["type"] == "resource" && isset($param['subtype'])) {
+                    $obj = $extension->getResource($param['subtype']);
+                } else if ($param["type"] == "object" && isset($param['subtype'])) {
+                    $obj = $extension->getClass($param['subtype']);
+                } else if (isset($param["default"]) && is_object($param["default"])) {
+                    $obj = $param["default"];
+                } else {
+                    continue;
                 }
+                $code.= $obj->ifConditionStart();
             }
         }
         
@@ -1599,19 +1600,19 @@ class CodeGen_PECL_Element_Function
             $params = $this->params;
             $params[] = $this->returns;
             
+            $params = array_reverse($params);
+            
             foreach ($params as $param) {
-                switch ($param["type"]) {
-                case "resource":
-                    if (isset($param['subtype'])) {
-                        $code.= $extension->getResource($param['subtype'])->ifConditionEnd();
-                    }
-                    break;
-                case "object":
-                    // TODO
-                    break;
-                default:
-                    break;
+                if ($param["type"] == "resource" && isset($param['subtype'])) {
+                    $obj = $extension->getResource($param['subtype']);
+                } else if ($param["type"] == "object" && isset($param['subtype'])) {
+                   $obj = $extension->getClass($param['subtype']);
+                } else if (isset($param["default"]) && is_object($param["default"])) {
+                    $obj = $param["default"];
+                } else {
+                    continue;
                 }
+                $code.= $obj->ifConditionEnd();
             }
         }
 

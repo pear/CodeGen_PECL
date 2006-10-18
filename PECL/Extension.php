@@ -420,6 +420,23 @@ class CodeGen_PECL_Extension
 
     
     /**
+     * Get a specific class by name
+     *
+     * @access public
+     * @param  string  class name
+     * @return object  class object or false if not found
+     */
+    function getClass($name)
+    {
+        if (isset($this->classes[$name])) {
+            return $this->classes[$name];
+        }
+
+        return false;
+    }
+
+    
+    /**
      * Add a PHP class to the extension
      *
      * @access public
@@ -2423,14 +2440,22 @@ of phpinfo();
      */
     function minPhpVersion()
     {
+        // extension interdependencies only exist in 5.1 and above
         if (!empty($this->otherExtensions)) {
             return "5.1.0rc1";
         }
 
+        // return by reference only exist in 5.1 and above
+        if (isset($this->returns["byRef"])) {
+            return "5.1.0rc1";
+        }
+
+		// we only support the 5.0 (ZE2) OO api 
         if (!empty($this->classes) || !empty($this->interfaces)) {
           return "5.0.0";
         }
 
+		// default: 4.0
         return "4.0.0"; // TODO test for real lower bound 
     }
 

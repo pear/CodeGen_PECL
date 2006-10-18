@@ -96,7 +96,7 @@ default(A) ::= ARRAY_ PAR_OPEN PAR_CLOSE. { A = "array()"; }
 default(A) ::= NAME(B). { 
     $constant = $extension->getConstant(B);
     if ($constant) {
-        A = $constant->getValue();
+        A = $constant;
     } else {
         throw new Exception("invalid default value '".B."'");
     }
