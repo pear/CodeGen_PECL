@@ -2440,23 +2440,30 @@ of phpinfo();
      */
     function minPhpVersion()
     {
-        // extension interdependencies only exist in 5.1 and above
-        if (!empty($this->otherExtensions)) {
-            return "5.1.0rc1";
-        }
-
-        // return by reference only exist in 5.1 and above
-        if (isset($this->returns["byRef"])) {
-            return "5.1.0rc1";
-        }
+		// min. default: 4.0
+        $version = "4.0.0"; // TODO test for real lower bound 
 
 		// we only support the 5.0 (ZE2) OO api 
         if (!empty($this->classes) || !empty($this->interfaces)) {
-          return "5.0.0";
+            $version = $this->maxVersion($version, "5.0.0");
         }
 
-		// default: 4.0
-        return "4.0.0"; // TODO test for real lower bound 
+        // extension interdependencies only exist in 5.1 and above
+        if (!empty($this->otherExtensions)) {
+            $version = $this->maxVersion($version, "5.1.0rc1");
+        }
+
+        // check function requirements
+        foreach ($this->functions as $function) {
+          $version = $this->maxVersion($version, $function->minPhpVersion());
+        }       
+
+        return $version;
+    }
+
+    function maxVersion($v1, $v2)
+    {
+      return version_compare($v1, $v2) > 0 ? $v1 : $v2;
     }
 
     /**

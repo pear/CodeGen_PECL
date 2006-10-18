@@ -1476,7 +1476,15 @@ class CodeGen_PECL_Element_Function
         // generate refargs mask if needed
         $code.= "#if (PHP_MAJOR_VERSION >= 5)\n";
 
-        $code.= "ZEND_BEGIN_ARG_INFO($argInfoName, 0)\n";
+        $minArgs = 0;
+        foreach ($params as $param) {
+            if (isset($param["optional"])) break;
+            $minArgs++;
+        }
+
+        $code.= sprintf("ZEND_BEGIN_ARG_INFO_EX($argInfoName, ZEND_SEND_BY_VAL, ZEND_RETURN_%s, %d)\n",
+                       isset($this->returns["byRef"]) ? "REFERENCE" : "VALUE",
+                       $minArgs);
 
         foreach ($params as $param) {
             switch ($param["type"]) {
@@ -1620,6 +1628,23 @@ class CodeGen_PECL_Element_Function
 
         return $code;
     }
+
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersion()
+    {
+        // return by reference only exist in 5.1 and above
+        if (isset($this->returns["byRef"])) {
+            return "5.1.0rc1";
+        }
+
+		// default: 4.0
+        return "4.0.0"; // TODO test for real lower bound 
+    }
+
 }
 
 /*
