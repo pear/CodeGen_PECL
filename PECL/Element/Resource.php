@@ -316,10 +316,14 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
     function configm4($extension_name) 
     {
         if ($this->ifCondition) {
-            return ""; // TODO implement more clever checking
+            return ""; // no checks here
         }
 
-        return "  AC_CHECK_TYPE(".$this->getPayload()." *, [], [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], [#include \"\$srcdir/php_{$extension_name}.h\"])\n";
+        return "
+  AC_CHECK_TYPE(".$this->getPayload()." *, 
+                [], 
+                [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], 
+                [#include \"\$srcdir/php_{$extension_name}.h\"])\n";
     }
 
 
