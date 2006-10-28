@@ -315,6 +315,9 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      */
     function configm4($extension_name) 
     {
+        return "";
+
+/* disabled due to autoconf version conflicts on AC_CHECK_TYPE
         if ($this->ifCondition) {
             return ""; // no checks here
         }
@@ -324,6 +327,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
                 [], 
                 [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], 
                 [#include \"\$srcdir/php_{$extension_name}.h\"])\n";
+*/
     }
 
 
