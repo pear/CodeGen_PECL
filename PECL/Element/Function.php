@@ -1496,10 +1496,9 @@ class CodeGen_PECL_Element_Function
                 break;
             case 'array':
                 $code.= "#if (PHP_MINOR_VERSION > 0)\n";
-                $code.= sprintf("  ZEND_ARG_ARRAY_INFO(%d, %s, %s, %d)\n", 
+                $code.= sprintf("  ZEND_ARG_ARRAY_INFO(%d, %s, %d)\n", 
                                 isset($param["byRef"]), 
                                 $param["name"],
-                                $param["subtype"],
                                 1 /*allow NULL*/);
                 $code.= "#else\n";
                 $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", 
