@@ -1552,9 +1552,7 @@ class CodeGen_PECL_Element_Function
     {
         $code = $this->ifConditionStart();
 
-        $arginfo = $this->hasRefArgs ? "{$this->name}_arg_info" : "NULL";
-
-        $code .= sprintf("    PHP_FE(%-20s, %s)\n", $this->name, $arginfo);
+        $code .= sprintf("    PHP_FE(%-20s, %s)\n", $this->name, "{$this->name}_arg_info");
 
         $code.= $this->ifConditionEnd();
 
