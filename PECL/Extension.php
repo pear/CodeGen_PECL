@@ -166,23 +166,6 @@ class CodeGen_PECL_Extension
     
 
     /**
-     * Makefile fragments
-     *
-     * @var    array
-     * @access private
-     */
-    protected $makefragments = array();
-
-
-    /**
-     * config.m4 fragments
-     *
-     * @var    array
-     * @access private
-     */
-    protected $configfragments = array("top"=>array(), "bottom"=>array());
-
-    /**
      * generate #line specs?
      *
      * @var     bool

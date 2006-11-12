@@ -756,15 +756,6 @@ class CodeGen_PECL_ExtensionParser
         }
     }
 
-    function tagend_extension_makefile($attr, $data) {
-        return $this->extension->addMakeFragment(CodeGen_Tools_IndentC::linetrim($data));
-    }
-
-    function tagend_deps_configm4($attr, $data) {
-        return $this->extension->addConfigFragment(CodeGen_Tools_IndentC::linetrim($data), 
-                                                   isset($attr['position']) ? $attr['position'] : "top");
-    }
-
 
     function tagstart_extension_test($attr) {
         static $testCount = 0;
