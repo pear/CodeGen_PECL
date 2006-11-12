@@ -1749,6 +1749,13 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
         echo "
   PHP_SUBST({$upname}_SHARED_LIBADD)
   AC_DEFINE(HAVE_$upname, 1, [ ])
+";
+        
+        foreach ($this->defines as $define) {
+          echo "  AC_DEFINE([$define[name]], [$define[value]], [$define[comment]])\n";
+        }
+
+        echo "
   PHP_NEW_EXTENSION({$this->name}, ".join(" ", array_keys($this->packageFiles['code']))." , \$ext_shared)
 ";
 
