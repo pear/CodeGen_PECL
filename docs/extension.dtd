@@ -53,6 +53,7 @@
   abstract   (yes|no) "no"
   final      (yes|no) "no"
   procedural CDATA #IMPLIED
+  if         CDATA #IMPLIED
 >
 <!ELEMENT proto (#PCDATA)>  
 <!ELEMENT code  (#PCDATA)>  
@@ -67,6 +68,7 @@
   name  CDATA #REQUIRED
   value CDATA #IMPLIED
   type  (string|int|float) "string"
+  group CDATA #IMPLIED
 >
 
 <!ELEMENT globals (phpini|global)*>
@@ -123,6 +125,7 @@
   name       CDATA #REQUIRED
   payload    CDATA #IMPLIED
   alloc      (yes|no) "no"
+  if         CDATA #IMPLIED
 >
 <!ELEMENT destruct (#PCDATA)>
 
