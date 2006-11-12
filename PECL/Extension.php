@@ -1432,6 +1432,8 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
             $need_block = true;
         }
 
+        // TODO: need to destruct globals here if in ZTS mode!!111
+
         if (count($this->logos)) {
             foreach ($this->logos as $logo) {
                 $code .= $this->codegen->block($logo->mshutdownCode());
