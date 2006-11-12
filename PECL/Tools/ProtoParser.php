@@ -108,8 +108,8 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 
   function __construct(CodeGen_PECL_Extension $extension, CodeGen_PECL_Element_Function $function)
   {
-	$this->extension = $extension;
-	$this->function  = $function;
+    $this->extension = $extension;
+    $this->function  = $function;
   }
 #line 117 "ProtoParser.php"
 
@@ -940,7 +940,7 @@ static public $yy_action = array(
     function yy_r11(){ $this->_retvalue = array("type" => "array");     }
 #line 946 "ProtoParser.php"
 #line 41 "ProtoParser.y"
-    function yy_r12(){ $this->_retvalue = array("type" => "object",    "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+    function yy_r12(){ $this->_retvalue = array("type" => "object",   "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
 #line 949 "ProtoParser.php"
 #line 42 "ProtoParser.y"
     function yy_r13(){ $this->_retvalue = array("type" => "resource", "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
@@ -988,8 +988,8 @@ static public $yy_action = array(
 #line 83 "ProtoParser.y"
     function yy_r30(){
   $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor;
-  $this->_retvalue["name"] = $this->yystack[$this->yyidx + -2]->minor;
-  $this->_retvalue["default"] = $this->yystack[$this->yyidx + 0]->minor;		
+  $this->_retvalue["name"]     = $this->yystack[$this->yyidx + -2]->minor;
+  $this->_retvalue["default"]  = $this->yystack[$this->yyidx + 0]->minor;        
   $this->_retvalue["optional"] = true;
     }
 #line 1000 "ProtoParser.php"
@@ -1012,7 +1012,7 @@ static public $yy_action = array(
     function yy_r37(){ 
     $constant = $extension->getConstant($this->yystack[$this->yyidx + 0]->minor);
     if ($constant) {
-        $this->_retvalue = $constant->getValue();
+        $this->_retvalue = $constant;
     } else {
         throw new Exception("invalid default value '".$this->yystack[$this->yyidx + 0]->minor."'");
     }
@@ -1133,10 +1133,10 @@ static public $yy_action = array(
 
   $expect = array();
   foreach ($this->yy_get_expected_tokens($yymajor) as $token) {
-	$expect[] = self::$yyTokenName[$token];
+    $expect[] = self::$yyTokenName[$token];
   }
   throw new Exception('Unexpected ' . $this->tokenName($yymajor) . '(' . $TOKEN
-					  . '), expected one of: ' . implode(',', $expect));
+                      . '), expected one of: ' . implode(',', $expect));
 #line 1146 "ProtoParser.php"
     }
 
