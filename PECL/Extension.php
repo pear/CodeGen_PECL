@@ -1837,7 +1837,7 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
         echo "  AC_DEFINE(\"HAVE_$upname\", 1, \"{$this->name} support\");\n";
 
         foreach ($this->defines as $define) {
-            echo "  AC_DEFINE(\"$define[name]]\", $define[value], \"$define[comment]\")\n";
+            echo "  AC_DEFINE(\"$define[name]\", $define[value], \"$define[comment]\")\n";
         }
 
         echo "}\n";
