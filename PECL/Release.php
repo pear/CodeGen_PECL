@@ -49,9 +49,13 @@ class CodeGen_PECL_Release
     {
         $code = "\n  <release>\n";
         foreach (array("version", "state", "notes") as $key) {
+            $code.= "    <$key>";
             if ($this->$key !== "") {
-                $code.= "    <$key>".htmlentities($this->$key)."</$key>\n";
+              $code.= htmlentities($this->$key);
+            } else {
+              $code.= "unknown";
             }
+            $code.= "</$key>\n";
         }
         if ($this->date !== "") {
             $code .= "    <date>".date("Y-m-d", $this->date)."</date>\n";
