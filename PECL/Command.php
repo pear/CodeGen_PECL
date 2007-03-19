@@ -173,14 +173,14 @@ pecl-gen [-h] [--force] [--experimental] [--version]
         
         $err = $this->extension->setName($extname);
         if (PEAR::isError($err)) {
-            $command->terminate($err->getMessage());
+            $this->terminate($err->getMessage());
         }
         
         if ($this->options->have("proto")) {
             $proto_file = $this->options->value("proto");
             
             if (!file_exists($proto_file) || !is_readable($proto_file)) {
-                $command->terminate("cannot open proto file");  
+                $this->terminate("cannot open proto file");  
             }
             
             foreach (file($proto_file) as $line) {
@@ -188,12 +188,12 @@ pecl-gen [-h] [--force] [--experimental] [--version]
                 $func->setRole("public");
                 $err = $func->setProto(trim($line));
                 if (PEAR::isError($err)) {
-                    $command->terminate($err->getMessage());
+                    $this->terminate($err->getMessage());
                 }   
                 
                 $err = $this->extension->addFunction($func);
                 if (PEAR::isError($err)) {
-                    $command->terminate($err->getMessage());
+                    $this->terminate($err->getMessage());
                 }
             }
         }
@@ -202,7 +202,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             $stubname = $this->options->value("stubs");
             
             if (file_exists("$stubname")  && !$this->options->have("f", "force")) {
-                $command->terminate("'$stubname' already exists (use '--force' to overwrite)"); 
+                $this->terminate("'$stubname' already exists (use '--force' to overwrite)"); 
             }
             
             $fp = fopen($stubname, "w");
@@ -225,19 +225,19 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             echo "$stubname successfully written\n";
         } else {
             if (file_exists("./$extname")  && !$this->options->have("f", "force")) {
-                $command->terminate("'$extname' already exists, can't create directory (use '--force' to override)"); 
+                $this->terminate("'$extname' already exists, can't create directory (use '--force' to override)"); 
             }
             
             $err = System::mkdir($extname);
             if (PEAR::isError($err)) {
-                $command->terminate($err->getMessage());
+                $this->terminate($err->getMessage());
             }
            
             $this->extension->dirpath = realpath("./$extname");
  
             $err = $this->extension->generateSource("./$extname");
             if (PEAR::isError($err)) {
-                $command->terminate($err->getMessage());
+                $this->terminate($err->getMessage());
             }
             
             if ($this->options->have("xml")) {
@@ -245,16 +245,16 @@ pecl-gen [-h] [--force] [--experimental] [--version]
                 
                 $err = System::mkdir("-p $manpath");
                 if (PEAR::isError($err)) {
-                    $command->terminate($err->getMessage());
+                    $this->terminate($err->getMessage());
                 }
                 
                 $err = $this->extension->generateDocumentation($manpath);
                 if (PEAR::isError($err)) {
-                    $command->terminate($err->getMessage());
+                    $this->terminate($err->getMessage());
                 }
             }
             
-            $this->extension->writeRreadme("./$extname");
+            $this->extension->writeReadme("./$extname");
             
             if (!$this->options->have("quiet")) {
                 echo $this->extension->successMsg();
