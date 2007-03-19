@@ -2534,6 +2534,17 @@ vi: ts=1 sw=1
         }
         exit(3);
     }
+
+
+    /**
+     * Return array of defined functions
+     *
+     * @return array
+     */
+    function getFunctions() 
+    {
+        return $this->functions;
+    }
 }   
 
 

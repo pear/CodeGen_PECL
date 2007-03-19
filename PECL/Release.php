@@ -99,7 +99,7 @@ class CodeGen_PECL_Release
 
             $code.= "  <license {$uri}filesource=\"LICENSE\">{$license->getShortName()}</license>\n\n";
         } else {
-            $code.= "  <license>unknown</license\n\n";
+            $code.= "  <license>unknown</license>\n\n";
         }
 
         $code .="  <notes>\n".htmlentities($this->notes)."\n  </notes>\n\n";

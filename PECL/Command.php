@@ -138,27 +138,27 @@ pecl-gen [-h] [--force] [--experimental] [--version]
 
         $func->setRole("public");
 
-        $err = $func->setProto(trim($this->options->value("function")));
+        $err = $func->setProto(trim($this->options->value("function")), $this->extension);
         if (PEAR::isError($err)) {
-            terminate($err->get_message());
+            $this->terminate($err->getMessage());
         }   
         
         $err = $this->extension->addFunction($func);
         if (PEAR::isError($err)) {
-            terminate($err->get_message());
+            $this->terminate($err->getMessage());
         }
         
         echo $this->extension->publicFunctionsC();
         
         echo "\n\n/*----------------------------------------------------------------------*/\n\n";
         
-        foreach ($this->extension->functions as $name => $function) {
+        foreach ($this->extension->getFunctions() as $name => $function) {
             echo sprintf("\tPHP_FE(%-20s, NULL)\n", $name);
         }
         
         echo "\n\n/*----------------------------------------------------------------------*/\n\n";
         
-        foreach ($this->extension->functions as $name => $function) {
+        foreach ($this->extension->getFunctions() as $name => $function) {
             echo "PHP_FUNCTION($name);\n";
         }
     }
