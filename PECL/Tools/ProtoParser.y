@@ -94,7 +94,7 @@ default(A) ::= NUMVAL(B). { A = B; }
 default(A) ::= STRVAL(B). { A = '"'.B.'"'; }
 default(A) ::= ARRAY_ PAR_OPEN PAR_CLOSE. { A = "array()"; }
 default(A) ::= NAME(B). { 
-    $constant = $extension->getConstant(B);
+    $constant = $this->extension->getConstant(B);
     if ($constant) {
         A = $constant;
     } else {
