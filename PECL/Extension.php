@@ -2347,8 +2347,15 @@ http://pear.php.net/dtd/package-2.0.xsd">
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/README");
 
-        $configOption = isset($this->with[$this->name]) ? "--with-" : "--enable-";
-        $configOption.= $this->name;
+        $configOption = "";
+
+        if (count($this->with)) {
+            foreach ($this->with as $with) {
+                $configOption.= "[--with-".$with->getName()."=...] ";
+            }
+        } else {
+          $configOption.= "[--enable--".$this->name."] ";
+        }
 
 ?>
 This is a standalone PHP extension created using CodeGen_PECL <?php echo self::version(); ?>
@@ -2379,14 +2386,11 @@ BUILDING ON UNIX etc.
 To compile your new extension, you will have to execute the following steps:
 
 1.  $ ./phpize
-2.  $ ./configure [<?php echo $configOption; ?>]
+2.  $ ./configure <?php echo $configOption."\n"; ?>
 3.  $ make
-[4. $ make test ] # NOTE: this doesn't work right now *)
+4.  $ make test
 5.  $ [sudo] make install
 
-*) this is a general problem with "make test" and standalone extensions
-   (that is being worked on) so please don't blame CodeGen_PECL for this
-   
 <?php endif; ?>
 
 <?php if ($this->platform->test("windows")): ?>
@@ -2403,7 +2407,7 @@ select the apropriate configuration for your installation
 (either "Release_TS" or "Debug_TS") and create "php_<?php echo $this->name; ?>.dll"
 
 After successfull compilation you have to copy the newly
-created "php_<?php echo $this->name; ?>.dll" to the PHP
+created "<?php echo $this->name; ?>.dll" to the PHP
 extension directory (default: C:\PHP\extensions).
 
 <?php endif; ?>
@@ -2413,16 +2417,16 @@ TESTING
 
 You can now load the extension using a php.ini directive
 
-  extension="php_<?php echo $this->name; ?>.[so|dll]"
+  extension="<?php echo $this->name; ?>.[so|dll]"
 
 or load it at runtime using the dl() function
 
-  dl("php_<?php echo $this->name; ?>.[so|dll]");
+  dl("<?php echo $this->name; ?>.[so|dll]");
 
 The extension should now be available, you can test this
 using the extension_loaded() function:
 
-  if (extension_loaded(<?php echo $this->name; ?>))
+  if (extension_loaded("<?php echo $this->name; ?>"))
     echo "<?php echo $this->name; ?> loaded :)";
   else
     echo "something is wrong :(";
