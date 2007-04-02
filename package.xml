@@ -62,8 +62,11 @@
 Changes since 1.0.4:
 - new function prototype parser
 - added PHP version check to config.m4
-- functions accepting/returning resources now "inherit"
-  those resources conditional compilation settings
+- functions accepting/returning resources or classes 
+  or using constants for default values now "inherit"
+  conditional compilation settings from these elements
+- disabled output of AC_CHECK_TYPE checks for resource
+  types due to autoconf version conflicts
     </notes>
 
     <deps>
@@ -87,7 +90,7 @@ Changes since 1.0.4:
           </dir>
         </dir>
         <file role="script" name="pecl-gen">
-          <replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
+          <replace from="/usr/local/bin/php" to="php_bin" type="pear-config" />
           <replace from="@php_dir@"  to="php_dir"  type="pear-config" />
         </file>
       </dir>
