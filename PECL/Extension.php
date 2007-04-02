@@ -732,6 +732,10 @@ html: confcheck manual.xml
 \trm -rf html; mkdir html
 \tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/docbook/docbook-dsssl/catalog -c $(PHPDOC)/phpbook/phpbook-dsssl/defaults/catalog -d $(PHPDOC)/phpbook/phpbook-dsssl/html.dsl -V use-output-dir -t sgml $(PHPDOC)/phpbook/phpbook-xml/phpdocxml.dcl manual.xml
 
+bightml: confcheck manual.xml
+\trm -rf html; mkdir html
+\tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/docbook/docbook-dsssl/catalog -c $(PHPDOC)/phpbook/phpbook-dsssl/defaults/catalog -d $(PHPDOC)/phpbook/phpbook-dsssl/html.dsl -V nochunks -t sgml $(PHPDOC)/phpbook/phpbook-xml/phpdocxml.dcl manual.xml > manual.html
+
 tex: manual.tex
 
 manual.tex: confcheck manual.xml
