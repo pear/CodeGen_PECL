@@ -1010,7 +1010,7 @@ static public $yy_action = array(
 #line 1015 "ProtoParser.php"
 #line 96 "ProtoParser.y"
     function yy_r37(){ 
-    $constant = $extension->getConstant($this->yystack[$this->yyidx + 0]->minor);
+    $constant = $this->extension->getConstant($this->yystack[$this->yyidx + 0]->minor);
     if ($constant) {
         $this->_retvalue = $constant;
     } else {
