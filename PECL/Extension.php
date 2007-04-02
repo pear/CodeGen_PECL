@@ -730,12 +730,12 @@ manual.xml: manual.xml.in
 
 html: confcheck manual.xml
 \trm -rf html; mkdir html
-\tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/entities/ISO/catalog -c $(PHPDOC)/dsssl/docbook/catalog -c $(PHPDOC)/dsssl/defaults/catalog -d $(PHPDOC)/dsssl/html.dsl -V use-output-dir -t sgml $(PHPDOC)/dtds/dbxml-4.1.2/phpdocxml.dcl manual.xml
+\tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/docbook/docbook-dsssl/catalog -c $(PHPDOC)/phpbook/phpbook-dsssl/defaults/catalog -d $(PHPDOC)/phpbook/phpbook-dsssl/html.dsl -V use-output-dir -t sgml $(PHPDOC)/phpbook/phpbook-xml/phpdocxml.dcl manual.xml
 
 tex: manual.tex
 
 manual.tex: confcheck manual.xml
-\tSP_ENCODING=XML SP_CHARSET_FIXED=YES /usr/bin/openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/entities/ISO/catalog -c $(PHPDOC)/dsssl/docbook/catalog -c $(PHPDOC)/dsssl/defaults/catalog -d $(PHPDOC)/dsssl/print.dsl -t tex $(PHPDOC)/dtds/dbxml-4.1.2/phpdocxml.dcl manual.xml
+\tSP_ENCODING=XML SP_CHARSET_FIXED=YES openjade -D $(PHPDOC) -wno-idref -c $(PHPDOC)/docbook/docbook-dsssl/catalog -c $(PHPDOC)/phpbook/phpbook-dsssl/defaults/catalog -d $(PHPDOC)/phpbook/phpbook-dsssl/print.dsl -t tex $(PHPDOC)/phpbook/phpbook-xml/phpdocxml.dcl manual.xml
 
 pdf: manual.tex
 \tpdfjadetex manual.tex && pdfjadetex manual.tex && pdfjadetex manual.tex
