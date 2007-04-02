@@ -18,17 +18,14 @@ milestone 1.1
 - pkg-config support (almost done)
 
 - have functions using a conditional element in their proto
-  modify their ifCondition automaticly (done for resources,
-  still open for classes and for constants in default values)
+  modify their ifCondition automaticly (done)
  
-- finish config.w32 generation (almost done, need someone 
-  with windows build experience to finish and test this)
-
-- check #line numbers in generated source with libxml
-  -> error messages with meaningfull line numbers need this
-  (pretty ok by now but not perfect)
+- dto. for tests
 
 - return by reference for 5.1 and above
+
+- finish config.w32 generation (almost done, need someone 
+  with windows build experience to finish and test this)
 
 - re2c and lemon support in config.m4 / Makefile.frag generation?
 
@@ -37,10 +34,16 @@ milestone 1.1
 
 - make standalone docs Makefile more clever
 
+- check #line numbers in generated source with libxml
+  -> error messages with meaningfull line numbers need this
+  (pretty ok by now but not perfect)
+
   
 
 not necessarily 1.1
 -------------------
+
+- find a better/portable way to do type checks for resources
 
 - implement pass-by-reference for all parameter types
 
