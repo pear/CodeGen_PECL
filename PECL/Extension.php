@@ -1143,7 +1143,7 @@ $moduleHeader
      * @access private
      * @return string  code fragment
      */
-    function getLicense() 
+    function getLicenseComment() 
     {    
         $code = "/*\n";
         $code.= "   +----------------------------------------------------------------------+\n";
@@ -1203,7 +1203,7 @@ $moduleHeader
         
         $upname = strtoupper($this->name);
         
-        echo $this->getLicense();
+        echo $this->getLicenseComment();
         echo "#ifndef PHP_{$upname}_H\n";
         echo "#define PHP_{$upname}_H\n\n";
         
@@ -1588,7 +1588,7 @@ PHP_MINFO_FUNCTION({$this->name})
 
         $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename, CodeGen_Tools_Outbuf::OB_TABIFY);
             
-        echo $this->getLicense();
+        echo $this->getLicenseComment();
 
         echo "#include \"php_{$this->name}.h\"\n\n";
             
