@@ -974,6 +974,8 @@ class CodeGen_PECL_Element_Function
                     } else {
                         $code .= "    $payload * return_res;\n";
                     }
+                } else {
+                    $code .= "    void * return_res;\n";
                 }
             } else {
                 $code .= "    void * return_res;\n";
@@ -1590,7 +1592,9 @@ class CodeGen_PECL_Element_Function
                 } else {
                     continue;
                 }
-                $code.= $obj->ifConditionStart();
+                if (is_object($obj)) {
+                    $code.= $obj->ifConditionStart();
+                }
             }
         }
         
@@ -1617,7 +1621,9 @@ class CodeGen_PECL_Element_Function
                 } else {
                     continue;
                 }
-                $code.= $obj->ifConditionEnd();
+                if (is_object($obj)) {
+                    $code.= $obj->ifConditionEnd();
+                }
             }
         }
 
