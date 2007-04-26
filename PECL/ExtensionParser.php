@@ -895,7 +895,7 @@ class CodeGen_PECL_ExtensionParser
             }
         }
 
-        if (isset($attr["abstract"]))
+        if (isset($attr["abstract"])) {
             $value = $this->toBool($attr["abstract"], "abstract");
             if (PEAR::isError($value)) {
                 return $value;
