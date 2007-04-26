@@ -1051,7 +1051,7 @@ class CodeGen_PECL_ExtensionParser
         
         if (isset($attr["alloc"])) {
             $alloc = $this->toBool($attr["alloc"], "alloc");
-            if (PEAR::isError($value)) {
+            if (PEAR::isError($alloc)) {
                 return $value;
             }
         } else {
