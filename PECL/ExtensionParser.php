@@ -285,7 +285,12 @@ class CodeGen_PECL_ExtensionParser
         }
         
         if (isset($attr["alloc"])) {
-            $err = $this->helper->setAlloc($this->toBool($attr["alloc"]));
+            $value = $this->toBool($attr["alloc"], "alloc");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+
+            $err = $this->helper->setAlloc($value);
             if (PEAR::isError($err)) {
                 return $err;
             }
@@ -880,12 +885,24 @@ class CodeGen_PECL_ExtensionParser
             
         // TODO: make sure a class is not abstract and final at the same time
 
-        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
-            $class->isFinal();
+        if (isset($attr["final"])) {
+            $value = $this->toBool($attr["final"], "final");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $class->isFinal();
+            }
         }
 
-        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
-            $class->isAbstract();
+        if (isset($attr["abstract"]))
+            $value = $this->toBool($attr["abstract"], "abstract");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $class->isAbstract();
+            }
         }
 
         if (isset($attr["if"])) {
@@ -960,8 +977,14 @@ class CodeGen_PECL_ExtensionParser
             }
         }
 
-        if (isset($attr["static"]) && $this->toBool($attr["static"])) {
-            $prop->isStatic();
+        if (isset($attr["static"])) {
+            $value = $this->toBool($attr["static"], "static");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $prop->isStatic();
+            }
         }
 
         if (isset($attr["if"])) {
@@ -1025,8 +1048,15 @@ class CodeGen_PECL_ExtensionParser
             return PEAR::raiseError("type attribute missing for class payload");
         }
         $this->helper->setPayloadType($attr["type"]);
-
-        $alloc = isset($attr["alloc"]) ? $this->toBool($attr["alloc"]): true;
+        
+        if (isset($attr["alloc"])) {
+            $alloc = $this->toBool($attr["alloc"], "alloc");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+        } else {
+            $alloc = true;
+        }
         $this->helper->setPayloadAlloc($alloc);
     }
 
@@ -1068,23 +1098,41 @@ class CodeGen_PECL_ExtensionParser
             }
         }
         
-        if (isset($attr["static"]) && $this->toBool($attr["static"])) {
-            $err = $method->isStatic();
-            if (PEAR::isError($err)) {
-                return $err;
+        if (isset($attr["static"])) {
+            $value = $this->toBool($attr["static"], "static");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $err = $method->isStatic();
+                if (PEAR::isError($err)) {
+                    return $err;
+                }
             }
         }
-        if (isset($attr["abstract"]) && $this->toBool($attr["abstract"])) {
-            $err = $method->isAbstract();
-            if (PEAR::isError($err)) {
-                return $err;
+        if (isset($attr["abstract"])) {
+            $value = $this->toBool($attr["abstract"], "abstract");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $err = $method->isAbstract();
+                if (PEAR::isError($err)) {
+                    return $err;
+                }
             }
         }
         
-        if (isset($attr["final"]) && $this->toBool($attr["final"])) {
-            $err = $method->isFinal();
-            if (PEAR::isError($err)) {
-                return $err;
+        if (isset($attr["final"])) {
+            $value = $this->toBool($attr["final"], "final");
+            if (PEAR::isError($value)) {
+                return $value;
+            }
+            if ($value) {
+                $err = $method->isFinal();
+                if (PEAR::isError($err)) {
+                    return $err;
+                }
             }
         }
         
