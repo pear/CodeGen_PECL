@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE extension SYSTEM "../extension.dtd">
-<extension name="class_minimal" version="1.0.0">
-
-<class name="myClass">
- <summary>Simple test class that does exactly nothing</summary>
-</class>
-
-</extension>

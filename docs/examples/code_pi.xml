@@ -1,9 +1,0 @@
-<?xml version="1.0" ?>
-<!DOCTYPE extension SYSTEM "../extension.dtd">
-<extension name="code_pi" version="1.0.0">
-<code>
-<?data
-  int foo = 42; // <&>
-?>
-</code>
-</extension> 

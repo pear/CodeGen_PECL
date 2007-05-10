@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<!DOCTYPE extension SYSTEM "../extension.dtd">
-<extension name="license" version="1.0.0">
-  <license>PHP</license>
-</extension>
