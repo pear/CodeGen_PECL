@@ -1136,7 +1136,8 @@ class CodeGen_PECL_Element_Function
                     case "array":
                         $zvalType     = true;
                         $argString   .= "a";
-                        $var_decl    .= "    zval * $name = NULL;\n";
+                        $var_decl    .= "    zval * $name;\n";
+                        $var_code    .= "    MAKE_STD_ZVAL($name);\n    array_init($name);\n";
                         $var_decl    .= "    HashTable * {$name}_hash = NULL;\n";
                         $postProcess .= "    {$name}_hash = HASH_OF($name);\n";
                         break;
