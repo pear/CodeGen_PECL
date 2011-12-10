@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="function_type_hints" version="1.0.0">
+
+  <class name="class1"/>
+
+  <function name="foo">
+   <proto>int foo(object class1 c1, object class1 c2)</proto>
+   <code>
+RETURN_STRING("OK", 1);
+   </code>
+  </function>
+
+  <test>
+   <code>
+    <?data
+
+$p1 = new class1;
+$p2 = new class1;
+
+echo foo($p1, $p2);
+    ?>
+   </code>
+  </test>
+
+  <test>
+   <code>
+    <?data
+echo foo(1,2);
+    ?>
+   </code>
+   <result mode="format">
+Fatal error: Argument 1 must be an object of class class1 in %s on line %d
+   </result>
+  </test>
+
+
+
+
+
+</extension>

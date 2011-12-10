@@ -1,0 +1,139 @@
+<?php
+class CodeGen_PECL_Tools_ProtoLexer
+{
+    private $data;
+    public $token;
+    public $value;
+    private $line;
+    private $count;
+
+    function __construct($data)
+    {
+        $this->data  = $data;
+        $this->count = 0;
+        $this->line  = 1;
+    }
+
+/*!lex2php
+%input   $this->data
+%counter $this->count
+%token   $this->token
+%value   $this->value
+%line    $this->line
+whitespace = /[ \t\n]+/
+par_open   = /\(/
+par_close  = /\)/
+square_open   = /\[/
+square_close  = /\]/
+eq         = /=/
+ampersand  = /[&@]/
+comma      = /,/
+semicolon  = /;/
+ellipse    = /\.\.\./
+name       = /[_a-zA-Z][_a-zA-Z0-9]*/
+strval     = /"[^"]*"|'[^']*'/
+floatval   = /[0-9]*(\.[0-9]+)?([eE][+-]?[0-9]+)?/
+intval     = /[+-]?[0-9]+/
+hexval     = /0x[0-9a-fA-F]+/
+*/
+
+/*!lex2php
+whitespace {
+	return false;
+}
+par_open {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::PAR_OPEN;
+}
+par_close {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::PAR_CLOSE;
+}
+square_open {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_OPEN;
+}
+square_close {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_CLOSE;
+}
+eq {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::EQ;
+}
+comma {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::COMMA;
+}
+semicolon {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::SEMICOLON;
+}
+ellipse {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::ELLIPSE;
+}
+ampersand {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::AMPERSAND;
+}
+name {
+	switch ($this->value) {
+	case "void":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::VOID;
+		break;
+	case "bool": 	
+    case "boolean":
+	    $this->token = CodeGen_PECL_Tools_ProtoParser::BOOL;
+		break;
+	case "int": 
+	case "integer":
+	case "long":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::INT;
+		break;
+	case "float":
+	case "double":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::FLOAT;
+		break;
+	case "string": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::STRING;
+		break;
+	case "array": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::ARRAY_;
+		break;
+	case "class":
+	case "object":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::CLASS_;
+		break;
+	case "resource": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::RESOURCE;
+		break;
+	case "mixed": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::MIXED;
+		break;
+	case "callback": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::CALLBACK;
+		break;
+	case "stream": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::STREAM;
+		break;
+	case "true": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::TRUE_;
+		break;
+	case "false":
+		$this->token = CodeGen_PECL_Tools_ProtoParser::FALSE_;
+		break;
+	case "null": 
+		$this->token = CodeGen_PECL_Tools_ProtoParser::NULL_;
+		break;
+	default:
+		$this->token = CodeGen_PECL_Tools_ProtoParser::NAME;
+		break;
+	}
+}
+strval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::STRVAL;
+}
+floatval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
+intval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
+hexval {
+	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+}
+*/
+}
+

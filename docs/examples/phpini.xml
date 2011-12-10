@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="phpini" version="1.0.0">
+ <phpini name="foo" type="int" value="42"/>
+
+ <test>
+  <code>
+echo ini_get("phpini.foo")."\n";
+ini_set("phpini.foo", "23")."\n";
+echo ini_get("phpini.foo")."\n";
+  </code>
+  <result>
+42
+23
+  </result>
+ </test>
+</extension>

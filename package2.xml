@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>CodeGen_PECL</name>
+ <channel>pear.php.net</channel>
+ <summary>Tool to generate PECL extensions from an XML description</summary>
+ <description>CodeGen_PECL (formerly known as PECL_Gen) is a pure PHP replacement 
+for the ext_skel shell script that comes with the PHP 4 source. 
+It reads in configuration options, function prototypes and code fragments
+from an XML description file and generates a complete ready-to-compile
+PECL extension.
+ </description>
+ <lead>
+  <name>Hartmut Holzgraefe</name>
+  <user>hholzgra</user>
+  <email>hartmut@php.net</email>
+  <active>yes</active>
+ </lead>
+ <contributor>
+  <name>Rasmus Lerdorf</name>
+  <user>rasmus</user>
+  <email>rasmus@php.net</email>
+  <active>yes</active>
+ </contributor>
+ <contributor>
+  <name>Carsten Lucke</name>
+  <user>luckec</user>
+  <email>luckec@php.net</email>
+  <active>yes</active>
+ </contributor>
+ <helper>
+  <name>Pierre-Alain Joye</name>
+  <user>pajoye</user>
+  <email>pajoye@php.net</email>
+  <active>yes</active>
+ </helper>
+ <helper>
+  <name>Johann Peter Hartmann</name>
+  <user>hartmann</user>
+  <email>hartmann@php.net</email>
+  <active>yes</active>
+ </helper>
+ <date>2007-04-19</date>
+ <time>18:15:40</time>
+ <version>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP</license>
+ <notes>Changes since 1.0.4:
+- new function prototype parser
+- added PHP version check to config.m4
+- functions accepting/returning resources or classes 
+  or using constants for default values now &quot;inherit&quot;
+  conditional compilation settings from these elements
+- disabled output of AC_CHECK_TYPE checks for resource
+  types due to autoconf version conflicts
+    
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="docs">
+    <dir name="examples">
+     <file baseinstalldir="/" name="api_functions.xml" role="doc" />
+     <file baseinstalldir="/" name="minimal.xml" role="doc" />
+     <file baseinstalldir="/" name="release.xml" role="doc" />
+    </dir> <!-- /docs/examples -->
+    <file baseinstalldir="/" name="manual.html" role="doc" />
+   </dir> <!-- /docs -->
+   <dir name="PECL">
+    <dir name="Dependency">
+     <file baseinstalldir="CodeGen" name="Extension.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Header.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Lib.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Platform.php" role="php" />
+     <file baseinstalldir="CodeGen" name="With.php" role="php" />
+    </dir> <!-- /PECL/Dependency -->
+    <dir name="Element">
+     <file baseinstalldir="CodeGen" name="Class.php" role="php" />
+     <file baseinstalldir="CodeGen" name="ClassConstant.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Constant.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Function.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Global.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Ini.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Interface.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Logo.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Method.php" role="php" />
+     <file baseinstalldir="CodeGen" name="ObjectInterface.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Property.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Resource.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Stream.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Test.php" role="php" />
+    </dir> <!-- /PECL/Element -->
+    <dir name="Tools">
+     <file baseinstalldir="CodeGen" name="ProtoLexer.php" role="php" />
+     <file baseinstalldir="CodeGen" name="ProtoParser.php" role="php" />
+    </dir> <!-- /PECL/Tools -->
+    <file baseinstalldir="CodeGen" name="Command.php" role="php" />
+    <file baseinstalldir="CodeGen" name="Element.php" role="php" />
+    <file baseinstalldir="CodeGen" name="Extension.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
+    <file baseinstalldir="CodeGen" name="Maintainer.php" role="php" />
+    <file baseinstalldir="CodeGen" name="Release.php" role="php" />
+   </dir> <!-- /PECL -->
+   <file baseinstalldir="/" name="pecl-gen" role="script">
+    <tasks:replace from="/usr/local/bin/php" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+   </file>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.2</min>
+   </package>
+   <package>
+    <name>CodeGen</name>
+    <channel>pear.php.net</channel>
+    <min>1.0.2</min>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.4</release>
+    <api>1.0.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-17</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Changes since 1.0.3:
+- added support for constant grouping
+- standalone documentation support hacked in
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.3</release>
+    <api>1.0.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-16</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Changes since 1.0.2:
+- fixed CodeGen dependency entry
+- disabled #line output by default
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-14</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Changes since 1.0.0:
+- now using codegen helper object for indent and code blocks
+- updated the DTD 
+- added DOCTYPE specs to all examples
+- package.xml 1.0 OS dependencies generation fixed
+- some config.m4 generation stuff ended up in CodeGen, now moved back
+- added config.m4 checks for header files
+- added new interface CodeGen_PECL_Element_ObjectInterface for methods
+  that can take both Classes and Interfaces as argument
+- fixed typo in class payload constructor code generation
+- allow :: in names when using C++ only
+- use PHP_MALIAS instead of PHP_FALIAS for methods
+- improved attribute checking in XML parser
+- pear channel support
+- pkg-config support in --with options
+- started support for arg_info and pass/return by reference (work in progress)
+     
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-02-17</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>1.0.0 stable release (finally)
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0rc1</release>
+    <api>1.0.0rc1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-09-22</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>I&apos;m feature-complete for a 1.0 release now :)
+
+- object store support for private C/C++ data in objects
+
+- &lt;lib&gt; and &lt;header&gt; tags within &lt;with&gt;
+
+- interface and type hints support
+
+- added a lint option (-l) for syntax checking of spec files
+
+- write to tmpfiles first, only overwrite        -&gt; done
+  existing files if actual changes are 
+  detected, preserve unchanged files 
+  (to make &quot;make&quot; happy)
+
+- changed names of variables generated for resource parameters,
+  backwards compatibility is provided by checking the extension
+  tags version attribute, for versions &lt; 1.0.0dev the old naming
+  stile is used
+
+- added test generation for class member functions
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.9.0</release>
+    <api>0.9.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-08-11</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Milestone 0.9
+-------------
+
+- copy &lt;changelog&gt; to generated package.xml    - done
+
+- rewrite the function prototype parser
+  - object type specification (as in resources)      - done
+  - default values                                   - done
+  - &apos;void&apos; treatment                                 - done
+  - &apos;...&apos; not handled                                - done
+  - array() as default value                         - done
+  - code generation for &apos;pass by refecence&apos;          - for zval based types yet
+  - &apos;...&apos; code generation                            - if first parameter yet
+
+FREE_RESOURCE macro                                  - done
+
+allow defined PHP constants as default value         - done
+
+&lt;define&gt; tag -&gt; #define + &lt;constant&gt;? - done 
+
+allow for embedded base64 or uu encoded logo specs   - done
+
+changeable function prefix?                          - done
+
+trick parser to verbatim pass on docbook contentent  - done
+
+add configure compile test for &lt;resource&gt;      -done
+to check whether a given payload is a valid type?
+
+SYSTEM Entity and XInclude support                   - done 
+
+support for multiple &lt;with&gt; tags with distinct 
+names, name defaults to extension name if not given  - done
+
+added version attribute to &lt;extension&gt;
+to control parser features (replaces -x switch)      - done
+
+support &lt;?code ... ?&gt; as alternative to CDATA  - done 
+
+check whether &lt;header&gt; checks work             - done
+
+test files are not yet added to package.xml          - done
+
+documentation up to date for all 0.9 features        - done
+
+examples and test cases added                        - done
+
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.9.0rc5</release>
+    <api>0.9.0rc5</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-08-03</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- implemeted new proto parser, activate with --experimental
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.5</release>
+    <api>0.8.5</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2004-11-11</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- fixed method renaming inconsistencies introduced with 0.8.4
+- config.m4 additions can now be placed at &apos;top&apos; or &apos;bottom&apos; of config.m4
+- &apos;--force&apos; does not remove the target directory anymore
+- &apos;#include &lt;php.h&gt;&apos; moved out of #ifdef block to allow static builds
+- &apos;extern &quot;C&quot;&apos; specifications added on C++ builds
+- container tags like &lt;functions&gt; or &lt;globals&gt; are now optional
+- pecl-gen will now set exit status on errors
+
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.4</release>
+    <api>0.8.4</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2004-05-16</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>This is the first release living in PECL insteat of PEAR.
+
+Technical changes are: 
+
+- improved PECL CS compliance of generated code
+- generated config.m4 supports both shared and static build
+- code snippets may be read from files instead of beeing 
+  embedded in CDATA sections
+- improved resource parameter handling
+- shortcuts for constants that just mimic C constants
+- global &apos;code&apos; tag finally works as documented
+- files can be added using &apos;file&apos; tag in &apos;deps&apos;
+- ...
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.3</release>
+    <api>0.8.3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2004-04-01</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- this release was completely broken for unknown reasons,
+  might be realted to the move from PEAR to PECL ...?
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.2</release>
+    <api>0.8.2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-10-13</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- fixed a bug in the parser that rendered 0.8.1 almost useless :(
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.1</release>
+    <api>0.8.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-10-12</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- custom test generation added
+- minor DTD changes
+- code reformatted for better PEAR coding standards compliance
+- additional tools for whitespace and indentation management
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.0</release>
+    <api>0.8.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-07-13</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- added documentation
+- check for reserved words 
+- check for duplicate names
+- config,m4 header files check added
+- config.m4 support for makefile fragments
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.7.0</release>
+    <api>0.7.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-07-03</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>- a README file is written containing information on
+  how to continue after an extension was generated
+- --function=&quot;proto&quot; writes function stub to stdout
+- --stubs=filename now supported in ext_skel BC mode
+- added --help and --version options
+- added a short feedback howto message 
+  (can be disabled using --quiet)  
+- --with-xml works again 
+  (ext_skel compatibility)
+- will now only purge and overwrite existing target directory
+  if &apos;--force&apos; is requested on cmd line
+- .cvsignore created with platform-specific entries
+- PEARifying error reporting finished
+      
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.6.1</release>
+    <api>0.6.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-06-29</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>typo fix in package.xml dependencies entry for XML_Parser
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.6.0</release>
+    <api>0.6.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2003-06-28</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Moved from php5/scripts to PEAR.
+   </notes>
+  </release>
+ </changelog>
+</package>

@@ -1,0 +1,44 @@
+the grammer for a prototype would look like this: ?
+
+proto     : type name '(' param-spec ')'
+
+name      : [A-Za-z_][A-Za-z0-9_]*
+                 
+type      : "void"
+          | typespec
+
+typespec  : typename
+          | typename '&'
+        
+typename  : 'bool'  | 'boolean'
+          | 'int'   | 'integer' | 'long'
+          | 'float' | 'double'  | 'real'
+          | 'string'
+          | 'array'
+          | 'object'   | 'object' name
+          | 'resource' | 'resource' name
+          | 'mixed'
+          | 'callback'
+          | 'stream'
+
+param-spec: 'void'
+          | '...'
+          | param-list
+          | param-list ',' '...'
+
+param-list: parameter
+          | parm-list ',' parameter
+                   
+parameter : typespec name
+          | typespec name '=' default
+
+default   : "true" 
+          | "false" 
+          | "array()" 
+          | "null"
+          | numeric
+          | string
+
+string    : '"' character* '"'
+          
+numeric   : ... the usual int, float, hex and octal stuff ...

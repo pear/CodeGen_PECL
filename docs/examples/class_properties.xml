@@ -1,0 +1,232 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="class_properties" version="1.0.0">
+
+ <class name="class1">
+  <summary>Class1</summary>
+  <description>test class 1</description>
+  <property name="foo"        access="public"  type="int"    value="42"/>
+  <property name="foo_float"  access="public"  type="float"  value="42"/>
+  <property name="foo_string" access="public"  type="string" value="42"/>
+
+  <property name="bar" access="private" type="int" value="23"/>
+  <property name="baz" access="public"  type="int" value="37" static="yes"/>
+
+  <property name="init" access="public"  type="int" value="37" static="yes"/>
+
+  <constant name="c_int"    type="int"    value="23"/>
+  <constant name="c_float"  type="float"  value="23"/>
+  <constant name="c_string" type="string" value="23"/>
+
+  <function name="f_test">
+   <proto>int f_test(int n)</proto>
+   <code>RETURN_LONG(n);</code>
+  </function>
+
+  <function name="f_private" access="private">
+   <proto>int f_test(int n)</proto>
+   <code>RETURN_LONG(n);</code>
+  </function>
+
+  <function name="__construct">
+   <proto>void __construct([int i = 451])</proto>   
+   <code>
+    <?data
+PROP_SET_LONG("init", 666);
+    ?>
+   </code>
+  </function>
+
+  <function name="getBar" procedural="yes">
+   <proto>int getBar()</proto>
+   <code>
+    <?data
+RETURN_LONG(PROP_GET_LONG("bar"));
+    ?>
+   </code>
+  </function>
+
+  <function name="getInit" procedural="gaga">
+   <proto>int getInit()</proto>
+   <code>
+    <?data
+RETURN_LONG(PROP_GET_LONG("init"));
+    ?>
+   </code>
+  </function>
+ </class>
+
+ <class name="class2" extends="class1">
+  <summary>Class2</summary>
+  <description>test class 2</description>
+ </class>
+
+ <class name="class_f" extends="class1" final="yes">
+  <summary>Class_F</summary>
+  <description>test class final</description>
+ </class>
+
+ <class name="class_f2" extends="class1">
+  <summary>Class_F2</summary>
+  <description>test method final</description>
+  <function name="f_final" final="yes">
+   <proto>int f_final()</proto>
+   <code>RETURN_LONG(42);</code>
+  </function>
+ </class>
+
+ <test name="property_int">
+  <code>
+   <?data 
+    $c1 = new class1; 
+    var_dump($c1->foo); 
+   ?>
+  </code>
+  <result>int(42)</result>
+ </test>
+
+ <test name="property_float">
+  <code>
+   <?data 
+    $c1 = new class1; 
+    var_dump($c1->foo_float); 
+   ?>
+  </code>
+  <result>float(42)</result>
+ </test>
+
+ <test name="property_string">
+  <code>
+   <?data 
+    $c1 = new class1; 
+    var_dump($c1->foo_string); 
+   ?>
+  </code>
+  <result>string(2) "42"</result>
+ </test>
+
+ <test name="property_private">
+  <code>
+   <?data 
+    $c1 = new class1; 
+    echo $c1->bar;
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Cannot access private property class1::$bar in %s on line %d
+  </result>
+ </test>
+
+ <test name="property_static">
+  <code>
+   <?data
+    $c1  = new class1;
+    class1::$baz = 451;
+
+    class class3 extends class2 
+    {
+       function getBaz()
+       {
+           return self::$baz;
+       }
+    }
+
+	$c3 = new class3;
+    echo $c3->getBaz();
+   ?>
+  </code>
+  <result>
+451
+  </result>
+ </test>
+
+ <test name="class_final">
+  <code>
+   <?data
+class class3 extends class_f {
+  function foo() { echo "bar"; }
+}
+
+$c3 = new class3;
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Class class3 may not inherit from final class (class_f) in %s on line %d
+  </result>
+ </test>
+
+
+ <test name="method_final">
+  <code>
+   <?data
+class class3 extends class_f2 {
+  function f_final() { return 32; }
+}
+
+$c3 = new class3;
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Cannot override final method class_f2::f_final() in %s on line %d
+  </result>
+ </test>
+
+ <test name="constant_int">
+  <code>
+   <?data 
+    var_dump(class1::c_int); 
+   ?>
+  </code>
+  <result>int(23)</result>
+ </test>
+
+ <test name="constant_float">
+  <code>
+   <?data 
+    var_dump(class1::c_float); 
+   ?>
+  </code>
+  <result>float(23)</result>
+ </test>
+
+ <test name="constant_string">
+  <code>
+   <?data 
+    var_dump(class1::c_string); 
+   ?>
+  </code>
+  <result>string(2) "23"</result>
+ </test>
+
+ <test name="method_test">
+  <code>
+   <?data
+    $c1 = new class1;
+    echo $c1->f_test(42);
+   ?>
+  </code>
+  <result>42</result>
+ </test>
+
+ <test name="method_private">
+  <code>
+   <?data
+    $c1 = new class1;
+    echo $c1->f_private(42);
+   ?>
+  </code>
+  <result mode="format">
+Fatal error: Call to private method class1::f_private() from context '' in %s on line %f
+  </result>
+ </test>
+
+
+ <test name="constructor">
+  <code>
+   $c = new class1(666);
+   echo gaga($c);
+  </code>
+  <result>666</result>
+ </test>
+
+</extension>

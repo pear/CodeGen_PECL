@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT extension (summary|description|license|maintainers|maintainer|logo|release|changelog|functions|function|constants|constant|globals|global|phpini|deps|resources|resource|code|streams|stream|tests|test|makefile|classes|class|interface|channel)*>
+<!ATTLIST extension
+  name    CDATA #REQUIRED
+  version CDATA #IMPLIED
+  rel     CDATA #IMPLIED
+>
+
+<!ELEMENT summary (#PCDATA)>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT maintainers (maintainer)+>
+
+<!ELEMENT maintainer (user|role|name|email)*>
+
+<!ELEMENT user (#PCDATA)>
+
+<!ELEMENT role (#PCDATA)>
+
+<!ELEMENT name (#PCDATA)>
+
+<!ELEMENT email (#PCDATA)>
+
+<!ELEMENT logo (#PCDATA)>
+<!ATTLIST logo
+  src      CDATA #REQUIRED
+  mimetype CDATA #IMPLIED
+>
+
+<!ELEMENT changelog (release)*>
+
+<!ELEMENT release (version|license|state|date|notes|filelist|deps)*>
+
+<!ELEMENT version (#PCDATA)>
+
+<!ELEMENT state (#PCDATA)>
+
+<!ELEMENT license (#PCDATA)>
+
+<!ELEMENT date (#PCDATA)>
+
+<!ELEMENT notes (#PCDATA)>
+
+
+<!ELEMENT functions (function)*>
+<!ELEMENT function (summary|proto|description|code|test)*>
+<!ATTLIST function
+  name       CDATA #REQUIRED
+  role       (internal|public) "public"
+  access     (public|private|protected) "public"
+  abstract   (yes|no) "no"
+  final      (yes|no) "no"
+  procedural CDATA #IMPLIED
+  if         CDATA #IMPLIED
+>
+<!ELEMENT proto (#PCDATA)>  
+<!ELEMENT code  (#PCDATA)>  
+<!ATTLIST code  
+  role     (header|code) "code"
+  position (top|bottom)  "bottom"
+  src  CDATA #IMPLIED
+>
+<!ELEMENT constants (constant)*>
+<!ELEMENT constant (#PCDATA)>
+<!ATTLIST constant
+  name  CDATA #REQUIRED
+  value CDATA #IMPLIED
+  type  (string|int|float) "string"
+  group CDATA #IMPLIED
+>
+
+<!ELEMENT globals (phpini|global)*>
+<!ELEMENT phpini (#PCDATA)>
+<!ATTLIST phpini
+  name CDATA #REQUIRED
+  type (bool|int|float|string) "string"
+  value CDATA #REQUIRED
+  access (system|perdir|user|all) "all"
+  onupdate CDATA #IMPLIED
+>
+<!ELEMENT global (#PCDATA)>
+<!ATTLIST global
+  name  CDATA #REQUIRED
+  type  CDATA #REQUIRED
+  value CDATA #IMPLIED
+>
+
+<!ELEMENT deps (with|lib|header|file|program|extension)*>
+<!ATTLIST deps
+  language (c|cpp) "c"
+  platform   (unix|win32|all) "all"
+>
+<!ELEMENT with (#PCDATA|lib|header)*>
+<!ATTLIST with
+  defaults CDATA #REQUIRED
+  testfile CDATA #REQUIRED
+  name     CDATA #IMPLIED
+>
+<!ELEMENT lib (#PCDATA)>
+<!ATTLIST lib
+  name       CDATA #REQUIRED
+  function   CDATA #IMPLIED
+  searchpath CDATA #IMPLIED
+  platform   (unix|win32|all) "all"
+>
+<!ELEMENT header (#PCDATA)>
+<!ATTLIST header
+  name     CDATA #REQUIRED
+  path     CDATA #IMPLIED
+  prepend  (yes|no) "no"
+>
+<!ELEMENT file (#PCDATA)>
+<!ATTLIST file
+  name CDATA #REQUIRED
+  dir  CDATA #IMPLIED
+>
+
+
+
+<!ELEMENT resources (resource)*>
+<!ELEMENT resource (description?, destruct?)>
+<!ATTLIST resource
+  name       CDATA #REQUIRED
+  payload    CDATA #IMPLIED
+  alloc      (yes|no) "no"
+  if         CDATA #IMPLIED
+>
+<!ELEMENT destruct (#PCDATA)>
+
+<!ELEMENT streams (stream)*>
+<!ELEMENT stream (description?, ops?, data?)>
+<!ATTLIST stream
+  name CDATA #REQUIRED
+>
+<!ELEMENT ops (op)*>
+<!ELEMENT op (#PCDATA)>
+<!ATTLIST op
+  name CDATA #REQUIRED
+>
+
+
+<!ELEMENT tests (test)*>
+<!ELEMENT test (title?, description?, ini?, skipif?, post?, get?, code, result?)>
+<!ATTLIST test
+  name CDATA #IMPLIED
+>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT ini (#PCDATA)>
+<!ELEMENT skipif (#PCDATA)>
+<!ELEMENT post (#PCDATA)>
+<!ELEMENT get (#PCDATA)>
+<!ELEMENT result (#PCDATA)>
+<!ATTLIST result
+  mode (plain|format|regex) "plain"
+>
+
+<!ELEMENT makefile (#PCDATA)>
+
+
+<!ELEMENT class (summary?, description?, implements*, payload?, destruct?, property*, constant*, function*)>
+<!ATTLIST class 
+  name     CDATA #REQUIRED
+  extends  CDATA #IMPLIED
+  abstract (yes|no) "no"
+  final    (yes|no) "no"
+>
+
+<!ELEMENT interface (summary?, description?, function*)>
+<!ATTLIST interface
+  name     CDATA #REQUIRED
+  extends  CDATA #IMPLIED
+>
+
+<!ELEMENT payload (#PCDATA)>
+<!ATTLIST payload
+  type   CDATA #REQUIRED
+  alloc  (yes|no) "no"
+>
+
+<!ELEMENT property (#PCDATA)>
+<!ATTLIST property 
+  name   CDATA #REQUIRED
+  type   CDATA #REQUIRED
+  value  CDATA #IMPLIED
+  static (yes|no) "no"
+  access (private|protected|public) "public"
+>
+
+<!ELEMENT implements (#PCDATA)>
+<!ATTLIST implements
+  interface CDATA #REQUIRED
+>

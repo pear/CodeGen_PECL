@@ -1,0 +1,3 @@
+struct snippet {
+  int i;
+};
