@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Resource.php,v 1.14 2006/10/28 20:15:17 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -30,7 +30,7 @@ require_once "CodeGen/PECL/Element.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -237,7 +237,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      */
     static function cCodeFooter($name) 
     {
-        return "/* }}} *\n\n";
+      return "/* }}} */\n\n";
     }
 
     /** 

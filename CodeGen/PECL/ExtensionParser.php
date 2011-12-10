@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: ExtensionParser.php,v 1.64 2007/04/26 11:23:08 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -31,7 +31,7 @@ require_once "CodeGen/PECL/Maintainer.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -45,14 +45,13 @@ class CodeGen_PECL_ExtensionParser
         return parent::setInputFile($filename);
     }
 
-    function tagstart_maintainer($attr)
+    function tagstart_extension_maintainer($attr)
     {
-        // check: never popped?
         $this->pushHelper(new CodeGen_PECL_Maintainer);
         return $this->noAttributes($attr);
     }
 
-    function tagstart_release($attr)
+    function tagstart_extension_release($attr)
     {
         $this->pushHelper(new CodeGen_PECL_Release);
         return $this->noAttributes($attr);
@@ -95,12 +94,26 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["if"])) {
             $this->helper->setIfCondition($attr["if"]);
+        } 
+
+        
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
+            }
         }
         
+         
+
         return true;
     }
     
     function tagstart_extension_functions_function($attr) {
+        return $this->tagstart_extension_function($attr);
+    }
+        
+    function tagstart_group_function($attr) {
         return $this->tagstart_extension_function($attr);
     }
         
@@ -235,11 +248,12 @@ class CodeGen_PECL_ExtensionParser
         return $err;
     }
     
-
-
-
-
     function tagend_extension_functions_function($attr, $data)
+    {
+        return $this->tagend_extension_function($attr, $data);
+    }
+
+    function tagend_group_function($attr, $data)
     {
         return $this->tagend_extension_function($attr, $data);
     }
@@ -253,11 +267,6 @@ class CodeGen_PECL_ExtensionParser
 
 
     function tagstart_extension_resource($attr)
-    {
-        return $this->tagstart_resources_resource($attr);
-    }
-    
-    function tagstart_resources_resource($attr)
     {
         $err = $this->checkAttributes($attr, array("name", "payload", "alloc", "if"));
         if (PEAR::isError($err)) {
@@ -300,9 +309,26 @@ class CodeGen_PECL_ExtensionParser
             $this->helper->setIfCondition($attr["if"]);
         }
         
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
+            }
+        }
+
         return true;
     }
 
+    function tagstart_resources_resource($attr)
+    {
+        return $this->tagstart_extension_resource($attr);
+    }
+
+    function tagstart_group_resource($attr)
+    {
+        return $this->tagstart_extension_resource($attr);
+    }
+    
     function tagend_resource_destruct($attr, $data)
     {
         return $this->helper->setDestruct(CodeGen_Tools_IndentC::linetrim($data));
@@ -313,15 +339,19 @@ class CodeGen_PECL_ExtensionParser
         return $this->helper->setDescription(CodeGen_Tools_IndentC::linetrim($data));
     }
 
-    function tagend_extension_resource($attr, $data) {
-        return $this->tagend_resources_resource($attr, $data);
-    }
-    
-    function tagend_resources_resource($attr, $data) 
+    function tagend_extension_resource($attr, $data) 
     {
         $err = $this->extension->addResource($this->helper);
         $this->popHelper();
         return $err;
+    }
+    
+    function tagend_resources_resource($attr, $data) {
+        return $this->tagend_extension_resource($attr, $data);
+    }
+
+    function tagend_group_resource($attr, $data) {
+        return $this->tagend_extension_resource($attr, $data);
     }
     
     
@@ -365,17 +395,16 @@ class CodeGen_PECL_ExtensionParser
         return $this->extension->addLogo($logo);
     }
     
-    
-    function tagstart_constants($attr) {
+    function tagend_group_logo($attr, $data)
+    {
+        $this->tagend_extension_logo($attr, $data);
+    }
+
+    function tagstart_extension_constants($attr) {
         $this->pushHelper($attr);
     }
-    
+
     function tagend_extension_constant($attr, $data)
-    {
-        return $this->tagend_constants_constant($attr, $data);
-    }
-    
-    function tagend_constants_constant($attr, $data)
     {
         $const = new CodeGen_PECL_Element_Constant;
 
@@ -426,13 +455,33 @@ class CodeGen_PECL_ExtensionParser
         if (isset($attr["if"])) {
             $condition = ($attr["if"] == "yes") ? $attr["name"] : $attr["if"];
             $const->setIfCondition($condition);
-        }                
+        } else if (is_array($this->helper) && isset($this->helper["if"])) {
+            $const->setIfCondition($this->helper["if"]);
+        }
+
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $const->addIfCondition($if);
+            }
+        }
         
         $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         return $this->extension->addConstant($const);
     }
 
+    function tagend_constants_constant($attr, $data)
+    {
+        return $this->tagend_extension_constant($attr, $data);
+    }
+
+    function tagend_group_constant($attr, $data)
+    {
+        return $this->tagend_extension_constant($attr, $data);
+    }
+    
+    
     function tagend_constants($attr, $data) {
         $this->popHelper();
         return true;
@@ -440,13 +489,8 @@ class CodeGen_PECL_ExtensionParser
 
 
         
+
     function tagend_extension_global($attr, $data)
-    {
-        return $this->tagend_globals_global($attr, $data);
-    }
-
-
-    function tagend_globals_global($attr, $data)
     {
         $global = new CodeGen_PECL_Element_Global;
 
@@ -479,17 +523,29 @@ class CodeGen_PECL_ExtensionParser
             $global->setIfCondition($attr["if"]);
         }
 
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $global->addIfCondition($if);
+            }
+        }
+
         return $this->extension->addGlobal($global);
+    }
+
+    function tagend_globals_global($attr, $data)
+    {
+        return $this->tagend_extension_global($attr, $data);
+    }
+
+    function tagend_group_global($attr, $data)
+    {
+        return $this->tagend_extension_global($attr, $data);
     }
 
         
 
-    function tagend_extension_phpini($attr, $data) 
-    {
-        return $this->tagend_globals_phpini($attr, $data);
-    }
-
-    function tagend_globals_phpini($attr, $data)
+    function tagend_extension_phpini($attr, $data)
     {
         $ini = new CodeGen_PECL_Element_Ini;
 
@@ -534,6 +590,13 @@ class CodeGen_PECL_ExtensionParser
             $ini->setIfCondition($attr["if"]);
         }
 
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $ini->addIfCondition($if);
+            }
+        }
+
         $ini->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
         $err = $this->extension->addPhpini($ini);
@@ -555,6 +618,16 @@ class CodeGen_PECL_ExtensionParser
         $err = $this->extension->addGlobal($global);
 
         return $err;
+    }
+
+    function tagend_globals_phpini($attr, $data) 
+    {
+        return $this->tagend_extension_phpini($attr, $data);
+    }
+
+    function tagend_group_phpini($attr, $data) 
+    {
+        return $this->tagend_extension_phpini($attr, $data);
     }
 
     function tagend_globals($attr, $data) {
@@ -787,6 +860,11 @@ class CodeGen_PECL_ExtensionParser
         return $this->tagstart_extension_test($attr);
     }
 
+    function tagstart_extension_group_test($attr) 
+    {
+        return $this->tagstart_extension_test($attr);
+    }
+
     function tagend_test_title($attr, $data) {
         $this->helper->setTitle(CodeGen_Tools_IndentC::linetrim($data));
     }
@@ -847,6 +925,10 @@ class CodeGen_PECL_ExtensionParser
         return $this->tagend_extension_test($attr, $data);
     }
 
+    function tagend_extension_group_test($attr, $data) {
+        return $this->tagend_extension_test($attr, $data);
+    }
+
     function tagend_extension_tests($attr, $data) {
         return true;
     }
@@ -856,7 +938,7 @@ class CodeGen_PECL_ExtensionParser
 
 
 
-    function tagstart_class($attr)
+    function tagstart_extension_class($attr)
     {
         $err = $this->checkAttributes($attr, array("name", "extends", "final", "abstract", "if"));
         if (PEAR::isError($err)) {
@@ -909,7 +991,19 @@ class CodeGen_PECL_ExtensionParser
             $class->setIfCondition($attr["if"]);
         }
         
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
+            }
+        }
+
         return true;
+    }
+
+    function tagstart_group_class($attr)
+    {
+        return $this->tagstart_extension_class($attr);
     }
 
     function tagend_class_summary($attr, $data) 
@@ -1161,14 +1255,19 @@ class CodeGen_PECL_ExtensionParser
         return $err;
     }
     
-    function tagend_class($attr, $data) 
+    function tagend_extension_class($attr, $data) 
     {
         $err = $this->extension->addClass($this->helper);
         $this->popHelper();
         return true;
     }
 
-    function tagstart_interface($attr)
+    function tagend_group_class($attr, $data)
+    {
+        return $this->tagend_extension_class($attr, $data);
+    }
+
+    function tagstart_extension_interface($attr)
     {
         $err = $this->checkAttributes($attr, array("name", "extends", "if"));
         if (PEAR::isError($err)) {
@@ -1199,7 +1298,18 @@ class CodeGen_PECL_ExtensionParser
             $interface->setIfCondition($attr["if"]);
         }
 
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $interface->addIfCondition($if);
+            }
+        }
         return true;
+    }
+
+    function tagstart_group_interface($attr)
+    {
+        return $this->tagstart_extension_interface($attr);
     }
 
     function tagstart_interface_function($attr)
@@ -1235,14 +1345,19 @@ class CodeGen_PECL_ExtensionParser
     }
     
 
-    function tagend_interface($attr, $data) 
+    function tagend_extension_interface($attr, $data) 
     {
         $err = $this->extension->addInterface($this->helper);
         $this->popHelper();
         return true;
     }
 
-    function tagstart_stream($attr)
+    function tagend_group_interface($attr, $data)
+    {
+        return $this->tagend_extension_interface($attr, $data);
+    }
+
+    function tagstart_extension_stream($attr)
     {
         $err = $this->checkAttributes($attr, array("name"));
         if (PEAR::isError($err)) {
@@ -1259,6 +1374,11 @@ class CodeGen_PECL_ExtensionParser
         } else {
             return PEAR::raiseError("'name' attribut for <stream> missing");
         }
+    }
+
+    function tagstart_group_stream($attr)
+    {
+        return $this->extension_group_stream($attr);
     }
 
     function tagend_stream_open($attr, $data)
@@ -1341,10 +1461,15 @@ class CodeGen_PECL_ExtensionParser
         $this->helper->addCode("set", $data);
     }
 
-    function tagend_stream($attr, $data)
+    function tagend_extension_stream($attr, $data)
     {
         $this->extension->addStream($this->helper);
         $this->popHelper();
+    }
+
+    function tagend_group_stream($attr, $data)
+    {
+        return $this->tagend_extension_stream($attr, $data);
     }
 
     function tagstart_channel($attr)
@@ -1352,9 +1477,19 @@ class CodeGen_PECL_ExtensionParser
         return $this->noAttributes($attr);
     }
 
+    function tagstartgroup_channel($attr)
+    {
+        return $this->tagstart_extension_channel($attr);
+    }
+
     function tagend_channel($attr, $data)
     {
         return $this->extension->setChannel($data);
+    }
+
+    function tagend_group_channel($attr, $data)
+    {
+        return $this->tagend_extension_channel($attr, $data);
     }
 }
 

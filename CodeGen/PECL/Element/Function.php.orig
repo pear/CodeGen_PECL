@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005-2008 Hartmut Holzgraefe
+ * @copyright  2005, 2006 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Function.php,v 1.46 2007/04/25 13:59:09 hholzgra Exp $
+ * @version    CVS: $Id$
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -35,7 +35,7 @@ require_once "CodeGen/PECL/Tools/ProtoParser.php";
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005-2008 Hartmut Holzgraefe
+ * @copyright  2005, 2006 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -203,34 +203,6 @@ class CodeGen_PECL_Element_Function
      */
     protected $varargs = false;
 
-    function setVarargs($varargs) 
-    {
-        $this->varargs = (bool)$varargs;
-    }
-
-    function getVarargs() 
-    {
-        return $this->varargs;
-    }
-
-    protected $varargsType = "mixed";
-
-    function setVarargsType($type)
-    {
-        $type = strtolower($type);
-        
-        switch ($type) {
-        case "bool":
-        case "int":
-        case "float":
-        case "string":
-        case "mixed":
-            $this->varargsType = $type;
-            return true;
-        }
-        
-        return PEAR::raiseError("invalid vararg type '$type', only 'bool', 'int', 'float', 'string' \nand 'mixed' are supported for now");
-    }
 
     /**
      * Function prototype
@@ -421,7 +393,7 @@ class CodeGen_PECL_Element_Function
         }
             
         // return by reference?
-        if (count($tokens) && $tokens[0][0] === 'char' && ($tokens[0][1] === '&' || $tokens[0][1] === '@')) {
+        if (count($tokens) && $tokens[0][0] === 'char' && $tokens[0][1] === '&') {
             list($type, $token) = array_shift($tokens);
             $returnByRef = true;
         }
@@ -505,10 +477,10 @@ class CodeGen_PECL_Element_Function
             }
                 
             //  pass by reference?
-            if (count($tokens) && ($tokens[0][0] === 'char') && ($tokens[0][1] === '&' || $tokens[0][1] === '@')) {
+            if (count($tokens) && ($tokens[0][0] === 'char') && ($tokens[0][1] === '&')) {
                 list($type, $token) = array_shift($tokens);
-                if ($param['type'] != "array" && $param['type'] != "mixed" && $param['type'] != 'object') {
-                    return PEAR::raiseError("only 'array', 'object' and 'mixed' arguments may be passed by reference, '$param[name]' is of type '$param[type]'");
+                if ($type != "array" && $type != "mixed") {
+                    return PEAR::raiseError("only 'array' and 'mixed' arguments may be passed by reference, '$param[name]' is of type '$type'");
                 }
                 $param['byRef'] = true;
                 $this->hasRefArgs = true;
@@ -667,7 +639,7 @@ class CodeGen_PECL_Element_Function
                 $params[$param]['type'] = $tokens[$n];
                 $n++;
 
-                if ($tokens[$n] == "&" || $token[$n] == "@") {
+                if ($tokens[$n] == "&") {
                     $params[$param]['byRef'] = true;
                     $n++;
                 }
@@ -677,7 +649,7 @@ class CodeGen_PECL_Element_Function
                     $n++;
                 }
 
-                if ($tokens[$n] == "&" || $token[$n] == "@") {
+                if ($tokens[$n] == "&") {
                     $params[$param]['byRef'] = true;
                     $n++;
                 }
@@ -968,28 +940,14 @@ class CodeGen_PECL_Element_Function
     /**
      * Hook for parameter parsing API function 
      *
+     * @param  string  C expr. for number of arguments
      * @param  string  Argument string
      * @param  array   Argument variable pointers
-     * @param  int     Return value for number of arguments
      */
-    protected function parseParameterHook($argString, $argPointers, &$count)
+    protected function parseParameterHook($argc, $argString, $argPointers)
     {
-        $count = count($this->params);
-
-        if ($this->varargs) {
-            $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", $count);
-        } else if ($count > 0) {
-            $argc = "ZEND_NUM_ARGS()";
-        } 
-       
-        if (isset($argc)) {
-            $parse_call = "zend_parse_parameters($argc TSRMLS_CC, \"$argString\", ".join(", ", $argPointers).")";
-        } else {
-            $parse_call = "zend_parse_parameters_none()";
-        }
-        
         return "
-    if ($parse_call == FAILURE) {
+    if (zend_parse_parameters($argc TSRMLS_CC, \"$argString\", ".join(", ", $argPointers).") == FAILURE) {
         return;
     }
 ";
@@ -1055,19 +1013,14 @@ class CodeGen_PECL_Element_Function
                 
             $code .= $this->localVariables($extension);
 
-            $var_decl = "\n";
-            $var_code = "\n";
-
             // now we create local variables for all parameters
             // at the same time we put together the parameter parsing string
             if (is_array($this->params) && count($this->params)) {
-
                 $argString   = "";
                 $argPointers = array();
                 $optional    = false;
                 $postProcess = "";
                 $zvalType    = false;
-
                 foreach ($this->params as $param) {
                     if ($param["type"] === "void"  || $param["type"] === "...") {
                         continue;
@@ -1090,26 +1043,26 @@ class CodeGen_PECL_Element_Function
                     case "bool":
                         $argString .= "b";
                         $default    = $this->defaultval($param, "0");
-                        $var_decl  .= "    zend_bool $name = $default;\n";
+                        $code      .= "    zend_bool $name = $default;\n";
                         break;
 
                     case "int":
                         $argString .= "l";
                         $default    = $this->defaultval($param, "0");
-                        $var_decl  .= "    long $name = $default;\n";
+                        $code      .= "    long $name = $default;\n";
                         break;
 
                     case "float":
                         $argString .= "d";
                         $default    = $this->defaultval($param, "0.0");
-                        $var_decl  .= "    double $name = $default;\n";
+                        $code      .= "    double $name = $default;\n";
                         break;
 
                     case "string":
                         $argString    .= "s";
                         $default       = $this->defaultval($param, "NULL");
-                        $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len = %d;\n", 
+                        $code         .= "    const char * $name = $default;\n";
+                        $code         .= sprintf("    int {$name}_len = %d;\n", 
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
                         $argPointers[] = "&{$name}_len";
                         break;
@@ -1117,8 +1070,8 @@ class CodeGen_PECL_Element_Function
                     case "unicode":
                         $argString    .= "u";
                         $default       = $this->defaultval($param, "NULL");
-                        $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len = %d;\n", 
+                        $code         .= "    const char * $name = $default;\n";
+                        $code         .= sprintf("    int {$name}_len = %d;\n", 
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
                         $argPointers[] = "&{$name}_len";
                         break;
@@ -1126,24 +1079,24 @@ class CodeGen_PECL_Element_Function
                     case "text":
                         $argString    .= "t";
                         $default       = $this->defaultval($param, "NULL");
-                        $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len  = %d;\n", 
+                        $code         .= "    const char * $name = $default;\n";
+                        $code         .= sprintf("    int {$name}_len  = %d;\n", 
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
-                        $var_decl     .= "    int {$name}_type = IS_STRING;\n"; // TODO depends on input encoding
+                        $code         .= "    int {$name}_type = IS_STRING;\n"; // TODO depends on input encoding
                         $argPointers[] = "&{$name}_len";
                         break;
 
                     case "array":
                         $zvalType     = true;
                         $argString   .= "a";
-                        $var_decl    .= "    zval * $name = NULL;\n";
-                        $var_decl    .= "    HashTable * {$name}_hash = NULL;\n";
+                        $code        .= "    zval * $name = NULL;\n";
+                        $code        .= "    HashTable * {$name}_hash = NULL;\n";
                         $postProcess .= "    {$name}_hash = HASH_OF($name);\n";
                         break;
 
                     case "object": 
                         $zvalType = true;
-                        $var_decl.= "    zval * $name = NULL;\n";
+                        $code    .= "    zval * $name = NULL;\n";
                         if (isset($param['subtype'])) {
                             $argString    .= "O";
                             $argPointers[] = "$param[subtype]_ce_ptr";
@@ -1191,8 +1144,8 @@ class CodeGen_PECL_Element_Function
                     case "stream":
                         $zvalType     = true;
                         $argString   .= "r";
-                        $var_decl    .= "    zval * {$name}_zval = NULL;\n";
-                        $var_decl    .= "    php_stream * $name = NULL:\n";
+                        $code        .= "    zval * {$name}_zval = NULL;\n";
+                        $code        .= "    php_stream * $name = NULL:\n";
                         $postProcess .= "    php_stream_from_zval($name, &_z$name);\n"; 
                         break;
 
@@ -1205,124 +1158,45 @@ class CodeGen_PECL_Element_Function
                     case "mixed":
                         $zvalType = true;
                         $argString .= "z";
-                        $var_decl  .= "    zval * {$name} = NULL;\n";
+                        $code      .= "    zval * {$name} = NULL;\n";
                         break;                          
                     }
 
                     if (empty($param['byRef']) && ($param['type'] == 'mixed' || $param['type'] == 'array')) {
                         $argString .= "/";
-                    } else if ($param['type'] == 'object') {
-                        // nothing to do as objects are passed by reference anyway
                     } else if (!$zvalType) {
                         // TODO: pass by ref for 'simple' types requires further thinking
                     }
                 }
             } 
 
-            if ($this->varargs) {
-                $var_decl .= "\n";
-                $var_decl .= "    int varargc;\n";
-                $var_decl .= "    zval ***real_argv;\n";
-                switch ($this->varargsType) {
-                case "bool":
-                    $var_decl .= "    zend_bool *varargv;\n";
-                    break;
-                case "int":
-                    $var_decl .= "    long *varargv;\n";
-                    break;
-                case "float":
-                    $var_decl .= "    double *varargv;\n";
-                    break;
-                case "string":
-                    $var_decl .= "    char **varargv;\n";
-                    $var_decl .= "    int   *varargv_len;\n";
-                    break;
-                case "mixed":
-                default:
-                    $var_decl .= "    zval ***varargv;\n";
-                    break;
-                }
-                $var_decl .= "\n";
-            }
-
-            $varargs_offset = 0;
             // now we do the actual parameter parsing
-
             if (empty($argString)) {
-                if ((!empty($this->params) && $this->params[0]['type'] == "...") // old parser?
-                    || $this->varargs) {
+                if (!empty($this->params) && $this->params[0]['type'] == "...") {
+                    $code .= "/* custom parsing code required */\n\n";
                 } else {
-                    $var_code .= "    if (ZEND_NUM_ARGS()>0)  {\n        WRONG_PARAM_COUNT;\n    }\n\n";
+                    $code .= "    if (ZEND_NUM_ARGS()>0)  {\n        WRONG_PARAM_COUNT;\n    }\n\n";
                 }
             } else {
-                $var_code .= $this->parseParameterHook($argString, $argPointers, $varargs_offset);
+                if ($this->varargs) {
+                    $argc = sprint("MIN(ZEND_NUM_ARGS(),%d)", count($this->params)-1);
+                } else {
+                    $argc = "ZEND_NUM_ARGS()";
+                }
+
+
+                $code .= $this->parseParameterHook($argc, $argString, $argPointers);
                     
-                if (!empty($postProcess)) {
-                    $var_code.= "$postProcess\n\n";
+                if ($this->varargs) {
+                    // TODO can't do a zend_get_parameters_array with offset yet
+                }
+                    
+
+                if ($postProcess) {
+                    $code.= "$postProcess\n\n";
                 }
             }
-
                     
-            $code .= "$var_decl\n";
-            $code .= "$var_code\n";
-
-            if ($this->varargs) {
-                $code .= "\n    varargc = ZEND_NUM_ARGS();\n";
-                $code .= "    real_argv = (zval ***)calloc(sizeof(zval **), varargc);\n";
-                $code .= "    zend_get_parameters_array_ex(varargc, real_argv);\n";
-                $code .= "    varargc -= $varargs_offset;\n";
-
-                switch ($this->varargsType) {
-                case "bool":
-                    $code .= "    varargv = (zend_bool *)calloc(sizeof(zend_bool), varargc);\n";
-                    $code .= "    {\n";
-                    $code .= "      int i;\n";
-                    $code .= "      for (i = 0; i < varargc; i++) {\n";
-                    $code .= "        convert_to_boolean_ex(real_argv[i + $varargs_offset]);\n";
-                    $code .= "        varargv[i] = Z_BVAL_PP(real_argv[i + $varargs_offset]);\n";
-                    $code .= "      }\n";
-                    $code .= "    }\n";
-                    break;
-                case "int":                    
-                    $code .= "    varargv = (long *)calloc(sizeof(long), varargc);\n";
-                    $code .= "    {\n";
-                    $code .= "      int i;\n";
-                    $code .= "      for (i = 0; i < varargc; i++) {\n";
-                    $code .= "        convert_to_long_ex(real_argv[i + $varargs_offset]);\n";
-                    $code .= "        varargv[i] = Z_LVAL_PP(real_argv[i + $varargs_offset]);\n";
-                    $code .= "      }\n";
-                    $code .= "    }\n";
-                    break;
-                case "float":
-                    $code .= "    varargv = (double *)calloc(sizeof(double), varargc);\n";
-                    $code .= "    {\n";
-                    $code .= "      int i;\n";
-                    $code .= "      for (i = 0; i < varargc; i++) {\n";
-                    $code .= "        convert_to_double_ex(real_argv[i + $varargs_offset]);\n";
-                    $code .= "        varargv[i] = Z_DVAL_PP(real_argv[i + $varargs_offset]);\n";
-                    $code .= "      }\n";
-                    $code .= "    }\n";
-                    break;
-                case "string":
-                    $code .= "    varargv = (char **)calloc(sizeof(char *), varargc);\n";
-                    $code .= "    varargv_len = (int *)calloc(sizeof(int), varargc);\n";
-                    $code .= "    {\n";
-                    $code .= "      int i;\n";
-                    $code .= "      for (i = 0; i < varargc; i++) {\n";
-                    $code .= "        convert_to_string_ex(real_argv[i + $varargs_offset]);\n";
-                    $code .= "        varargv[i] = Z_STRVAL_PP(real_argv[i + $varargs_offset]);\n";
-                    $code .= "        varargv_len[i] = Z_STRLEN_PP(real_argv[i + $varargs_offset]);\n";
-                    $code .= "      }\n";
-                    $code .= "    }\n";
-                    break;
-                case "mixed":
-                default:
-                    $code .= "    varargv = real_argv + $varargs_offset;\n";
-                    break;
-                }
-            } 
-            
-
             // for functions returning an array we initialize return_value
             if ($this->returns['type'] === "array") {
                 $code.="    array_init(return_value);\n\n";
@@ -1332,36 +1206,24 @@ class CodeGen_PECL_Element_Function
                 if ($extension->getLinespecs()) {
                     // generate #line preprocessor directive
                     if ($this->codeLine) {
-                        $linedef = "#line {$this->codeLine}";
+                        $linedef = "#line {$this->codeLine} ";
                         if ($this->codeFile) {
-                            $linedef.= ' "'.$this->codeFile.'"';
+                            $linedef.= '"'.$this->codeFile.'"';
                         }
-                        $linedef.= "\n";
                     } else {
                         $linedef = "";
                     }
                 }
 
-            $code .= $extension->codegen->varblock($linedef . $this->code); 
-                // free varargs array if exists
-                if ($this->varargs) {
-                    $code .= "\n    free(real_argv);\n";
-                    switch ($this->varargsType) {
-                    case "string":
-                        $code .="    free(varargv_len);\n";
-                    case "bool":
-                    case "int":
-                    case "float":
-                        $code .="    free(varargv);\n";
-                        break;
-                    default:
-                        break;
-                    }
+                // if function code is specified so we add it here
+                if (isset($linedef)) {
+                    $code .= "$linedef\n";
                 }
+                $code .= $extension->codegen->varblock($this->code);
 
                 // when a function returns a named resource we know what to do
                 if ($this->returns['type'] == "resource" && isset($this->returns['subtype'])) {
-                    $code .= "\n    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
+                    $code .= "    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
                         .$this->returns['subtype'].");\n";
                 }
             } else {
@@ -1701,18 +1563,10 @@ class CodeGen_PECL_Element_Function
 
     function addParam($param) 
     {
-        foreach ($this->params as $p) {
-            if ($param["name"] == $p["name"]) {
-                return PEAR::raiseError("Parameter '".$param['name']."' already declared");
-            }
-        }
-
         $this->params[] = $param;
         if (@$param['byRef']) {
             $this->hasRefArgs = true;
         }
-
-        return true;
     }
 
     function setReturns($returns)

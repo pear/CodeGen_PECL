@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="optional_args" version="1.1.0">
+
+ <!-- simple test -->
+ <function name="f1">
+  <proto>int f1([int p1])</proto>
+  <code>
+   RETURN_LONG(p1);
+  </code>
+  <test>
+   <code>
+echo f1()."\n";
+echo f1(42)."\n";
+   </code>
+   <result>
+0
+42
+   </result>
+  </test>
+ </function>
+
+ <!-- testing default value -->
+ <function name="f2">
+  <proto>int f2([int p1 = 23])</proto>
+  <code>
+   RETURN_LONG(p1);
+  </code>
+  <test>
+   <code>
+echo f2()."\n";
+echo f2(42)."\n";
+   </code>
+   <result>
+23
+42
+   </result>
+  </test>
+ </function>
+
+ <!-- testing multiple optional parameters -->
+ <function name="f3">
+  <proto>int f3(int p1 [, int p2 [, int p3]])</proto>
+  <code>
+   RETURN_LONG(p1 + p2 + p3);
+  </code>
+  <test>
+   <code>
+echo f3(1)."\n";
+echo f3(1,1)."\n";
+echo f3(1,1,1)."\n";
+   </code>
+   <result>
+1
+2
+3
+   </result>
+  </test>
+ </function>
+
+ <!-- testing multiple dependant optional parameters -->
+ <!-- TODO not functional yet
+ <function name="f4">
+  <proto>int f4(int p1 [, int p2, int p3])</proto>
+  <code>
+   RETURN_LONG(p1 + p2 + p3);
+  </code>
+  <test>
+   <code>
+echo f4(1)."\n";
+echo f4(1,1)."\n";
+echo f4(1,1,1)."\n";
+   </code>
+   <result>
+1
+2
+3
+   </result>
+  </test>
+ </function>
+ -->
+
+</extension>

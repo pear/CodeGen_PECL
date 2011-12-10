@@ -13,10 +13,10 @@
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
+ * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
@@ -53,9 +53,9 @@ require_once "CodeGen/PECL/Dependency/Platform.php";
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: @package_version@
+ * @version    Release: 1.1.3
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
 class CodeGen_PECL_Extension 
@@ -68,7 +68,7 @@ class CodeGen_PECL_Extension
     */
     function version() 
     {
-        return "@package_version@";
+        return "1.1.3";
     }
 
     /**
@@ -197,6 +197,17 @@ class CodeGen_PECL_Extension
      * @access private
      */
     protected $channel = "pecl.php.net";
+
+    /**
+     * phpdoc reference purpose
+     *
+     * See http://doc.php.net/php/en/dochowto/x1257.php for details
+     *
+     * @var    string
+     * @access private
+     */
+    protected $docPurpose = "utilspec";
+
 
     // }}} 
 
@@ -582,7 +593,23 @@ class CodeGen_PECL_Extension
         
         // make path absolute to be independant of working directory changes
         $this->dirpath = realpath($dirpath);
-        
+
+     
+        // add "unknown" author if no authors specified
+        if (empty($this->authors)) {
+            $author = new CodeGen_PECL_Maintainer;
+            $author->setUser("unknown");
+            $author->setName("Unknown User");
+            $author->setEmail("unknown@example.com");
+            $author->setRole("lead");
+            
+            $this->addAuthor($author);
+        }
+
+        if (empty($this->description)) {
+            $this->description = "none";
+        }
+
         echo "Creating '{$this->name}' extension in '$dirpath'\n";
 
         // generate complete source code
@@ -754,7 +781,25 @@ pdf: manual.tex
         $fp->puts(
 "<?xml version='1.0' encoding='iso-8859-1'?>
 <!-- ".'$'."Revision: 1.1 $ -->
- <reference id='ref.$idName'>
+");
+
+        // phpdoc comments according to http://doc.php.net/php/de/dochowto/x1257.php
+        $fp->puts("<!-- Purpose: ".$this->docPurpose." -->\n");
+
+        $fp->puts("<!-- Membership: pecl");
+        if (count($this->with)) {
+            $fp->puts(", external");
+        }
+        $fp->puts(" -->\n");
+
+        if ($this->release->getState() !== 'stable') {
+            $fp->puts("<!-- State: experimental -->\n");
+        }
+        
+
+
+        $fp->puts("
+ <reference xml:id='ref.$idName' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>
   <title>{$this->summary}</title>
   <titleabbrev>$idName</titleabbrev>
 
@@ -766,7 +811,15 @@ pdf: manual.tex
     </para>
    </section>
    
+   <section xml:id='$idName.requirements'>
+    &reftitle.required;
+    <para>
+     
+    </para>
+   </section>
+
    &reference.$idName.configure;
+   &reference.extname.ini;
 
    <section id='$idName.resources'>
     &reftitle.resources;
@@ -780,41 +833,10 @@ pdf: manual.tex
             }
         }
 
-
         $fp->puts(
 "   </section>
 
-   <section id='$idName.constants'>
-    &reftitle.constants;
-");
-
-        if (empty($this->constants)) {
-            $fp->puts("    &no.constants;\n");
-        } else {
-            $const_groups = array();
-
-            foreach ($this->constants as $constant) {
-                $const_groups[$constant->getGroup()][] = $constant;
-            }
-
-            foreach ($const_groups as $group => $constants) {
-                if ($group == "default") {
-                    $group = $idName;
-                }
-
-                $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
-
-                foreach ($constants as $constant) {
-                    $fp->puts($constant->docEntry($group));
-                }
-
-                $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
-            }
-        }
-
-        $fp->puts(
-"   </section>
-   
+   &reference.extname.constants;
   </partintro>
 
 &reference.$idName.functions;
@@ -826,9 +848,108 @@ pdf: manual.tex
 
         $fp->close();
   
+
+
+        // 
+        // constants.xml
+        //
+
+        $entities->puts("<!ENTITY reference.$idName.constants SYSTEM './$idName/constants.xml'>\n");
+
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/constants.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
+
+        $fp->puts("<section id='$idName.constants' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
+
+        $fp->puts(" &reftitle.constants;\n");
+        $fp->puts(" &extension.constants;\n");
+
+        $fp->puts(" <para>\n");
+
+        if (empty($this->constants)) {
+            $fp->puts("    &no.constants;\n");
+        } else {
+            $const_groups = array();
+            foreach ($this->constants as $constant) {
+                $const_groups[$constant->getGroup()][] = $constant;
+            }
+            foreach ($const_groups as $group => $constants) {
+                if ($group == "default") {
+                    $group = $idName;
+                }
+                $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
+                foreach ($constants as $constant) {
+                    $fp->puts($constant->docEntry($group));
+                }
+                $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
+            }
+        }
+        
+        // TODO: 2nd half missing, see http://doc.php.net/php/de/dochowto/c578.php
+
+        $fp->puts(" </para>\n");
+        $fp->puts("</section>\n");
+
+        $fp->puts($this->docEditorSettings());
+        $fp->close();
+
+
+
+        // 
+        // ini.xml
+        //
+
+        $entities->puts("<!ENTITY reference.$idName.ini SYSTEM './$idName/ini.xml'>\n");
+
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/ini.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
+
+        $fp->puts("<section id='$idName.configuration' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
+
+        $fp->puts(" &reftitle.runtime;\n");
+        $fp->puts(" &extension.runtime;\n");
+
+        $fp->puts(" <para>\n");
+
+        if (empty($this->phpini)) {
+            $fp->puts("    &no.config;\n");
+        } else {
+            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
+            foreach ($this->phpini as $phpini) {
+                $fp->puts($phpini->docEntry($idName));
+            }
+            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
+        }
+        
+        $fp->puts(" </para>\n");
+        $fp->puts("</section>\n");
+
+        $fp->puts($this->docEditorSettings());
+        $fp->close();
+
+
+
+        //
+        // configure.xml
+        // 
+
         // configure options and dependencies have their own file
         $entities->puts("<!ENTITY reference.$idName.configure SYSTEM './$idName/configure.xml'>\n");
+
         $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/configure.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
 
         $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
 
@@ -875,20 +996,14 @@ pdf: manual.tex
         }
         $fp->puts("\n   </section>\n\n");
 
-        $fp->puts("\n   <section id='$idName.configuration'>\n    &reftitle.runtime;\n");
-        if (empty($this->phpini)) {
-            $fp->puts("    &no.config;\n");
-        } else {
-            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
-            foreach ($this->phpini as $phpini) {
-                $fp->puts($phpini->docEntry($idName));
-            }
-            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
-        }
-        $fp->puts("\n   </section>\n\n");
             
         $fp->puts($this->docEditorSettings());
         $fp->close();
+
+
+        // 
+
+
 
 
         $function_entities = array();
@@ -969,7 +1084,7 @@ $moduleHeader
     PHP_RINIT($name),     /* Replace with NULL if there is nothing to do at request start */
     PHP_RSHUTDOWN($name), /* Replace with NULL if there is nothing to do at request end   */
     PHP_MINFO($name),
-    \"".$this->release->getVersion()."\", 
+    PHP_".$upname."_VERSION, 
     STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -1128,8 +1243,9 @@ $moduleHeader
      */
     function setLicense($license) 
     {
-        if ($license->getShortName() == "GPL") {
-            return PEAR::raiseError("The GPL is no valid choice for PHP extensions due to license incompatibilities");
+        if (preg_match("|^GPL|", $license->getShortName())) {
+            return PEAR::raiseError("The ".$license->getShortName().
+                                    "is not a valid choice for PHP extensions due to license incompatibilities");
         }
  
         $this->license = $license;
@@ -1223,7 +1339,12 @@ $moduleHeader
 #include <php.h>
 
 #ifdef HAVE_'.$upname.'
+';
 
+       
+       echo '#define PHP_'.$upname.'_VERSION "'.$this->release->getVersion().'"'."\n\n";
+
+       echo '
 #include <php_ini.h>
 #include <SAPI.h>
 #include <ext/standard/info.h>
@@ -1286,7 +1407,7 @@ PHP_MINFO_FUNCTION({$this->name});
 #define PROP_GET_STRING(name)    Z_STRVAL_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
 #define PROP_GET_STRLEN(name)    Z_STRLEN_P(zend_read_property(_this_ce, _this_zval, #name, strlen(#name), 1 TSRMLS_CC))
 #define PROP_SET_STRING(name, s) zend_update_property_string(_this_ce, _this_zval, #name, strlen(#name), s TSRMLS_CC)
-#define PROP_SET_STRINGL(name, s, l) zend_update_property_string(_this_ce, _this_zval, #name, strlen(#name), s, l TSRMLS_CC)
+#define PROP_SET_STRINGL(name, s, l) zend_update_property_stringl(_this_ce, _this_zval, #name, strlen(#name), s, l TSRMLS_CC)
 
 ";
 
@@ -1393,13 +1514,6 @@ PHP_MINIT_FUNCTION({$this->name})
             $need_block = true;         
         }
 
-        if (count($this->classes)) {
-            foreach ($this->classes as $class) {
-                $code .= $this->codegen->block($class->minitCode($this));
-            }
-            $need_block = true;
-        }
-
         if (count($this->interfaces)) {
             foreach ($this->interfaces as $interface) {
                 $code .= $this->codegen->block($interface->minitCode($this));
@@ -1407,6 +1521,13 @@ PHP_MINIT_FUNCTION({$this->name})
             $need_block = true;
         }
             
+        if (count($this->classes)) {
+            foreach ($this->classes as $class) {
+                $code .= $this->codegen->block($class->minitCode($this));
+            }
+            $need_block = true;
+        }
+
         if (count($this->streams)) {
             foreach ($this->streams as $stream) {
                 $code .= $this->codegen->block($stream->minitCode($this));
@@ -1501,30 +1622,39 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION({$this->name})
 {
-    php_info_print_box_start(0);
 ";
 
-        foreach ($this->logos as $logo) {
-            $code.= $logo->phpinfoCode($this->name);
+        if (!empty($this->logos)) {
+            $code.= "    if (!sapi_module.phpinfo_as_text) {\n";
+            foreach ($this->logos as $logo) {
+                $code.= $logo->phpinfoCode($this->name);
+            }
+            echo "    }\n";
         }
 
         if (!empty($this->summary)) {
-            $summary = strtr(trim($this->summary), array('"'=>'\\"', "\n"=>"<br />"));
-            $code .= "    php_printf(\"<p>$summary</p>\\n\");\n";
+            $summary = strtr(trim($this->summary), array('"'=>'\\"'));
+            $code .= "    php_printf(\"$summary\\n\");\n";
         }
+
+        $code.= "    php_info_print_table_start();\n";
+
         if (!empty($this->release)) {
             $code .= $this->release->phpinfoCode($this->name);
         }
 
         if (count($this->authors)) {
-            $code .= "    php_printf(\"<p><b>Authors:</b></p>\\n\");\n";
+            $code.= '    php_info_print_table_row(2, "Authors", "';
+     
             foreach ($this->authors as $author) {
-                $code.= $this->codegen->block($author->phpinfoCode($this->name));
+                $code.= $author->phpinfoCode($this->name).'\\n';
             }
+
+            $code.= "\");\n";
         }
 
         $code.=
-"    php_info_print_box_end();
+"    php_info_print_table_end();
 ";
 
         // TODO move this decision up?
@@ -1684,6 +1814,12 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
         echo "if test \"\$PHP_$upname\" != \"no\"; then\n";
 
+        if ($this->language === "cpp") {
+            echo "  PHP_REQUIRE_CXX\n";
+            echo "  AC_LANG_CPLUSPLUS\n";
+            echo "  PHP_ADD_LIBRARY(stdc++,,{$upname}_SHARED_LIBADD)\n";
+        }
+
         foreach ($this->configfragments['top'] as $fragment) {
             echo "$fragment\n";
         }
@@ -1700,12 +1836,6 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
        
         foreach (array_keys($pathes) as $path) {
             echo "  PHP_ADD_INCLUDE(\$PHP_{$upname}_DIR/$path)\n";
-        }
-
-        if ($this->language === "cpp") {
-            echo "  PHP_REQUIRE_CXX\n";
-            echo "  AC_LANG_CPLUSPLUS\n";
-            echo "  PHP_ADD_LIBRARY(stdc++,,{$upname}_SHARED_LIBADD)\n";
         }
 
         echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";

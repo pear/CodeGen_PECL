@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Header.php,v 1.9 2006/10/09 21:27:04 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
@@ -30,7 +30,7 @@ require_once "CodeGen/Dependency/Header.php";
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen

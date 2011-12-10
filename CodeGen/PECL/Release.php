@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Release.php,v 1.11 2007/03/19 18:15:08 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -31,7 +31,7 @@ require_once "CodeGen/Release.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -102,7 +102,7 @@ class CodeGen_PECL_Release
             $code.= "  <license>unknown</license>\n\n";
         }
 
-        $code .="  <notes>\n".htmlentities($this->notes)."\n  </notes>\n\n";
+        $code .="  <notes>\n".htmlentities(empty($this->notes) ? "none" : $this->notes)."\n  </notes>\n\n";
 
         return $code;
     }
@@ -117,10 +117,18 @@ class CodeGen_PECL_Release
      */
     function phpinfoCode($name) 
     {
-        return sprintf("    php_printf(\"<p>Version %s%s (%s)</p>\\n\");\n",
-                       $this->version,
-                       $this->state,
-                       date("Y-m-d", $this->date));
+        $version = 'PHP_'.strtoupper($name).'_VERSION';
+        $state   = $this->state;
+        $date    = date("Y-m-d", $this->date);
+        $id      = '$Id: $';
+   
+        $code = '    php_info_print_table_row(2, "Version",';
+        $code.= sprintf("%s \" (%s)\");\n", $version, $state);
+
+        $code.= "    php_info_print_table_row(2, \"Released\", \"$date\");\n";
+        $code.= "    php_info_print_table_row(2, \"CVS Revision\", \"$id\");\n";
+      
+        return $code;
     }
 }
 

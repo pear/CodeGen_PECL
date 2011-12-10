@@ -2,17 +2,45 @@
 <!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="class_extends" version="1.0.0">
 
- <class name="class1"/>
+ <!-- parent class -->
+ <class name="Base">
+  <function name="f1">
+   <proto>int f1()</proto>
+   <code>RETURN_LONG(42);</code>
+  </function>
+        
+  <function name="f2">
+   <proto>float f2()</proto>
+   <code>RETURN_DOUBLE(3.14);</code>
+  </function>
+ </class>
+    
+ <!-- child overwrites f1() -->
+ <class name="Derived" extends="Base">
+  <function name="f1">
+   <proto>int f1()</proto>
+   <code>RETURN_LONG(23);</code>
+  </function>
+ </class>
 
- <class name="class2" extends="class1"/>
-
- <test name="extend">
+ <test>
   <code>
    <?data 
-    $c2 = new class2; 
-    echo $c2 instanceof class1 ? "OK" : "Failure";
+    $c1 = new Base;
+    $c2 = new Derived; 
+    $c2 instanceof Base or die("Failure instantiating derived class");
+    echo $c1->f1()."\n";
+    echo $c1->f2()."\n";
+    echo $c2->f1()."\n";
+    echo $c2->f2()."\n";
    ?>
   </code>
+  <result>
+42
+3.14
+23
+3.14
+  </result>
  </test>
 
 </extension>

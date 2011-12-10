@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Class.php,v 1.31 2006/10/09 21:27:04 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -34,7 +34,7 @@ require_once "CodeGen/PECL/Element/ObjectInterface.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -542,7 +542,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         }
 
         if ($this->extends) {
-            echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
+            echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, {$this->extends}_ce_ptr, NULL TSRMLS_CC);\n";
         } else {
             echo "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
         }

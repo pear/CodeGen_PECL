@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Ini.php,v 1.7 2006/10/12 13:11:25 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -30,7 +30,7 @@ require_once "CodeGen/PECL/Element.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -392,13 +392,14 @@ class CodeGen_PECL_Element_Ini
     {
         return
             "    <table>
-     <title>$name runtime configuration</title>
-      <tgroup cols='3'>
+     <title>$name &ConfigureOptions;</title>
+      <tgroup cols='4'>
        <thead>
         <row>
-         <entry>directive</entry>
-         <entry>default value</entry>
-         <entry>descrpition</entry>
+         <entry>&Name;</entry>
+         <entry>&Default;</entry>
+         <entry>&Changeable;</entry>
+         <entry>Changelog</entry>
         </row>
        </thead>
       <tbody>
@@ -418,7 +419,8 @@ class CodeGen_PECL_Element_Ini
             "    <row>
      <entry>$this->name</entry>
      <entry>$this->value</entry>
-     <entry>$this->desc</entry>
+     <entry>$this->access</entry>
+     <entry></entry>
     </row>
 ";
     }

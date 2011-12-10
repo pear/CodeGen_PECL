@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="groups" version="1.1.0">
+
+ <group name="foo" if="HAVE_FOO">
+
+  <group name="foo2" if="HAVE_FOO2">
+    
+   <function name="foo2" if="FOO == 42">
+    <proto>int foo()</proto>
+    <code>
+    </code>
+   </function>
+
+  </group>
+
+  <function name="foo">
+   <proto>int bar()</proto>
+   <code>
+   </code>
+  </function>
+
+ </group>
+
+ <group name="bar">
+  
+  <group name="bar2">
+
+    <constant name="bar" type="int" value="2"/>
+
+  </group>
+
+ </group>
+
+
+</extension>

@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: With.php,v 1.15 2006/10/10 07:18:46 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -30,7 +30,7 @@ require_once "CodeGen/PECL/Element.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -332,6 +332,8 @@ class CodeGen_PECL_Dependency_With
         
         switch ($this->mode) {
         case "pkg-config":
+            $pkgName = $this->getName();
+
             $code.= "  
   if test -z \"\$PKG_CONFIG\"
   then
@@ -342,25 +344,25 @@ class CodeGen_PECL_Dependency_With
     AC_MSG_ERROR([required utility 'pkg-config' not found])
   fi
 
-  if ! \$PKG_CONFIG --exists $withName
+  if ! \$PKG_CONFIG --exists $pkgName
   then
-    AC_MSG_ERROR(['$withName' not known to pkg-config])
+    AC_MSG_ERROR(['$pkgName' not known to pkg-config])
   fi
 ";
 
             if ($this->version) {
                 $code .= "
-  if ! \$PKG_CONFIG --atleast-version {$this->version} $withName
+  if ! \$PKG_CONFIG --atleast-version {$this->version} $pkgName
   then
-    PKG_VERSION=`\$PKG_CONFIG --modversion $withName`
-    AC_MSG_ERROR(['$withName'\ is version \$PKG_VERSION, {$this->version} required])
+    PKG_VERSION=`\$PKG_CONFIG --modversion $pkgName`
+    AC_MSG_ERROR(['$pkgName'\ is version \$PKG_VERSION, {$this->version} required])
   fi
 ";
             }
 
             $code .= "
-  PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $withName`)
-  PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $withName`, {$extUpname}_SHARED_LIBADD)
+  PHP_EVAL_INCLINE(`\$PKG_CONFIG --cflags-only-I $pkgName`)
+  PHP_EVAL_LIBLINE(`\$PKG_CONFIG --libs $pkgName`, {$extUpname}_SHARED_LIBADD)
 ";
             break;
 

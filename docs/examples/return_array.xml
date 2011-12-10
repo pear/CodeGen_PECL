@@ -1,0 +1,173 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="return_array" version="1.0.0" >
+ <!-- add_next_...() is like $array[] = ...; -->
+ <function name="f1">
+  <proto>array f1();</proto>
+  <code>
+<![CDATA[
+  add_next_index_bool(  return_value, 1);
+  add_next_index_long(  return_value, 42);
+  add_next_index_double(return_value, 3.14);
+  add_next_index_string(return_value, "Hello World!", 1);
+]]>
+  </code>
+  <test>
+   <code>
+var_dump(f1());
+   </code>
+   <result>
+array(4) {
+  [0]=>
+  bool(true)
+  [1]=>
+  int(42)
+  [2]=>
+  float(3.14)
+  [3]=>
+  string(12) "Hello World!"
+}
+   </result>
+  </test>
+ </function>
+
+ <!-- filling by numeric index -->
+ <function name="f2">
+  <proto>array f2();</proto>
+  <code>
+<![CDATA[
+  add_index_bool(  return_value, 10, 1);
+  add_index_long(  return_value, 11, 42);
+  add_index_double(return_value, 12, 3.14);
+  add_index_string(return_value, 13, "Hello World!", 1);
+]]>
+  </code>
+  <test>
+   <code>
+var_dump(f2());
+   </code>
+   <result>
+array(4) {
+  [10]=>
+  bool(true)
+  [11]=>
+  int(42)
+  [12]=>
+  float(3.14)
+  [13]=>
+  string(12) "Hello World!"
+}
+   </result>
+  </test>
+ </function>
+
+ <!-- filling by string index -->
+ <function name="f3">
+  <proto>array f3();</proto>
+  <code>
+<![CDATA[
+  add_assoc_bool(  return_value, "foo", 1);
+  add_assoc_long(  return_value, "bar", 42);
+  add_assoc_double(return_value, "baz", 3.14);
+  add_assoc_string(return_value, "bla", "Hello World!", 1);
+]]>
+  </code>
+  <test>
+   <code>
+var_dump(f3());
+   </code>
+   <result>
+array(4) {
+  ["foo"]=>
+  bool(true)
+  ["bar"]=>
+  int(42)
+  ["baz"]=>
+  float(3.14)
+  ["bla"]=>
+  string(12) "Hello World!"
+}
+   </result>
+  </test>
+ </function>
+
+ <!-- mixed -->
+ <function name="f4">
+  <proto>array f4();</proto>
+  <code>
+<![CDATA[
+  add_index_bool(return_value, 10, 1);
+  add_assoc_long(return_value, "foo", 42);
+  add_next_index_double(return_value, 3.14);
+  add_next_index_string(return_value, "Hello World!", 1);
+]]>
+  </code>
+  <test>
+   <code>
+var_dump(f4());
+   </code>
+   <result>
+array(4) {
+  [10]=>
+  bool(true)
+  ["foo"]=>
+  int(42)
+  [11]=>
+  float(3.14)
+  [12]=>
+  string(12) "Hello World!"
+}
+   </result>
+  </test>
+ </function>
+
+
+ <!-- nested -->
+ <function name="f5">
+  <proto>array f5();</proto>
+  <code>
+<![CDATA[
+  zval *row;
+  int i;
+  
+  MAKE_STD_ZVAL(row);
+  array_init(row);
+  add_assoc_long(row, "foo", 23);
+  add_assoc_long(row, "bar", 42);
+  add_next_index_zval(return_value, row);
+
+  MAKE_STD_ZVAL(row);
+  array_init(row);
+  add_assoc_double(row, "foo", 3.14);
+  add_assoc_double(row, "bar", 2.78);
+  add_next_index_zval(return_value, row);
+]]>
+  </code>
+  <test>
+   <code>
+var_dump(f5());
+   </code>
+   <result>
+array(2) {
+  [0]=>
+  array(2) {
+    ["foo"]=>
+    int(23)
+    ["bar"]=>
+    int(42)
+  }
+  [1]=>
+  array(2) {
+    ["foo"]=>
+    float(3.14)
+    ["bar"]=>
+    float(2.78)
+  }
+}
+   </result>
+  </test>
+ </function>
+
+
+
+</extension>

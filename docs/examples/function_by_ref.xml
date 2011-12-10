@@ -1,37 +1,34 @@
 <?xml version="1.0"?>
 <!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="function_by_ref" version="1.0.0">
- <function name="foo">
-  <proto>bool foo(array bar)</proto>
+
+<!-- passing simple scalar types by reference not yet possible
+ <function name="int_by_ref">
+  <proto>void int_by_ref(int &amp;foo)</proto>
   <code>
-   add_index_long(bar, 23, 42);
-   RETURN_TRUE;
+   foo = 42;
   </code>
   <test>
    <code>
-<?data
-$a = array(5=>23, 37=>"in a row");
-foo($a);
-echo count($a);
-?>
+    $a = 23;
+    foo($a);
+    echo $a;
    </code>
-   <result>
-2
-   </result>
+   <result>42</result>
   </test>
  </function>
+-->
 
- <function name="foo_by_ref">
-  <proto>bool foo_by_ref(array &amp;bar)</proto>
+ <function name="array_by_ref">
+  <proto>void array_by_ref(array @foo)</proto>
   <code>
-   add_index_long(bar, 23, 42);
-   RETURN_TRUE;
+   add_index_long(foo, 23, 42);
   </code>
   <test>
    <code>
 <?data
 $a = array(5=>23, 37=>"in a row");
-foo_by_ref($a);
+array_by_ref($a);
 echo count($a);
 ?>
    </code>
@@ -41,28 +38,14 @@ echo count($a);
   </test>
  </function>
 
- <function name="bar">
-  <proto>bool bar(mixed foo)</proto>
+ <function name="mixed_by_ref">
+  <proto>void mixed_by_ref(mixed @foo)</proto>
   <code>
 convert_to_double(foo);
 Z_DVAL_P(foo) = 3.14;
-RETURN_TRUE;
   </code>
   <test>
-   <code>$f = 42; bar($f); echo $f;</code>
-   <result>42</result>
-  </test>
- </function>
-
- <function name="bar_by_ref">
-  <proto>bool bar_by_ref(mixed &amp;foo)</proto>
-  <code>
-convert_to_double(foo);
-Z_DVAL_P(foo) = 3.14;
-RETURN_TRUE;
-  </code>
-  <test>
-   <code>$f = 42; bar_by_ref($f); echo $f;</code>
+   <code>$f = 42; mixed_by_ref($f); echo $f;</code>
    <result>3.14</result>
   </test>
  </function>

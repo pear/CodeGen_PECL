@@ -1,17 +1,24 @@
 <?xml version="1.0" ?>
 <!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="phpini" version="1.0.0">
- <phpini name="foo" type="int" value="42"/>
+ <phpini name="foo" type="int"    access="all"    value="42"/>
+ <phpini name="bar" type="string" access="system" value="Hello World!"/>
 
  <test>
   <code>
 echo ini_get("phpini.foo")."\n";
 ini_set("phpini.foo", "23")."\n";
 echo ini_get("phpini.foo")."\n";
+
+echo ini_get("phpini.bar")."\n";
+ini_set("phpini.bar", "foobar")."\n";
+echo ini_get("phpini.bar")."\n";
   </code>
   <result>
 42
 23
+Hello World!
+Hello World!
   </result>
  </test>
 </extension>

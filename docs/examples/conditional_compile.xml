@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="conditional_compile" version="1.0.3"> <!-- feature introduced in 1.0.3 -->
+
+ <code role="header" position="top">
+#define HAVE_FOO 1
+#define HAVE_BAR 0
+ </code>
+
+ <function name="foo" if="HAVE_FOO">
+  <proto>string foo(void)</proto>
+  <code>RETURN_STRING("foo", 1);</code>
+ </function>
+
+ <function name="bar" if="HAVE_BAR">
+  <proto>string bar(void)</proto>
+  <code>RETURN_STRING("bar", 1);</code>
+ </function>
+
+</extension>

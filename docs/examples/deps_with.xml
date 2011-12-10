@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="deps_with" version="1.0.0">
+
+ <deps language="c">
+  <with name="libz" defaults='/usr:/usr/local' testfile='include/zlib.h'>
+  <header name="zlib.h"/>
+  <lib name="z" function="zlibVersion"/>
+  </with>
+ </deps>
+
+ <function name="z_version">
+  <proto>string z_version(void)</proto>
+  <code>
+   RETURN_STRING((char *)zlibVersion(), 1);
+  </code>
+  <test>
+   <code>
+echo z_version();
+   </code>
+   <result mode="regex">
+\d+\.\d+\.\d+(\.\d+)?
+   </result>
+  </test>
+ </function>
+</extension> 

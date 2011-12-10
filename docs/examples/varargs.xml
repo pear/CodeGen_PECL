@@ -1,0 +1,170 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="varargs" version="1.1.0">
+ <function name="my_sum">
+  <proto>int my_sum(...)</proto>
+  <code>
+<![CDATA[
+    long sum = 0;
+    int i;
+    
+    for (i = 0; i < varargc; i++) {
+      convert_to_long_ex(varargv[i]);
+      sum += Z_LVAL_PP(varargv[i]);
+    }
+
+    RETURN_LONG(sum);
+]]>
+  </code>
+  <test>
+   <code>
+echo my_sum(1, 2, 3, 4);
+   </code>
+   <result>
+10
+   </result>
+  </test>
+ </function>
+
+ <function name="my_sum2">
+  <proto>int my_sum2(int ...)</proto>
+  <code>
+<![CDATA[
+    long sum = 0;
+    int i;
+    
+    for (i = 0; i < varargc; i++) {
+      sum += varargv[i];
+    }
+
+    RETURN_LONG(sum);
+]]>
+  </code>
+  <test>
+   <code>
+echo my_sum(1, 2, 3, 4);
+   </code>
+   <result>
+10
+   </result>
+  </test>
+ </function>
+
+ <function name="my_join">
+  <proto>string my_join(string delim, ...)</proto>
+  <code>
+<![CDATA[
+    int i, len=0;
+    char *result_string, *p;    
+
+    if (varargc == 0) {
+      RETURN_STRING("", 1);
+    }
+
+    for (i = 0; i < varargc; i++) {
+      convert_to_string_ex(varargv[i]);
+      len += Z_STRLEN_PP(varargv[i]);
+    }
+
+    len += delim_len * (varargc -1) +1;
+
+    p = result_string = emalloc(len);
+
+    for (i = 0; i < varargc - 1; i++) {
+      memcpy(p, Z_STRVAL_PP(varargv[i]), Z_STRLEN_PP(varargv[i]));
+      p += Z_STRLEN_PP(varargv[i]);
+      memcpy(p, delim, delim_len);
+      p += delim_len;
+    }
+
+    memcpy(p, Z_STRVAL_PP(varargv[varargc - 1]), Z_STRLEN_PP(varargv[varargc - 1]));
+    p += Z_STRLEN_PP(varargv[varargc - 1]);
+    *p = '\0';
+
+    RETURN_STRINGL(result_string, len-1, 0);
+]]>
+  </code>
+  <test>
+   <code>
+echo my_join("-", "1", "2", "3", "4");
+   </code>
+   <result>
+1-2-3-4
+   </result>
+  </test>
+ </function>
+
+ <class name="foo">
+  <function name="sum">
+   <proto>int sum(...)</proto>
+   <code>
+<![CDATA[
+    long sum = 0;
+    int i;
+    
+    for (i = 0; i < varargc; i++) {
+      convert_to_long_ex(varargv[i]);
+      sum += Z_LVAL_PP(varargv[i]);
+    }
+
+    RETURN_LONG(sum);
+]]>
+   </code>
+   <test>
+    <code>
+$foo = new foo;
+echo $foo->sum(1, 2, 3, 4);
+    </code>
+    <result>
+10
+    </result>
+   </test>
+  </function>
+
+  <function name="join">
+   <proto>string join(string delim, ...)</proto>
+   <code>
+<![CDATA[
+    int i, len=0;
+    char *result_string, *p;    
+
+    if (varargc == 0) {
+      RETURN_STRING("", 1);
+    }
+
+    for (i = 0; i < varargc; i++) {
+      convert_to_string_ex(varargv[i]);
+      len += Z_STRLEN_PP(varargv[i]);
+    }
+
+    len += delim_len * (varargc -1) +1;
+
+    p = result_string = emalloc(len);
+
+    for (i = 0; i < varargc - 1; i++) {
+      memcpy(p, Z_STRVAL_PP(varargv[i]), Z_STRLEN_PP(varargv[i]));
+      p += Z_STRLEN_PP(varargv[i]);
+      memcpy(p, delim, delim_len);
+      p += delim_len;
+    }
+
+    memcpy(p, Z_STRVAL_PP(varargv[varargc - 1]), Z_STRLEN_PP(varargv[varargc - 1]));
+    p += Z_STRLEN_PP(varargv[varargc - 1]);
+    *p = '\0';
+
+    RETURN_STRINGL(result_string, len-1, 0);
+]]>
+   </code>
+   <test>
+    <code>
+$foo = new foo;
+echo $foo->join("-", "1", "2", "3", "4");
+    </code>
+    <result>
+1-2-3-4
+    </result>
+   </test>
+  </function>
+ </class>
+
+</extension>

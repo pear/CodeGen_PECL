@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Constant.php,v 1.11 2006/10/09 21:27:04 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -30,7 +30,7 @@ require_once "CodeGen/PECL/Element.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -197,7 +197,7 @@ class CodeGen_PECL_Element_Constant
     }
 
     /**
-     * Get group thsi constant belongs to
+     * Get group this constant belongs to
      *
      * @access public
      * @return string group name
@@ -298,19 +298,7 @@ class CodeGen_PECL_Element_Constant
      */
     static function docHeader($name) 
     {
-        return
-            "    <table>
-     <title>$name constants</title>
-      <tgroup cols='3'>
-       <thead>
-        <row>
-         <entry>name</entry>
-         <entry>value</entry>
-         <entry>descrpition</entry>
-        </row>
-       </thead>
-      <tbody>
-";
+        return "  <variablelist>\n";
     }
             
     /** 
@@ -322,15 +310,21 @@ class CodeGen_PECL_Element_Constant
      */
     function docEntry($base) 
     {
+	  // TODO: indent desc.
+
         return "
-        <row>
-         <entry>
-          <constant id='constant".strtolower(str_replace("_", "-", $this->name))."'>{$this->name}</constant>
-          (<link linkend='language.types.integer'>integer</link>)
-         </entry>
-         <entry>{$this->value}</entry>
-         <entry>{$this->desc}</entry>
-        </row>\n\n";
+   <varlistentry>
+    <term>
+     <constant>{$this->name}</constant> 
+     (<type>{$this->type}</type>)
+    </term>
+    <listitem>
+     <simpara>
+      {$this->desc}     
+     </simpara>
+    </listitem>
+   </varlistentry>\n";
+
     }
 
     /** 
@@ -342,11 +336,7 @@ class CodeGen_PECL_Element_Constant
      */
     static function docFooter() 
     {
-        return
-            "     </tbody>
-    </tgroup>
-   </table>
-";
+        return "  </variablelist>\n";
     }
 }
 

@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Maintainer.php,v 1.6 2006/10/09 21:27:04 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -31,7 +31,7 @@ require_once "CodeGen/Maintainer.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -47,7 +47,7 @@ class CodeGen_PECL_Maintainer
      */
     function phpinfoCode()
     {
-        return "  php_printf(\"<p>{$this->name} &lt;{$this->email}&gt; ({$this->role})</p>\\n\");\n";
+        return "{$this->name} '{$this->email}' ({$this->role})";
     }
 
      

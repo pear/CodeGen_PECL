@@ -13,9 +13,9 @@
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id$
+ * @version    CVS: $Id: Method.php,v 1.23 2006/10/17 11:08:04 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -32,7 +32,7 @@ require_once "CodeGen/PECL/Element/Class.php";
  * @category   Tools and Utilities
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
@@ -177,14 +177,22 @@ class CodeGen_PECL_Element_Method
     /**
      * Hook for parameter parsing API function 
      *
-     * @param  string  C expr. for number of arguments
      * @param  string  Argument string
      * @param  array   Argument variable pointers
+     * @param  int     Return value for number of arguments
      */
-    protected function parseParameterHook($argc, $argString, $argPointers)
+    protected function parseParameterHook($argString, $argPointers, &$count)
     {
+        $count = count($this->params) - 1;
+
+        if ($this->varargs) {
+            $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", $count);
+        } else {
+            $argc = "ZEND_NUM_ARGS()";
+        }
+
         if ($this->name == "__construct") {
-            $code = parent::parseParameterHook($argc, $argString, $argPointers);
+            $code = parent::parseParameterHook($argString, $argPointers, $count);
             $code.= "\n    _this_zval = getThis();\n";
         } else {
             $code = "
@@ -275,6 +283,13 @@ class CodeGen_PECL_Element_Method
         }
 
         $code.= "ZEND_ACC_".strtoupper($this->access);
+
+        switch ($this->name) {
+        case "__construct": $code.=" | ZEND_ACC_CTOR";  break;
+        case "__desctruct": $code.=" | ZEND_ACC_DTOR";  break;
+        case "__clone":     $code.=" | ZEND_ACC_CLONE"; break;
+        default: break;
+        }
 
         if ($this->isStatic) {
             $code.= " | ZEND_ACC_STATIC";

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="lineno" version="1.0.0">
+ <function name="foo">
+  <proto>void foo(void)</proto>
+  <code>
+    int i;
+    int j
+    x=@;
+  </code>
+ </function>
+ <function name="bar">
+  <proto>void bar(void)</proto>
+  <code> 
+    int i;
+    x=@;
+  </code>
+ </function>
+</extension>

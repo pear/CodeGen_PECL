@@ -105,13 +105,15 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 
   protected $extension;
   protected $function;
+  protected $optParams;
 
   function __construct(CodeGen_PECL_Extension $extension, CodeGen_PECL_Element_Function $function)
   {
     $this->extension = $extension;
     $this->function  = $function;
+    $this->optParams = array();
   }
-#line 117 "ProtoParser.php"
+#line 119 "ProtoParser.php"
 
 /* Next is all token values, as class constants
 */
@@ -148,9 +150,9 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
     const NULL_                          = 24;
     const NUMVAL                         = 25;
     const STRVAL                         = 26;
-    const YY_NO_ACTION = 96;
-    const YY_ACCEPT_ACTION = 95;
-    const YY_ERROR_ACTION = 94;
+    const YY_NO_ACTION = 102;
+    const YY_ACCEPT_ACTION = 101;
+    const YY_ERROR_ACTION = 100;
 
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
@@ -202,42 +204,42 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 **                          shifting non-terminals after a reduce.
 **  self::$yy_default       Default action for each state.
 */
-    const YY_SZ_ACTTAB = 95;
+    const YY_SZ_ACTTAB = 100;
 static public $yy_action = array(
- /*     0 */    30,   11,   44,   41,   40,   37,   38,   16,   10,   46,
- /*    10 */    52,   53,    3,   28,   31,   44,   41,   40,   37,   38,
- /*    20 */    16,   10,   46,   52,   53,   44,   41,   40,   37,   38,
- /*    30 */    16,   10,   46,   52,   53,   26,    1,   54,   44,   41,
- /*    40 */    40,   37,   38,   16,   10,   46,   52,   53,   24,   95,
- /*    50 */     9,   14,   19,   29,   22,    2,   13,   18,   20,   17,
- /*    60 */    22,    7,   27,    5,   17,   22,   39,    8,   36,   47,
- /*    70 */    48,   49,   55,   17,   22,   43,   51,   17,   22,   34,
- /*    80 */     6,   50,   19,   35,   25,   19,   33,   12,   15,   23,
- /*    90 */    32,   42,    4,   45,   21,
+ /*     0 */    36,   17,   29,   41,   53,   50,   44,   23,   22,   54,
+ /*    10 */    47,   48,    4,   34,   37,   29,   41,   53,   50,   44,
+ /*    20 */    23,   22,   54,   47,   48,   29,   41,   53,   50,   44,
+ /*    30 */    23,   22,   54,   47,   48,   25,    1,   42,   29,   41,
+ /*    40 */    53,   50,   44,   23,   22,   54,   47,   48,   40,    3,
+ /*    50 */    21,   12,   10,    8,   33,   16,   32,   18,  101,   11,
+ /*    60 */    24,   59,   35,   13,   12,    9,   27,   43,   57,   58,
+ /*    70 */    56,   55,   52,   12,   13,   27,    6,   12,   13,   45,
+ /*    80 */     7,   16,   16,   26,    2,   39,   49,   20,   30,   46,
+ /*    90 */    31,    5,   19,   51,   14,   38,   80,   15,   27,   28,
     );
     static public $yy_lookahead = array(
  /*     0 */     5,    3,    7,    8,    9,   10,   11,   12,   13,   14,
  /*    10 */    15,   16,   17,    5,   19,    7,    8,    9,   10,   11,
  /*    20 */    12,   13,   14,   15,   16,    7,    8,    9,   10,   11,
  /*    30 */    12,   13,   14,   15,   16,   18,    3,   19,    7,    8,
- /*    40 */     9,   10,   11,   12,   13,   14,   15,   16,    2,   28,
- /*    50 */    29,   30,   17,   32,   33,   20,    2,   11,   31,   32,
- /*    60 */    33,   34,   35,   21,   32,   33,    2,   35,   22,   23,
- /*    70 */    24,   25,   26,   32,   33,    6,   35,   32,   33,   18,
- /*    80 */    35,   37,   17,   18,    4,   17,   18,   36,    2,   36,
- /*    90 */     1,    4,   20,    2,   36,
+ /*    40 */     9,   10,   11,   12,   13,   14,   15,   16,    2,   20,
+ /*    50 */    31,   32,   33,   34,   35,   17,   18,   11,   28,   29,
+ /*    60 */    30,    4,   32,   33,   32,   33,    6,   35,   22,   23,
+ /*    70 */    24,   25,   26,   32,   33,    6,   35,   32,   33,   19,
+ /*    80 */    35,   17,   17,   18,   20,   18,    2,    2,   19,    2,
+ /*    90 */     4,   21,    2,   37,   36,    1,   38,   36,    6,   36,
 );
     const YY_SHIFT_USE_DFLT = -6;
-    const YY_SHIFT_MAX = 22;
+    const YY_SHIFT_MAX = 24;
     static public $yy_shift_ofst = array(
- /*     0 */     8,   -5,   18,   31,   31,   46,   68,   35,   65,   89,
- /*    10 */    91,   80,   17,   33,   54,   42,   64,   86,   -2,   72,
- /*    20 */    87,   61,   69,
+ /*     0 */     8,   -5,   18,   31,   31,   46,   38,   65,   64,   60,
+ /*    10 */    69,   94,   90,   92,   67,   17,   29,   57,   -2,   70,
+ /*    20 */    33,   86,   84,   87,   85,
 );
     const YY_REDUCE_USE_DFLT = -1;
     const YY_REDUCE_MAX = 8;
     static public $yy_reduce_ofst = array(
- /*     0 */    21,   27,   41,   45,   32,   44,   58,   53,   51,
+ /*     0 */    30,   19,   32,   45,   41,   56,   58,   61,   63,
 );
     static public $yyExpectedTokens = array(
         /* 0 */ array(5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ),
@@ -247,24 +249,24 @@ static public $yy_action = array(
         /* 4 */ array(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ),
         /* 5 */ array(2, 11, 22, 23, 24, 25, 26, ),
         /* 6 */ array(17, 18, ),
-        /* 7 */ array(17, 20, ),
-        /* 8 */ array(17, 18, ),
-        /* 9 */ array(1, ),
-        /* 10 */ array(2, ),
-        /* 11 */ array(4, ),
-        /* 12 */ array(18, ),
-        /* 13 */ array(3, ),
-        /* 14 */ array(2, ),
-        /* 15 */ array(21, ),
-        /* 16 */ array(2, ),
-        /* 17 */ array(2, ),
+        /* 7 */ array(17, 18, ),
+        /* 8 */ array(17, 20, ),
+        /* 9 */ array(6, 19, ),
+        /* 10 */ array(6, 19, ),
+        /* 11 */ array(1, ),
+        /* 12 */ array(2, ),
+        /* 13 */ array(6, ),
+        /* 14 */ array(18, ),
+        /* 15 */ array(18, ),
+        /* 16 */ array(20, ),
+        /* 17 */ array(4, ),
         /* 18 */ array(3, ),
-        /* 19 */ array(20, ),
-        /* 20 */ array(4, ),
-        /* 21 */ array(18, ),
-        /* 22 */ array(6, ),
-        /* 23 */ array(),
-        /* 24 */ array(),
+        /* 19 */ array(21, ),
+        /* 20 */ array(3, ),
+        /* 21 */ array(4, ),
+        /* 22 */ array(2, ),
+        /* 23 */ array(2, ),
+        /* 24 */ array(2, ),
         /* 25 */ array(),
         /* 26 */ array(),
         /* 27 */ array(),
@@ -296,14 +298,18 @@ static public $yy_action = array(
         /* 53 */ array(),
         /* 54 */ array(),
         /* 55 */ array(),
+        /* 56 */ array(),
+        /* 57 */ array(),
+        /* 58 */ array(),
+        /* 59 */ array(),
 );
     static public $yy_default = array(
- /*     0 */    94,   78,   94,   94,   94,   94,   94,   73,   94,   56,
- /*    10 */    94,   94,   94,   94,   94,   85,   94,   94,   94,   94,
- /*    20 */    94,   94,   61,   81,   93,   92,   84,   82,   59,   60,
- /*    30 */    77,   76,   57,   74,   75,   83,   87,   66,   67,   68,
- /*    40 */    65,   64,   58,   62,   63,   69,   70,   88,   89,   90,
- /*    50 */    86,   80,   71,   72,   79,   91,
+ /*     0 */   100,   83,  100,  100,  100,  100,  100,  100,   77,   65,
+ /*    10 */    65,   60,  100,   65,  100,  100,  100,  100,  100,   91,
+ /*    20 */   100,  100,  100,  100,  100,   90,   89,   66,   87,   67,
+ /*    30 */    81,   62,   78,   88,   63,   64,   82,   80,   61,   79,
+ /*    40 */    99,   68,   84,   86,   71,   85,   72,   75,   76,   73,
+ /*    50 */    70,   92,   97,   69,   74,   96,   95,   93,   94,   98,
 );
 /* The next thing included is series of defines which control
 ** various aspects of the generated parser.
@@ -322,8 +328,8 @@ static public $yy_action = array(
 */
     const YYNOCODE = 39;
     const YYSTACKDEPTH = 100;
-    const YYNSTATE = 56;
-    const YYNRULE = 38;
+    const YYNSTATE = 60;
+    const YYNRULE = 40;
     const YYERRORSYMBOL = 27;
     const YYERRSYMDT = 'yy0';
     const YYFALLBACK = 0;
@@ -444,23 +450,25 @@ static public $yy_action = array(
  /*  18 */ "param_spec ::= SQUARE_OPEN param SQUARE_CLOSE",
  /*  19 */ "param_spec ::= SQUARE_OPEN param optional_params SQUARE_CLOSE",
  /*  20 */ "param_spec ::= ELLIPSE",
- /*  21 */ "param_spec ::= VOID",
- /*  22 */ "param_spec ::=",
- /*  23 */ "param_list ::= param_list COMMA ELLIPSE",
- /*  24 */ "param_list ::= param_list COMMA param",
- /*  25 */ "param_list ::= param_list optional_params",
- /*  26 */ "param_list ::= param",
- /*  27 */ "optional_params ::= SQUARE_OPEN COMMA param SQUARE_CLOSE",
- /*  28 */ "optional_params ::= SQUARE_OPEN COMMA param optional_params SQUARE_CLOSE",
- /*  29 */ "param ::= typespec NAME",
- /*  30 */ "param ::= typespec NAME EQ default",
- /*  31 */ "default ::= TRUE_",
- /*  32 */ "default ::= FALSE_",
- /*  33 */ "default ::= NULL_",
- /*  34 */ "default ::= NUMVAL",
- /*  35 */ "default ::= STRVAL",
- /*  36 */ "default ::= ARRAY_ PAR_OPEN PAR_CLOSE",
- /*  37 */ "default ::= NAME",
+ /*  21 */ "param_spec ::= typename ELLIPSE",
+ /*  22 */ "param_spec ::= VOID",
+ /*  23 */ "param_spec ::=",
+ /*  24 */ "param_list ::= param_list COMMA ELLIPSE",
+ /*  25 */ "param_list ::= param_list COMMA typename ELLIPSE",
+ /*  26 */ "param_list ::= param_list COMMA param",
+ /*  27 */ "param_list ::= param_list optional_params",
+ /*  28 */ "param_list ::= param",
+ /*  29 */ "optional_params ::= SQUARE_OPEN COMMA param SQUARE_CLOSE",
+ /*  30 */ "optional_params ::= SQUARE_OPEN COMMA param optional_params SQUARE_CLOSE",
+ /*  31 */ "param ::= typespec NAME",
+ /*  32 */ "param ::= typespec NAME EQ default",
+ /*  33 */ "default ::= TRUE_",
+ /*  34 */ "default ::= FALSE_",
+ /*  35 */ "default ::= NULL_",
+ /*  36 */ "default ::= NUMVAL",
+ /*  37 */ "default ::= STRVAL",
+ /*  38 */ "default ::= ARRAY_ PAR_OPEN PAR_CLOSE",
+ /*  39 */ "default ::= NAME",
     );
 
     /**
@@ -692,6 +700,8 @@ static public $yy_action = array(
             }
             break;
         } while (true);
+        $this->yyidx = $yyidx;
+        $this->yystack = $stack;
         return true;
     }
 
@@ -844,9 +854,11 @@ static public $yy_action = array(
   array( 'lhs' => 31, 'rhs' => 3 ),
   array( 'lhs' => 31, 'rhs' => 4 ),
   array( 'lhs' => 31, 'rhs' => 1 ),
+  array( 'lhs' => 31, 'rhs' => 2 ),
   array( 'lhs' => 31, 'rhs' => 1 ),
   array( 'lhs' => 31, 'rhs' => 0 ),
   array( 'lhs' => 34, 'rhs' => 3 ),
+  array( 'lhs' => 34, 'rhs' => 4 ),
   array( 'lhs' => 34, 'rhs' => 3 ),
   array( 'lhs' => 34, 'rhs' => 2 ),
   array( 'lhs' => 34, 'rhs' => 1 ),
@@ -874,7 +886,7 @@ static public $yy_action = array(
         3 => 3,
         4 => 4,
         5 => 4,
-        34 => 4,
+        36 => 4,
         6 => 6,
         7 => 7,
         8 => 8,
@@ -887,21 +899,24 @@ static public $yy_action = array(
         15 => 15,
         16 => 16,
         18 => 18,
-        27 => 18,
         19 => 19,
-        28 => 19,
         20 => 20,
-        23 => 23,
+        21 => 21,
         24 => 24,
-        26 => 24,
+        25 => 25,
+        26 => 26,
+        28 => 26,
+        27 => 27,
         29 => 29,
         30 => 30,
         31 => 31,
         32 => 32,
         33 => 33,
+        34 => 34,
         35 => 35,
-        36 => 36,
         37 => 37,
+        38 => 38,
+        39 => 39,
     );
     /* Beginning here are the reduction cases.  A typical example
     ** follows:
@@ -909,107 +924,164 @@ static public $yy_action = array(
     **   function yy_r0($yymsp){ ... }           // User supplied code
     **  #line <lineno> <thisfile>
     */
-#line 25 "ProtoParser.y"
+#line 27 "ProtoParser.y"
     function yy_r2(){
   $this->function->setReturns($this->yystack[$this->yyidx + -4]->minor);
   $this->function->setName($this->yystack[$this->yyidx + -3]->minor);
     }
-#line 922 "ProtoParser.php"
-#line 30 "ProtoParser.y"
-    function yy_r3(){ $this->_retvalue = array("type" => "void");     }
-#line 925 "ProtoParser.php"
-#line 31 "ProtoParser.y"
-    function yy_r4(){ $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;     }
-#line 928 "ProtoParser.php"
-#line 34 "ProtoParser.y"
-    function yy_r6(){ $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor; $this->_retvalue["byRef"] = true;     }
-#line 931 "ProtoParser.php"
-#line 36 "ProtoParser.y"
-    function yy_r7(){ $this->_retvalue = array("type" => "bool");     }
-#line 934 "ProtoParser.php"
-#line 37 "ProtoParser.y"
-    function yy_r8(){ $this->_retvalue = array("type" => "int");     }
 #line 937 "ProtoParser.php"
-#line 38 "ProtoParser.y"
-    function yy_r9(){ $this->_retvalue = array("type" => "float");     }
+#line 32 "ProtoParser.y"
+    function yy_r3(){ $this->_retvalue = array("type" => "void");     }
 #line 940 "ProtoParser.php"
-#line 39 "ProtoParser.y"
-    function yy_r10(){ $this->_retvalue = array("type" => "string");     }
+#line 33 "ProtoParser.y"
+    function yy_r4(){ $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;     }
 #line 943 "ProtoParser.php"
-#line 40 "ProtoParser.y"
-    function yy_r11(){ $this->_retvalue = array("type" => "array");     }
+#line 36 "ProtoParser.y"
+    function yy_r6(){ $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor; $this->_retvalue["byRef"] = true;     }
 #line 946 "ProtoParser.php"
-#line 41 "ProtoParser.y"
-    function yy_r12(){ $this->_retvalue = array("type" => "object",   "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+#line 38 "ProtoParser.y"
+    function yy_r7(){ $this->_retvalue = array("type" => "bool");     }
 #line 949 "ProtoParser.php"
-#line 42 "ProtoParser.y"
-    function yy_r13(){ $this->_retvalue = array("type" => "resource", "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+#line 39 "ProtoParser.y"
+    function yy_r8(){ $this->_retvalue = array("type" => "int");     }
 #line 952 "ProtoParser.php"
-#line 43 "ProtoParser.y"
-    function yy_r14(){ $this->_retvalue = array("type" => "mixed");     }
+#line 40 "ProtoParser.y"
+    function yy_r9(){ $this->_retvalue = array("type" => "float");     }
 #line 955 "ProtoParser.php"
-#line 44 "ProtoParser.y"
-    function yy_r15(){ $this->_retvalue = array("type" => "callback");     }
+#line 41 "ProtoParser.y"
+    function yy_r10(){ $this->_retvalue = array("type" => "string");     }
 #line 958 "ProtoParser.php"
-#line 45 "ProtoParser.y"
-    function yy_r16(){ $this->_retvalue = array("type" => "stream");     }
+#line 42 "ProtoParser.y"
+    function yy_r11(){ $this->_retvalue = array("type" => "array");     }
 #line 961 "ProtoParser.php"
-#line 48 "ProtoParser.y"
+#line 43 "ProtoParser.y"
+    function yy_r12(){ $this->_retvalue = array("type" => "object",   "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+#line 964 "ProtoParser.php"
+#line 44 "ProtoParser.y"
+    function yy_r13(){ $this->_retvalue = array("type" => "resource", "subtype" => $this->yystack[$this->yyidx + 0]->minor);     }
+#line 967 "ProtoParser.php"
+#line 45 "ProtoParser.y"
+    function yy_r14(){ $this->_retvalue = array("type" => "mixed");     }
+#line 970 "ProtoParser.php"
+#line 46 "ProtoParser.y"
+    function yy_r15(){ $this->_retvalue = array("type" => "callback");     }
+#line 973 "ProtoParser.php"
+#line 47 "ProtoParser.y"
+    function yy_r16(){ $this->_retvalue = array("type" => "stream");     }
+#line 976 "ProtoParser.php"
+#line 50 "ProtoParser.y"
     function yy_r18(){
   $this->yystack[$this->yyidx + -1]->minor["optional"] = true;
-  $this->function->addParam($this->yystack[$this->yyidx + -1]->minor);
+  $stat = $this->function->addParam($this->yystack[$this->yyidx + -1]->minor);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
     }
-#line 967 "ProtoParser.php"
-#line 52 "ProtoParser.y"
+#line 985 "ProtoParser.php"
+#line 57 "ProtoParser.y"
     function yy_r19(){
   $this->yystack[$this->yyidx + -2]->minor["optional"] = true;
-  $this->function->addParam($this->yystack[$this->yyidx + -2]->minor);
+  $stat = $this->function->addParam($this->yystack[$this->yyidx + -2]->minor);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+  foreach ($this->optParams as $param) {
+	$stat = $this->function->addParam($param);
+	if ($stat !== true) {
+	  throw new Exception($stat->getMessage());
+	}
+  }
     }
-#line 973 "ProtoParser.php"
-#line 56 "ProtoParser.y"
-    function yy_r20(){ $this->function->setVarargs(true);     }
-#line 976 "ProtoParser.php"
-#line 60 "ProtoParser.y"
-    function yy_r23(){ 
+#line 1000 "ProtoParser.php"
+#line 70 "ProtoParser.y"
+    function yy_r20(){ 
+  $this->function->setVarargs(true); 
+    }
+#line 1005 "ProtoParser.php"
+#line 73 "ProtoParser.y"
+    function yy_r21(){ 
+  $stat = $this->function->setVarargsType($this->yystack[$this->yyidx + -1]->minor["type"]);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+  $this->function->setVarargs(true); 
+    }
+#line 1014 "ProtoParser.php"
+#line 83 "ProtoParser.y"
+    function yy_r24(){ 
   $this->function->setVarargs(true);
     }
-#line 981 "ProtoParser.php"
-#line 63 "ProtoParser.y"
-    function yy_r24(){
-  $this->function->addParam($this->yystack[$this->yyidx + 0]->minor);
+#line 1019 "ProtoParser.php"
+#line 86 "ProtoParser.y"
+    function yy_r25(){ 
+  $stat = $this->function->setVarargsType($this->yystack[$this->yyidx + -1]->minor["type"]);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+  $this->function->setVarargs(true);
     }
-#line 986 "ProtoParser.php"
-#line 79 "ProtoParser.y"
+#line 1028 "ProtoParser.php"
+#line 93 "ProtoParser.y"
+    function yy_r26(){
+  $stat = $this->function->addParam($this->yystack[$this->yyidx + 0]->minor);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+    }
+#line 1036 "ProtoParser.php"
+#line 99 "ProtoParser.y"
+    function yy_r27(){
+  foreach ($this->optParams as $param) {
+	$stat = $this->function->addParam($param);
+	if ($stat !== true) {
+	  throw new Exception($stat->getMessage());
+	}
+  }
+    }
+#line 1046 "ProtoParser.php"
+#line 113 "ProtoParser.y"
     function yy_r29(){
+  $this->yystack[$this->yyidx + -1]->minor["optional"] = true;
+  array_unshift($this->optParams, $this->yystack[$this->yyidx + -1]->minor);
+    }
+#line 1052 "ProtoParser.php"
+#line 117 "ProtoParser.y"
+    function yy_r30(){
+  $this->yystack[$this->yyidx + -2]->minor["optional"] = true;
+  array_unshift($this->optParams, $this->yystack[$this->yyidx + -2]->minor);
+    }
+#line 1058 "ProtoParser.php"
+#line 122 "ProtoParser.y"
+    function yy_r31(){
   $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
   $this->_retvalue["name"] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 992 "ProtoParser.php"
-#line 83 "ProtoParser.y"
-    function yy_r30(){
+#line 1064 "ProtoParser.php"
+#line 126 "ProtoParser.y"
+    function yy_r32(){
   $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor;
   $this->_retvalue["name"]     = $this->yystack[$this->yyidx + -2]->minor;
   $this->_retvalue["default"]  = $this->yystack[$this->yyidx + 0]->minor;        
   $this->_retvalue["optional"] = true;
     }
-#line 1000 "ProtoParser.php"
-#line 90 "ProtoParser.y"
-    function yy_r31(){ $this->_retvalue = "true";     }
-#line 1003 "ProtoParser.php"
-#line 91 "ProtoParser.y"
-    function yy_r32(){ $this->_retvalue = "false";     }
-#line 1006 "ProtoParser.php"
-#line 92 "ProtoParser.y"
-    function yy_r33(){ $this->_retvalue = "null";     }
-#line 1009 "ProtoParser.php"
-#line 94 "ProtoParser.y"
-    function yy_r35(){ $this->_retvalue = '"'.$this->yystack[$this->yyidx + 0]->minor.'"';     }
-#line 1012 "ProtoParser.php"
-#line 95 "ProtoParser.y"
-    function yy_r36(){ $this->_retvalue = "array()";     }
-#line 1015 "ProtoParser.php"
-#line 96 "ProtoParser.y"
-    function yy_r37(){ 
+#line 1072 "ProtoParser.php"
+#line 133 "ProtoParser.y"
+    function yy_r33(){ $this->_retvalue = "true";     }
+#line 1075 "ProtoParser.php"
+#line 134 "ProtoParser.y"
+    function yy_r34(){ $this->_retvalue = "false";     }
+#line 1078 "ProtoParser.php"
+#line 135 "ProtoParser.y"
+    function yy_r35(){ $this->_retvalue = "null";     }
+#line 1081 "ProtoParser.php"
+#line 137 "ProtoParser.y"
+    function yy_r37(){ $this->_retvalue = '"'.$this->yystack[$this->yyidx + 0]->minor.'"';     }
+#line 1084 "ProtoParser.php"
+#line 138 "ProtoParser.y"
+    function yy_r38(){ $this->_retvalue = "array()";     }
+#line 1087 "ProtoParser.php"
+#line 139 "ProtoParser.y"
+    function yy_r39(){ 
     $constant = $this->extension->getConstant($this->yystack[$this->yyidx + 0]->minor);
     if ($constant) {
         $this->_retvalue = $constant;
@@ -1017,7 +1089,7 @@ static public $yy_action = array(
         throw new Exception("invalid default value '".$this->yystack[$this->yyidx + 0]->minor."'");
     }
     }
-#line 1025 "ProtoParser.php"
+#line 1097 "ProtoParser.php"
 
     /**
      * placeholder for the left hand side in a reduce operation.
@@ -1129,7 +1201,7 @@ static public $yy_action = array(
      */
     function yy_syntax_error($yymajor, $TOKEN)
     {
-#line 13 "ProtoParser.y"
+#line 15 "ProtoParser.y"
 
   $expect = array();
   foreach ($this->yy_get_expected_tokens($yymajor) as $token) {
@@ -1137,7 +1209,7 @@ static public $yy_action = array(
   }
   throw new Exception('Unexpected ' . $this->tokenName($yymajor) . '(' . $TOKEN
                       . '), expected one of: ' . implode(',', $expect));
-#line 1146 "ProtoParser.php"
+#line 1218 "ProtoParser.php"
     }
 
     /**
