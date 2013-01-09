@@ -1193,8 +1193,8 @@ class CodeGen_PECL_Element_Function
                         $zvalType     = true;
                         $argString   .= "r";
                         $var_decl    .= "    zval * {$name}_zval = NULL;\n";
-                        $var_decl    .= "    php_stream * $name = NULL:\n";
-                        $postProcess .= "    php_stream_from_zval($name, &_z$name);\n"; 
+                        $var_decl    .= "    php_stream * $name = NULL;\n";
+                        $postProcess .= "    php_stream_from_zval($name, &{$name}_zval);\n";
                         break;
 
                     case "callback": 
