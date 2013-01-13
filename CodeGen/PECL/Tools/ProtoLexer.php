@@ -14,7 +14,6 @@ class CodeGen_PECL_Tools_ProtoLexer
         $this->line  = 1;
     }
 
-
     private $_yy_state = 1;
     private $_yy_stack = array();
 
@@ -38,9 +37,6 @@ class CodeGen_PECL_Tools_ProtoLexer
     {
         $this->_yy_state = $state;
     }
-
-
-
 
     function yylex1()
     {
@@ -143,12 +139,12 @@ class CodeGen_PECL_Tools_ProtoLexer
                                 $yysubmatches = array();
                             }
                         }
-                    	$r = $this->{'yy_r1_' . $this->token}($yysubmatches);
+                        $r = $this->{'yy_r1_' . $this->token}($yysubmatches);
                     } while ($r !== null && !is_bool($r));
-			        if ($r === true) {
-			            // we have changed state
-			            // process this token in the new state
-			            return $this->yylex();
+                    if ($r === true) {
+                        // we have changed state
+                        // process this token in the new state
+                        return $this->yylex();
                     } elseif ($r === false) {
                         $this->count += strlen($this->value);
                         $this->line += substr_count($this->value, "\n");
@@ -157,12 +153,12 @@ class CodeGen_PECL_Tools_ProtoLexer
                         }
                         // skip this token
                         continue;
-			        } else {
-	                    // accept
-	                    $this->count += strlen($this->value);
-	                    $this->line += substr_count($this->value, "\n");
-	                    return true;
-			        }
+                    } else {
+                        // accept
+                        $this->count += strlen($this->value);
+                        $this->line += substr_count($this->value, "\n");
+                        return true;
+                    }
                 }
             } else {
                 throw new Exception('Unexpected input at line' . $this->line .
@@ -176,128 +172,128 @@ class CodeGen_PECL_Tools_ProtoLexer
     function yy_r1_1($yy_subpatterns)
     {
 
-	return false;
+    return false;
     }
     function yy_r1_2($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::PAR_OPEN;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::PAR_OPEN;
     }
     function yy_r1_3($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::PAR_CLOSE;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::PAR_CLOSE;
     }
     function yy_r1_4($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_OPEN;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_OPEN;
     }
     function yy_r1_5($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_CLOSE;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::SQUARE_CLOSE;
     }
     function yy_r1_6($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::EQ;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::EQ;
     }
     function yy_r1_7($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::COMMA;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::COMMA;
     }
     function yy_r1_8($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::SEMICOLON;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::SEMICOLON;
     }
     function yy_r1_9($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::ELLIPSE;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::ELLIPSE;
     }
     function yy_r1_10($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::AMPERSAND;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::AMPERSAND;
     }
     function yy_r1_11($yy_subpatterns)
     {
 
-	switch ($this->value) {
-	case "void":
-		$this->token = CodeGen_PECL_Tools_ProtoParser::VOID;
-		break;
-	case "bool": 	
+    switch ($this->value) {
+    case "void":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::VOID;
+        break;
+    case "bool":
     case "boolean":
-	    $this->token = CodeGen_PECL_Tools_ProtoParser::BOOL;
-		break;
-	case "int": 
-	case "integer":
-	case "long":
-		$this->token = CodeGen_PECL_Tools_ProtoParser::INT;
-		break;
-	case "float":
-	case "double":
-		$this->token = CodeGen_PECL_Tools_ProtoParser::FLOAT;
-		break;
-	case "string": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::STRING;
-		break;
-	case "array": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::ARRAY_;
-		break;
-	case "class":
-	case "object":
-		$this->token = CodeGen_PECL_Tools_ProtoParser::CLASS_;
-		break;
-	case "resource": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::RESOURCE;
-		break;
-	case "mixed": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::MIXED;
-		break;
-	case "callback": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::CALLBACK;
-		break;
-	case "stream": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::STREAM;
-		break;
-	case "true": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::TRUE_;
-		break;
-	case "false":
-		$this->token = CodeGen_PECL_Tools_ProtoParser::FALSE_;
-		break;
-	case "null": 
-		$this->token = CodeGen_PECL_Tools_ProtoParser::NULL_;
-		break;
-	default:
-		$this->token = CodeGen_PECL_Tools_ProtoParser::NAME;
-		break;
-	}
+        $this->token = CodeGen_PECL_Tools_ProtoParser::BOOL;
+        break;
+    case "int":
+    case "integer":
+    case "long":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::INT;
+        break;
+    case "float":
+    case "double":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::FLOAT;
+        break;
+    case "string":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::STRING;
+        break;
+    case "array":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::ARRAY_;
+        break;
+    case "class":
+    case "object":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::CLASS_;
+        break;
+    case "resource":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::RESOURCE;
+        break;
+    case "mixed":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::MIXED;
+        break;
+    case "callback":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::CALLBACK;
+        break;
+    case "stream":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::STREAM;
+        break;
+    case "true":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::TRUE_;
+        break;
+    case "false":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::FALSE_;
+        break;
+    case "null":
+        $this->token = CodeGen_PECL_Tools_ProtoParser::NULL_;
+        break;
+    default:
+        $this->token = CodeGen_PECL_Tools_ProtoParser::NAME;
+        break;
+    }
     }
     function yy_r1_12($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::STRVAL;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::STRVAL;
     }
     function yy_r1_13($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
     }
     function yy_r1_16($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
     }
     function yy_r1_17($yy_subpatterns)
     {
 
-	$this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
+    $this->token = CodeGen_PECL_Tools_ProtoParser::NUMVAL;
     }
 
 }

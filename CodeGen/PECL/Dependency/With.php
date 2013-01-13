@@ -86,7 +86,6 @@ class CodeGen_PECL_Dependency_With
      */
     protected $libs = array();
 
-
     /**
      * dependant header files
      *
@@ -111,14 +110,13 @@ class CodeGen_PECL_Dependency_With
 
     /**
      * name getter
-     * 
+     *
      * @param string
      */
     function getName()
     {
         return $this->name;
     }
-
 
     /**
      * name setter
@@ -144,7 +142,7 @@ class CodeGen_PECL_Dependency_With
     function setSummary($text)
     {
         $this->summary = trim($text);
-      
+
         return true;
     }
 
@@ -175,14 +173,14 @@ class CodeGen_PECL_Dependency_With
      *
      * @param string
      */
-    function setTestfile($path) 
+    function setTestfile($path)
     {
         $this->testfile = $path;
     }
 
     /**
      * testfile getter
-     * 
+     *
      * @return string
      */
     function getTestfile()
@@ -202,7 +200,7 @@ class CodeGen_PECL_Dependency_With
 
     /**
      * default searchpath getter
-     * 
+     *
      * @return string
      */
     function getDefaults()
@@ -227,7 +225,7 @@ class CodeGen_PECL_Dependency_With
             return PEAR::raiseError("'$mode' is not a valid <with> mode");
         }
     }
-    
+
     /**
      * version setter
      *
@@ -237,16 +235,16 @@ class CodeGen_PECL_Dependency_With
     {
         $this->version = $version;
     }
-    
+
     /**
      * add library dependency
-     * 
+     *
      * @param  object
      */
     function addLib(CodeGen_PECL_Dependency_Lib $lib)
     {
         $name = $lib->getName();
-        
+
         if (isset($this->libs[$name])) {
             return PEAR::raiseError("library '$name' specified twice");
         }
@@ -266,7 +264,7 @@ class CodeGen_PECL_Dependency_With
         return $this->libs;
     }
 
-    /** 
+    /**
      * add header dependency
      *
      * @param object
@@ -274,7 +272,7 @@ class CodeGen_PECL_Dependency_With
     function addHeader(CodeGen_PECL_Dependency_Header $header)
     {
         $name = $header->getName();
-        
+
         if (isset($this->headers[$name])) {
             return PEAR::raiseError("header '$name' specified twice");
         }
@@ -294,13 +292,13 @@ class CodeGen_PECL_Dependency_With
         return $this->headers;
     }
 
-    /** 
+    /**
      * m4 PHP_ARG_WITH line
      *
      * @parameter string  optional help text
      * @return    string
      */
-    function m4Line() 
+    function m4Line()
     {
         $optname = str_replace("_", "-", $this->name);
 
@@ -311,13 +309,12 @@ class CodeGen_PECL_Dependency_With
                        $this->name);
     }
 
-    
     /**
      * config.m4 code snippet
      *
      * @return string
      */
-    function configm4(CodeGen_PECL_Extension $extension) 
+    function configm4(CodeGen_PECL_Extension $extension)
     {
         $code = "\n";
 
@@ -325,16 +322,16 @@ class CodeGen_PECL_Dependency_With
         $withUpname = strtoupper($withName);
         $extName    = $extension->getName();
         $extUpname  = strtoupper($extName);
-        
+
         if ($withName != $extName) {
             $code.= $this->m4Line()."\n\n";
         }
-        
+
         switch ($this->mode) {
         case "pkg-config":
             $pkgName = $this->getName();
 
-            $code.= "  
+            $code.= "
   if test -z \"\$PKG_CONFIG\"
   then
     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -387,34 +384,34 @@ class CodeGen_PECL_Dependency_With
 
 ";
             }
-            
+
             $pathes = array();
             foreach ($this->getHeaders() as $header) {
                 $pathes[$header->getPath()] = true;
             }
             foreach (array_keys($pathes) as $path) {
                 $code .="  PHP_ADD_INCLUDE(\$PHP_{$withUpname}_DIR/$path)\n";
-            }       
+            }
             break;
         }
 
         $code.= "\n";
         $code.= "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
         $code.= "  export CPPFLAGS=\"\$CPPFLAGS \$INCLUDES -DHAVE_$withUpname\"\n";
-        
+
         foreach ($this->headers as $header) {
             $code.= $header->configm4($extName, $this->name);
-        }  
+        }
 
         foreach ($this->getLibs() as $lib) {
             $code.= $lib->configm4($extName, $this->name);
         }
-            
-        $code.= "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";     
+
+        $code.= "  export CPPFLAGS=\"\$OLD_CPPFLAGS\"\n";
 
         return $code."\n";
     }
-    
+
 }
 
 /*
@@ -425,3 +422,4 @@ class CodeGen_PECL_Dependency_With
  * End:
  */
 ?>
+

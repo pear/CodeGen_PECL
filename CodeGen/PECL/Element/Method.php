@@ -40,10 +40,10 @@ require_once "CodeGen/PECL/Element/Class.php";
 class CodeGen_PECL_Element_Method
     extends CodeGen_PECL_Element_Function
 {
-    function __construct(Codegen_PECL_Element_ObjectInterface $class) 
+    function __construct(Codegen_PECL_Element_ObjectInterface $class)
     {
         $this->class     = $class;
-        $this->classname = $class->getName(); 
+        $this->classname = $class->getName();
     }
 
     /**
@@ -59,8 +59,6 @@ class CodeGen_PECL_Element_Method
      * @var string
      */
     protected $classname;
-         
-       
 
     /**
      * Name for procedural alias of this method
@@ -69,17 +67,17 @@ class CodeGen_PECL_Element_Method
      */
     protected $proceduralName = "";
 
-    function getProceduralName() 
+    function getProceduralName()
     {
         return $this->proceduralName;
     }
-     
-    function setProceduralName($name) 
+
+    function setProceduralName($name)
     {
         if ($name == "default") {
             $name = $this->classname."_".$this->name;
         } else if (!$this->isName($name)) {
-            return PEAR::raiseError("'$name' is not a valid function alias name");             
+            return PEAR::raiseError("'$name' is not a valid function alias name");
         }
 
         $this->proceduralName = $name;
@@ -104,7 +102,7 @@ class CodeGen_PECL_Element_Method
      */
     protected $isAbstract = false;
 
-    function isAbstract() 
+    function isAbstract()
     {
         $this->isAbstract = true;
 
@@ -118,7 +116,7 @@ class CodeGen_PECL_Element_Method
      */
     protected $isInterface = false;
 
-    function isInterface() 
+    function isInterface()
     {
         $this->isInterface = true;
         $this->isAbstract  = true;
@@ -133,7 +131,7 @@ class CodeGen_PECL_Element_Method
      */
     protected $isFinal = false;
 
-    function isFinal() 
+    function isFinal()
     {
         $this->isFinal = true;
 
@@ -147,7 +145,7 @@ class CodeGen_PECL_Element_Method
      */
     protected $isStatic = false;
 
-    function isStatic() 
+    function isStatic()
     {
         $this->isStatic = true;
 
@@ -157,11 +155,11 @@ class CodeGen_PECL_Element_Method
     /**
      * Visibility of this property
      *
-     * @var   string 
+     * @var   string
      */
     protected $access = "public";
 
-    function setAccess($access) 
+    function setAccess($access)
     {
         switch ($this->access) {
         case "private":
@@ -175,7 +173,7 @@ class CodeGen_PECL_Element_Method
     }
 
     /**
-     * Hook for parameter parsing API function 
+     * Hook for parameter parsing API function
      *
      * @param  string  Argument string
      * @param  array   Argument variable pointers
@@ -212,22 +210,21 @@ class CodeGen_PECL_Element_Method
         return $code;
     }
 
-
     /**
      * Generate local variable declarations
      *
      * @return string C code snippet
      */
-    function localVariables($extension) 
+    function localVariables($extension)
     {
         $code = parent::localVariables($extension);
         $code.= "    zend_class_entry * _this_ce;\n";
-            
+
         if ($this->name == "__construct") {
             $code.= "    zval * _this_zval;\n";
         }
 
-        $payload = $this->class->getPayloadType(); 
+        $payload = $this->class->getPayloadType();
         if ($payload) {
             $code.= "    php_obj_{$this->classname} *payload;\n";
         }
@@ -239,16 +236,16 @@ class CodeGen_PECL_Element_Method
      * Set parameter and return value information from PHP style prototype
      *
      * @access public
-     * @param  string  PHP style prototype 
+     * @param  string  PHP style prototype
      * @return bool    Success status
      */
-    function setProto($proto, $extension) 
+    function setProto($proto, $extension)
     {
         $err = parent::setProto($proto, $extension);
         if (PEAR::isError($err)) {
             return $err;
         }
-            
+
         if ($this->name != "__construct") {
             $param            = array();
             $param['name']    = "_this_zval";
@@ -266,7 +263,7 @@ class CodeGen_PECL_Element_Method
      * @param  string  Name of class owning this method
      * @return string  C code snippet
      */
-    function methodEntry() 
+    function methodEntry()
     {
         $code = "";
 
@@ -300,7 +297,7 @@ class CodeGen_PECL_Element_Method
         }
 
         $code.= ")";
-            
+
         return $code;
     }
 
@@ -310,7 +307,7 @@ class CodeGen_PECL_Element_Method
      * @param  string  Name of class owning this method
      * @return string  C code snippet
      */
-    function functionAliasEntry() 
+    function functionAliasEntry()
     {
         if (!$this->proceduralName) {
             return "";
@@ -320,20 +317,19 @@ class CodeGen_PECL_Element_Method
         return "    PHP_MALIAS({$this->classname}, {$this->proceduralName}, {$this->name}, NULL, ZEND_ACC_PUBLIC)\n";
     }
     /**
-     * Create proto line for method 
+     * Create proto line for method
      *
      * @param  string  Name of class owning this method
      * @return string  C code snippet
      */
-    function cProto() 
+    function cProto()
     {
         if ($this->isAbstract || $this->isInterface) {
             return "";
         }
-            
+
         return "PHP_METHOD({$this->classname}, {$this->name})";
     }
-
 
     /**
      * Create C code implementing the PHP userlevel function
@@ -342,7 +338,7 @@ class CodeGen_PECL_Element_Method
      * @param  class Extension  extension the function is part of
      * @return string           C code implementing the function
      */
-    function cCode($extension) 
+    function cCode($extension)
     {
         if (!$this->isAbstract && !$this->isInterface) {
             return parent::cCode($extension);
@@ -400,7 +396,7 @@ class CodeGen_PECL_Element_Method
 
     /**
      * Method name checking is less strict
-     * 
+     *
      * Method names can't clash with PHP standard functions
      * so we can just check for syntax and keywords here
      *
@@ -411,17 +407,16 @@ class CodeGen_PECL_Element_Method
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid function name");
         }
-            
+
         if (self::isKeyword($name)) {
             return PEAR::raiseError("'$name' is a reserved word which is not valid for function names");
         }
-            
+
         $this->name = $name;
-            
+
         return true;
     }
 
-        
     /**
      * Create test case for this function
      *
@@ -429,7 +424,7 @@ class CodeGen_PECL_Element_Method
      * @param  object  extension the function is part of
      * @return object  generated test case
      */
-    function createTest(CodeGen_PECL_Extension $extension) 
+    function createTest(CodeGen_PECL_Extension $extension)
     {
         if ($this->isAbstract || $this->isInterface) {
             return null;
@@ -439,12 +434,12 @@ class CodeGen_PECL_Element_Method
 
         $test->setName($this->getFullName());
         $test->setTitle($this->classname."::".$this->name."() member function");
-            
+
         return $test;
     }
 
     /**
-     * Code needed ahead of the method table 
+     * Code needed ahead of the method table
      *
      * Abstract/Interface methods need to define their argument
      * list ahead of the method table
@@ -452,11 +447,11 @@ class CodeGen_PECL_Element_Method
      * @param   array
      * @returns string
      */
-    function argInfoCode($params) 
+    function argInfoCode($params)
     {
         array_shift($params);
         return parent::argInfoCode($params);
-    } 
+    }
 
     /**
      * Name for ARG_INFO definition
@@ -479,3 +474,4 @@ class CodeGen_PECL_Element_Method
  */
 
 ?>
+

@@ -38,7 +38,7 @@ require_once "CodeGen/PECL/Element.php";
 class CodeGen_PECL_Dependency_Extension
     extends CodeGen_Element
 {
-    /** 
+    /**
      * Extension name
      *
      * @var string
@@ -50,7 +50,7 @@ class CodeGen_PECL_Dependency_Extension
      *
      * @return string
      */
-    function getName() 
+    function getName()
     {
         return $this->name;
     }
@@ -60,7 +60,7 @@ class CodeGen_PECL_Dependency_Extension
      *
      * @param string
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!$this->isName($name)) {
             PEAR::raiseError("'$name' is not a valid extension name ");
@@ -69,8 +69,7 @@ class CodeGen_PECL_Dependency_Extension
         $this->name = $name;
     }
 
-
-    /** 
+    /**
      * Extension version relation
      *
      * @var array
@@ -82,7 +81,7 @@ class CodeGen_PECL_Dependency_Extension
      *
      * @param string
      */
-    function setVersion($version, $relation = "ge") 
+    function setVersion($version, $relation = "ge")
     {
         switch ($relation) {
         case "ge":
@@ -113,7 +112,7 @@ class CodeGen_PECL_Dependency_Extension
             $relation = "eq";
             break;
 
-        default: 
+        default:
             return PEAR::raiseError("'$relation' is not a valid version relation ");
         }
 
@@ -122,8 +121,7 @@ class CodeGen_PECL_Dependency_Extension
         $this->version = array("version" => $version, "relation" => $relation);
     }
 
-
-    /** 
+    /**
      * Extension name
      *
      * @var string
@@ -135,10 +133,10 @@ class CodeGen_PECL_Dependency_Extension
      *
      * @param string
      */
-    function setType($type) 
+    function setType($type)
     {
         $type = strtoupper($type);
-        
+
         switch ($type) {
         case "REQUIRED":
         case "OPTIONAL":
@@ -146,7 +144,7 @@ class CodeGen_PECL_Dependency_Extension
             $this->type = $type;
             break;
         default:
-            return PEAR::raiseError("'$type' is not a valid dependency type "); 
+            return PEAR::raiseError("'$type' is not a valid dependency type ");
         }
     }
 
@@ -194,7 +192,6 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
 ";
     }
 
-
     /**
      * package.xml dependencie entry
      *
@@ -210,8 +207,6 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
 
         return $xml;
     }
-
-
 
     /**
      * package.xml 2.0 dependencie entry
@@ -265,3 +260,4 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
         return $xml;
     }
 }
+

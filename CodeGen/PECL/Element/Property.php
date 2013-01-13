@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a class property within a PECL extension 
+ * Class describing a class property within a PECL extension
  *
  * PHP versions 5
  *
@@ -27,7 +27,7 @@ require_once "CodeGen/PECL/Element/Function.php";
 require_once "CodeGen/PECL/Element/Class.php";
 
 /**
- * Class describing a class property within a PECL extension 
+ * Class describing a class property within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -47,7 +47,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $isAbstract = false;
 
-    function isAbstract() 
+    function isAbstract()
     {
         $this->isAbstract = true;
     }
@@ -59,7 +59,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $isInterface = false;
 
-    function isInterface() 
+    function isInterface()
     {
         $this->isInterface = true;
     }
@@ -71,7 +71,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $isFinal = false;
 
-    function isFinal() 
+    function isFinal()
     {
         $this->isFinal = true;
     }
@@ -83,7 +83,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $isStatic = false;
 
-    function isStatic() 
+    function isStatic()
     {
         $this->isStatic = true;
     }
@@ -91,11 +91,11 @@ class CodeGen_PECL_Element_Property
     /**
      * Visibility of this property
      *
-     * @var   string 
+     * @var   string
      */
     protected $access = "public";
 
-    function setAccess($access) 
+    function setAccess($access)
     {
         switch ($this->access) {
         case "private":
@@ -108,7 +108,6 @@ class CodeGen_PECL_Element_Property
         }
     }
 
-
     /**
      * Property type
      *
@@ -116,7 +115,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $type = "null";
 
-    function setType($type) 
+    function setType($type)
     {
         switch ($type) {
         case "int":
@@ -141,7 +140,6 @@ class CodeGen_PECL_Element_Property
         return true;
     }
 
-
     /**
      * Property name
      *
@@ -149,18 +147,18 @@ class CodeGen_PECL_Element_Property
      */
     protected $name = "unknown";
 
-    function setName($name) 
+    function setName($name)
     {
         if (!$this->isName($name)) {
             return PEAR::raiseError("'$name' is not a valid property name");
         }
-            
+
         $this->name = $name;
 
         return true;
     }
 
-    function getName() 
+    function getName()
     {
         return $this->name;
     }
@@ -173,7 +171,7 @@ class CodeGen_PECL_Element_Property
      */
     protected $value = "";
 
-    function setValue($value) 
+    function setValue($value)
     {
         // TODO check?
         $this->value = $value;
@@ -181,13 +179,13 @@ class CodeGen_PECL_Element_Property
         return true;
     }
 
-    /** 
+    /**
      * MINIT code fragment
      *
      * @access public
      * @return string
      */
-    function minitCode($classptr) 
+    function minitCode($classptr)
     {
         $code = $this->ifConditionStart();
 
@@ -203,11 +201,10 @@ class CodeGen_PECL_Element_Property
             // TODO zend_declare_property_double only available in 5.1? add a configure check for this?
             $code .= $this->value.", ";
             break;
-        default: 
+        default:
             break;
         }
 
-            
         $code.= "\n        ZEND_ACC_".strtoupper($this->access);
         if ($this->isStatic) {
             $code.= " | ZEND_ACC_STATIC";
@@ -230,3 +227,4 @@ class CodeGen_PECL_Element_Property
     }
 }
 ?>
+

@@ -24,7 +24,6 @@
  */
 require_once "CodeGen/Maintainer.php";
 
-
 /**
  * PECL specific Maintainer extensions
  *
@@ -36,7 +35,7 @@ require_once "CodeGen/Maintainer.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Maintainer 
+class CodeGen_PECL_Maintainer
     extends CodeGen_Maintainer
 {
     /**
@@ -50,8 +49,6 @@ class CodeGen_PECL_Maintainer
         return "{$this->name} '{$this->email}' ({$this->role})";
     }
 
-     
-    
     /**
      * Generate a package.xml <maintainer> entry for this author
      *
@@ -66,10 +63,10 @@ class CodeGen_PECL_Maintainer
         $code.= "      <email>{$this->email}</email>\n";
         $code.= "      <role>{$this->role}</role>\n";
         $code.= "    </maintainer>\n";
-        
+
         return $code;
     }
-    
+
     /**
      * Generate a package.xml 2.0 <maintainer> entry for this author
      *
@@ -79,17 +76,17 @@ class CodeGen_PECL_Maintainer
     function packageXml2()
     {
         $code = "";
-        
+
         $code.= "  <{$this->role}>\n";
         $code.= "    <name>{$this->name}</name>\n";
         $code.= "    <user>{$this->user}</user>\n";
         $code.= "    <email>{$this->email}</email>\n";
         $code.= "    <active>yes</active>\n"; // TODO add something like this on the input side, too
         $code.= "  </{$this->role}>\n";
-        
+
         return $code;
     }
-    
+
     /**
      * Comparison function
      *
@@ -99,15 +96,15 @@ class CodeGen_PECL_Maintainer
      *
      * @param  object maintainer #1
      * @param  object maintainer #2
-     * @return int    the usual -1, 0, 1 
+     * @return int    the usual -1, 0, 1
      */
     static function comp($m1, $m2)
     {
         $ranking = array("lead"=>1, "developer"=>2, "contributor"=>3, "helper"=>4);
-        
+
         $r1 = $ranking[$m1->role];
         $r2 = $ranking[$m2->role];
-        
+
         if ($r1 < $r2) return -1;
         if ($r1 > $r2) return  1;
         return 0;
@@ -123,3 +120,4 @@ class CodeGen_PECL_Maintainer
  */
 
 ?>
+

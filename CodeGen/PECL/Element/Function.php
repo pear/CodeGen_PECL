@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a function within a PECL extension 
+ * Class describing a function within a PECL extension
  *
  * PHP versions 5
  *
@@ -19,7 +19,7 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
-/** 
+/**
  * includes
  */
 require_once "CodeGen/PECL/Element.php";
@@ -30,7 +30,7 @@ require_once "CodeGen/PECL/Tools/ProtoLexer.php";
 require_once "CodeGen/PECL/Tools/ProtoParser.php";
 
 /**
- * Class describing a function within a PECL extension 
+ * Class describing a function within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
@@ -40,8 +40,8 @@ require_once "CodeGen/PECL/Tools/ProtoParser.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Element_Function 
-    extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Function
+    extends CodeGen_PECL_Element
 {
     /**
      * The function name
@@ -55,12 +55,12 @@ class CodeGen_PECL_Element_Function
      *
      * @param string
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid function name");
         }
-            
+
         switch ($this->role) {
         case "internal":
             if (!$this->isInternalName($name)) {
@@ -83,7 +83,7 @@ class CodeGen_PECL_Element_Function
         }
 
         $this->name = $name;
-            
+
         return true;
     }
 
@@ -129,9 +129,6 @@ class CodeGen_PECL_Element_Function
         return true;
     }
 
-
-
-
     /**
      * A long description
      *
@@ -141,7 +138,7 @@ class CodeGen_PECL_Element_Function
 
     /**
      * description setter
-     * 
+     *
      * @param string
      */
     function setDescription($text)
@@ -149,9 +146,6 @@ class CodeGen_PECL_Element_Function
         $this->description = $text;
         return true;
     }
-
-
-
 
     /**
      * Type of function: internal, public
@@ -162,7 +156,7 @@ class CodeGen_PECL_Element_Function
 
     /**
      * role setter
-     * 
+     *
      * @param string
      */
     function setRole($role)
@@ -182,33 +176,32 @@ class CodeGen_PECL_Element_Function
             break;
 
         default:
-            return PEAR::raiseError("'$role' is not a valid function role"); 
+            return PEAR::raiseError("'$role' is not a valid function role");
         }
-            
+
         $this->role = $role;
-            
+
         return true;
     }
 
-    function getRole() 
+    function getRole()
     {
         return $this->role;
     }
 
-
     /**
      * Function has variable arguments "..."
-     * 
+     *
      * @var    bool
      */
     protected $varargs = false;
 
-    function setVarargs($varargs) 
+    function setVarargs($varargs)
     {
         $this->varargs = (bool)$varargs;
     }
 
-    function getVarargs() 
+    function getVarargs()
     {
         return $this->varargs;
     }
@@ -218,7 +211,7 @@ class CodeGen_PECL_Element_Function
     function setVarargsType($type)
     {
         $type = strtolower($type);
-        
+
         switch ($type) {
         case "bool":
         case "int":
@@ -228,7 +221,7 @@ class CodeGen_PECL_Element_Function
             $this->varargsType = $type;
             return true;
         }
-        
+
         return PEAR::raiseError("invalid vararg type '$type', only 'bool', 'int', 'float', 'string' \nand 'mixed' are supported for now");
     }
 
@@ -263,11 +256,11 @@ class CodeGen_PECL_Element_Function
     /**
      * Set parameter and return value information from PHP style prototype
      *
-     * @param  string  PHP style prototype 
+     * @param  string  PHP style prototype
      * @param  object  Extension object owning this function
      * @return bool    Success status
      */
-    function setProto($proto, $extension) 
+    function setProto($proto, $extension)
     {
         $this->proto = $proto;
 
@@ -288,11 +281,11 @@ class CodeGen_PECL_Element_Function
      * new (and hopefully final) version using a PHP_LexerGenerator and
      * PHP_ParserGenerator generated prototype parser
      *
-     * @param  string  PHP style prototype 
+     * @param  string  PHP style prototype
      * @param  object  Extension object owning this function
      * @return bool    Success status
      */
-    protected function newSetProto2($proto, $extension) 
+    protected function newSetProto2($proto, $extension)
     {
         try {
             $lex    = new CodeGen_PECL_Tools_ProtoLexer($proto);
@@ -309,21 +302,21 @@ class CodeGen_PECL_Element_Function
     /**
      * Set parameter and return value information from PHP style prototype
      *
-     * @param  string  PHP style prototype 
+     * @param  string  PHP style prototype
      * @param  object  Extension object owning this function
      * @return bool    Success status
      */
-    protected function newSetProto($proto, $extension) 
+    protected function newSetProto($proto, $extension)
     {
         $tokenGroups    = array();
         $optionals      = 0;
         $firstOptional  = 0;
         $squareBrackets = 0;
-            
+
         $scanner = new CodeGen_Tools_Tokenizer($proto);
 
         // group #0 -> return type and function name
-        $group = array();       
+        $group = array();
         while ($scanner->nextToken()) {
             if ($scanner->type === 'char' && $scanner->token === '(') {
                 break;
@@ -331,9 +324,9 @@ class CodeGen_PECL_Element_Function
             $group[] = array($scanner->type, $scanner->token);
         }
         $tokenGroups[] = $group;
-            
+
         // all following groups are parameters delimited by ','
-        $group = array();       
+        $group = array();
         while ($scanner->nextToken()) {
             if ($scanner->type === 'char') {
                 if ($scanner->token === '[') {
@@ -346,16 +339,15 @@ class CodeGen_PECL_Element_Function
                         $firstOptional = count($tokenGroups);
                     }
                     continue;
-                } 
-                    
+                }
+
                 if ($scanner->token === ',') {
                     if (count($group)) {
                         $tokenGroups[] = $group;
                         $group         = array();
                     }
                     continue;
-                } 
-                    
+                }
 
                 if ($scanner->token === ']') {
                     $squareBrackets--;
@@ -366,7 +358,7 @@ class CodeGen_PECL_Element_Function
                     $tokenGroups[] = $group;
                     $group         = array();
                     break;
-                } 
+                }
             }
 
             $group[] = array($scanner->type, $scanner->token);
@@ -379,12 +371,11 @@ class CodeGen_PECL_Element_Function
             return PEAR::raiseError("to many closing ']'");
         }
 
-            
         //
         // get return type and function name
         //
         $tokens = array_shift($tokenGroups);
-            
+
         // first the function name
         list($type, $token) = array_pop($tokens);
         if ($type !== 'char' || $token !== '@') { // @ is allowed as function name placeholder
@@ -404,14 +395,14 @@ class CodeGen_PECL_Element_Function
         } else {
             $this->name = $functionName;
         }
-            
+
         // then the return type
         list($type, $token) = array_shift($tokens);
         if ($type !== 'name' || !self::isType($token)) {
             return PEAR::raiseError("'$token' is not a valid return type");
         }
         $returnType = $token;
-            
+
         // some types may carry a name
         if ($token === "object" || $token == "resource") {
             if (isset($tokens[0][0]) && $tokens[0][0] === 'name') {
@@ -419,36 +410,36 @@ class CodeGen_PECL_Element_Function
                 $returnSubtype = $token;
             }
         }
-            
+
         // return by reference?
         if (count($tokens) && $tokens[0][0] === 'char' && ($tokens[0][1] === '&' || $tokens[0][1] === '@')) {
             list($type, $token) = array_shift($tokens);
             $returnByRef = true;
         }
-            
+
         // any tokens left?
         if (count($tokens)) {
             return PEAR::raiseError("extra token '".$tokens[0][1]."' in function prototype");
         }
-            
-        // 
+
+        //
         // now the parameters one by one
-        // 
+        //
         $params = array();
         $vararg = false;
         while ($tokens = array_shift($tokenGroups)) {
             if ($vararg) {
                 return PEAR::raiseError("no further parameters are allowed after '...'");
             }
-                
+
             $param = array();
-                
+
             // check for default value assignment
             $equals  = false;
             $default = array();
             foreach ($tokens as $key => $value) {
                 if ($value[0] === 'char' && $value[1] === '=') {
-                    $equals = $key; 
+                    $equals = $key;
                     break;
                 }
             }
@@ -458,14 +449,14 @@ class CodeGen_PECL_Element_Function
                 }
                 array_pop($tokens);
             }
-                
+
             // get parameter name
             list($type, $token) = array_pop($tokens);
             if ($type !== 'name') {
                 return PEAR::raiseError("'$token' is not a valid parameter name (1)");
             }
             $param['name'] = $token;
-                
+
             // then the parameter type
             list($type, $token) = array_shift($tokens);
             if ($type !== 'name' || !self::isType($token)) {
@@ -491,7 +482,7 @@ class CodeGen_PECL_Element_Function
             } else {
                 $param['type'] = $token;
             }
-                
+
             if (!empty($param["name"]) && !self::isName($param["name"])) {
                 return PEAR::raiseError("'{$param[name]}' is not a valid parameter name (2)");
             }
@@ -503,7 +494,7 @@ class CodeGen_PECL_Element_Function
                     $param['subtype'] = $token;
                 }
             }
-                
+
             //  pass by reference?
             if (count($tokens) && ($tokens[0][0] === 'char') && ($tokens[0][1] === '&' || $tokens[0][1] === '@')) {
                 list($type, $token) = array_shift($tokens);
@@ -513,12 +504,12 @@ class CodeGen_PECL_Element_Function
                 $param['byRef'] = true;
                 $this->hasRefArgs = true;
             }
-                
+
             // any tokens left?
             if (count($tokens)) {
                 return PEAR::raiseError("extra token '".$tokens[0][1]."' in specification of parameter '$param[name]'");
             }
-                
+
             // do we have a default value?
             switch (count($default)) {
             case 0:
@@ -526,11 +517,11 @@ class CodeGen_PECL_Element_Function
             case 1:
                 list($type, $token) = array_shift($default);
                 switch ($type) {
-                case 'string': 
+                case 'string':
                 case 'char':
                     $param['default'] = '"'.str_replace('"', '\"', $token).'"';
                     break;
-                case 'numeric': 
+                case 'numeric':
                     $param['default'] = $token;
                     break;
                 case 'name':
@@ -540,8 +531,8 @@ class CodeGen_PECL_Element_Function
                     case 'false':
                     case 'null':
                     case 'array()':
-                        $param['default'] = $token; 
-                        break;                          
+                        $param['default'] = $token;
+                        break;
                     default:
                         // now see if this is a constand defined by this extension
                         $constant = $extension->getConstant($token);
@@ -559,12 +550,12 @@ class CodeGen_PECL_Element_Function
             default:
                 return PEAR::raiseError("invalid default value '$token' specification for parameter '$param[name]' ($type)");
             }
-                
+
             if ($firstOptional && count($params)+1 >= $firstOptional) {
                 $param['optional'] = true;
                 $optionals++;
             }
-                
+
             $params[] = $param;
         }
 
@@ -584,12 +575,11 @@ class CodeGen_PECL_Element_Function
         return true;
     }
 
-
-    function oldSetProto($proto) 
+    function oldSetProto($proto)
     {
         // This is the classic setProto() version, we keep it for now
         // as the new version is not 100% backwards compatible yet
-            
+
         // 'tokenize' it
         $tokens = array();
 
@@ -640,7 +630,7 @@ class CodeGen_PECL_Element_Function
         }
 
         if ($tokens[$n++] != '(') return PEAR::raiseError("'(' expected instead of '$tokens[$n]'");
-            
+
         if ($tokens[$n] == ')') {
             /* done */
         } else if ($tokens[$n] == '...') {
@@ -695,7 +685,7 @@ class CodeGen_PECL_Element_Function
 
                 if ($tokens[$n] == ',') continue;
                 if ($tokens[$n] == ']') break;
-                if ($tokens[$n] == ')') break;            
+                if ($tokens[$n] == ')') break;
 
             }
 
@@ -707,7 +697,7 @@ class CodeGen_PECL_Element_Function
             if ($opts != 0) {
                 return PEAR::raiseError("'[' / ']' count mismatch");
             }
-        } 
+        }
 
         if ($tokens[$n] != ')') {
             return PEAR::raiseError("')' expected instead of '$tokens[$n]'");
@@ -723,7 +713,6 @@ class CodeGen_PECL_Element_Function
 
         return true;
     }
-
 
     /**
      * Code snippet
@@ -771,10 +760,6 @@ class CodeGen_PECL_Element_Function
         return $this->code;
     }
 
-
-
-
-
     /**
      * test code snippet
      *
@@ -802,14 +787,13 @@ class CodeGen_PECL_Element_Function
         return $this->testCode;
     }
 
-
     /**
      * expected test result string
      *
      * @var array
      */
     protected $testResult = array();
- 
+
     /**
      * testResult setter
      *
@@ -830,7 +814,6 @@ class CodeGen_PECL_Element_Function
     {
         return $this->testResult;
     }
-
 
     /**
      * test code description
@@ -859,7 +842,6 @@ class CodeGen_PECL_Element_Function
         return $this->testDescription;
     }
 
-
     /**
      * test additional skipif condition
      *
@@ -886,8 +868,6 @@ class CodeGen_PECL_Element_Function
     {
         return $this->testSkipIf;
     }
-
-
 
     /**
      * test additional ini condition
@@ -916,14 +896,6 @@ class CodeGen_PECL_Element_Function
         return $this->testIni;
     }
 
-
-
-
-
-
-
-
-
     /**
      * Check whether a function name is already used internally
      *
@@ -944,29 +916,27 @@ class CodeGen_PECL_Element_Function
         return false;
     }
 
-
-    /** 
+    /**
      * Helper for cCode
      *
      * @param  string  Parameter spec. array
      * @param  string  default value for type
      * @return string  default value
      */
-    function defaultval($param, $default) 
+    function defaultval($param, $default)
     {
         if (isset($param["default"])) {
             if (is_object($param["default"])) {
                 return $param["default"]->getValue();
-            } 
+            }
             return $param["default"];
         }
 
         return $default;
     }
 
-
     /**
-     * Hook for parameter parsing API function 
+     * Hook for parameter parsing API function
      *
      * @param  string  Argument string
      * @param  array   Argument variable pointers
@@ -980,14 +950,14 @@ class CodeGen_PECL_Element_Function
             $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", $count);
         } else if ($count > 0) {
             $argc = "ZEND_NUM_ARGS()";
-        } 
-       
+        }
+
         if (isset($argc)) {
             $parse_call = "zend_parse_parameters($argc TSRMLS_CC, \"$argString\", ".join(", ", $argPointers).")";
         } else {
             $parse_call = "zend_parse_parameters_none()";
         }
-        
+
         return "
     if ($parse_call == FAILURE) {
         return;
@@ -995,13 +965,12 @@ class CodeGen_PECL_Element_Function
 ";
     }
 
-
     /**
      * Generate local variable declarations
      *
      * @return string C code snippet
      */
-    function localVariables($extension) 
+    function localVariables($extension)
     {
         $code = "";
 
@@ -1034,7 +1003,7 @@ class CodeGen_PECL_Element_Function
      * @param  class Extension  extension the function is part of
      * @return string           C code implementing the function
      */
-    function cCode($extension) 
+    function cCode($extension)
     {
         $code = "\n";
 
@@ -1052,7 +1021,7 @@ class CodeGen_PECL_Element_Function
             // function declaration
             $code .= $this->cProto()."\n";
             $code .= "{\n";
-                
+
             $code .= $this->localVariables($extension);
 
             $var_decl = "\n";
@@ -1073,8 +1042,8 @@ class CodeGen_PECL_Element_Function
                         continue;
                     }
 
-                    $name = $param['name']; 
-                        
+                    $name = $param['name'];
+
                     if ($param['type'] == "resource" && $extension->haveVersion("1.0.0alpha")) {
                         $argPointers[] = "&{$name}_res";
                     } else {
@@ -1109,7 +1078,7 @@ class CodeGen_PECL_Element_Function
                         $argString    .= "s";
                         $default       = $this->defaultval($param, "NULL");
                         $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len = %d;\n", 
+                        $var_decl     .= sprintf("    int {$name}_len = %d;\n",
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
                         $argPointers[] = "&{$name}_len";
                         break;
@@ -1118,7 +1087,7 @@ class CodeGen_PECL_Element_Function
                         $argString    .= "u";
                         $default       = $this->defaultval($param, "NULL");
                         $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len = %d;\n", 
+                        $var_decl     .= sprintf("    int {$name}_len = %d;\n",
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
                         $argPointers[] = "&{$name}_len";
                         break;
@@ -1127,7 +1096,7 @@ class CodeGen_PECL_Element_Function
                         $argString    .= "t";
                         $default       = $this->defaultval($param, "NULL");
                         $var_decl     .= "    const char * $name = $default;\n";
-                        $var_decl     .= sprintf("    int {$name}_len  = %d;\n", 
+                        $var_decl     .= sprintf("    int {$name}_len  = %d;\n",
                                                  $default==="NULL" ? 0 : strlen($default) - 2);
                         $var_decl     .= "    int {$name}_type = IS_STRING;\n"; // TODO depends on input encoding
                         $argPointers[] = "&{$name}_len";
@@ -1142,7 +1111,7 @@ class CodeGen_PECL_Element_Function
                         $postProcess .= "    {$name}_hash = HASH_OF($name);\n";
                         break;
 
-                    case "object": 
+                    case "object":
                         $zvalType = true;
                         $var_decl.= "    zval * $name = NULL;\n";
                         if (isset($param['subtype'])) {
@@ -1172,7 +1141,7 @@ class CodeGen_PECL_Element_Function
                         $code .= "    int $idVar = -1;\n";
 
                         if (isset($param['subtype'])) {
-                            $resource = $extension->getResource($param['subtype']);                            
+                            $resource = $extension->getResource($param['subtype']);
                         }
 
                         if ($resource) {
@@ -1182,7 +1151,7 @@ class CodeGen_PECL_Element_Function
                                 $varname = "res_{$name}";
                             }
                             $code .= "    ".$resource->getPayload()." * $payloadVar;\n";
-                                
+
                             $postProcess .= "    ZEND_FETCH_RESOURCE($payloadVar, ".$resource->getPayload()." *, &$resVar, $idVar, \"$param[subtype]\", le_$param[subtype]);\n";
                         } else {
                             $postProcess .="    ZEND_FETCH_RESOURCE(???, ???, $resVar, $idVar, \"???\", ???_rsrc_id);\n";
@@ -1197,7 +1166,7 @@ class CodeGen_PECL_Element_Function
                         $postProcess .= "    php_stream_from_zval($name, &{$name}_zval);\n";
                         break;
 
-                    case "callback": 
+                    case "callback":
                         $postProcess .= "    if (!zend_is_callable({$name}, 0, NULL)) {\n";
                         $postProcess .= "      php_error(E_WARNING, \"Invalid comparison function.\");\n";
                         $postProcess .= "      return;";
@@ -1207,7 +1176,7 @@ class CodeGen_PECL_Element_Function
                         $zvalType = true;
                         $argString .= "z";
                         $var_decl  .= "    zval * {$name} = NULL;\n";
-                        break;                          
+                        break;
                     }
 
                     if (empty($param['byRef']) && ($param['type'] == 'mixed' || $param['type'] == 'array')) {
@@ -1218,7 +1187,7 @@ class CodeGen_PECL_Element_Function
                         // TODO: pass by ref for 'simple' types requires further thinking
                     }
                 }
-            } 
+            }
 
             if ($this->varargs) {
                 $var_decl .= "\n";
@@ -1257,13 +1226,12 @@ class CodeGen_PECL_Element_Function
                 }
             } else {
                 $var_code .= $this->parseParameterHook($argString, $argPointers, $varargs_offset);
-                    
+
                 if (!empty($postProcess)) {
                     $var_code.= "$postProcess\n\n";
                 }
             }
 
-                    
             $code .= "$var_decl\n";
             $code .= "$var_code\n";
 
@@ -1284,7 +1252,7 @@ class CodeGen_PECL_Element_Function
                     $code .= "      }\n";
                     $code .= "    }\n";
                     break;
-                case "int":                    
+                case "int":
                     $code .= "    varargv = (long *)calloc(sizeof(long), varargc);\n";
                     $code .= "    {\n";
                     $code .= "      int i;\n";
@@ -1321,8 +1289,7 @@ class CodeGen_PECL_Element_Function
                     $code .= "    varargv = real_argv + $varargs_offset;\n";
                     break;
                 }
-            } 
-            
+            }
 
             // for functions returning an array we initialize return_value
             if ($this->returns['type'] === "array") {
@@ -1343,7 +1310,7 @@ class CodeGen_PECL_Element_Function
                     }
                 }
 
-            $code .= $extension->codegen->varblock($linedef . $this->code); 
+            $code .= $extension->codegen->varblock($linedef . $this->code);
                 // free varargs array if exists
                 if ($this->varargs) {
                     $code .= "\n    free(real_argv);\n";
@@ -1368,23 +1335,23 @@ class CodeGen_PECL_Element_Function
             } else {
                 // no code snippet was given so we produce a suggestion for the return statement
                 $code .= "    php_error(E_WARNING, \"{$this->name}: not yet implemented\"); RETURN_FALSE;\n\n";
-                    
+
                 switch ($this->returns['type']) {
                 case "void":
                     break;
-                        
+
                 case "bool":
-                    $code .= "    RETURN_FALSE;\n"; 
+                    $code .= "    RETURN_FALSE;\n";
                     break;
-                        
+
                 case "int":
-                    $code .= "    RETURN_LONG(0);\n"; 
+                    $code .= "    RETURN_LONG(0);\n";
                     break;
-                        
+
                 case "float":
                     $code .= "    RETURN_DOUBLE(0.0);\n";
                     break;
-                        
+
                 case "string":
                     $code .= "    RETURN_STRINGL(\"\", 0, 1);\n";
                     break;
@@ -1392,11 +1359,11 @@ class CodeGen_PECL_Element_Function
                 case "array":
                     $code .= "    array_init(return_value);\n";
                     break;
-                        
-                case "object": 
+
+                case "object":
                     $code .= "    object_init(return_value)\n";
                     break;
-                        
+
                 case "resource":
                     if (isset($this->returns['subtype'])) {
                         $code .= "    ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
@@ -1405,27 +1372,27 @@ class CodeGen_PECL_Element_Function
                         $code .= "    /* RETURN_RESOURCE(...); */\n";
                     }
                     break;
-                        
+
                 case "stream":
                     $code .= "    /* php_stream_to_zval(stream, return_value); */\n";
                     break;
-                        
+
                 case "mixed":
-                    $code .= "    /* RETURN_...(...); */\n";              
+                    $code .= "    /* RETURN_...(...); */\n";
                     break;
-                        
-                default: 
+
+                default:
                     $code .= "    /* UNKNOWN RETURN TYPE '".$this->returns['type']."' */\n";
                     break;
                 }
             }
-                
+
             $code .= "}\n/* }}} {$this->name} */\n\n";
 
             $code .= $this->ifConditionEnd($extension);
 
             break;
-                
+
         case "internal":
             if (!empty($this->code)) {
                 $code .= $extension->codegen->varblock($this->code."\n");
@@ -1434,8 +1401,6 @@ class CodeGen_PECL_Element_Function
         }
         return $code;
     }
-        
-
 
     /**
      * Create DocBook reference entry for the function
@@ -1443,9 +1408,9 @@ class CodeGen_PECL_Element_Function
      * @param  string  base (currently not used)
      * @return string  DocBook XML code
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
-        $xml = 
+        $xml =
             '<?xml version="1.0" encoding="iso-8859-1"?>
 <!-- '.'$'.'Revision: 1.0 $ -->
   <refentry id="function.' . strtolower(str_replace("_", "-", $this->name)) . '">
@@ -1465,7 +1430,7 @@ class CodeGen_PECL_Element_Function
         if (@$this->returns['byref']) {
             $returns .= " &";
         }
-            
+
         $xml .= "      <type>$returns</type><methodname>{$this->name}</methodname>\n";
         if (empty($this->params) || $this->params[0]["type"] === "void") {
             $xml .= "      <void/>\n";
@@ -1480,13 +1445,12 @@ class CodeGen_PECL_Element_Function
                 }
                 $xml .= "<type>$param[type]</type><parameter>";
                 if (isset($param['byRef'])) {
-                    $xml .= "&amp;"; 
+                    $xml .= "&amp;";
                 }
                 $xml .= "$param[name]</parameter>";
                 $xml .= "</methodparam>\n";
             }
         }
-
 
         $description = $this->description;
 
@@ -1494,24 +1458,22 @@ class CodeGen_PECL_Element_Function
             $description = "     <para>\n$description     </para>\n";
         }
 
-        $xml .= 
+        $xml .=
             '     </methodsynopsis>
 '.$description.'
    </refsect1>
   </refentry>
 ';
- 
+
         return $xml;
     }
-
-        
 
     /**
      * write test case for this function
      *
      * @param  class Extension  extension the function is part of
      */
-    function writeTest(CodeGen_PECL_Extension $extension) 
+    function writeTest(CodeGen_PECL_Extension $extension)
     {
         $test = $this->createTest($extension);
 
@@ -1526,25 +1488,25 @@ class CodeGen_PECL_Element_Function
      * @param  object  extension the function is part of
      * @return object  generated test case
      */
-    function createTest(CodeGen_PECL_Extension $extension) 
+    function createTest(CodeGen_PECL_Extension $extension)
     {
         if (!$this->testCode) {
             return false;
         }
 
         $test = new CodeGen_PECL_Element_Test;
-            
+
         $test->setName($this->name);
         $test->setTitle($this->name."() function");
-            
+
         if ($this->testDescription) {
             $test->setDescription($this->testDescription);
         }
-            
+
         if ($this->testIni) {
             $test->addIni($this->testIni);
         }
-            
+
         $test->setSkipIf("!extension_loaded('".$extension->getName()."')");
         if ($this->ifCondition) {
             $test->addSkipIf("!function_exists('{$this->name}')", "not compiled in ($this->ifCondition)");
@@ -1552,21 +1514,20 @@ class CodeGen_PECL_Element_Function
         if ($this->testSkipIf) {
             $test->addSkipIf($this->testSkipIf);
         }
-            
+
         $test->setCode($this->testCode);
-            
+
         if (!empty($this->testResult)) {
             $test->setOutput($this->testResult['result']);
             if (isset($this->testResult['mode'])) {
                 $test->setMode($this->testResult['mode']);
             }
         }
-            
+
         return $test;
     }
 
-
-    /** 
+    /**
      * C function signature
      *
      * @return  string  C snippet
@@ -1582,7 +1543,7 @@ class CodeGen_PECL_Element_Function
      * @param  class Extension  extension the function is part of
      * @return string           C header code snippet
      */
-    function hCode($extension) 
+    function hCode($extension)
     {
         $code = $this->ifConditionStart();
 
@@ -1598,14 +1559,13 @@ class CodeGen_PECL_Element_Function
         return $code;
     }
 
-
     /**
-     * Code needed ahead of the function table 
+     * Code needed ahead of the function table
      *
-     * @param  array 
+     * @param  array
      * @return string
      */
-    function argInfoCode($params) 
+    function argInfoCode($params)
     {
         // TODO only generate code for versions actually requested
         // TODO only allow null on objects/arrays with default=NULL ?
@@ -1630,27 +1590,27 @@ class CodeGen_PECL_Element_Function
         foreach ($params as $param) {
             switch ($param["type"]) {
             case 'object':
-                $code.= sprintf("  ZEND_ARG_OBJ_INFO(%d, %s, %s, 1)\n", 
-                                isset($param["byRef"]), 
+                $code.= sprintf("  ZEND_ARG_OBJ_INFO(%d, %s, %s, 1)\n",
+                                isset($param["byRef"]),
                                 $param["name"],
                                 $param["subtype"]);
                 break;
             case 'array':
                 $code.= "#if (PHP_MINOR_VERSION > 0)\n";
-                $code.= sprintf("  ZEND_ARG_ARRAY_INFO(%d, %s, %d)\n", 
-                                isset($param["byRef"]), 
+                $code.= sprintf("  ZEND_ARG_ARRAY_INFO(%d, %s, %d)\n",
+                                isset($param["byRef"]),
                                 $param["name"],
                                 1 /*allow NULL*/);
                 $code.= "#else\n";
-                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", 
-                                isset($param["byRef"]), 
+                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n",
+                                isset($param["byRef"]),
                                 $param["name"],
                                 1 /*allow NULL*/);
                 $code.= "#endif\n";
                 break;
             default:
-                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n", 
-                                isset($param["byRef"]), 
+                $code.= sprintf("  ZEND_ARG_INFO(%d, %s)\n",
+                                isset($param["byRef"]),
                                 $param["name"]);
                 break;
             }
@@ -1670,9 +1630,9 @@ class CodeGen_PECL_Element_Function
             $code .= "#define $argInfoName NULL\n";
         }
         $code.= "#endif\n\n";
-        
+
         return $code;
-    } 
+    }
 
     /**
      * Name for ARG_INFO definition
@@ -1700,7 +1660,7 @@ class CodeGen_PECL_Element_Function
         return $code;
     }
 
-    function addParam($param) 
+    function addParam($param)
     {
         foreach ($this->params as $p) {
             if ($param["name"] == $p["name"]) {
@@ -1728,7 +1688,7 @@ class CodeGen_PECL_Element_Function
         if ($extension) {
             $params = $this->params;
             $params[] = $this->returns;
-            
+
             foreach ($params as $param) {
                 if ($param["type"] == "resource" && isset($param['subtype'])) {
                     $obj = $extension->getResource($param['subtype']);
@@ -1744,20 +1704,20 @@ class CodeGen_PECL_Element_Function
                 }
             }
         }
-        
+
         return $code;
     }
 
     function ifConditionEnd($extension = false)
     {
         $code = "";
-        
-        if ($extension) { 
+
+        if ($extension) {
             $params = $this->params;
             $params[] = $this->returns;
-            
+
             $params = array_reverse($params);
-            
+
             foreach ($params as $param) {
                 if ($param["type"] == "resource" && isset($param['subtype'])) {
                     $obj = $extension->getResource($param['subtype']);
@@ -1791,8 +1751,8 @@ class CodeGen_PECL_Element_Function
             return "5.1.0rc1";
         }
 
-		// default: 4.0
-        return "4.0.0"; // TODO test for real lower bound 
+        // default: 4.0
+        return "4.0.0"; // TODO test for real lower bound
     }
 
 }
@@ -1805,3 +1765,4 @@ class CodeGen_PECL_Element_Function
  * End:
  */
 ?>
+

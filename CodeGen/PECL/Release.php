@@ -24,7 +24,6 @@
  */
 require_once "CodeGen/Release.php";
 
-
 /**
  * PECL specific extensions to the Release class
  *
@@ -36,7 +35,7 @@ require_once "CodeGen/Release.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Release 
+class CodeGen_PECL_Release
     extends CodeGen_Release
 {
     /**
@@ -61,7 +60,7 @@ class CodeGen_PECL_Release
             $code .= "    <date>".date("Y-m-d", $this->date)."</date>\n";
         }
         $code.= "  </release>\n";
-        
+
         return $code;
     }
 
@@ -69,7 +68,7 @@ class CodeGen_PECL_Release
      * generate XML fragment for package.xml 2.0
      *
      * @access public
-     * @param  object License 
+     * @param  object License
      * @return string XML fragment
      */
     function packageXml2($license)
@@ -77,7 +76,7 @@ class CodeGen_PECL_Release
         $code ="";
 
         $date = $this->date ? $this->date : time();
-        $code.= "  <date>".date("Y-m-d", $date)."</date>\n";       
+        $code.= "  <date>".date("Y-m-d", $date)."</date>\n";
 
         $code.= "  <version>\n";
         $code.= "    <release>{$this->version}</release>\n";
@@ -107,7 +106,6 @@ class CodeGen_PECL_Release
         return $code;
     }
 
-
     /**
      * Code snippet for phpinfo output
      *
@@ -115,21 +113,22 @@ class CodeGen_PECL_Release
      * @param  string extension name
      * @return string C code snippet
      */
-    function phpinfoCode($name) 
+    function phpinfoCode($name)
     {
         $version = 'PHP_'.strtoupper($name).'_VERSION';
         $state   = $this->state;
         $date    = date("Y-m-d", $this->date);
         $id      = '$Id: $';
-   
+
         $code = '    php_info_print_table_row(2, "Version",';
         $code.= sprintf("%s \" (%s)\");\n", $version, $state);
 
         $code.= "    php_info_print_table_row(2, \"Released\", \"$date\");\n";
         $code.= "    php_info_print_table_row(2, \"CVS Revision\", \"$id\");\n";
-      
+
         return $code;
     }
 }
 
 ?>
+

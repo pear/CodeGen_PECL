@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a thread-global within a PECL extension 
+ * Class describing a thread-global within a PECL extension
  *
  * PHP versions 5
  *
@@ -25,7 +25,7 @@
 require_once "CodeGen/PECL/Element.php";
 
 /**
- * Class describing a thread-global within a PECL extension 
+ * Class describing a thread-global within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -35,8 +35,8 @@ require_once "CodeGen/PECL/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Element_Global 
-  extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Global
+  extends CodeGen_PECL_Element
 {
     // TODO add description and use it for C code comments
 
@@ -47,24 +47,24 @@ class CodeGen_PECL_Element_Global
      * @var     string
      */
     protected $name;
-    
+
     /**
      * Set method for name
      *
      * @access public
      * @var string global variable name
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid global name");
         }
-        
+
         $this->name = $name;
-        
+
         return true;
     }
-    
+
     /**
      * Get method for name
      *
@@ -76,8 +76,6 @@ class CodeGen_PECL_Element_Global
         return $this->name;
     }
 
-
-
     /**
      * The type of the global
      *
@@ -85,7 +83,7 @@ class CodeGen_PECL_Element_Global
      * @var     string
      */
     protected $type;
-    
+
     /**
      * Set method for type
      *
@@ -97,12 +95,12 @@ class CodeGen_PECL_Element_Global
         if (!self::isType($name)) {
             return PEAR::raiseError("'$name' is not a valid type for a global");
         }
-        
+
         $this->type = $name;
-        
+
         return true;
     }
-    
+
     /**
      * Get method for name
      *
@@ -113,8 +111,6 @@ class CodeGen_PECL_Element_Global
     {
         return $this->type;
     }
-
-    
 
     /**
      * Default value
@@ -128,17 +124,17 @@ class CodeGen_PECL_Element_Global
      * Set method for default value
      *
      * @access public
-     * @param string default value 
+     * @param string default value
      */
     function setValue($value)
     {
         // TODO checks
         $this->value = $value;
-        
+
         return true;
     }
 
-    /** 
+    /**
      * Get method for default value
      *
      * @access public
@@ -148,9 +144,6 @@ class CodeGen_PECL_Element_Global
     {
         return $this->value;
     }
-    
-
-
 
     /**
      * Overriding type check as we deal with real C types here
@@ -158,7 +151,7 @@ class CodeGen_PECL_Element_Global
      * @access public
      * @var string C type specifier
      */
-    function isType($type) 
+    function isType($type)
     {
         /* check is rather naive as it doesn't know about context
            so we check for a sequence of valid names for now
@@ -168,22 +161,20 @@ class CodeGen_PECL_Element_Global
         foreach ($array as $name) {
             if (empty($name)) continue;
             // TODO :: should only be allowed for C++, not C extensions
-            if (!$this->isName(str_replace("::", "", $name))) return false; 
+            if (!$this->isName(str_replace("::", "", $name))) return false;
         }
         return true;
     }
-  
-  
-  
+
     /**
      * Generate header for global variable registration code
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function cCodeHeader($name) 
-    { 
+    static function cCodeHeader($name)
+    {
         return "static void php_{$name}_init_globals(zend_{$name}_globals *{$name}_globals)\n{\n";
     }
 
@@ -192,9 +183,9 @@ class CodeGen_PECL_Element_Global
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    function cCode($name) 
+    function cCode($name)
     {
         $code = $this->ifConditionStart();
 
@@ -208,23 +199,23 @@ class CodeGen_PECL_Element_Global
             } else {
                 $code .= "0";
             }
-        } 
-        
+        }
+
         $code .= ";\n";
 
         $code.= $this->ifConditionEnd();
 
         return $code;
     }
-  
+
     /**
      * Generate footer for global variable registration code
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function cCodeFooter($name) 
+    static function cCodeFooter($name)
     {
         return '
 }
@@ -234,15 +225,14 @@ static void php_'.$name.'_shutdown_globals(zend_'.$name.'_globals *'.$name.'_glo
 }';
     }
 
-
     /**
      * Generate header for global variable registration code in header file
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function hCodeHeader($name) 
+    static function hCodeHeader($name)
     {
         return "ZEND_BEGIN_MODULE_GLOBALS({$name})\n";
     }
@@ -252,9 +242,9 @@ static void php_'.$name.'_shutdown_globals(zend_'.$name.'_globals *'.$name.'_glo
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    function hCode($name) 
+    function hCode($name)
     {
         $code = $this->ifConditionStart();
 
@@ -270,12 +260,12 @@ static void php_'.$name.'_shutdown_globals(zend_'.$name.'_globals *'.$name.'_glo
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function hCodeFooter($name) 
+    static function hCodeFooter($name)
     {
         $upname = strtoupper($name);
-    
+
         return "
 ZEND_END_MODULE_GLOBALS({$name})
 
@@ -286,9 +276,10 @@ ZEND_END_MODULE_GLOBALS({$name})
 #endif
 
 ";
-      
+
     }
-  
+
 }
 
 ?>
+
