@@ -35,8 +35,8 @@ require_once "CodeGen/PECL/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Element_Resource 
-    extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Resource
+    extends CodeGen_PECL_Element
 {
     /**
      * Resource type name
@@ -53,17 +53,17 @@ class CodeGen_PECL_Element_Resource
      * @param  string name
      * @return bool   true on success
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid resource name");
         }
-        
+
         $this->name = $name;
-        
+
         return true;
     }
-    
+
     /**
      * Get method for name
      *
@@ -74,7 +74,6 @@ class CodeGen_PECL_Element_Resource
     {
         return $this->name;
     }
-
 
     /**
      * Type of the payload that the resource data pointer points to
@@ -94,10 +93,10 @@ class CodeGen_PECL_Element_Resource
     function setPayload($type)
     {
         $this->payload = $type;
-        
+
         return true;
     }
-    
+
     /**
      * Get method for payload type
      *
@@ -108,7 +107,6 @@ class CodeGen_PECL_Element_Resource
     {
         return $this->payload;
     }
-
 
     /**
      * Whether the resource memory is allocated and freed by the extension itself
@@ -128,7 +126,7 @@ class CodeGen_PECL_Element_Resource
     function setAlloc($text)
     {
         $this->alloc = (bool)$text;
-        
+
         return true;
     }
 
@@ -142,9 +140,8 @@ class CodeGen_PECL_Element_Resource
     {
         return $this->alloc;
     }
-    
 
-    /** 
+    /**
      * Code snippet to be added to the resource destructor callback
      *
      * @var string
@@ -162,12 +159,9 @@ class CodeGen_PECL_Element_Resource
     function setDestruct($text)
     {
         $this->destruct = $text;
-        
+
         return true;
     }
-    
-
-
 
     /**
      * DocBook XML snippet that describes the resource for the manual
@@ -187,34 +181,30 @@ class CodeGen_PECL_Element_Resource
     function setDescription($text)
     {
         $this->description = $text;
-        
+
         return true;
     }
-    
 
-    
-    
-    /** 
+    /**
      * Generate resource registration code for MINIT()
      *
      * @access public
      * @return string C code snippet
      */
-    function minitCode() 
+    function minitCode()
     {
         $code = $this->ifConditionStart();
 
         $code.= "
-le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor, 
+le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
                        NULL, \"{$this->name}\", module_number);
 
 ";
 
         $code.= $this->ifConditionEnd();
-  
+
         return $code;
     }
-
 
     /**
      * Generate C code header block for resources
@@ -223,7 +213,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @param  string Extension name
      * @return string C code
      */
-    static function cCodeHeader($name) 
+    static function cCodeHeader($name)
     {
         return "/* {{{ Resource destructors */\n";
     }
@@ -235,19 +225,19 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @param  string Extension name
      * @return string C code
      */
-    static function cCodeFooter($name) 
+    static function cCodeFooter($name)
     {
       return "/* }}} */\n\n";
     }
 
-    /** 
+    /**
      * Generate C code for resource destructor callback
      *
      * @access public
      * @param  object extension
      * @return string C code snippet
      */
-    function cCode($extension) 
+    function cCode($extension)
     {
         $code = $this->ifConditionStart();
 
@@ -257,7 +247,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
             $code.= 'extern "C" ';
         }
 
-        $code.= 
+        $code.=
 "void {$this->name}_dtor(zend_rsrc_list_entry *rsrc TSRMLS_DC)
 {
     {$this->payload} * resource = ({$this->payload} *)(rsrc->ptr);
@@ -269,33 +259,31 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
         if ($this->alloc) {
             $code .= "\n\tefree(resource);\n";
         }
-        
+
         $code.= "}\n";
 
         $code.= $this->ifConditionEnd();
 
         $code.= "\n";
-        
+
         return $code;
     }
 
-
-
-    /** 
+    /**
      * Generate covenience macros for resource access
      *
      * @access public
      * @return string C code snippet
      */
-    function hCode() 
+    function hCode($extension)
     {
         $upname = strtoupper($this->name);
-        
+
         $code = $this->ifConditionStart();
 
         $code.= "
-#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name });
-#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, ${$this->name}, le_{$this->name }); if (!r) { RETURN_FALSE; }
+#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name});
+#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, {$this->name}, le_{$this->name}); if (!r) { RETURN_FALSE; }
 ";
 
         $code.= $this->ifConditionEnd();
@@ -305,15 +293,13 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
         return $code;
     }
 
-
-
-    /** 
+    /**
      * Generate config.m4 to check for payload type
      *
      * @access public
      * @return string autoconf code snippet
      */
-    function configm4($extension_name) 
+    function configm4($extension_name)
     {
         return "";
 
@@ -323,23 +309,21 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
         }
 
         return "
-  AC_CHECK_TYPE(".$this->getPayload()." *, 
-                [], 
-                [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)], 
+  AC_CHECK_TYPE(".$this->getPayload()." *,
+                [],
+                [AC_MSG_ERROR(required payload type for resource ".$this->getName()." not found)],
                 [#include \"\$srcdir/php_{$extension_name}.h\"])\n";
 */
     }
 
-
-
-    /** 
+    /**
      * Generate documentation for this resource
      *
-     * @access public 
+     * @access public
      * @param  string id basename for extension
      * @return string DocBook XML code snippet
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
         return "
     <section id='$base.resources.{$this->name}'>
@@ -350,7 +334,6 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
     </section>
 ";
     }
-    
+
 }
 
-?>

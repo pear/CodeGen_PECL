@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a PHP interface within a PECL extension 
+ * Class describing a PHP interface within a PECL extension
  *
  * PHP versions 5
  *
@@ -29,7 +29,7 @@ require_once "CodeGen/PECL/Element/ObjectInterface.php";
 require_once "CodeGen/Tools/Indent.php";
 
 /**
- * Class describing a PHP interface within a PECL extension 
+ * Class describing a PHP interface within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -41,7 +41,7 @@ require_once "CodeGen/Tools/Indent.php";
  */
 
 class CodeGen_PECL_Element_Interface
-    extends CodeGen_PECL_Element 
+    extends CodeGen_PECL_Element
     implements CodeGen_PECL_Element_ObjectInterface
 {
     /**
@@ -54,16 +54,16 @@ class CodeGen_PECL_Element_Interface
     /**
      * name set()er
      *
-     * @param string 
+     * @param string
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid interface name");
         }
-            
+
         $this->name = $name;
-            
+
         return true;
     }
 
@@ -77,8 +77,6 @@ class CodeGen_PECL_Element_Interface
         return $this->name;
     }
 
-
-
     /**
      * A short description
      *
@@ -89,16 +87,13 @@ class CodeGen_PECL_Element_Interface
     /**
      * summary set()er
      *
-     * @param string 
+     * @param string
      */
     function setSummary($text)
     {
         $this->summary = $text;
         return true;
     }
-
-
-
 
     /**
      * A long description
@@ -110,7 +105,7 @@ class CodeGen_PECL_Element_Interface
     /**
      * description set()er
      *
-     * @param string 
+     * @param string
      */
     function setDescription($text)
     {
@@ -118,8 +113,6 @@ class CodeGen_PECL_Element_Interface
         return true;
     }
 
-
-        
     /**
      * Documentation
      *
@@ -132,15 +125,13 @@ class CodeGen_PECL_Element_Interface
     /**
      * description set()er
      *
-     * @param string 
+     * @param string
      */
-    function setDocumentation($text) 
+    function setDocumentation($text)
     {
         $this->documentation = $text;
     }
 
-
-        
     /**
      * Extents which interface?
      *
@@ -151,32 +142,30 @@ class CodeGen_PECL_Element_Interface
     /**
      * extends set()er
      *
-     * @param string 
+     * @param string
      */
-    function setExtends($parent) 
+    function setExtends($parent)
     {
         if (!self::isName($parent)) {
             return PEAR::raiseError("'$parent' is not a valid parent interface name");
-        }           
+        }
 
         $this->extends = $parent;
     }
-        
 
-        
     /**
      * Member Functions
      *
      * @var   array
      */
     protected $methods = array();
-        
+
     /**
      * Add a method to the interface
      *
      * @param object
      */
-    function addMethod(CodeGen_PECL_Element_Method $method) 
+    function addMethod(CodeGen_PECL_Element_Method $method)
     {
         $name = $method->getName();
 
@@ -189,13 +178,11 @@ class CodeGen_PECL_Element_Interface
             return PEAR::raiseError("an interface method has to be declated both abstract and interface");
         }
         */
-            
+
         $this->methods[$name] = $method;
 
         return true;
     }
-
-
 
     /**
      * Create C header entry for interface
@@ -204,7 +191,7 @@ class CodeGen_PECL_Element_Interface
      * @param  class Extension  extension the function is part of
      * @return string           C header code snippet
      */
-    function hCode($extension) 
+    function hCode($extension)
     {
         $code = "";
 
@@ -219,14 +206,13 @@ class CodeGen_PECL_Element_Interface
         return $code;
     }
 
-
     /**
      * Generate global scope code
      *
      * @access public
      * @return string
      */
-    function globalCode($extension) 
+    function globalCode($extension)
     {
         ob_start();
 
@@ -246,16 +232,16 @@ class CodeGen_PECL_Element_Interface
         echo "};\n\n";
 
         echo "static void interface_init_{$this->name}(void)\n{\n";
-        echo "    zend_class_entry ce;\n";  
+        echo "    zend_class_entry ce;\n";
         if ($this->extends) {
             echo "    zend_class_entry **parent_ce;\n";
         }
         echo "\n";
         echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
         echo "    {$this->name}_ce_ptr = zend_register_internal_interface(&ce TSRMLS_CC);\n";
-            
+
         if ($this->extends) {
-            echo sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&parent_ce)) {\n", 
+            echo sprintf("        if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&parent_ce)) {\n",
                          strtolower($this->extends), strlen($this->extends) + 1);
             echo "";
             echo "    if (parent_ce) {\n";
@@ -263,7 +249,7 @@ class CodeGen_PECL_Element_Interface
             echo "    }\n";
         }
 
-        echo "}\n\n";    
+        echo "}\n\n";
 
         echo  $this->ifConditionEnd();
 
@@ -272,18 +258,16 @@ class CodeGen_PECL_Element_Interface
         return ob_get_clean();
     }
 
-
     /**
      * MINIT code fragment
-     * 
+     *
      * @access public
      * @return string
      */
-    function minitCode($extension) 
+    function minitCode($extension)
     {
         return $this->ifConditionStart() . "interface_init_{$this->name}();\n" . $this->ifConditionEnd();
     }
-        
 
     /**
      * DocBook documentation fragment
@@ -291,17 +275,16 @@ class CodeGen_PECL_Element_Interface
      * @access public
      * @return string
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
         $xml = "";
- 
+
         return $xml;
     }
 
-    function getPayloadType() 
+    function getPayloadType()
     {
         return "";
     }
 }
 
-?>

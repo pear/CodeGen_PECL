@@ -77,7 +77,7 @@ class CodeGen_PECL_Dependency_Lib
             $ret.= "  PHP_SUBST({$extUpname}_SHARED_LIBADD)\n\n";
             $first = false;
         }
-        
+
         if ($this->function) {
             $ret.= "
   PHP_CHECK_LIBRARY({$this->name}, {$this->function},
@@ -91,9 +91,9 @@ class CodeGen_PECL_Dependency_Lib
 ";
         } else {
             $ret.= "  PHP_ADD_LIBRARY_WITH_PATH({$this->name}, \$PHP_{$withUpname}_DIR/{$this->path}, {$extUpname}_SHARED_LIBADD)\n";
-            
+
         }
-        
+
         return $ret;
     }
 
@@ -111,13 +111,12 @@ class CodeGen_PECL_Dependency_Lib
         }
 
         $extUpname = strtoupper($extName);
-      
+
         return "
-  if (!CHECK_LIB(\"{$this->name}.lib\", \"{$extName}\", PHP_$extUpname)) { 
+  if (!CHECK_LIB(\"{$this->name}.lib\", \"{$extName}\", PHP_$extUpname)) {
     ERROR(\"{$extName}: library '{$this->name}' not found\");
   }
-";        
+";
     }
 }
 
-?>

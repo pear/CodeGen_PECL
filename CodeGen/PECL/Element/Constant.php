@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a PHP constant within a PECL extension 
+ * Class describing a PHP constant within a PECL extension
  *
  * PHP versions 5
  *
@@ -19,13 +19,13 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
-/** 
+/**
  * includes
  */
 require_once "CodeGen/PECL/Element.php";
 
 /**
- * Class describing a PHP constant within a PECL extension 
+ * Class describing a PHP constant within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -36,8 +36,8 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 
-class CodeGen_PECL_Element_Constant 
-    extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Constant
+    extends CodeGen_PECL_Element
 {
     /**
      * The constants name
@@ -71,10 +71,9 @@ class CodeGen_PECL_Element_Constant
      */
     protected $desc;
 
-
     /**
-     * Create a C #define for this constant 
-     * 
+     * Create a C #define for this constant
+     *
      * @access private
      * @var    bool
      */
@@ -88,7 +87,7 @@ class CodeGen_PECL_Element_Constant
     protected $group = "default";
 
     /**
-     * Set constant name 
+     * Set constant name
      *
      * @access public
      * @param  string  the name
@@ -101,14 +100,13 @@ class CodeGen_PECL_Element_Constant
         }
 
         if (self::isKeyword($name)) {
-            return PEAR::raiseError("'$name' is a reserved word which is not valid for constant names");               
+            return PEAR::raiseError("'$name' is a reserved word which is not valid for constant names");
         }
-            
+
         $this->name = $name;
-            
+
         return true;
     }
-        
 
     /**
      * Get constant name
@@ -128,19 +126,19 @@ class CodeGen_PECL_Element_Constant
      * @param  string  the type
      * @return bool    true on success
      */
-    function setType($type) 
+    function setType($type)
     {
         if (!in_array($type, array('int', 'float', 'string'))) {
             return PEAR::raiseError("'$type' is not a valid constant type, only int, float and string");
-        }                                                         
-            
+        }
+
         $this->type = $type;
-            
+
         return true;
     }
 
     /**
-     * Set constant value 
+     * Set constant value
      *
      * @access public
      * @param  string  the value
@@ -158,7 +156,7 @@ class CodeGen_PECL_Element_Constant
     }
 
     /**
-     * Get constant value 
+     * Get constant value
      *
      * @access public
      * @return string  the value
@@ -223,19 +221,18 @@ class CodeGen_PECL_Element_Constant
             $this->define = ($value === 'yes');
             return true;
         }
-            
+
         return PEAR::raiseError("'define' attribute has to be 'yes' or 'no', '$value' given");
     }
 
-
-    /** 
+    /**
      * Create C code snippet to register this constant
      *
      * @access public
      * @param  class Extension  extension we are owned by
      * @return sting            C code snippet
      */
-    function cCode($extension) 
+    function cCode($extension)
     {
         $code = $this->ifConditionStart();
 
@@ -258,21 +255,21 @@ class CodeGen_PECL_Element_Constant
         return $code;
     }
 
-    /** 
+    /**
      * Create C header snippet to register this constant
      *
      * @access public
      * @param  class Extension  extension we are owned by
      * @return sting            C code snippet
      */
-    function hCode($extension) 
+    function hCode($extension)
     {
         if (!$this->define) {
             return "";
         }
 
         $code = $this->ifConditionStart();
-            
+
         switch ($this->type) {
         case "int":
         case "float":
@@ -282,62 +279,60 @@ class CodeGen_PECL_Element_Constant
             $code.= "#define {$this->name} \"$value\"\n";
             break;
         }
-             
+
         $this->ifConditionEnd();
 
         return $code;
     }
 
-
-    /** 
+    /**
      * Generate DocBook XML section block header
      *
      * @access public
      * @param  string  Extension name
      * @return string  DocBook XML snippet
      */
-    static function docHeader($name) 
+    static function docHeader($name)
     {
         return "  <variablelist>\n";
     }
-            
-    /** 
+
+    /**
      * Generate DocBook XML entry for this constant
      *
      * @access public
      * @param  string  Extension name (currently unused)
      * @return string  DocBook XML snippet
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
-	  // TODO: indent desc.
+      // TODO: indent desc.
 
         return "
    <varlistentry>
     <term>
-     <constant>{$this->name}</constant> 
+     <constant>{$this->name}</constant>
      (<type>{$this->type}</type>)
     </term>
     <listitem>
      <simpara>
-      {$this->desc}     
+      {$this->desc}
      </simpara>
     </listitem>
    </varlistentry>\n";
 
     }
 
-    /** 
+    /**
      * Generate DocBook XML section block footer
      *
      * @access public
      * @param  string  Extension name
      * @return string  DocBook XML snippet
      */
-    static function docFooter() 
+    static function docFooter($name)
     {
         return "  </variablelist>\n";
     }
 }
 
-?>

@@ -46,7 +46,7 @@ class CodeGen_PECL_Dependency_Platform
     function packageXML()
     {
         if ($this->test("all")) return "";
-        
+
         $xml = "";
 
         if ($this->test("windows")) {
@@ -68,7 +68,7 @@ class CodeGen_PECL_Dependency_Platform
     function packageXML2()
     {
         if ($this->test("all")) return "";
-        
+
         $xml = "";
 
         if ($this->test("windows")) {
@@ -82,3 +82,4 @@ class CodeGen_PECL_Dependency_Platform
         return $xml;
     }
 }
+

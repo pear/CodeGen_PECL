@@ -39,6 +39,8 @@
 
 <!ELEMENT license (#PCDATA)>
 
+<!ELEMENT channel (#PCDATA)>
+
 <!ELEMENT date (#PCDATA)>
 
 <!ELEMENT notes (#PCDATA)>
@@ -55,9 +57,9 @@
   procedural CDATA #IMPLIED
   if         CDATA #IMPLIED
 >
-<!ELEMENT proto (#PCDATA)>  
-<!ELEMENT code  (#PCDATA)>  
-<!ATTLIST code  
+<!ELEMENT proto (#PCDATA)>
+<!ELEMENT code  (#PCDATA)>
+<!ATTLIST code
   role     (header|code) "code"
   position (top|bottom)  "bottom"
   src  CDATA #IMPLIED
@@ -111,12 +113,13 @@
   path     CDATA #IMPLIED
   prepend  (yes|no) "no"
 >
+<!ELEMENT filelist (file)>
 <!ELEMENT file (#PCDATA)>
 <!ATTLIST file
   name CDATA #REQUIRED
   dir  CDATA #IMPLIED
 >
-
+<!ELEMENT program (#PCDATA)>
 
 
 <!ELEMENT resources (resource)*>
@@ -139,6 +142,7 @@
 <!ATTLIST op
   name CDATA #REQUIRED
 >
+<!ELEMENT data (#PCDATA)>
 
 
 <!ELEMENT tests (test)*>
@@ -158,9 +162,9 @@
 
 <!ELEMENT makefile (#PCDATA)>
 
-
+<!ELEMENT classes (class)>
 <!ELEMENT class (summary?, description?, implements*, payload?, destruct?, property*, constant*, function*)>
-<!ATTLIST class 
+<!ATTLIST class
   name     CDATA #REQUIRED
   extends  CDATA #IMPLIED
   abstract (yes|no) "no"
@@ -180,7 +184,7 @@
 >
 
 <!ELEMENT property (#PCDATA)>
-<!ATTLIST property 
+<!ATTLIST property
   name   CDATA #REQUIRED
   type   CDATA #REQUIRED
   value  CDATA #IMPLIED

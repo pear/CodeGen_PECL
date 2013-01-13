@@ -58,15 +58,15 @@ require_once "CodeGen/PECL/Dependency/Platform.php";
  * @version    Release: 1.1.3
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
-class CodeGen_PECL_Extension 
+class CodeGen_PECL_Extension
     extends CodeGen_Extension
 {
     /**
     * Current CodeGen_PECL version number
-    * 
+    *
     * @return string
     */
-    function version() 
+    function version()
     {
         return "1.1.3";
     }
@@ -81,9 +81,7 @@ class CodeGen_PECL_Extension
         return "Copyright (c) 2003-2006 Hartmut Holzgraefe";
     }
 
-
     // {{{ member variables
-    
 
     /**
      * The public PHP functions defined by this extension
@@ -91,42 +89,42 @@ class CodeGen_PECL_Extension
      * @var array
      */
     protected $functions = array();
-    
+
     /**
-     * The extensions internal functions like MINIT 
+     * The extensions internal functions like MINIT
      *
      * @var array
      */
     protected $internalFunctions = array();
-        
+
     /**
      * The constants defined by this extension
      *
      * @var array
      */
     protected $constants = array();
-    
+
     /**
      * The PHP classes defined by this extension
      *
      * @var array
      */
     protected $classes = array();
-    
+
     /**
      * The PHP interfaces defined by this extension
      *
      * @var array
      */
     protected $interfaces = array();
-    
+
     /**
      * The extensions php.ini parameters
      *
      * @var array
      */
     protected $phpini    = array();
-    
+
     /**
      * The extensions internal global variables
      *
@@ -141,13 +139,12 @@ class CodeGen_PECL_Extension
      */
     protected $resources = array();
 
-    /** 
+    /**
      * Custom test cases
      *
      * @var array
      */
     protected $testcases = array();
-
 
     /**
      * phpinfo logos
@@ -157,14 +154,12 @@ class CodeGen_PECL_Extension
      */
     protected $logos = array();
 
-
     /**
      * cross extension dependencies
      *
      * @var  array
      */
     protected $otherExtensions = array();
-    
 
     /**
      * generate #line specs?
@@ -184,7 +179,7 @@ class CodeGen_PECL_Extension
 
     /**
      * --with configure options
-     * 
+     *
      * @var    array
      * @access private
      */
@@ -208,29 +203,25 @@ class CodeGen_PECL_Extension
      */
     protected $docPurpose = "utilspec";
 
+    // }}}
 
-    // }}} 
-
-    
     // {{{ constructor
-    
+
     /**
      * The constructor
      *
      * @access public
      */
-    function __construct() 
+    function __construct()
     {
         $this->release = new CodeGen_PECL_Release;
-        
+
         $this->platform = new CodeGen_PECL_Dependency_Platform("all");
 
         parent::__construct();
     }
-    
-    // }}} 
-    
-    
+
+    // }}}
 
     // {{{ member adding functions
 
@@ -244,7 +235,7 @@ class CodeGen_PECL_Extension
     {
         $name = $function->getName();
         $role = $function->getRole();
-        
+
         switch ($role) {
         case "public":
             if (isset($this->functions[$name])) {
@@ -252,22 +243,21 @@ class CodeGen_PECL_Extension
             }
             $this->functions[$name] = $function;
             return true;
-            
+
         case "private":
             return PEAR::raiseError("private functions are no longer supported, use <code> sections instead");
-            
+
         case "internal":
             if (isset($this->internalFunctions[$name])) {
                 return PEAR::raiseError("internal '$name' has been defined before");
             }
             $this->internalFunctions[$name] = $function;
             return true;
-            
-        default: 
+
+        default:
             return PEAR::raiseError("unnokwn function role '$role'");
         }
     }
-
 
     /**
      * Set target platform for generated code
@@ -281,7 +271,7 @@ class CodeGen_PECL_Extension
         if (PEAR::isError($this->platform)) {
             return $this->platform;
         }
-        
+
         return true;
     }
 
@@ -299,11 +289,9 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("constant '$name' has been defined before");
         }
         $this->constants[$name] = $constant;
-        
+
         return true;
     }
-    
-    
 
     /**
      * Add a PHP ini directive
@@ -319,10 +307,9 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("php.ini directive '$name' has been defined before");
         }
         $this->phpini[$name] = $phpini;
-        
+
         return true;
     }
-
 
     /**
      * Add a internal global variable
@@ -337,10 +324,9 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("global '{$name}' has been defined before");
         }
         $this->globals[$name] = $global;
-        
+
         return true;
     }
-  
 
     /**
      * Add a PHP resource type
@@ -355,10 +341,10 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("resource type '{$name}' has been defined before");
         }
         $this->resources[$name] = $resource;
-        
+
         return true;
     }
-    
+
     /**
      * Get PHP resource types
      *
@@ -387,7 +373,7 @@ class CodeGen_PECL_Extension
     }
 
     /**
-     * Get PHP constants 
+     * Get PHP constants
      *
      * @access public
      * @return array
@@ -413,7 +399,6 @@ class CodeGen_PECL_Extension
         return false;
     }
 
-    
     /**
      * Get a specific class by name
      *
@@ -430,7 +415,6 @@ class CodeGen_PECL_Extension
         return false;
     }
 
-    
     /**
      * Add a PHP class to the extension
      *
@@ -443,11 +427,10 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("class '".$class->getName()."' has been defined before");
         }
         $this->classes[$class->getName()] = $class;
-        
+
         return true;
     }
-    
-    
+
     /**
      * Add a PHP interface to the extension
      *
@@ -460,11 +443,10 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("interface '".$interface->getName()."' has been defined before");
         }
         $this->interfaces[$interface->getName()] = $interface;
-        
+
         return true;
     }
-    
-    
+
     /**
      * Add a PHP stream wrapper to the extension
      *
@@ -477,19 +459,18 @@ class CodeGen_PECL_Extension
             return PEAR::raiseError("stream '".$stream->getName()."' has been defined before");
         }
         $this->streams[$stream->getName()] = $stream;
-        
+
         return true;
     }
-    
-        
-    /** 
+
+    /**
      * Add a --with configure option
      *
      * @access  public
      * @param   object 'With' object
      * @returns bool
      */
-    function addWith(CodeGen_PECL_Dependency_With $with) 
+    function addWith(CodeGen_PECL_Dependency_With $with)
     {
         $name = $with->getName();
 
@@ -502,14 +483,13 @@ class CodeGen_PECL_Extension
         return true;
     }
 
-
-    /** 
+    /**
      * Add phpinfo logo
      *
      * @access public
      * @param  object  the logo
      */
-    function addLogo(CodeGen_PECL_Element_Logo $logo) 
+    function addLogo(CodeGen_PECL_Element_Logo $logo)
     {
         $name = $logo->getName();
 
@@ -518,10 +498,9 @@ class CodeGen_PECL_Extension
         }
 
         $this->logos[$name] = $logo;
-        
+
         return true;
     }
-
 
     /**
      * Add cross-module dependency
@@ -537,17 +516,17 @@ class CodeGen_PECL_Extension
         }
 
         $this->otherExtensions[$name] = $ext;
-        
+
         return true;
     }
-    
+
     /**
      * Generate #line specs?
      *
      * @access public
      * @param  bool
      */
-    function setLinespecs($state) 
+    function setLinespecs($state)
     {
         $this->linespecs = $state;
     }
@@ -563,8 +542,7 @@ class CodeGen_PECL_Extension
         return $this->linespecs;
     }
 
-
-    // }}} 
+    // }}}
 
     // {{{ output generation
 
@@ -574,27 +552,26 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  string Directory to create (default is ./$this->name)
      */
-    function createExtension($dirpath = false, $force = false) 
+    function createExtension($dirpath = false, $force = false)
     {
-        // default: create dir in current working directory, 
+        // default: create dir in current working directory,
         // dirname is the extensions base name
         if (!is_string($dirpath) || $dirpath == "") {
             $dirpath = "./" . $this->name;
-        } 
-        
+        }
+
         // purge and create extension directory
         if ($dirpath !== ".") {
             if (!$force && file_exists($dirpath)) {
-                return PEAR::raiseError("'$dirpath' already exists, can't create that directory (use '--force' to override)"); 
+                return PEAR::raiseError("'$dirpath' already exists, can't create that directory (use '--force' to override)");
             } else if (!@System::mkdir("-p $dirpath")) {
                 return PEAR::raiseError("can't create '$dirpath'");
             }
         }
-        
+
         // make path absolute to be independant of working directory changes
         $this->dirpath = realpath($dirpath);
 
-     
         // add "unknown" author if no authors specified
         if (empty($this->authors)) {
             $author = new CodeGen_PECL_Maintainer;
@@ -602,7 +579,7 @@ class CodeGen_PECL_Extension
             $author->setName("Unknown User");
             $author->setEmail("unknown@example.com");
             $author->setRole("lead");
-            
+
             $this->addAuthor($author);
         }
 
@@ -625,24 +602,24 @@ class CodeGen_PECL_Extension
                 copy($sourcepath, $targetpath);
             }
         }
-        
+
         // generate README file
         $this->writeReadme();
-        
+
         // generate DocBook XML documantation for PHP manual
         $manpath = $this->dirpath . "/manual/";
         if (!@System::mkdir("-p $manpath")) {
             return PEAR::raiseError("can't create '$manpath'", E_USER_ERROR);
         }
-        $this->generateDocumentation($manpath);            
+        $this->generateDocumentation($manpath);
     }
-    
+
     /**
      * Create the extensions code soure and project files
      *
      * @access public
      */
-    function generateSource() 
+    function generateSource()
     {
         // generate source and header files
         $this->writeHeaderFile();
@@ -653,41 +630,41 @@ class CodeGen_PECL_Extension
             $fp->puts($logo->hCode());
             $fp->close();
         }
-            
+
         // generate project files for configure (unices and similar platforms like cygwin)
         if ($this->platform->test("unix")) {
             $this->writeConfigM4();
         }
-        
+
         // generate project files for Windows platform (VisualStudio/C++ V6)
         if ($this->platform->test("windows")) {
             $this->writeMsDevStudioDsp();
             $this->writeConfigW32();
         }
-        
+
         // generate .cvsignore file entries
         $this->writeDotCvsignore();
 
         // generate EXPERIMENTAL file for unstable release states
         $this->writeExperimental();
-        
+
         // generate CREDITS file
         $this->writeCredits();
-        
+
         // generate LICENSE file if license given
         if ($this->license) {
             $this->license->writeToFile($this->dirpath."/LICENSE");
             $this->files['doc'][] = "LICENSE";
         }
-        
+
         // generate test case templates
         $this->writeTestFiles();
 
         // generate PEAR/PECL package.xml file
-        $this->writePackageXml();        
-        $this->writePackageXml2();        
+        $this->writePackageXml();
+        $this->writePackageXml2();
     }
-    
+
     // {{{   docbook documentation
 
     /**
@@ -696,13 +673,13 @@ class CodeGen_PECL_Extension
      * @access public
      * @param  string Directory to write to
      */
-    function generateDocumentation($docdir) 
+    function generateDocumentation($docdir)
     {
         $idName = str_replace('_', '-', $this->name);
-        
+
         if (!@System::mkdir("-p $docdir/$idName")) {
             return PEAR::raiseError("can't create '$docdir/$idName'", E_USER_ERROR);
-        }        
+        }
 
         $manual = new CodeGen_Tools_FileReplacer("$docdir/manual.xml.in");
         $manual->puts("<?xml version='1.0' encoding='UTF-8' ?>
@@ -746,7 +723,7 @@ class CodeGen_PECL_Extension
         $manual->close();
 
         $makefile = new CodeGen_Tools_FileReplacer("$docdir/Makefile");
-        $makefile->puts("# 
+        $makefile->puts("#
 all: html
 
 confcheck:
@@ -795,8 +772,6 @@ pdf: manual.tex
         if ($this->release->getState() !== 'stable') {
             $fp->puts("<!-- State: experimental -->\n");
         }
-        
-
 
         $fp->puts("
  <reference xml:id='ref.$idName' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>
@@ -810,11 +785,11 @@ pdf: manual.tex
 {$this->description}
     </para>
    </section>
-   
+
    <section xml:id='$idName.requirements'>
     &reftitle.required;
     <para>
-     
+
     </para>
    </section>
 
@@ -847,10 +822,8 @@ pdf: manual.tex
         $fp->puts($this->docEditorSettings());
 
         $fp->close();
-  
 
-
-        // 
+        //
         // constants.xml
         //
 
@@ -888,7 +861,7 @@ pdf: manual.tex
                 $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
             }
         }
-        
+
         // TODO: 2nd half missing, see http://doc.php.net/php/de/dochowto/c578.php
 
         $fp->puts(" </para>\n");
@@ -897,9 +870,7 @@ pdf: manual.tex
         $fp->puts($this->docEditorSettings());
         $fp->close();
 
-
-
-        // 
+        //
         // ini.xml
         //
 
@@ -922,24 +893,22 @@ pdf: manual.tex
         if (empty($this->phpini)) {
             $fp->puts("    &no.config;\n");
         } else {
-            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
+            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name));
             foreach ($this->phpini as $phpini) {
                 $fp->puts($phpini->docEntry($idName));
             }
-            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
+            $fp->puts(CodeGen_PECL_Element_Ini::docFooter());
         }
-        
+
         $fp->puts(" </para>\n");
         $fp->puts("</section>\n");
 
         $fp->puts($this->docEditorSettings());
         $fp->close();
 
-
-
         //
         // configure.xml
-        // 
+        //
 
         // configure options and dependencies have their own file
         $entities->puts("<!ENTITY reference.$idName.configure SYSTEM './$idName/configure.xml'>\n");
@@ -953,7 +922,7 @@ pdf: manual.tex
 
         $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
 
-        // TODO headers and libs are now "hidden" in $with 
+        // TODO headers and libs are now "hidden" in $with
 
         if (empty($this->libs) && empty($this->headers)) {
             $fp->puts("    &no.requirement;\n");
@@ -991,20 +960,15 @@ pdf: manual.tex
                     }
                 } else {
                     $fp->puts("    <para>Requires <literal>".$with->getName()."</literal></para>\n");
-                } 
+                }
             }
         }
         $fp->puts("\n   </section>\n\n");
 
-            
         $fp->puts($this->docEditorSettings());
         $fp->close();
 
-
-        // 
-
-
-
+        //
 
         $function_entities = array();
         @mkdir("$docdir/$idName/functions");
@@ -1021,9 +985,8 @@ pdf: manual.tex
             $funcfile->puts($function->docEntry($idName));
             $funcfile->puts($this->docEditorSettings(4));
             $funcfile->close();
-        } 
+        }
 
-   
         $entities->puts("<!ENTITY reference.$idName.functions SYSTEM './functions.xml'>\n");
         $entities->close();
 
@@ -1035,10 +998,7 @@ pdf: manual.tex
         $functionsXml->close();
     }
 
-    // }}} 
-
-
-
+    // }}}
 
     // {{{   extension entry
     /**
@@ -1047,7 +1007,7 @@ pdf: manual.tex
      * @access private
      * @return string  zend_module_entry code fragment
      */
-    function generateExtensionEntry() 
+    function generateExtensionEntry()
     {
         $name   = $this->name;
         $upname = strtoupper($this->name);
@@ -1062,7 +1022,7 @@ pdf: manual.tex
             }
             $code.= CodeGen_PECL_Dependency_Extension::cCodeFooter($this);
 
-            $moduleHeader = 
+            $moduleHeader =
 "#if ZEND_EXTENSION_API_NO >= 220050617
         STANDARD_MODULE_HEADER_EX, NULL,
         {$this->name}_deps,
@@ -1079,12 +1039,12 @@ zend_module_entry {$name}_module_entry = {
 $moduleHeader
     \"$name\",
     {$name}_functions,
-    PHP_MINIT($name),     /* Replace with NULL if there is nothing to do at php startup   */ 
+    PHP_MINIT($name),     /* Replace with NULL if there is nothing to do at php startup   */
     PHP_MSHUTDOWN($name), /* Replace with NULL if there is nothing to do at php shutdown  */
     PHP_RINIT($name),     /* Replace with NULL if there is nothing to do at request start */
     PHP_RSHUTDOWN($name), /* Replace with NULL if there is nothing to do at request end   */
     PHP_MINFO($name),
-    PHP_".$upname."_VERSION, 
+    PHP_".$upname."_VERSION,
     STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -1104,7 +1064,7 @@ $moduleHeader
         return $code;
     }
 
-    // }}} 
+    // }}}
 
     // {{{ globals and ini
     /**
@@ -1114,13 +1074,13 @@ $moduleHeader
      * @return string  module globals code fragment
      */
 
-    function generateGlobalsC() 
+    function generateGlobalsC()
     {
         if (empty($this->globals)) return "";
-        
+
         $code  = "\n/* {{{ globals and ini entries */\n";
         $code .= "ZEND_DECLARE_MODULE_GLOBALS({$this->name})\n\n";
-        
+
         if (!empty($this->phpini)) {
             $code .= CodeGen_PECL_Element_Ini::cCodeHeader($this->name);
             foreach ($this->phpini as $phpini) {
@@ -1128,7 +1088,7 @@ $moduleHeader
             }
             $code .= CodeGen_PECL_Element_Ini::cCodeFooter($this->name);
         }
-        
+
         if (!empty($this->globals)) {
             $code .= CodeGen_PECL_Element_Global::cCodeHeader($this->name);
             foreach ($this->globals as $global) {
@@ -1136,33 +1096,31 @@ $moduleHeader
             }
             $code .= CodeGen_PECL_Element_Global::cCodeFooter($this->name);
         }
-        
+
         $code .= "/* }}} */\n\n";
         return $code;
     }
-    
-    
-    
+
     /**
      * Create the module globals c header file fragment
      *
      * @access private
      * @return string  module globals code fragment
      */
-    function generateGlobalsH() 
+    function generateGlobalsH()
     {
         if (empty($this->globals)) return "";
-        
+
         $code = CodeGen_PECL_Element_Global::hCodeHeader($this->name);
         foreach ($this->globals as $global) {
             $code .= $global->hCode($this->name);
         }
         $code .= CodeGen_PECL_Element_Global::hCodeFooter($this->name);
-        
+
         return $code;
     }
-    
-    // }}} 
+
+    // }}}
 
     // {{{
     /**
@@ -1187,7 +1145,7 @@ $moduleHeader
         return $code;
     }
     // }}}
-    
+
     // {{{
     /**
      * Create global class registration code and functions
@@ -1213,7 +1171,7 @@ $moduleHeader
 
     // {{{
     /**
-     * Create global interface registration code 
+     * Create global interface registration code
      *
      * @access private
      * @return string  interface registration code fragments
@@ -1241,15 +1199,15 @@ $moduleHeader
      * @access public
      * @param  object
      */
-    function setLicense($license) 
+    function setLicense($license)
     {
         if (preg_match("|^GPL|", $license->getShortName())) {
             return PEAR::raiseError("The ".$license->getShortName().
                                     "is not a valid choice for PHP extensions due to license incompatibilities");
         }
- 
+
         $this->license = $license;
- 
+
         return true;
     }
 
@@ -1259,34 +1217,33 @@ $moduleHeader
      * @access private
      * @return string  code fragment
      */
-    function getLicenseComment() 
-    {    
+    function getLicenseComment()
+    {
         $code = "/*\n";
         $code.= "   +----------------------------------------------------------------------+\n";
-        
+
         if (is_object($this->license)) {
             $code.= $this->license->getComment();
         } else {
             $code.= sprintf("   | unknown license: %-52s |\n", $this->license);
         }
-        
+
         $code.= "   +----------------------------------------------------------------------+\n";
-        
+
         foreach ($this->authors as $author) {
             $code.= $author->comment();
         }
-        
+
         $code.= "   +----------------------------------------------------------------------+\n";
         $code.= "*/\n\n";
-        
+
         $code.= "/* $ Id: $ */ \n\n";
-        
+
         return $code;
     }
-    
-    // }}} 
 
-    
+    // }}}
+
     /**
      * Set pear installer channel
      *
@@ -1302,7 +1259,6 @@ $moduleHeader
         $this->channel = $channel;
     }
 
-
     // {{{ header file
 
     /**
@@ -1311,22 +1267,22 @@ $moduleHeader
      * @access private
      * @param  string  directory to write to
      */
-    function writeHeaderFile() 
+    function writeHeaderFile()
     {
-        $this->addPackageFile('header', "php_{$this->name}.h"); 
+        $this->addPackageFile('header', "php_{$this->name}.h");
 
         $file =  new CodeGen_Tools_Outbuf($this->dirpath."/php_{$this->name}.h");
-        
+
         $upname = strtoupper($this->name);
-        
+
         echo $this->getLicenseComment();
         echo "#ifndef PHP_{$upname}_H\n";
         echo "#define PHP_{$upname}_H\n\n";
-        
+
         foreach ($this->headers as $header) {
             echo $header->hCode(true);
         }
-        
+
         echo "#ifdef  __cplusplus\n";
         echo "extern \"C\" {\n";
         echo "#endif\n";
@@ -1341,7 +1297,6 @@ $moduleHeader
 #ifdef HAVE_'.$upname.'
 ';
 
-       
        echo '#define PHP_'.$upname.'_VERSION "'.$this->release->getVersion().'"'."\n\n";
 
        echo '
@@ -1364,7 +1319,6 @@ $moduleHeader
                 echo $header->hCode(false);
             }
         }
-
 
         if (isset($this->code["header"]["top"])) {
             foreach ($this->code["header"]["top"] as $code) {
@@ -1445,8 +1399,8 @@ PHP_MINFO_FUNCTION({$this->name});
             echo "/* mirrored PHP Constants */\n";
             echo $defines;
             echo "\n";
-        } 
-        
+        }
+
         // add bottom header snippets
         if (isset($this->code["header"]["bottom"])) {
             echo "/* 'bottom' header snippets*/\n";
@@ -1464,7 +1418,7 @@ PHP_MINFO_FUNCTION({$this->name});
         return $file->write();
     }
 
-    // }}} 
+    // }}}
 
     // {{{ internal functions
 
@@ -1474,11 +1428,11 @@ PHP_MINFO_FUNCTION({$this->name});
      * @access private
      * @return string  code snippet
      */
-    
-    function internalFunctionsC() 
+
+    function internalFunctionsC()
     {
         $need_block = false;
-        
+
         $code = "
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION({$this->name})
@@ -1494,24 +1448,24 @@ PHP_MINIT_FUNCTION({$this->name})
             $code      .= "    REGISTER_INI_ENTRIES();\n";
             $need_block = true;
         }
-           
+
         foreach ($this->logos as $logo) {
             $code      .= $this->codegen->block($logo->minitCode());
             $need_block = true;
         }
-            
+
         if (count($this->constants)) {
             foreach ($this->constants as $constant) {
                 $code .= $this->codegen->block($constant->cCode($this->name));
             }
             $need_block = true;
         }
-            
+
         if (count($this->resources)) {
             foreach ($this->resources as $resource) {
                 $code .= $this->codegen->block($resource->minitCode());
             }
-            $need_block = true;         
+            $need_block = true;
         }
 
         if (count($this->interfaces)) {
@@ -1520,7 +1474,7 @@ PHP_MINIT_FUNCTION({$this->name})
             }
             $need_block = true;
         }
-            
+
         if (count($this->classes)) {
             foreach ($this->classes as $class) {
                 $code .= $this->codegen->block($class->minitCode($this));
@@ -1534,7 +1488,7 @@ PHP_MINIT_FUNCTION({$this->name})
             }
             $need_block = true;
         }
-            
+
         if (isset($this->internalFunctions['MINIT'])) {
             $code .= $this->codegen->varblock($this->internalFunctions['MINIT']->getCode());
         } else {
@@ -1546,13 +1500,13 @@ PHP_MINIT_FUNCTION({$this->name})
 /* }}} */
 
 ";
-            
+
         $code .= "
 /* {{{ PHP_MSHUTDOWN_FUNCTION */
 PHP_MSHUTDOWN_FUNCTION({$this->name})
 {
 ";
-            
+
         if (count($this->phpini)) {
             $code      .= "    UNREGISTER_INI_ENTRIES();\n";
             $need_block = true;
@@ -1566,7 +1520,7 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
             }
             $need_block = true;
         }
-            
+
         if (isset($this->internalFunctions['MSHUTDOWN'])) {
             $code .= $this->codegen->varblock($this->internalFunctions['MSHUTDOWN']->getCode());
         } else {
@@ -1579,7 +1533,7 @@ PHP_MSHUTDOWN_FUNCTION({$this->name})
 /* }}} */
 
 ";
-        
+
         $code .= "
 /* {{{ PHP_RINIT_FUNCTION */
 PHP_RINIT_FUNCTION({$this->name})
@@ -1617,7 +1571,7 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 /* }}} */
 
 ";
-    
+
         $code .= "
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION({$this->name})
@@ -1645,7 +1599,7 @@ PHP_MINFO_FUNCTION({$this->name})
 
         if (count($this->authors)) {
             $code.= '    php_info_print_table_row(2, "Authors", "';
-     
+
             foreach ($this->authors as $author) {
                 $code.= $author->phpinfoCode($this->name).'\\n';
             }
@@ -1664,7 +1618,6 @@ PHP_MINFO_FUNCTION({$this->name})
             $code .= "    /* add your stuff here */\n";
         }
 
-
         if (count($this->phpini)) {
             $code .= "\n    DISPLAY_INI_ENTRIES();";
         }
@@ -1677,7 +1630,7 @@ PHP_MINFO_FUNCTION({$this->name})
         return $code;
     }
 
-    // }}} 
+    // }}}
 
     // {{{ public functions
     /**
@@ -1686,19 +1639,18 @@ PHP_MINFO_FUNCTION({$this->name})
      * @access private
      * @return string  code snippet
      */
-    function publicFunctionsC() 
+    function publicFunctionsC()
     {
         $code = "";
 
         foreach ($this->functions as $function) {
             $code .= $function->cCode($this);
         }
-        
+
         return $code;
     }
 
-    // }}} 
-
+    // }}}
 
     // {{{ code file
 
@@ -1708,28 +1660,27 @@ PHP_MINFO_FUNCTION({$this->name})
      * @access private
      * @param  string  directory to write to
      */
-    function writeCodeFile() 
+    function writeCodeFile()
     {
         $filename = "{$this->name}.{$this->language}";  // todo extension logic
 
         $upname = strtoupper($this->name);
 
-        $this->addPackageFile('code', $filename); 
+        $this->addPackageFile('code', $filename);
 
         $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename, CodeGen_Tools_Outbuf::OB_TABIFY);
-            
+
         echo $this->getLicenseComment();
 
         echo "#include \"php_{$this->name}.h\"\n\n";
-            
+
         echo "#if HAVE_$upname\n\n";
-  
+
         if (isset($this->code["code"]["top"])) {
             foreach ($this->code["code"]["top"] as $code) {
                 echo $this->codegen->block($code, 0);
             }
         }
-
 
         if (!empty($this->logos)) {
             echo CodeGen_PECL_Element_Logo::cCodeHeader($this->name);
@@ -1752,13 +1703,13 @@ PHP_MINFO_FUNCTION({$this->name})
         echo $this->generateClassRegistrations();
 
         echo $this->generateFunctionRegistrations();
-            
+
         echo $this->generateExtensionEntry();
- 
+
         echo $this->generateGlobalsC();
 
         echo $this->internalFunctionsC();
- 
+
         echo $this->publicFunctionsC();
 
         if (isset($this->code["code"]["bottom"])) {
@@ -1768,24 +1719,23 @@ PHP_MINFO_FUNCTION({$this->name})
         }
 
         echo "#endif /* HAVE_$upname */\n\n";
-  
+
         echo $this->cCodeEditorSettings();
 
         return $file->write();
     }
 
-    // }}} 
-
+    // }}}
 
     // {{{ config.m4 file
 
     /**
-     * Write config.m4 file for autoconf 
+     * Write config.m4 file for autoconf
      *
      * @access private
      * @param  string  directory to write to
      */
-    function writeConfigM4() 
+    function writeConfigM4()
     {
         $upname = strtoupper($this->name);
 
@@ -1793,13 +1743,12 @@ PHP_MINFO_FUNCTION({$this->name})
 
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/config.m4", CodeGen_Tools_Outbuf::OB_TABIFY);
 
-        echo 
+        echo
 'dnl
 dnl $ Id: $
 dnl
 ';
 
-        
         if (isset($this->with[$this->name])) {
             $with = $this->with[$this->name];
             echo "\n".$with->m4Line()."\n";
@@ -1824,7 +1773,6 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
             echo "$fragment\n";
         }
 
-
         foreach ($this->with as $with) {
             echo $with->configm4($this);
         }
@@ -1833,7 +1781,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
         foreach ($this->headers as $header) {
             $pathes[$header->getPath()] = true; // TODO WTF???
         }
-       
+
         foreach (array_keys($pathes) as $path) {
             echo "  PHP_ADD_INCLUDE(\$PHP_{$upname}_DIR/$path)\n";
         }
@@ -1861,7 +1809,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
             foreach ($this->headers as $header) {
                 echo $header->configm4($this->name, $this->name);
             }
-        }  
+        }
 
         foreach ($this->resources as $resource) {
             echo $resource->configm4($this->name);
@@ -1880,12 +1828,11 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
         echo "\n";
 
-
         echo "
   PHP_SUBST({$upname}_SHARED_LIBADD)
   AC_DEFINE(HAVE_$upname, 1, [ ])
 ";
-        
+
         foreach ($this->defines as $define) {
           echo "  AC_DEFINE([$define[name]], [$define[value]], [$define[comment]])\n";
         }
@@ -1908,7 +1855,7 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
             echo "$fragment\n";
         }
 
-        echo 
+        echo
 "
 fi
 
@@ -1917,8 +1864,7 @@ fi
         return $file->write();
     }
 
-    // }}} 
-
+    // }}}
 
     // {{{ config.w32 file
 
@@ -1928,7 +1874,7 @@ fi
      * @access private
      * @param  string  directory to write to
      */
-    function writeConfigW32() 
+    function writeConfigW32()
     {
         // TODO fragments
         $upname = strtoupper($this->name);
@@ -1936,10 +1882,10 @@ fi
         $this->addPackageFile("conf", "config.w32");
 
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/config.w32",
-                                         CodeGen_Tools_Outbuf::OB_UNTABIFY 
+                                         CodeGen_Tools_Outbuf::OB_UNTABIFY
                                          | CodeGen_Tools_Outbuf::OB_DOSIFY);
 
-        echo 
+        echo
 '// $ Id: $
 // vim:ft=javascript
 ';
@@ -1979,7 +1925,7 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
         $file->write();
     }
 
-    // }}} 
+    // }}}
 
     // {{{ M$ dev studio project file
 
@@ -1989,16 +1935,16 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
      * @access private
      * @param  string  directory to write to
      */
-    function writeMsDevStudioDsp() 
+    function writeMsDevStudioDsp()
     {
-        $filename = $this->name.".dsp"; 
+        $filename = $this->name.".dsp";
         $this->addPackageFile("conf", $filename);
-        $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename, 
-                                         CodeGen_Tools_Outbuf::OB_UNTABIFY 
+        $file = new CodeGen_Tools_Outbuf($this->dirpath.'/'.$filename,
+                                         CodeGen_Tools_Outbuf::OB_UNTABIFY
                                          | CodeGen_Tools_Outbuf::OB_DOSIFY);
 
         // these system libraries are always needed?
-        // (list taken from sample *.dsp files in php ext tree...) 
+        // (list taken from sample *.dsp files in php ext tree...)
         $winlibs = "kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ";
         $winlibs.= "shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib";
 
@@ -2012,12 +1958,10 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
             }
         }
 
-        
         $defines = '/D HAVE_'.strtoupper($this->name).'=1 ';
         foreach ($this->defines as $define) {
             $defines = '/D "'.$define['name'].'='.$define['value'].'" "';
         }
-
 
         echo
 '# Microsoft Developer Studio Project File - Name="'.$this->name.'" - Package Owner=<4>
@@ -2029,19 +1973,19 @@ ARG_ENABLE('{$this->name}' , '{$this->summary}', 'no');
 CFG='.$this->name.' - Win32 Debug_TS
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "'.$this->name.'.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "'.$this->name.'.mak" CFG="'.$this->name.' - Win32 Debug_TS"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "'.$this->name.' - Win32 Release_TS" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "'.$this->name.' - Win32 Debug_TS" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -2103,14 +2047,13 @@ LINK32=link.exe
 # ADD BASE LINK32 '.$winlibs.' /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 php4ts_debug.lib '.$winlibs.' /nologo /dll /debug /machine:I386 /out:"..\..\Debug_TS\php_'.$this->name.'.dll" /pdbtype:sept /libpath:"..\..\Debug_TS"
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
 # Name "'.$this->name.' - Win32 Release_TS"
 # Name "'.$this->name.' - Win32 Debug_TS"
 ';
-
 
         echo '
 # Begin Group "Source Files"
@@ -2132,9 +2075,6 @@ SOURCE=$filename
         echo '
 # End Group
 ';
-
-
-
 
         echo '
 # Begin Group "Header Files"
@@ -2165,10 +2105,7 @@ SOURCE=$filename
         return $file->write();
     }
 
-// }}} 
-
-
-
+// }}}
 
     /**
      * Write authors to the CREDITS file
@@ -2176,7 +2113,7 @@ SOURCE=$filename
      * @access private
      * @param  string  directory to write to
      */
-    function writeCredits() 
+    function writeCredits()
     {
         if (count($this->authors)) {
             $this->addPackageFile("doc", "CREDITS");
@@ -2186,11 +2123,10 @@ SOURCE=$filename
             foreach ($this->authors as $author) {
                 $names[] = $author->getName();
             }
-            $fp->puts(join(", ", $names) . "\n"); 
+            $fp->puts(join(", ", $names) . "\n");
             $fp->close();
         }
     }
-
 
     /**
     * Write EXPERIMENTAL file for non-stable extensions
@@ -2198,7 +2134,7 @@ SOURCE=$filename
     * @access private
     * @param  string  directory to write to
     */
-    function writeExperimental() 
+    function writeExperimental()
     {
         if (($this->release) && $this->release->getState() === 'stable') {
             return;
@@ -2208,14 +2144,13 @@ SOURCE=$filename
         $fp = new CodeGen_Tools_FileReplacer($this->dirpath."/EXPERIMENTAL");
         $fp->puts(
 "this extension is experimental,
-its functions may change their names 
-or move to extension all together 
-so do not rely to much on them 
+its functions may change their names
+or move to extension all together
+so do not rely to much on them
 you have been warned!
 ");
         $fp->close();
     }
-
 
     /**
     * Write file list for package.xml (both version 1.0 and 2.0)
@@ -2258,11 +2193,11 @@ you have been warned!
      * @access private
      * @param  string  directory to write to
      */
-    function writePackageXml() 
+    function writePackageXml()
     {
         $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package.xml");
 
-        echo 
+        echo
 "<?xml version=\"1.0\"?>
 <!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">
 <package>
@@ -2277,7 +2212,7 @@ you have been warned!
         if (isset($this->description)) {
             echo "  <description>\n".rtrim($this->description)."\n  </description>\n";
         }
-        
+
         if ($this->license) {
             echo "\n  <license>".$this->license->getShortName()."</license>\n";
         }
@@ -2298,7 +2233,7 @@ you have been warned!
             }
             echo "  </maintainers>\n";
         }
-        
+
         if (isset($this->release)) {
             echo $this->release->packageXml();
         }
@@ -2307,25 +2242,20 @@ you have been warned!
         echo $this->changelog."\n"; // TODO indent
         echo "  </changelog>\n";
 
-
-        
         echo "  <deps>\n";
         echo "    <dep type=\"php\" rel=\"ge\" version=\"".$this->minPhpVersion()."\"/>\n";
         echo $this->platform->packageXML();
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML();
-        }       
+        }
         echo "  </deps>\n";
 
-
-        
         echo "\n  <filelist>\n";
         echo $this->packageXmlFileList();
         echo "  </filelist>\n";
 
-
         echo "</package>\n";
-        
+
         return $outfile->write();
     }
 
@@ -2337,7 +2267,7 @@ you have been warned!
      * @access private
      * @param  string  directory to write to
      */
-    function writePackageXml2() 
+    function writePackageXml2()
     {
         $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package2.xml");
 
@@ -2354,7 +2284,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 ';
 
         echo "  <name>{$this->name}</name>\n";
-        echo "  <channel>{$this->channel}</channel>\n\n"; 
+        echo "  <channel>{$this->channel}</channel>\n\n";
 
         if (isset($this->summary)) {
             echo "  <summary>{$this->summary}</summary>\n\n";
@@ -2386,14 +2316,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
         echo "      </pearinstaller>\n";
         foreach ($this->otherExtensions as $ext) {
             echo $ext->packageXML2(array("REQUIRED", "CONFLICTS"));
-        }       
+        }
         echo $this->platform->packageXML2();
         echo "    </required>\n";
 
         $optional = "";
         foreach ($this->otherExtensions as $ext) {
             $optional.= $ext->packageXML2(array("OPTIONAL"));
-        }       
+        }
         if (!empty($optional)) {
           echo "    <optional>\n";
           echo $optional;
@@ -2403,7 +2333,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
         echo "  </dependencies>\n\n";
 
         echo "  <providesextension>{$this->name}</providesextension>\n\n";
-        
 
         if (count($this->with)) {
             echo "  <extsrcrelease>\n";
@@ -2417,7 +2346,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
         }
 
         echo "</package>\n";
-        
+
         return $outfile->write();
     }
 
@@ -2429,10 +2358,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
      * @access public
      * @param  object  a Test object
      */
-    function addTest(CodeGen_PECL_Element_Test $test) 
+    function addTest(CodeGen_PECL_Element_Test $test)
     {
         $name = $test->getName();
-       
+
         if (isset($this->testcases[$name])) {
             return PEAR::raiseError("testcase '{$name}' added twice");
         }
@@ -2446,11 +2375,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
      *
      * @access private
      */
-    function writeTestFiles() 
+    function writeTestFiles()
     {
         $testCount=0;
         @mkdir($this->dirpath."/tests");
-    
+
         // function related tests
         foreach ($this->functions as $function) {
             $function->writeTest($this);
@@ -2458,7 +2387,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
         // class method related tests
         foreach ($this->classes as $class) {
-            $class->writeTests($this);            
+            $class->writeTests($this);
         }
 
         // custom test cases (may overwrite custom function test cases)
@@ -2471,13 +2400,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
         }
     }
 
-    /** 
+    /**
     * Generate README file (custom or default)
     *
     * @access private
     * @param  string  directory to write to
     */
-    function writeReadme() 
+    function writeReadme()
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/README");
 
@@ -2494,21 +2423,20 @@ http://pear.php.net/dtd/package-2.0.xsd">
 ?>
 This is a standalone PHP extension created using CodeGen_PECL <?php echo self::version(); ?>
 
-
 HACKING
 =======
 
 There are two ways to modify an extension created using CodeGen_PECL:
 
 1) you can modify the generated code as with any other PHP extension
-  
+
 2) you can add custom code to the CodeGen_PECL XML source and re-run pecl-gen
 
 The 2nd approach may look a bit complicated but you have be aware that any
 manual changes to the generated code will be lost if you ever change the
 XML specs and re-run PECL-Gen. All changes done before have to be applied
 to the newly generated code again.
-Adding code snippets to the XML source itself on the other hand may be a 
+Adding code snippets to the XML source itself on the other hand may be a
 bit more complicated but this way your custom code will always be in the
 generated code no matter how often you rerun CodeGen_PECL.
 
@@ -2532,7 +2460,7 @@ To compile your new extension, you will have to execute the following steps:
 BUILDING ON WINDOWS
 ===================
 
-The extension provides the VisualStudio V6 project file 
+The extension provides the VisualStudio V6 project file
 
   <?php echo $this->name.".dsp" ?>
 
@@ -2573,7 +2501,6 @@ of phpinfo();
         $file->write();
     }
 
-
     /**
      * Return minimal PHP version required to support the requested features
      *
@@ -2581,10 +2508,10 @@ of phpinfo();
      */
     function minPhpVersion()
     {
-		// min. default: 4.0
-        $version = "4.0.0"; // TODO test for real lower bound 
+        // min. default: 4.0
+        $version = "4.0.0"; // TODO test for real lower bound
 
-		// we only support the 5.0 (ZE2) OO api 
+        // we only support the 5.0 (ZE2) OO api
         if (!empty($this->classes) || !empty($this->interfaces)) {
             $version = $this->maxVersion($version, "5.0.0");
         }
@@ -2597,7 +2524,7 @@ of phpinfo();
         // check function requirements
         foreach ($this->functions as $function) {
           $version = $this->maxVersion($version, $function->minPhpVersion());
-        }       
+        }
 
         return $version;
     }
@@ -2626,7 +2553,7 @@ of phpinfo();
      * @param  int    Directory nesting depth of target file (default: 3)
      * @return string Editor settings comment block
     */
-    static function docEditorSettings($level=3) 
+    static function docEditorSettings($level=3)
     {
         return '
 <!-- Keep this comment at the end of the file
@@ -2652,8 +2579,6 @@ vi: ts=1 sw=1
 ';
     }
 
-
-
     /**
      * Show error message and bailout
      *
@@ -2673,18 +2598,16 @@ vi: ts=1 sw=1
         exit(3);
     }
 
-
     /**
      * Return array of defined functions
      *
      * @return array
      */
-    function getFunctions() 
+    function getFunctions()
     {
         return $this->functions;
     }
-}   
-
+}
 
 /*
  * Local variables:
@@ -2693,4 +2616,4 @@ vi: ts=1 sw=1
  * indent-tabs-mode:nil
  * End:
  */
-?>
+

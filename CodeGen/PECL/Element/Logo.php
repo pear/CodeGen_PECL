@@ -35,8 +35,8 @@ require_once "CodeGen/PECL/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Element_Logo 
-  extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Logo
+  extends CodeGen_PECL_Element
 {
     /**
      * Basename
@@ -45,7 +45,7 @@ class CodeGen_PECL_Element_Logo
      * @var string
      */
     protected $name;
-    
+
     /**
      * ID for URL call of image ("...?=ID")
      *
@@ -53,7 +53,7 @@ class CodeGen_PECL_Element_Logo
      * @var string
      */
     protected $id;
-    
+
     /**
      * The actual image data as a binary string
      *
@@ -61,14 +61,14 @@ class CodeGen_PECL_Element_Logo
      * @var string
      */
     protected $data;
-    
+
     /**
      *
      * @access protected
      * @var string
      */
     protected $mimeType = false;
-    
+
     /**
      * Constructor
      *
@@ -76,24 +76,23 @@ class CodeGen_PECL_Element_Logo
      * @param  string image basename
      * @param  string source filename
      */
-    function __construct($name) 
+    function __construct($name)
     {
         $this->name = $name;
         $this->id = '"'.strtoupper($name).'_LOGO_ID"';
-    } 
-    
+    }
 
     /**
      * name getter
      *
-     * @return  string 
+     * @return  string
      */
     function getName()
     {
         return $this->name;
     }
 
-    /** 
+    /**
      * Set image data and mimetype
      *
      * @param  string  binary image data
@@ -108,7 +107,7 @@ class CodeGen_PECL_Element_Logo
             $this->mimetype = $mimetype;
         } else {
             // perform a little magic
-            // we only accept GIF, PNG and JPEG here, so we can test 
+            // we only accept GIF, PNG and JPEG here, so we can test
             // for the 'magic' signatures ourself
             if (!strncmp("GIF8", $data, 4)) {
                 $this->mimetype = "image/gif";
@@ -140,26 +139,24 @@ class CodeGen_PECL_Element_Logo
         return $this->setData(file_get_contents($path), $mimetype);
     }
 
-    
-    
-    /** 
+    /**
      * Code snippet for image registration in MINFO()
      *
      * @access public
      * @return string C code snippet
      */
-    function minitCode() 
+    function minitCode()
     {
         return "  php_register_info_logo({$this->id}, \"{$this->mimeType}\", {$this->name}_logo, ".strlen($this->data).");\n";
     }
 
-    /** 
+    /**
      * Code snippet for image release in MSHUTDOWN()
      *
      * @access public
      * @return string C code snippet
      */
-    function mshutdownCode() 
+    function mshutdownCode()
     {
         return "  php_unregister_info_logo({$this->id});\n";
     }
@@ -171,7 +168,7 @@ class CodeGen_PECL_Element_Logo
      * @param  string Extension name
      * @return string C code
      */
-    static function cCodeHeader($name) 
+    static function cCodeHeader($name)
     {
         return "
 /* {{{ phpinfo logo definitions */\n
@@ -187,7 +184,7 @@ class CodeGen_PECL_Element_Logo
      * @param  string Extension name
      * @return string C code
      */
-    static function cCodeFooter($name) 
+    static function cCodeFooter($name)
     {
         return "/* }}} */\n\n";
     }
@@ -199,12 +196,12 @@ class CodeGen_PECL_Element_Logo
      * @param  string extension name
      * @return string C code snippet
      */
-    function cCode($name) 
+    function cCode($name)
     {
         return "
 static unsigned char {$this->name}_logo[] = {
 #include \"{$this->name}_logos.h\"
-}; 
+};
 ";
     }
 
@@ -214,7 +211,7 @@ static unsigned char {$this->name}_logo[] = {
      * @access public
      * @return string C code snippet
      */
-    function hCode() 
+    function hCode($extension)
     {
         $len = strlen($this->data);
         $code = " ";
@@ -228,12 +225,11 @@ static unsigned char {$this->name}_logo[] = {
                 $i=0;
             }
         }
-        
+
         $code .= "\n";
-        
+
         return $code;
     }
-
 
     /**
      * Code snippet for phpinfo output
@@ -242,20 +238,18 @@ static unsigned char {$this->name}_logo[] = {
      * @param  string extension name
      * @return string C code snippet
      */
-    function phpinfoCode($name) 
+    function phpinfoCode($name)
     {
             return "
     php_printf(\"<img src='\");
     if (SG(request_info).request_uri) {
         php_printf(\"%s\", (SG(request_info).request_uri));
-    }   
+    }
     php_printf(\"?=%s\", {$this->id});
     php_printf(\"' align='right' alt='image' border='0'>\\n\");
 
-"; 
+";
     }
 
-    
 }
 
-?>
