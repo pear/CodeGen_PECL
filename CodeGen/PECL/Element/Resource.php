@@ -275,7 +275,7 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
      * @access public
      * @return string C code snippet
      */
-    function hCode()
+    function hCode($extension)
     {
         $upname = strtoupper($this->name);
 

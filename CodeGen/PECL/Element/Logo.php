@@ -211,7 +211,7 @@ static unsigned char {$this->name}_logo[] = {
      * @access public
      * @return string C code snippet
      */
-    function hCode()
+    function hCode($extension)
     {
         $len = strlen($this->data);
         $code = " ";

@@ -408,7 +408,7 @@ class CodeGen_PECL_Element_Ini
      * @param  string extension basename
      * @return string DocBook XML snippet
      */
-    static function docFooter()
+    static function docFooter($name)
     {
         return
             "     </tbody>

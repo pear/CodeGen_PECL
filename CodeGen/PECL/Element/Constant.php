@@ -330,7 +330,7 @@ class CodeGen_PECL_Element_Constant
      * @param  string  Extension name
      * @return string  DocBook XML snippet
      */
-    static function docFooter()
+    static function docFooter($name)
     {
         return "  </variablelist>\n";
     }

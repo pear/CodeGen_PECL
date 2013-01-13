@@ -387,9 +387,9 @@ class CodeGen_PECL_Element_Method
      *
      * @param  string  code snippet
      */
-    function setCode($code)
+    function setCode($code, $line = 0, $file = "")
     {
-        parent::setCode($code);
+        parent::setCode($code, $line, $file);
 
         return $this->validate();
     }

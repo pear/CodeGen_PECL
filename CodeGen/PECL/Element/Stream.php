@@ -206,7 +206,7 @@ class CodeGen_PECL_Element_Stream
      * @access public
      * @return string C code snippet
      */
-    function hCode()
+    function hCode($extension)
     {
         return "/* ".$this->name." stream goes here */\n";
     }

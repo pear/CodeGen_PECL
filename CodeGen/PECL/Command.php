@@ -184,7 +184,7 @@ pecl-gen [-h] [--force] [--experimental] [--version]
             foreach (file($proto_file) as $line) {
                 $func = new CodeGen_PECL_Element_Function;
                 $func->setRole("public");
-                $err = $func->setProto(trim($line));
+                $err = $func->setProto(trim($line), $this->extension);
                 if (PEAR::isError($err)) {
                     $this->terminate($err->getMessage());
                 }
