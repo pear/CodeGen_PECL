@@ -119,5 +119,3 @@ class CodeGen_PECL_Maintainer
  * End:
  */
 
-?>
-

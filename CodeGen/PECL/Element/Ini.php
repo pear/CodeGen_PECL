@@ -426,5 +426,3 @@ class CodeGen_PECL_Element_Ini
  * End:
  */
 
-?>
-

@@ -153,5 +153,3 @@ abstract class CodeGen_PECL_Element
 
 }
 
-?>
-

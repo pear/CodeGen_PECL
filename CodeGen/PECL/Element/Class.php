@@ -639,5 +639,3 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 
 }
 
-?>
-

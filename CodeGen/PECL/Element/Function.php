@@ -1764,5 +1764,4 @@ class CodeGen_PECL_Element_Function
  * indent-tabs-mode:nil
  * End:
  */
-?>
 

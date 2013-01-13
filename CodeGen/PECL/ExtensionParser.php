@@ -1467,5 +1467,4 @@ class CodeGen_PECL_ExtensionParser
  * indent-tabs-mode:nil
  * End:
  */
-?>
 

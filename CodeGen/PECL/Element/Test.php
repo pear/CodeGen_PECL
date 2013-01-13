@@ -460,5 +460,4 @@ class CodeGen_PECL_Element_Test
         $file->write();
     }
 }
-?>
 

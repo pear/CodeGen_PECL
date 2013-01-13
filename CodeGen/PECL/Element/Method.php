@@ -473,5 +473,3 @@ class CodeGen_PECL_Element_Method
  * End:
  */
 
-?>
-

@@ -281,5 +281,3 @@ ZEND_END_MODULE_GLOBALS({$name})
 
 }
 
-?>
-

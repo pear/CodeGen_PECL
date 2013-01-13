@@ -253,5 +253,3 @@ static unsigned char {$this->name}_logo[] = {
 
 }
 
-?>
-

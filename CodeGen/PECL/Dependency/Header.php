@@ -70,5 +70,3 @@ class CodeGen_PECL_Dependency_Header
     }
 }
 
-?>
-

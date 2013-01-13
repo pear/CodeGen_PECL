@@ -39,5 +39,3 @@ $parser = new CodeGen_PECL_ExtensionParser($extension);
 
 $command->execute($parser);
 
-?>
-

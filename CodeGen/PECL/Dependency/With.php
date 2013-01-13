@@ -421,5 +421,4 @@ class CodeGen_PECL_Dependency_With
  * indent-tabs-mode:nil
  * End:
  */
-?>
 

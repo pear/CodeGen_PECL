@@ -120,5 +120,3 @@ class CodeGen_PECL_Dependency_Lib
     }
 }
 
-?>
-

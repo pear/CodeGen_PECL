@@ -130,5 +130,3 @@ class CodeGen_PECL_Release
     }
 }
 
-?>
-

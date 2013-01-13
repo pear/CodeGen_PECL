@@ -226,5 +226,4 @@ class CodeGen_PECL_Element_Property
         return $code;
     }
 }
-?>
 

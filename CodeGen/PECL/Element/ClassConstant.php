@@ -228,5 +228,4 @@ class CodeGen_PECL_Element_ClassConstant
  * indent-tabs-mode:nil
  * End:
  */
-?>
 
