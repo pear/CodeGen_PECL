@@ -282,8 +282,8 @@ le_{$this->name} = zend_register_list_destructors_ex({$this->name}_dtor,
         $code = $this->ifConditionStart();
 
         $code.= "
-#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name });
-#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, ${$this->name}, le_{$this->name }); if (!r) { RETURN_FALSE; }
+#define {$upname}_REGISTER(r)   ZEND_REGISTER_RESOURCE(return_value, r, le_{$this->name});
+#define {$upname}_FETCH(r, z)   ZEND_FETCH_RESOURCE(r, {$this->payload} *, z, -1, {$this->name}, le_{$this->name}); if (!r) { RETURN_FALSE; }
 ";
 
         $code.= $this->ifConditionEnd();
