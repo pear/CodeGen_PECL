@@ -36,7 +36,7 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 class CodeGen_PECL_Element_Stream
-    extends CodeGen_PECL_Element 
+    extends CodeGen_PECL_Element
 {
     /**
      * Stream type name
@@ -53,23 +53,21 @@ class CodeGen_PECL_Element_Stream
      * @param  string name
      * @return bool   true on success
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid stream name");
         }
-        
+
         $this->name = $name;
-        
+
         return true;
     }
 
-
-    function getName() 
+    function getName()
     {
         return $this->name;
     }
-    
 
     /**
      * DocBook XML snippet that describes the resource for the manual
@@ -89,10 +87,9 @@ class CodeGen_PECL_Element_Stream
     function setSummary($text)
     {
         $this->summary = $text;
-        
+
         return true;
     }
-
 
     /**
      * DocBook XML snippet that describes the resource for the manual
@@ -112,15 +109,12 @@ class CodeGen_PECL_Element_Stream
     function setDescription($text)
     {
         $this->description = $text;
-        
+
         return true;
     }
-   
-
-
 
     /**
-     * code blocks for various handlers 
+     * code blocks for various handlers
      *
      * @var array
      */
@@ -138,37 +132,34 @@ class CodeGen_PECL_Element_Stream
             return PEAR::raiseError("Codeblock '$role' was already set");
         }
 
-        if (!in_array($role, array("open", "close", "stat", "urlstat", "diropen", 
-                                   "unlink", "rename", "mkdir", "rmdir", 
+        if (!in_array($role, array("open", "close", "stat", "urlstat", "diropen",
+                                   "unlink", "rename", "mkdir", "rmdir",
                                    "write", "read", "flush", "seek", "cast", "set"))) {
             return PEAR::raiseError("'$role' is not a valid stream codeblock type");
         }
 
-        $this->codeBlocks[$role] = $code; 
+        $this->codeBlocks[$role] = $code;
     }
 
-    
-    
-    /** 
+    /**
      * Generate resource registration code for MINIT()
      *
      * @access public
      * @return string C code snippet
      */
-    function minitCode() 
+    function minitCode()
     {
         return "/* ".$this->name." stream goes here */\n";
     }
 
-
-    /** 
+    /**
      * Generate C code for resource destructor callback
      *
      * @access public
      * @param  object extension
      * @return string C code snippet
      */
-    function cCode($extension) 
+    function cCode($extension)
     {
         ob_start();
 
@@ -191,7 +182,7 @@ class CodeGen_PECL_Element_Stream
         echo "\n";
 
         echo '"'.$this->summary.'"'."\n";
-        
+
         echo "    ";
         echo isset($this->codeBlocks['cast']) ? "php_{$this->name}_file_cast," : "NULL, /* cast */";
         echo "\n";
@@ -209,33 +200,28 @@ class CodeGen_PECL_Element_Stream
         return ob_get_clean();
     }
 
-
-
-    /** 
+    /**
      * Generate covenience macros for resource access
      *
      * @access public
      * @return string C code snippet
      */
-    function hCode() 
+    function hCode($extension)
     {
         return "/* ".$this->name." stream goes here */\n";
     }
 
-
-
-    /** 
+    /**
      * Generate documentation for this resource
      *
-     * @access public 
+     * @access public
      * @param  string id basename for extension
      * @return string DocBook XML code snippet
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
         return "   ";
     }
-    
+
 }
 
-?>

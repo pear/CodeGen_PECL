@@ -35,7 +35,7 @@ require_once "CodeGen/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-abstract class CodeGen_PECL_Element 
+abstract class CodeGen_PECL_Element
   extends CodeGen_Element
 {
 
@@ -46,17 +46,17 @@ abstract class CodeGen_PECL_Element
      * @param  string Type name
      * @return string The official type name or boolean false if not a type
      */
-    function isType($name) 
+    function isType($name)
     {
-        static $types = array("void"     => "void", 
-                              "bool"     => "bool", 
-                              "boolean"  => "bool", 
-                              "int"      => "int", 
-                              "integer"  => "int", 
-                              "float"    => "float", 
-                              "double"   => "float", 
-                              "real"     => "float", 
-                              "string"   => "string", 
+        static $types = array("void"     => "void",
+                              "bool"     => "bool",
+                              "boolean"  => "bool",
+                              "int"      => "int",
+                              "integer"  => "int",
+                              "float"    => "float",
+                              "double"   => "float",
+                              "real"     => "float",
+                              "string"   => "string",
                               "array"    => "array",
                               "object"   => "object",
                               "resource" => "resource",
@@ -64,14 +64,13 @@ abstract class CodeGen_PECL_Element
                               "callback" => "callback",
                               "stream"   => "stream"
                               );
-        
+
         if (isset($types[$name])) {
             return $types[$name];
         } else {
             return false;
         }
     }
-
 
     /**
      * Checks whether a string is a reserved name
@@ -80,7 +79,7 @@ abstract class CodeGen_PECL_Element
      * @param  string name
      * @return bool   true if reserved
      */
-    function isKeyword($name) 
+    function isKeyword($name)
     {
         // these are taken from zend_language_scanner.l
         static $reserved = array(
@@ -88,7 +87,7 @@ abstract class CodeGen_PECL_Element
                                  "and",
                                  "array",
                                  "as",
-                                 "break", 
+                                 "break",
                                  "case",
                                  "catch",
                                  "class",
@@ -99,7 +98,7 @@ abstract class CodeGen_PECL_Element
                                  "die",
                                  "do",
                                  "echo",
-                                 "else", 
+                                 "else",
                                  "elseif",
                                  "empty",
                                  "enddeclare",
@@ -111,11 +110,11 @@ abstract class CodeGen_PECL_Element
                                  "exit",
                                  "extends",
                                  "final",
-                                 "for", 
-                                 "foreach", 
-                                 "function", 
+                                 "for",
+                                 "foreach",
+                                 "function",
                                  "global",
-                                 "if", 
+                                 "if",
                                  "implements",
                                  "include",
                                  "include_once",
@@ -126,12 +125,12 @@ abstract class CodeGen_PECL_Element
                                  "new",
                                  "or",
                                  "print",
-                                 "private", 
-                                 "protected", 
-                                 "public", 
+                                 "private",
+                                 "protected",
+                                 "public",
                                  "require",
                                  "require_once",
-                                 "return", 
+                                 "return",
                                  "static",
                                  "throw",
                                  "try",
@@ -139,10 +138,10 @@ abstract class CodeGen_PECL_Element
                                  "unset",
                                  "use",
                                  "var",
-                                 "while", 
+                                 "while",
                                  "xor",
                                  );
-        
+
         foreach ($reserved as $keyword) {
             if (!strcasecmp($keyword, $name)) {
                 return true;
@@ -152,7 +151,5 @@ abstract class CodeGen_PECL_Element
         return false;
     }
 
-
 }
 
-?>

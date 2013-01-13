@@ -62,7 +62,7 @@ class CodeGen_PECL_Dependency_Header
     function configw32($extname, $withname)
     {
         $upname = strtoupper($extname);
-        echo "  
+        echo "
   if (!CHECK_HEADER_ADD_INCLUDE(\"{$this->name}\", \"CFLAGS_$upname\")) {
     ERROR(\"{$extname}: header '{$this->name}' not found\");
   }
@@ -70,4 +70,3 @@ class CodeGen_PECL_Dependency_Header
     }
 }
 
-?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a PHP class constant within a PECL extension 
+ * Class describing a PHP class constant within a PECL extension
  *
  * PHP versions 5
  *
@@ -19,13 +19,13 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
-/** 
+/**
  * includes
  */
 require_once "CodeGen/PECL/Element.php";
 
 /**
- * Class describing a PHP class constant within a PECL extension 
+ * Class describing a PHP class constant within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -36,8 +36,8 @@ require_once "CodeGen/PECL/Element.php";
  * @link       http://pear.php.net/package/CodeGen
  */
 
-class CodeGen_PECL_Element_ClassConstant 
-    extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_ClassConstant
+    extends CodeGen_PECL_Element
 {
     /**
      * The constants name
@@ -71,9 +71,8 @@ class CodeGen_PECL_Element_ClassConstant
      */
     protected $desc;
 
-
     /**
-     * Set constant name 
+     * Set constant name
      *
      * @access public
      * @param  string  the name
@@ -86,14 +85,14 @@ class CodeGen_PECL_Element_ClassConstant
         }
 
         if (self::isKeyword($name)) {
-            return PEAR::raiseError("'$name' is a reserved word which is not valid for constant names");               
+            return PEAR::raiseError("'$name' is a reserved word which is not valid for constant names");
         }
-            
+
         $this->name = $name;
-            
+
         return true;
     }
-        
+
     /**
      * Get constant name
      *
@@ -105,27 +104,26 @@ class CodeGen_PECL_Element_ClassConstant
         return $this->name;
     }
 
-
     /**
-     * Set constant type 
+     * Set constant type
      *
      * @access public
      * @param  string  the type
      * @return bool    true on success
      */
-    function setType($type) 
+    function setType($type)
     {
         if (!in_array($type, array('int', 'float', 'string'))) {
             return PEAR::raiseError("'$type' is not a valid constant type, only int, float and string");
-        }                                                         
-            
+        }
+
         $this->type = $type;
-            
+
         return true;
     }
 
     /**
-     * Set constant value 
+     * Set constant value
      *
      * @access public
      * @param  string  the value
@@ -156,20 +154,19 @@ class CodeGen_PECL_Element_ClassConstant
         return true;
     }
 
-
-    /** 
+    /**
      * MINIT code fragment
      *
      * @access public
      * @return string
      */
-    function minitCode($classptr) 
+    function minitCode($classptr)
     {
         $key     = '"'.$this->name.'"';
         $key_len = strlen($this->name);
 
         $code = $this->ifConditionStart();
-            
+
         switch ($this->type) {
         case "string":
             $code.= "        zend_declare_class_constant_stringl($classptr, $key, $key_len, \"{$this->value}\", ".strlen($this->value)." TSRMLS_CC );\n";
@@ -180,7 +177,7 @@ class CodeGen_PECL_Element_ClassConstant
         case "float":
             $code.= "        zend_declare_class_constant_double($classptr, $key, $key_len, {$this->value} TSRMLS_CC );\n";
             break;
-        default: 
+        default:
             return "";
         }
 
@@ -189,8 +186,7 @@ class CodeGen_PECL_Element_ClassConstant
         return $code;
     }
 
-
-    /** 
+    /**
      * MINIT code header
      *
      * @access public
@@ -207,8 +203,7 @@ class CodeGen_PECL_Element_ClassConstant
         return ob_get_clean();
     }
 
-
-    /** 
+    /**
      * MINIT code footer
      *
      * @access public
@@ -233,4 +228,4 @@ class CodeGen_PECL_Element_ClassConstant
  * indent-tabs-mode:nil
  * End:
  */
-?>
+

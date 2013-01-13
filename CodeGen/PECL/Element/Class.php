@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a PHP class within a PECL extension 
+ * Class describing a PHP class within a PECL extension
  *
  * PHP versions 5
  *
@@ -29,7 +29,7 @@ require_once "CodeGen/PECL/Element/Method.php";
 require_once "CodeGen/PECL/Element/ObjectInterface.php";
 
 /**
- * Class describing a PHP class within a PECL extension 
+ * Class describing a PHP class within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -41,7 +41,7 @@ require_once "CodeGen/PECL/Element/ObjectInterface.php";
  */
 
 class CodeGen_PECL_Element_Class
-    extends CodeGen_PECL_Element 
+    extends CodeGen_PECL_Element
     implements CodeGen_PECL_Element_ObjectInterface
 {
     /**
@@ -56,14 +56,14 @@ class CodeGen_PECL_Element_Class
      *
      * @param string Classname
      */
-    function setName($name) 
+    function setName($name)
     {
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid class name");
         }
-            
+
         $this->name = $name;
-            
+
         return true;
     }
 
@@ -76,8 +76,6 @@ class CodeGen_PECL_Element_Class
     {
         return $this->name;
     }
-
-
 
     /**
      * A short description
@@ -97,9 +95,6 @@ class CodeGen_PECL_Element_Class
         return true;
     }
 
-
-
-
     /**
      * A long description
      *
@@ -118,8 +113,6 @@ class CodeGen_PECL_Element_Class
         return true;
     }
 
-
-        
     /**
      * Documentation
      *
@@ -134,13 +127,11 @@ class CodeGen_PECL_Element_Class
      *
      * @param string Class documentation
      */
-    function setDocumentation($text) 
+    function setDocumentation($text)
     {
         $this->documentation = $text;
     }
 
-
-        
     /**
      * Extents which class?
      *
@@ -153,15 +144,14 @@ class CodeGen_PECL_Element_Class
      *
      * @param string parent class name
      */
-    function setExtends($parent) 
+    function setExtends($parent)
     {
         if (!self::isName($parent)) {
             return PEAR::raiseError("'$parent' is not a valid parent class name");
-        }           
+        }
 
         $this->extends = $parent;
     }
-        
 
     /**
      * Implemented Interfaces
@@ -169,18 +159,18 @@ class CodeGen_PECL_Element_Class
      * @var   array
      */
     protected $implements = array();
-        
+
     /**
      * Add an interface that this class implements
      *
      * @param string interface name
      */
-    function addInterface($interface) 
+    function addInterface($interface)
     {
         if (!self::isName($interface)) {
             return PEAR::raiseError("'$interface' is not a valid interface name");
-        }           
-        
+        }
+
         if (isset($this->implements[$interface])) {
             return PEAR::raiseError("interface '$interface' added twice");
         }
@@ -188,20 +178,19 @@ class CodeGen_PECL_Element_Class
         $this->implements[$interface] = $interface;
     }
 
-
     /**
      * Properties
      *
      * @var   array
      */
     protected $properties = array();
-        
+
     /**
      * Add a class property
      *
      * @param object a class property object
      */
-    function addProperty(CodeGen_PECL_Element_Property $property) 
+    function addProperty(CodeGen_PECL_Element_Property $property)
     {
         $name = $property->getName();
 
@@ -212,20 +201,19 @@ class CodeGen_PECL_Element_Class
         $this->properties[$name] = $property;
     }
 
-        
     /**
      * Constants
      *
      * @var   array
      */
     protected $constants = array();
-        
+
     /**
      * Add a constant to a class
      *
      * @param object a class constant object
      */
-    function addConstant(CodeGen_PECL_Element_ClassConstant $constant) 
+    function addConstant(CodeGen_PECL_Element_ClassConstant $constant)
     {
         $name = $constant->getName();
 
@@ -236,20 +224,19 @@ class CodeGen_PECL_Element_Class
         $this->constants[$name] = $constant;
     }
 
-        
     /**
      * Member Functions
      *
      * @var   array
      */
     protected $methods = array();
-        
+
     /**
      * Add a method definition to the class
      *
      * @param object class method object
      */
-    function addMethod(CodeGen_PECL_Element_Method $method) 
+    function addMethod(CodeGen_PECL_Element_Method $method)
     {
         $name = $method->getName();
 
@@ -262,8 +249,6 @@ class CodeGen_PECL_Element_Class
         return true;
     }
 
-
-
     /**
      * Is this an abstract class?
      *
@@ -274,12 +259,10 @@ class CodeGen_PECL_Element_Class
     /**
      * Make class abstract
      */
-    function isAbstract() 
+    function isAbstract()
     {
         $this->isAbstract = true;
     }
-
-
 
     /**
      * Is this class final?
@@ -296,8 +279,6 @@ class CodeGen_PECL_Element_Class
         $this->isFinal = true;
     }
 
-
-
     /**
      * Is this an interface?
      *
@@ -306,18 +287,17 @@ class CodeGen_PECL_Element_Class
     protected $isInterface = false;
 
     /**
-     * Make class an interface 
+     * Make class an interface
      */
-    function isInterface() 
+    function isInterface()
     {
         // TODO: check for already added non-abstract stuff
-            
+
         $this->isInterface = true;
     }
 
-
     /**
-     * Class payload data type  
+     * Class payload data type
      *
      * @var string  C type name class payload data
      */
@@ -325,10 +305,10 @@ class CodeGen_PECL_Element_Class
 
     /**
      * Payload type setter
-     * 
+     *
      * @param string
      */
-    function setPayloadType($type) 
+    function setPayloadType($type)
     {
         // TODO check
         $this->payloadType = $type;
@@ -339,14 +319,13 @@ class CodeGen_PECL_Element_Class
      *
      * @return string
      */
-    function getPayloadType() 
+    function getPayloadType()
     {
         return $this->payloadType;
     }
 
-
     /**
-     * Allocate storage space for payload data? 
+     * Allocate storage space for payload data?
      *
      * @var bool
      */
@@ -354,10 +333,10 @@ class CodeGen_PECL_Element_Class
 
     /**
      * Payload alloc setter
-     * 
+     *
      * @param string
      */
-    function setPayloadAlloc($alloc) 
+    function setPayloadAlloc($alloc)
     {
         $this->payloadAlloc = (bool)$alloc;
     }
@@ -368,8 +347,8 @@ class CodeGen_PECL_Element_Class
      * @param string
      */
     protected $payloadCtor = "";
-        
-    /** 
+
+    /**
      * Payload init code setter
      *
      * @param string code snippet
@@ -397,15 +376,14 @@ class CodeGen_PECL_Element_Class
         return $code;
     }
 
-
     /**
      * Payload dtor code snippet
      *
      * @param string
      */
     protected $payloadDtor = "";
-        
-    /** 
+
+    /**
      * Payload dtor code setter
      *
      * @param string code snippet
@@ -437,7 +415,7 @@ class CodeGen_PECL_Element_Class
      * @param  class Extension  extension the function is part of
      * @return string           C header code snippet
      */
-    function hCode($extension) 
+    function hCode($extension)
     {
         $code = "";
 
@@ -447,7 +425,7 @@ class CodeGen_PECL_Element_Class
 typedef struct _php_obj_{$this->name} {
     zend_object obj;
     {$this->payloadType} *data;
-} php_obj_{$this->name}; 
+} php_obj_{$this->name};
 ";
         }
 
@@ -462,20 +440,18 @@ typedef struct _php_obj_{$this->name} {
         return $code;
     }
 
-
     /**
      * Generate global scope code
      *
      * @access public
      * @return string
      */
-    function globalCode($extension) 
+    function globalCode($extension)
     {
         $upname = strtoupper($this->name);
 
         ob_start();
 
-            
         echo "/* {{{ Class {$this->name} */\n\n";
 
         echo $this->ifConditionStart();
@@ -496,7 +472,7 @@ typedef struct _php_obj_{$this->name} {
 
         echo "    { NULL, NULL, NULL }\n";
         echo "};\n\n";
-        
+
         echo "/* }}} Methods */\n\n";
 
         if ($this->payloadType) {
@@ -506,7 +482,7 @@ static zend_object_handlers {$this->name}_obj_handlers;
 static void {$this->name}_obj_free(void *object TSRMLS_DC)
 {
     php_obj_{$this->name} *payload = (php_obj_{$this->name} *)object;
-    
+
     {$this->payloadType} *data = payload->data;
 ".$this->getPayloadDtor($extension)."
     efree(object);
@@ -524,7 +500,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 ".$this->getPayloadCtor($extension)."
     retval.handle = zend_objects_store_put(payload, NULL, (zend_objects_free_object_storage_t) {$this->name}_obj_free, NULL TSRMLS_CC);
     retval.handlers = &{$this->name}_obj_handlers;
-    
+
     return retval;
 }
 
@@ -567,7 +543,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
             }
             echo "    /* }}} Property registration */\n\n";
         }
-            
+
         if (!empty($this->constants)) {
             echo "\n";
             echo CodeGen_PECL_Element_ClassConstant::minitHeader();
@@ -576,15 +552,15 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
             }
             echo CodeGen_PECL_Element_ClassConstant::minitFooter();
         }
-            
+
         if (count($this->implements)) {
             ob_start();
 
             echo "zend_class_entry **tmp;\n";
-                
+
             $interfaces = array();
             foreach ($this->implements as $interface) {
-                echo sprintf("if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n", 
+                echo sprintf("if (SUCCESS == zend_hash_find(CG(class_table), \"%s\", %d, (void **)&tmp)) {\n",
                              strtolower($interface), strlen($interface) + 1);
                 echo "    zend_class_implements({$this->name}_ce_ptr TSRMLS_CC, 1, *tmp);\n";
                 echo "} else {\n";
@@ -594,7 +570,6 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 
             echo $extension->codegen->varblock(ob_get_clean());
         }
-                
 
         echo "}\n\n";
 
@@ -605,20 +580,18 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         return ob_get_clean();
     }
 
-
     /**
      * MINIT code fragment
-     * 
+     *
      * @access public
      * @return string
      */
-    function minitCode($extension) 
+    function minitCode($extension)
     {
-        return $this->ifConditionStart() 
+        return $this->ifConditionStart()
             . "class_init_{$this->name}();\n"
             . $this->ifConditionEnd();
     }
-        
 
     /**
      * DocBook documentation fragment
@@ -626,10 +599,10 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
      * @access public
      * @return string
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
         $xml = "";
- 
+
         return $xml;
     }
 
@@ -652,7 +625,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
     function functionAliasEntries()
     {
         $code = "";
-        
+
         foreach ($this->methods as $method) {
             $code.= $method->functionAliasEntry();
         }
@@ -660,10 +633,9 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         if ($code) {
             $code = $this->ifConditionStart() . $code . $this->ifConditionEnd();
         }
-    
+
         return $code;
     }
-        
+
 }
 
-?>

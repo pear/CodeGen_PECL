@@ -38,13 +38,13 @@ require_once "CodeGen/PECL/Element.php";
 class CodeGen_PECL_Element_Test
     extends CodeGen_PECL_Element
 {
-    /** 
+    /**
      * Constructor
-     * 
+     *
      * @access public
      * @param  string  testfile basename
      */
-    function __construct() 
+    function __construct()
     {
     }
 
@@ -53,14 +53,14 @@ class CodeGen_PECL_Element_Test
      *
      */
     protected $name = "";
-    
+
     /**
      * Setter for testcase name
      *
      * @access public
      * @return string  value of
-     */ 
-    function setName($name) 
+     */
+    function setName($name)
     {
         if (! preg_match('|^[\w-]+$|i', $name)) {
             return PEAR::raiseError("'$name' is not a valid test case basename");
@@ -68,7 +68,7 @@ class CodeGen_PECL_Element_Test
 
         $this->name = $name;
         if (empty($this->title)) {
-            $this->title = $name;   
+            $this->title = $name;
         }
     }
 
@@ -77,8 +77,8 @@ class CodeGen_PECL_Element_Test
      *
      * @access public
      * @return string  value of
-     */ 
-    function getName() 
+     */
+    function getName()
     {
         return $this->name;
     }
@@ -96,22 +96,22 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getTitle() 
+    function getTitle()
     {
         return $this->title;
     }
-    
+
     /**
      * Setter for testcase title
      *
      * @access public
      * @param  string  new value for
      */
-    function setTitle($title) 
+    function setTitle($title)
     {
         $this->title = $title;
     }
-    
+
     /**
      * Testcase description
      *
@@ -125,22 +125,22 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getDescription() 
+    function getDescription()
     {
         return $this->description;
     }
-    
+
     /**
      * Setter for testcase description
      *
      * @access public
      * @param  string  new value for
      */
-    function setDescription($text) 
+    function setDescription($text)
     {
         $this->description = $text;
     }
-    
+
     /**
      * php.ini settings for this test
      *
@@ -154,22 +154,21 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getIni() 
+    function getIni()
     {
         return $this->ini;
     }
-    
+
     /**
      * Setter for php.ini settings
      *
      * @access public
      * @param  string  new value for
      */
-    function setIni($code) 
+    function setIni($code)
     {
         $this->ini = $code;
     }
-    
 
     /**
      * Adder for php.ini settings
@@ -177,11 +176,11 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @param  string  new value for
      */
-    function addIni($code) 
+    function addIni($code)
     {
         $this->ini.= "\n$code";
     }
-    
+
     /**
      * Test code to decide whether to skip a test
      *
@@ -195,18 +194,18 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getSkipif() 
+    function getSkipif()
     {
         return $this->skipif;
     }
-    
+
     /**
      * Setter for skipif testcode
      *
      * @access public
      * @param  string  new value for
      */
-    function setSkipIf($code) 
+    function setSkipIf($code)
     {
         $this->skipif = "";
         $this->addSkipIf($code);
@@ -218,7 +217,7 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @param  string  new value for
      */
-    function addSkipIf($code, $reason='') 
+    function addSkipIf($code, $reason='')
     {
         // check whether $code is just an expression or a complete code snippet
         $isExpression = true;
@@ -235,7 +234,7 @@ class CodeGen_PECL_Element_Test
             $this->skipif.= "\n$code";
         }
     }
-    
+
     /**
      * GET data
      *
@@ -250,22 +249,22 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getGet() 
+    function getGet()
     {
         return $this->get;
     }
-    
+
     /**
      * Setter for GET data
      *
      * @access public
      * @param  string  new value for
      */
-    function setGet($data) 
+    function setGet($data)
     {
         $this->get = $data;
     }
-    
+
     /**
      * raw POST data
      *
@@ -280,22 +279,22 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getPost() 
+    function getPost()
     {
         return $this->post;
     }
-    
+
     /**
      * Setter for raw POST data
      *
      * @access public
      * @param  string  new value for
      */
-    function setPost($data) 
+    function setPost($data)
     {
         $this->post = $data;
     }
-    
+
     /**
      * actual test code
      *
@@ -309,22 +308,22 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getCode() 
+    function getCode()
     {
         return $this->code;
     }
-    
+
     /**
      * Setter for test code
      *
      * @access public
      * @param  string  new value for
      */
-    function setCode($code) 
+    function setCode($code)
     {
         $this->code = $code;
     }
-    
+
     /**
      * expected output for test code
      *
@@ -338,18 +337,18 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getOutput() 
+    function getOutput()
     {
         return $this->output;
     }
-    
+
     /**
      * Setter for expected output
      *
      * @access public
      * @param  string  new value for
      */
-    function setOutput($data) 
+    function setOutput($data)
     {
         $this->output = $data;
     }
@@ -367,18 +366,18 @@ class CodeGen_PECL_Element_Test
      * @access public
      * @return string  value of
      */
-    function getMode() 
+    function getMode()
     {
         return $this->mode;
     }
-    
+
     /**
      * Setter for output block style
      *
      * @access public
      * @param  string  new value for
      */
-    function setMode($mode) 
+    function setMode($mode)
     {
         switch ($mode) {
         case 'plain':
@@ -387,30 +386,30 @@ class CodeGen_PECL_Element_Test
             $this->mode = $mode;
             return true;
         }
-        
+
         return PEAR::raiseError("'$mode' is not a valid test output comparison mode");
     }
 
-    /** 
+    /**
      * all required properties set?
      *
      * @access public
      * @return bool
      */
-    function complete() 
+    function complete()
     {
         if (empty($this->code))   return PEAR::raiseError("no code specified for test case");
         if (empty($this->output)) return PEAR::raiseError("no output specified for test case");
         return true;
     }
-    
+
     /**
      * generate testcase file
      *
      * @access public
      * @param  object  the complete extension context
      */
-    function writeTest($extension) 
+    function writeTest($extension)
     {
         $extName = $extension->getName();
 
@@ -425,11 +424,11 @@ class CodeGen_PECL_Element_Test
         if (!empty($this->description)) {
             echo "--DESCRIPTION--\n{$this->description}\n";
         }
-        
+
         if (!empty($this->ini)) {
             echo "--INI--\n{$this->ini}\n";
         }
-        
+
         if (!empty($this->skipif)) {
             echo "--SKIPIF--\n<?php \n{$this->skipif}\n ?>\n";
         }
@@ -441,7 +440,7 @@ class CodeGen_PECL_Element_Test
         if (!empty($this->get)) {
             echo "--GET--\n{$this->get}\n";
         }
-        
+
         echo "--FILE--\n<?php\n{$this->code}\n?>\n";
 
         switch ($this->mode) {
@@ -452,7 +451,7 @@ class CodeGen_PECL_Element_Test
             echo "--EXPECTF--\n";
             break;
         case 'plain':
-        default:   
+        default:
             echo "--EXPECT--\n";
             break;
         }
@@ -461,4 +460,4 @@ class CodeGen_PECL_Element_Test
         $file->write();
     }
 }
-?>
+

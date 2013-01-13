@@ -117,10 +117,10 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 
 /* Next is all token values, as class constants
 */
-/* 
+/*
 ** These constants (all generated automatically by the parser generator)
 ** specify the various kinds of tokens (terminals) that the parser
-** understands. 
+** understands.
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
@@ -157,7 +157,7 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
 ** functions that take a state number and lookahead value and return an
-** action integer.  
+** action integer.
 **
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
@@ -185,7 +185,7 @@ class CodeGen_PECL_Tools_ProtoParser#line 102 "ProtoParser.php"
 ** If the index value self::$yy_shift_ofst[S]+X is out of range or if the value
 ** self::$yy_lookahead[self::$yy_shift_ofst[S]+X] is not equal to X or if
 ** self::$yy_shift_ofst[S] is equal to self::YY_SHIFT_USE_DFLT, it means that
-** the action is not in the table and that self::$yy_default[S] should be used instead.  
+** the action is not in the table and that self::$yy_default[S] should be used instead.
 **
 ** The formula above is for computing the action when the lookahead is
 ** a terminal symbol.  If the lookahead is a non-terminal (as occurs after
@@ -315,7 +315,7 @@ static public $yy_action = array(
 ** various aspects of the generated parser.
 **    self::YYNOCODE      is a number which corresponds
 **                        to no legal terminal or nonterminal number.  This
-**                        number is used to fill in empty slots of the hash 
+**                        number is used to fill in empty slots of the hash
 **                        table.
 **    self::YYFALLBACK    If defined, this indicates that one or more tokens
 **                        have fall-back values which should be used if the
@@ -335,7 +335,7 @@ static public $yy_action = array(
     const YYFALLBACK = 0;
     /** The next table maps tokens into fallback tokens.  If a construct
      * like the following:
-     * 
+     *
      *      %fallback ID X Y Z.
      *
      * appears in the grammer, then ID becomes a fallback token for X, Y,
@@ -348,10 +348,10 @@ static public $yy_action = array(
     /**
      * Turn parser tracing on by giving a stream to which to write the trace
      * and a prompt to preface each trace message.  Tracing is turned off
-     * by making either argument NULL 
+     * by making either argument NULL
      *
      * Inputs:
-     * 
+     *
      * - A stream resource to which trace output should be written.
      *   If NULL, then tracing is turned off.
      * - A prefix string written at the beginning of every
@@ -359,7 +359,7 @@ static public $yy_action = array(
      *   turned off.
      *
      * Outputs:
-     * 
+     *
      * - None.
      * @param resource
      * @param string
@@ -411,17 +411,17 @@ static public $yy_action = array(
      * are required.  The following table supplies these names
      * @var array
      */
-    static public $yyTokenName = array( 
-  '$',             'SEMICOLON',     'NAME',          'PAR_OPEN',    
-  'PAR_CLOSE',     'VOID',          'AMPERSAND',     'BOOL',        
-  'INT',           'FLOAT',         'STRING',        'ARRAY_',      
-  'CLASS_',        'RESOURCE',      'MIXED',         'CALLBACK',    
-  'STREAM',        'SQUARE_OPEN',   'SQUARE_CLOSE',  'ELLIPSE',     
-  'COMMA',         'EQ',            'TRUE_',         'FALSE_',      
-  'NULL_',         'NUMVAL',        'STRVAL',        'error',       
-  'proto_line',    'proto',         'rettype',       'param_spec',  
-  'typespec',      'typename',      'param_list',    'param',       
-  'optional_params',  'default',     
+    static public $yyTokenName = array(
+  '$',             'SEMICOLON',     'NAME',          'PAR_OPEN',
+  'PAR_CLOSE',     'VOID',          'AMPERSAND',     'BOOL',
+  'INT',           'FLOAT',         'STRING',        'ARRAY_',
+  'CLASS_',        'RESOURCE',      'MIXED',         'CALLBACK',
+  'STREAM',        'SQUARE_OPEN',   'SQUARE_CLOSE',  'ELLIPSE',
+  'COMMA',         'EQ',            'TRUE_',         'FALSE_',
+  'NULL_',         'NUMVAL',        'STRVAL',        'error',
+  'proto_line',    'proto',         'rettype',       'param_spec',
+  'typespec',      'typename',      'param_list',    'param',
+  'optional_params',  'default',
     );
 
     /**
@@ -501,7 +501,7 @@ static public $yy_action = array(
         /* Here is inserted the actions which take place when a
         ** terminal or non-terminal is destroyed.  This can happen
         ** when the symbol is popped from the stack during a
-        ** reduce or during error processing or when a parser is 
+        ** reduce or during error processing or when a parser is
         ** being destroyed before it is finished parsing.
         **
         ** Note: during a reduce, the only symbols destroyed are those
@@ -628,7 +628,7 @@ static public $yy_action = array(
     /**
      * Based on the parser state and current parser stack, determine whether
      * the lookahead token is possible.
-     * 
+     *
      * The parser will convert the token value to an error token if not.  This
      * catches some unusual edge cases where the parser would fail.
      * @param int
@@ -717,7 +717,7 @@ static public $yy_action = array(
     function yy_find_shift_action($iLookAhead)
     {
         $stateno = $this->yystack[$this->yyidx]->stateno;
-     
+
         /* if ($this->yyidx < 0) return self::YY_NO_ACTION;  */
         if (!isset(self::$yy_shift_ofst[$stateno])) {
             // no shift actions
@@ -878,7 +878,7 @@ static public $yy_action = array(
     /**
      * The following table contains a mapping of reduce action to method name
      * that handles the reduction.
-     * 
+     *
      * If a rule is not set, it has no handler.
      */
     static public $yyReduceMap = array(
@@ -974,7 +974,7 @@ static public $yy_action = array(
   $this->yystack[$this->yyidx + -1]->minor["optional"] = true;
   $stat = $this->function->addParam($this->yystack[$this->yyidx + -1]->minor);
   if ($stat !== true) {
-	throw new Exception($stat->getMessage());
+    throw new Exception($stat->getMessage());
   }
     }
 #line 985 "ProtoParser.php"
@@ -983,40 +983,40 @@ static public $yy_action = array(
   $this->yystack[$this->yyidx + -2]->minor["optional"] = true;
   $stat = $this->function->addParam($this->yystack[$this->yyidx + -2]->minor);
   if ($stat !== true) {
-	throw new Exception($stat->getMessage());
+    throw new Exception($stat->getMessage());
   }
   foreach ($this->optParams as $param) {
-	$stat = $this->function->addParam($param);
-	if ($stat !== true) {
-	  throw new Exception($stat->getMessage());
-	}
+    $stat = $this->function->addParam($param);
+    if ($stat !== true) {
+      throw new Exception($stat->getMessage());
+    }
   }
     }
 #line 1000 "ProtoParser.php"
 #line 70 "ProtoParser.y"
-    function yy_r20(){ 
-  $this->function->setVarargs(true); 
+    function yy_r20(){
+  $this->function->setVarargs(true);
     }
 #line 1005 "ProtoParser.php"
 #line 73 "ProtoParser.y"
-    function yy_r21(){ 
+    function yy_r21(){
   $stat = $this->function->setVarargsType($this->yystack[$this->yyidx + -1]->minor["type"]);
   if ($stat !== true) {
-	throw new Exception($stat->getMessage());
+    throw new Exception($stat->getMessage());
   }
-  $this->function->setVarargs(true); 
+  $this->function->setVarargs(true);
     }
 #line 1014 "ProtoParser.php"
 #line 83 "ProtoParser.y"
-    function yy_r24(){ 
+    function yy_r24(){
   $this->function->setVarargs(true);
     }
 #line 1019 "ProtoParser.php"
 #line 86 "ProtoParser.y"
-    function yy_r25(){ 
+    function yy_r25(){
   $stat = $this->function->setVarargsType($this->yystack[$this->yyidx + -1]->minor["type"]);
   if ($stat !== true) {
-	throw new Exception($stat->getMessage());
+    throw new Exception($stat->getMessage());
   }
   $this->function->setVarargs(true);
     }
@@ -1025,17 +1025,17 @@ static public $yy_action = array(
     function yy_r26(){
   $stat = $this->function->addParam($this->yystack[$this->yyidx + 0]->minor);
   if ($stat !== true) {
-	throw new Exception($stat->getMessage());
+    throw new Exception($stat->getMessage());
   }
     }
 #line 1036 "ProtoParser.php"
 #line 99 "ProtoParser.y"
     function yy_r27(){
   foreach ($this->optParams as $param) {
-	$stat = $this->function->addParam($param);
-	if ($stat !== true) {
-	  throw new Exception($stat->getMessage());
-	}
+    $stat = $this->function->addParam($param);
+    if ($stat !== true) {
+      throw new Exception($stat->getMessage());
+    }
   }
     }
 #line 1046 "ProtoParser.php"
@@ -1061,7 +1061,7 @@ static public $yy_action = array(
     function yy_r32(){
   $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor;
   $this->_retvalue["name"]     = $this->yystack[$this->yyidx + -2]->minor;
-  $this->_retvalue["default"]  = $this->yystack[$this->yyidx + 0]->minor;        
+  $this->_retvalue["default"]  = $this->yystack[$this->yyidx + 0]->minor;
   $this->_retvalue["optional"] = true;
     }
 #line 1072 "ProtoParser.php"
@@ -1081,7 +1081,7 @@ static public $yy_action = array(
     function yy_r38(){ $this->_retvalue = "array()";     }
 #line 1087 "ProtoParser.php"
 #line 139 "ProtoParser.y"
-    function yy_r39(){ 
+    function yy_r39(){
     $constant = $this->extension->getConstant($this->yystack[$this->yyidx + 0]->minor);
     if ($constant) {
         $this->_retvalue = $constant;
@@ -1093,14 +1093,14 @@ static public $yy_action = array(
 
     /**
      * placeholder for the left hand side in a reduce operation.
-     * 
+     *
      * For a parser with a rule like this:
      * <pre>
      * rule(A) ::= B. { A = 1; }
      * </pre>
-     * 
+     *
      * The parser will translate to something like:
-     * 
+     *
      * <code>
      * function yy_r0(){$this->_retvalue = 1;}
      * </code>
@@ -1110,13 +1110,13 @@ static public $yy_action = array(
     /**
      * Perform a reduce action and the shift that must immediately
      * follow the reduce.
-     * 
+     *
      * For a rule such as:
-     * 
+     *
      * <pre>
      * A ::= B blah C. { dosomething(); }
      * </pre>
-     * 
+     *
      * This function will first call the action, if any, ("dosomething();" in our
      * example), and then it will pop three states from the stack,
      * one for each entry on the right-hand side of the expression
@@ -1133,7 +1133,7 @@ static public $yy_action = array(
         //CodeGen_PECL_Tools_ProtoParser_yyStackEntry $yymsp;            /* The top of the parser's stack */
         //int $yysize;                     /* Amount to pop the stack */
         $yymsp = $this->yystack[$this->yyidx];
-        if (self::$yyTraceFILE && $yyruleno >= 0 
+        if (self::$yyTraceFILE && $yyruleno >= 0
               && $yyruleno < count(self::$yyRuleName)) {
             fprintf(self::$yyTraceFILE, "%sReduce (%d) [%s].\n",
                 self::$yyTracePrompt, $yyruleno,
@@ -1177,7 +1177,7 @@ static public $yy_action = array(
 
     /**
      * The following code executes when the parse fails
-     * 
+     *
      * Code from %parse_fail is inserted here
      */
     function yy_parse_failed()
@@ -1194,7 +1194,7 @@ static public $yy_action = array(
 
     /**
      * The following code executes when a syntax error first occurs.
-     * 
+     *
      * %syntax_error code is inserted here
      * @param int The major type of the error token
      * @param mixed The minor type of the error token
@@ -1214,7 +1214,7 @@ static public $yy_action = array(
 
     /**
      * The following is executed when the parser accepts
-     * 
+     *
      * %parse_accept code is inserted here
      */
     function yy_accept()
@@ -1231,7 +1231,7 @@ static public $yy_action = array(
 
     /**
      * The main parser program.
-     * 
+     *
      * The first argument is the major token number.  The second is
      * the token value string as scanned from the input.
      *
@@ -1244,7 +1244,7 @@ static public $yy_action = array(
 //        $yyact;            /* The parser action. */
 //        $yyendofinput;     /* True if we are at the end of input */
         $yyerrorhit = 0;   /* True if yymajor has invoked an error */
-        
+
         /* (re)initialize the parser, if necessary */
         if ($this->yyidx === null || $this->yyidx < 0) {
             /* if ($yymajor == 0) return; // not sure why this was here... */
@@ -1257,12 +1257,12 @@ static public $yy_action = array(
             array_push($this->yystack, $x);
         }
         $yyendofinput = ($yymajor==0);
-        
+
         if (self::$yyTraceFILE) {
             fprintf(self::$yyTraceFILE, "%sInput %s\n",
                 self::$yyTracePrompt, self::$yyTokenName[$yymajor]);
         }
-        
+
         do {
             $yyact = $this->yy_find_shift_action($yymajor);
             if ($yymajor < self::YYERRORSYMBOL &&
@@ -1288,7 +1288,7 @@ static public $yy_action = array(
                 if (self::YYERRORSYMBOL) {
                     /* A syntax error has occurred.
                     ** The response to an error depends upon whether or not the
-                    ** grammar defines an error token "ERROR".  
+                    ** grammar defines an error token "ERROR".
                     **
                     ** This is what we do if the grammar does define ERROR:
                     **
@@ -1358,7 +1358,8 @@ static public $yy_action = array(
             } else {
                 $this->yy_accept();
                 $yymajor = self::YYNOCODE;
-            }            
+            }
         } while ($yymajor != self::YYNOCODE && $this->yyidx >= 0);
     }
 }
+

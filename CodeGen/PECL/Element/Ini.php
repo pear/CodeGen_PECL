@@ -1,6 +1,6 @@
 <?php
 /**
- * Class describing a PHP ini directive within a PECL extension 
+ * Class describing a PHP ini directive within a PECL extension
  *
  * PHP versions 5
  *
@@ -25,7 +25,7 @@
 require_once "CodeGen/PECL/Element.php";
 
 /**
- * Class describing a PHP ini directive within a PECL extension 
+ * Class describing a PHP ini directive within a PECL extension
  *
  * @category   Tools and Utilities
  * @package    CodeGen
@@ -35,8 +35,8 @@ require_once "CodeGen/PECL/Element.php";
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_PECL_Element_Ini 
-    extends CodeGen_PECL_Element 
+class CodeGen_PECL_Element_Ini
+    extends CodeGen_PECL_Element
 {
     // TODO this should be a subclass of CodeGen_PECL_Element_Global ?
 
@@ -47,7 +47,7 @@ class CodeGen_PECL_Element_Ini
      * @var     string
      */
     protected $name;
-      
+
     /**
      * Set method for name
      *
@@ -59,9 +59,9 @@ class CodeGen_PECL_Element_Ini
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid php.ini directive name");
         }
-          
+
         $this->name = $name;
-          
+
         return true;
     }
 
@@ -75,9 +75,6 @@ class CodeGen_PECL_Element_Ini
     {
         return $this->name;
     }
-
-
-
 
     /**
      * Directive data type
@@ -101,7 +98,7 @@ class CodeGen_PECL_Element_Ini
             if (!$this->onupdate) {
                 $this->onupdate = "OnUpdateBool";
             }
-            return true;          
+            return true;
 
         case "int":
             $this->cType = "long";
@@ -125,10 +122,9 @@ class CodeGen_PECL_Element_Ini
             return true;
 
         default:
-            return PEAR::raiseError("'$this->type' not supported, only bool, int, float and string"); 
+            return PEAR::raiseError("'$this->type' not supported, only bool, int, float and string");
         }
     }
-
 
     /**
      * Get method for type
@@ -141,8 +137,6 @@ class CodeGen_PECL_Element_Ini
         return $this->cType;
     }
 
-
-
     /**
      * Directive default value
      *
@@ -150,18 +144,18 @@ class CodeGen_PECL_Element_Ini
      * @var     string
      */
     protected $value;
-      
+
     /**
      * Set method for default value
      *
      * @access public
-     * @param string default value 
+     * @param string default value
      */
     function setValue($value)
     {
         // TODO checks
         $this->value = $value;
-          
+
         return true;
     }
 
@@ -176,9 +170,6 @@ class CodeGen_PECL_Element_Ini
         return $this->value;
     }
 
-
-
-
     /**
      * Directive description
      *
@@ -186,7 +177,7 @@ class CodeGen_PECL_Element_Ini
      * @var     string
      */
     protected $desc;
-      
+
     /**
      * Set method for directive description
      *
@@ -196,10 +187,9 @@ class CodeGen_PECL_Element_Ini
     function setDesc($desc)
     {
         $this->desc = $desc;
-          
+
         return true;
     }
-      
 
     /**
      * Get method for description
@@ -211,8 +201,6 @@ class CodeGen_PECL_Element_Ini
     {
         return $this->desc;
     }
-
-
 
     /**
      * Directive access mode
@@ -261,8 +249,6 @@ class CodeGen_PECL_Element_Ini
         return $this->access;
     }
 
-
-
     /**
      * Directive OnUpdate handler
      *
@@ -270,7 +256,7 @@ class CodeGen_PECL_Element_Ini
      * @var     string
      */
     protected $onupdate;
-      
+
     /**
      * Set method for OnUpdate handler
      *
@@ -282,12 +268,12 @@ class CodeGen_PECL_Element_Ini
         if (!self::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid update function name");
         }
-          
+
         $this->onupdate = $name;
-          
+
         return true;
     }
-      
+
     /**
      * Get method for update handler
      *
@@ -299,10 +285,6 @@ class CodeGen_PECL_Element_Ini
         return $this->onupdate;
     }
 
-
-
-
-
     /**
      * Internal C type that stores the directives value
      *
@@ -311,26 +293,22 @@ class CodeGen_PECL_Element_Ini
      */
     protected $cType;
 
-
     /**
      * Constructor
      */
-    function __construct() 
+    function __construct()
     {
         $this->setType("string");
     }
-
-
-
 
     /**
      * Generate header for ini directive registration code
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function cCodeHeader($name) 
+    static function cCodeHeader($name)
     {
         // this is a small incompatibility between ZE1 and ZE2 APIs
         // "OnUpdateInt" was changed to "OnUpdateLong" as it actualy
@@ -345,7 +323,7 @@ class CodeGen_PECL_Element_Ini
 ";
 
         $code .="PHP_INI_BEGIN()\n";
-            
+
         return $code;
     }
 
@@ -354,12 +332,12 @@ class CodeGen_PECL_Element_Ini
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    function cCode($name) 
+    function cCode($name)
     {
         $code = $this->ifConditionStart();
-     
+
         $code.= "  STD_PHP_INI_ENTRY(\"$name.{$this->name}\", \"{$this->value}\", {$this->access}, {$this->onupdate}, {$this->name}, zend_{$name}_globals, {$name}_globals)\n";
 
         $code.= $this->ifConditionEnd();
@@ -372,23 +350,21 @@ class CodeGen_PECL_Element_Ini
      *
      * @access private
      * @param  string extension basename
-     * @return string C code snippet 
+     * @return string C code snippet
      */
-    static function cCodeFooter($name) 
+    static function cCodeFooter($name)
     {
         return "PHP_INI_END()\n\n";
     }
-
-
 
     /**
      * Generate header for ini directive documentation
      *
      * @access private
      * @param  string extension basename
-     * @return string DocBook XML snippet 
+     * @return string DocBook XML snippet
      */
-    static function docHeader($name) 
+    static function docHeader($name)
     {
         return
             "    <table>
@@ -410,12 +386,12 @@ class CodeGen_PECL_Element_Ini
      * Generate documentation for ini directive documentation
      *
      * @access private
-     * @param  string id basename for extension 
-     * @return string DocBook XML snippet 
+     * @param  string id basename for extension
+     * @return string DocBook XML snippet
      */
-    function docEntry($base) 
+    function docEntry($base)
     {
-        return 
+        return
             "    <row>
      <entry>$this->name</entry>
      <entry>$this->value</entry>
@@ -430,9 +406,9 @@ class CodeGen_PECL_Element_Ini
      *
      * @access private
      * @param  string extension basename
-     * @return string DocBook XML snippet 
+     * @return string DocBook XML snippet
      */
-    static function docFooter() 
+    static function docFooter($name)
     {
         return
             "     </tbody>
@@ -450,4 +426,3 @@ class CodeGen_PECL_Element_Ini
  * End:
  */
 
-?>
