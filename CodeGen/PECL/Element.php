@@ -161,5 +161,24 @@ abstract class CodeGen_PECL_Element
         return false;
     }
 
+    /**
+     * Checks whether a string is a valid namespace
+     *
+     * @access public
+     * @param  string name
+     * @return bool   boolean false if a reserved keyword is used
+     */
+    function isNamespace($name)
+    {
+        $parts = explode('\\\\', $name);
+
+        foreach ($parts as $part) {
+            if (self::isKeyword($part)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
 

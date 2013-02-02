@@ -909,7 +909,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_extension_class($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "extends", "final", "abstract", "if"));
+        $err = $this->checkAttributes($attr, array("name",  "namespace", "extends", "final", "abstract", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -925,6 +925,13 @@ class CodeGen_PECL_ExtensionParser
             }
         } else {
             return PEAR::raiseError("name attribut for class missing");
+        }
+
+        if (isset($attr["namespace"])) {
+            $err = $class->setNamespace($attr["namespace"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
 
         if (isset($attr["extends"])) {
@@ -1237,7 +1244,7 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_extension_interface($attr)
     {
-        $err = $this->checkAttributes($attr, array("name", "extends", "if"));
+        $err = $this->checkAttributes($attr, array("name", "namespace", "extends", "if"));
         if (PEAR::isError($err)) {
             return $err;
         }
@@ -1253,6 +1260,13 @@ class CodeGen_PECL_ExtensionParser
             }
         } else {
             return PEAR::raiseError("name attribut for class missing");
+        }
+
+        if (isset($attr["namespace"])) {
+            $err = $interface->setNamespace($attr["namespace"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
 
         if (isset($attr["extends"])) {
