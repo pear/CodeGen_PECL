@@ -2526,6 +2526,16 @@ of phpinfo();
           $version = $this->maxVersion($version, $function->minPhpVersion());
         }
 
+        // check class requirements
+        foreach ($this->classes as $class) {
+          $version = $this->maxVersion($version, $class->minPhpVersion());
+        }
+
+        // check interface requirements
+        foreach ($this->interfaces as $interface) {
+          $version = $this->maxVersion($version, $interface->minPhpVersion());
+        }
+
         return $version;
     }
 

@@ -45,7 +45,7 @@ class CodeGen_PECL_Element_Interface
     implements CodeGen_PECL_Element_ObjectInterface
 {
     /**
-     * The class name
+     * The interface name
      *
      * @var     string
      */
@@ -75,6 +75,39 @@ class CodeGen_PECL_Element_Interface
     function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * namespace get()er
+     *
+     * @return string
+     */
+    function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * The namespace namespace
+     *
+     * @var     string
+     */
+    protected $namespace  = "";
+
+    /**
+     * namespace set()er
+     *
+     * @param string
+     */
+    function setNamespace($namespace)
+    {
+        if (!self::isNamespace($namespace)) {
+            return PEAR::raiseError("'$namespace' is not a valid namespace");
+        }
+
+        $this->namespace = $namespace;
+
+        return true;
     }
 
     /**
@@ -237,7 +270,14 @@ class CodeGen_PECL_Element_Interface
             echo "    zend_class_entry **parent_ce;\n";
         }
         echo "\n";
-        echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
+
+        if (empty($this->namespace)) {
+            echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
+        }
+        else {
+            echo "    INIT_NS_CLASS_ENTRY(ce, \"{$this->namespace}\", \"{$this->name}\", {$this->name}_methods);\n";
+        }
+
         echo "    {$this->name}_ce_ptr = zend_register_internal_interface(&ce TSRMLS_CC);\n";
 
         if ($this->extends) {
@@ -285,6 +325,21 @@ class CodeGen_PECL_Element_Interface
     function getPayloadType()
     {
         return "";
+    }
+
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersion()
+    {
+		if (!empty($this->namespace)) {
+			return "5.3.0";
+		}
+
+        // default: 5.0
+        return "5.0.0"; // TODO test for real lower bound
     }
 }
 

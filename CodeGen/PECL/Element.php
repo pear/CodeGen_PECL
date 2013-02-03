@@ -88,10 +88,12 @@ abstract class CodeGen_PECL_Element
                                  "array",
                                  "as",
                                  "break",
+                                 "callable",
                                  "case",
                                  "catch",
                                  "class",
                                  "const",
+                                 "clone",
                                  "continue",
                                  "declare",
                                  "default",
@@ -105,23 +107,28 @@ abstract class CodeGen_PECL_Element
                                  "endfor",
                                  "endforeach",
                                  "endif",
+                                 "endswitch",
                                  "endwhile",
                                  "eval",
                                  "exit",
                                  "extends",
                                  "final",
+                                 "finally",
                                  "for",
                                  "foreach",
                                  "function",
                                  "global",
+                                 "goto",
                                  "if",
                                  "implements",
+                                 "insteadof",
                                  "include",
                                  "include_once",
                                  "instanceof",
                                  "interface",
                                  "isset",
                                  "list",
+                                 "namespace",
                                  "new",
                                  "or",
                                  "print",
@@ -132,7 +139,9 @@ abstract class CodeGen_PECL_Element
                                  "require_once",
                                  "return",
                                  "static",
+                                 "switch",
                                  "throw",
+                                 "trait",
                                  "try",
                                  "unset",
                                  "unset",
@@ -140,6 +149,7 @@ abstract class CodeGen_PECL_Element
                                  "var",
                                  "while",
                                  "xor",
+                                 "yield"
                                  );
 
         foreach ($reserved as $keyword) {
@@ -151,5 +161,24 @@ abstract class CodeGen_PECL_Element
         return false;
     }
 
+    /**
+     * Checks whether a string is a valid namespace
+     *
+     * @access public
+     * @param  string name
+     * @return bool   boolean false if a reserved keyword is used
+     */
+    function isNamespace($name)
+    {
+        $parts = explode('\\\\', $name);
+
+        foreach ($parts as $part) {
+            if (self::isKeyword($part)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
 
