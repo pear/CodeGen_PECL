@@ -676,5 +676,19 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         return $code;
     }
 
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersion()
+    {
+		if (!empty($this->namespace)) {
+			return "5.3.0";
+		}
+
+        // default: 5.0
+        return "5.0.0"; // TODO test for real lower bound
+    }
 }
 
