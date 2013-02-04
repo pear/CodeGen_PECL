@@ -78,6 +78,39 @@ class CodeGen_PECL_Element_Class
     }
 
     /**
+     * Namespace of the class
+     *
+     * @var     string
+     */
+    protected $namespace = "";
+
+    /**
+     * class name setter
+     *
+     * @param string Classnamespace
+     */
+    function setNamespace($namespace)
+    {
+        if (!self::isNamespace($namespace)) {
+            return PEAR::raiseError("'$namespace' is not a valid namespace");
+        }
+
+        $this->namespace = $namespace;
+
+        return true;
+    }
+
+    /**
+     * class name getter
+     *
+     * @return string Classnamespace
+     */
+    function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
      * A short description
      *
      * @var     string
@@ -511,7 +544,13 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
 
         echo "    zend_class_entry ce;\n\n";
 
-        echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
+
+        if (empty($this->namespace)) {
+            echo "    INIT_CLASS_ENTRY(ce, \"{$this->name}\", {$this->name}_methods);\n";
+        }
+        else {
+            echo "    INIT_NS_CLASS_ENTRY(ce, \"{$this->namespace}\", \"{$this->name}\", {$this->name}_methods);\n";
+        }
 
         if ($this->payloadType) {
             echo "    ce.create_object = {$this->name}_obj_create;\n";
@@ -637,5 +676,19 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         return $code;
     }
 
+    /**
+     * Return minimal PHP version required to support the requested features
+     *
+     * @return  string  version string
+     */
+    function minPhpVersion()
+    {
+		if (!empty($this->namespace)) {
+			return "5.3.0";
+		}
+
+        // default: 5.0
+        return "5.0.0"; // TODO test for real lower bound
+    }
 }
 
