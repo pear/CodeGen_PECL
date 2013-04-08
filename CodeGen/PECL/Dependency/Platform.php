@@ -15,7 +15,6 @@
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Platform.php,v 1.7 2006/08/21 14:12:41 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
 

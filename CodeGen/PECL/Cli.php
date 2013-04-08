@@ -3,7 +3,6 @@
 * Console script to generate PECL extensions from command line
 *
 * @author Hartmut Holzgraefe <hartmut@php.net>
-* @version $Id: pecl-gen,v 1.4 2006/06/25 11:35:22 hholzgra Exp $
 */
 
 require_once "CodeGen/PECL/Command.php";

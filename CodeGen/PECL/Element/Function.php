@@ -15,7 +15,6 @@
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Function.php,v 1.46 2007/04/25 13:59:09 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
  */
 
