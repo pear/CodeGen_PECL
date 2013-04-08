@@ -50,28 +50,6 @@ class CodeGen_PECL_Dependency_Platform
         $xml = "";
 
         if ($this->test("windows")) {
-            $xml.= "    <dep type='os' rel='has' name='windows'/>\n";
-        }
-
-        if ($this->test("unix")) {
-            $xml.= "    <dep type='os' rel='has' name='unix'/>\n";
-        }
-
-        return $xml;
-    }
-
-    /**
-     * package.xml 2.0 dependencie entry
-     *
-     * @return string XML snippet
-     */
-    function packageXML2()
-    {
-        if ($this->test("all")) return "";
-
-        $xml = "";
-
-        if ($this->test("windows")) {
             $xml.= "    <os><name>windows</name></os>\n";
         }
 

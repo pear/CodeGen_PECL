@@ -57,24 +57,6 @@ class CodeGen_PECL_Maintainer
      */
     function packageXml()
     {
-        $code = "    <maintainer>\n";
-        $code.= "      <user>{$this->user}</user>\n";
-        $code.= "      <name>{$this->name}</name>\n";
-        $code.= "      <email>{$this->email}</email>\n";
-        $code.= "      <role>{$this->role}</role>\n";
-        $code.= "    </maintainer>\n";
-
-        return $code;
-    }
-
-    /**
-     * Generate a package.xml 2.0 <maintainer> entry for this author
-     *
-     * @access public
-     * @return string phpinfo() line
-     */
-    function packageXml2()
-    {
         $code = "";
 
         $code.= "  <{$this->role}>\n";

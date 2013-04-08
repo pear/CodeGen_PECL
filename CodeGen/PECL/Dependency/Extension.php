@@ -195,26 +195,10 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
     /**
      * package.xml dependencie entry
      *
-     * @return string XML snippet
-     */
-    function packageXML()
-    {
-        $xml = '    <dep type="ext"';
-        if (!empty($this->version)) {
-            $xml.= sprintf(' rel="%s" version="%s"', $this->version["relation"], $this->version["version"]);
-        }
-        $xml.= ">{$this->name}</dep>\n";
-
-        return $xml;
-    }
-
-    /**
-     * package.xml 2.0 dependencie entry
-     *
      * @param  mixed  requested type(s), either string or array
      * @return string XML snippet
      */
-    function packageXML2($types = false)
+    function packageXML($types = false)
     {
         $xml = "    <extension><name>{$this->name}</name>";
 

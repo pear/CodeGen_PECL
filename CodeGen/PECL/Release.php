@@ -42,36 +42,10 @@ class CodeGen_PECL_Release
      * generate XML fragment for package.xml
      *
      * @access public
-     * @return string XML fragment
-     */
-    function packageXml()
-    {
-        $code = "\n  <release>\n";
-        foreach (array("version", "state", "notes") as $key) {
-            $code.= "    <$key>";
-            if ($this->$key !== "") {
-              $code.= htmlentities($this->$key);
-            } else {
-              $code.= "unknown";
-            }
-            $code.= "</$key>\n";
-        }
-        if ($this->date !== "") {
-            $code .= "    <date>".date("Y-m-d", $this->date)."</date>\n";
-        }
-        $code.= "  </release>\n";
-
-        return $code;
-    }
-
-    /**
-     * generate XML fragment for package.xml 2.0
-     *
-     * @access public
      * @param  object License
      * @return string XML fragment
      */
-    function packageXml2($license)
+    function packageXml($license)
     {
         $code ="";
 
