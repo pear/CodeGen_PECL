@@ -4,9 +4,9 @@
  *
  * PHP versions 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
  *
@@ -14,8 +14,7 @@
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Maintainer.php,v 1.6 2006/10/09 21:27:04 hholzgra Exp $
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -31,7 +30,7 @@ require_once "CodeGen/Maintainer.php";
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
@@ -56,24 +55,6 @@ class CodeGen_PECL_Maintainer
      * @return string phpinfo() line
      */
     function packageXml()
-    {
-        $code = "    <maintainer>\n";
-        $code.= "      <user>{$this->user}</user>\n";
-        $code.= "      <name>{$this->name}</name>\n";
-        $code.= "      <email>{$this->email}</email>\n";
-        $code.= "      <role>{$this->role}</role>\n";
-        $code.= "    </maintainer>\n";
-
-        return $code;
-    }
-
-    /**
-     * Generate a package.xml 2.0 <maintainer> entry for this author
-     *
-     * @access public
-     * @return string phpinfo() line
-     */
-    function packageXml2()
     {
         $code = "";
 

@@ -4,9 +4,9 @@
  *
  * PHP versions 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
  *
@@ -14,9 +14,7 @@
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
- * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
 
@@ -54,7 +52,7 @@ require_once "CodeGen/PECL/Dependency/Platform.php";
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    Release: 1.1.3
  * @link       http://pear.php.net/package/CodeGen_PECL
  */
@@ -661,7 +659,6 @@ class CodeGen_PECL_Extension
 
         // generate PEAR/PECL package.xml file
         $this->writePackageXml();
-        $this->writePackageXml2();
     }
 
     // {{{   docbook documentation
@@ -2017,80 +2014,6 @@ you have been warned!
         $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package.xml");
 
         echo
-"<?xml version=\"1.0\"?>
-<!DOCTYPE package SYSTEM \"http://pear.php.net/dtd/package-1.0\">
-<package>
-
-  <name>{$this->name}</name>
-";
-
-        if (isset($this->summary)) {
-            echo "  <summary>{$this->summary}</summary>\n";
-        }
-
-        if (isset($this->description)) {
-            echo "  <description>\n".rtrim($this->description)."\n  </description>\n";
-        }
-
-        if ($this->license) {
-            echo "\n  <license>".$this->license->getShortName()."</license>\n";
-        }
-
-        if (count($this->with)) {
-            echo "\n  <configureoptions>\n";
-            foreach ($this->with as $with) {
-                $configOption = "with-".$with->getName();
-                echo "   <configureoption name=\"{$configOption}\" default=\"autodetect\" prompt=\"".$with->getName()." installation directory?\" />\n";
-            }
-            echo "  </configureoptions>\n";
-        }
-
-        if (count($this->authors)) {
-            echo "\n  <maintainers>\n";
-            foreach ($this->authors as $author) {
-                echo $author->packageXml();
-            }
-            echo "  </maintainers>\n";
-        }
-
-        if (isset($this->release)) {
-            echo $this->release->packageXml();
-        }
-
-        echo "  <changelog>\n";
-        echo $this->changelog."\n"; // TODO indent
-        echo "  </changelog>\n";
-
-        echo "  <deps>\n";
-        echo "    <dep type=\"php\" rel=\"ge\" version=\"".$this->minPhpVersion()."\"/>\n";
-        echo $this->platform->packageXML();
-        foreach ($this->otherExtensions as $ext) {
-            echo $ext->packageXML();
-        }
-        echo "  </deps>\n";
-
-        echo "\n  <filelist>\n";
-        echo $this->packageXmlFileList();
-        echo "  </filelist>\n";
-
-        echo "</package>\n";
-
-        return $outfile->write();
-    }
-
-    // }}}
-
-    /**
-     * Write PEAR/PECL package2.xml file
-     *
-     * @access private
-     * @param  string  directory to write to
-     */
-    function writePackageXml2()
-    {
-        $outfile = new CodeGen_Tools_Outbuf($this->dirpath."/package2.xml");
-
-        echo
 '<?xml version="1.0"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
     xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
@@ -2115,11 +2038,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
         uasort($this->authors, array("CodeGen_PECL_Maintainer", "comp"));
         foreach ($this->authors as $maintainer) {
-            echo $maintainer->packageXml2();
+            echo $maintainer->packageXml();
         }
         echo "\n";
 
-        echo $this->release->packageXml2($this->license);
+        echo $this->release->packageXml($this->license);
 
         echo "  <contents>\n";
         echo $this->packageXmlFileList();
@@ -2134,14 +2057,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
         echo "        <min>1.4.0a1</min>\n";
         echo "      </pearinstaller>\n";
         foreach ($this->otherExtensions as $ext) {
-            echo $ext->packageXML2(array("REQUIRED", "CONFLICTS"));
+            echo $ext->packageXML(array("REQUIRED", "CONFLICTS"));
         }
-        echo $this->platform->packageXML2();
+        echo $this->platform->packageXML();
         echo "    </required>\n";
 
         $optional = "";
         foreach ($this->otherExtensions as $ext) {
-            $optional.= $ext->packageXML2(array("OPTIONAL"));
+            $optional.= $ext->packageXML(array("OPTIONAL"));
         }
         if (!empty($optional)) {
           echo "    <optional>\n";

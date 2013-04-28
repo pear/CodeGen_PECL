@@ -4,9 +4,9 @@
  *
  * PHP versions 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
+ * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
  *
@@ -14,8 +14,7 @@
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Extension.php,v 1.9 2006/10/09 21:27:04 hholzgra Exp $
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @link       http://pear.php.net/package/CodeGen
  */
 
@@ -31,7 +30,7 @@ require_once "CodeGen/PECL/Element.php";
  * @package    CodeGen
  * @author     Hartmut Holzgraefe <hartmut@php.net>
  * @copyright  2005-2008 Hartmut Holzgraefe
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
@@ -195,26 +194,10 @@ static zend_module_dep ".$extension->getName()."_deps[] = {
     /**
      * package.xml dependencie entry
      *
-     * @return string XML snippet
-     */
-    function packageXML()
-    {
-        $xml = '    <dep type="ext"';
-        if (!empty($this->version)) {
-            $xml.= sprintf(' rel="%s" version="%s"', $this->version["relation"], $this->version["version"]);
-        }
-        $xml.= ">{$this->name}</dep>\n";
-
-        return $xml;
-    }
-
-    /**
-     * package.xml 2.0 dependencie entry
-     *
      * @param  mixed  requested type(s), either string or array
      * @return string XML snippet
      */
-    function packageXML2($types = false)
+    function packageXML($types = false)
     {
         $xml = "    <extension><name>{$this->name}</name>";
 
