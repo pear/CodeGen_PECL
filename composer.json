@@ -1,0 +1,38 @@
+{
+    "authors": [
+        {
+            "email": "hartmut@php.net",
+            "name": "Hartmut Holzgraefe",
+            "role": "Lead"
+        },
+        {
+            "email": "pajoye@php.net",
+            "name": "Pierre-Alain Joye",
+            "role": "Helper"
+        },
+        {
+            "email": "hartmann@php.net",
+            "name": "Johann Peter Hartmann",
+            "role": "Helper"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/CodeGen_PECL",
+    "license": "PHP",
+    "name": "pear/codegen_pecl",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=CodeGen_PECL",
+        "source": "https://github.com/pear/CodeGen_PECL"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
