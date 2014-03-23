@@ -279,7 +279,7 @@ class CodeGen_PECL_Element_Constant
             break;
         }
 
-        $this->ifConditionEnd();
+        $code.= $this->ifConditionEnd();
 
         return $code;
     }
