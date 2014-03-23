@@ -275,7 +275,7 @@ class CodeGen_PECL_Element_Constant
             $code.= "#define {$this->name} {$this->value}\n";
             break;
         case "string":
-            $code.= "#define {$this->name} \"$value\"\n";
+            $code.= "#define {$this->name} \"{$this->value}\"\n";
             break;
         }
 
