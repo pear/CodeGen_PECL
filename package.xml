@@ -82,8 +82,6 @@ Bug fixes:
    <file baseinstalldir="/" md5sum="e964237e7538c8c4013edcb7cc471207" name="CodeGen/PECL/Element/ClassConstant.php" role="php" />
    <file baseinstalldir="/" md5sum="6cca481277229160d823c27a2a492bcf" name="CodeGen/PECL/Element/Constant.php" role="php" />
    <file baseinstalldir="/" md5sum="6129106a2a647f4b0a64d0699d1f13a3" name="CodeGen/PECL/Element/Function.php" role="php" />
-   <file baseinstalldir="/" md5sum="4840ccc5316954cf99581da8bfc75988" name="CodeGen/PECL/Element/Function.php.orig" role="data" />
-   <file baseinstalldir="/" md5sum="089dcf6b09634d363b9e305299354bc2" name="CodeGen/PECL/Element/Function.php.rej" role="data" />
    <file baseinstalldir="/" md5sum="28a3a671355f86700281fb60669d330e" name="CodeGen/PECL/Element/Global.php" role="php" />
    <file baseinstalldir="/" md5sum="3a583c57b1ea47ccbacd4b7e9270de90" name="CodeGen/PECL/Element/Ini.php" role="php" />
    <file baseinstalldir="/" md5sum="dace4481ccee5aff0c6bc0ed2ce3416e" name="CodeGen/PECL/Element/Interface.php" role="php" />
