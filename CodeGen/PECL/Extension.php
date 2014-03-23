@@ -1128,7 +1128,7 @@ $moduleHeader
     function generateFunctionRegistrations()
     {
         $code  = "/* {{{ {$this->name}_functions[] */\n";
-        $code .= "function_entry {$this->name}_functions[] = {\n";
+        $code .= "static zend_function_entry {$this->name}_functions[] = {\n";
         foreach ($this->functions as $function) {
             $code.= $function->functionEntry();
         }
